@@ -1,30 +1,32 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 
-import { AtButton, AtButtonProps, AT_BUTTON_VARIANT } from '.'
-import { objectValuesToControls } from '../../../storybook-utils'
+import { Button, ButtonProps, BUTTON_VARIANT } from './index'
+import { objectValuesToControls } from '../../storybook-utils'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Atoms/AtButton',
-  component: AtButton,
+  title: 'components/Button',
+  component: Button,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     label: { control: 'text' },
-    variant: objectValuesToControls(AT_BUTTON_VARIANT),
+    variant: objectValuesToControls(BUTTON_VARIANT),
     onClick: { action: 'clicked' },
   },
-} as ComponentMeta<typeof AtButton>
+} as ComponentMeta<typeof Button>
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof AtButton> = (args: AtButtonProps) => <AtButton {...args} />
+const Template: ComponentStory<typeof Button> = (args: ButtonProps) => <Button {...args} />
 
 export const Primary = Template.bind({})
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
   label: 'Button',
   variant: 'PRIMARY',
-  onClick: () => alert('clicking primary'),
+  onClick: () => {
+    alert('clicking primary')
+  },
 }
 
 export const Secondary = Template.bind({})

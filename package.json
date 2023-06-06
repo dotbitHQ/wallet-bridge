@@ -13,7 +13,7 @@
     "./dist/style.css": "./dist/style.css"
   },
   "engines": {
-    "node": "16.18.1"
+    "node": ">=16.18.1"
   },
   "scripts": {
     "dev": "start-storybook -p 6006",
@@ -27,6 +27,7 @@
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
   "dependencies": {
+    "clsx": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -45,6 +46,7 @@
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.59.9",
     "@vitejs/plugin-react": "^3.0.0",
     "@vitest/coverage-c8": "^0.27.3",
     "autoprefixer": "^10.4.13",

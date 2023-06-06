@@ -8,13 +8,17 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
+    project: './tsconfig.json',
   },
-  plugins: ['react'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['react', '@typescript-eslint'],
   rules: {
     'react/jsx-key': 'off',
     'react/react-in-jsx-scope': 'off',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'warn',
     'no-console': 'warn',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/consistent-type-assertions': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'warn',
   },
 }
