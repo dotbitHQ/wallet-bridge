@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'standard-with-typescript', 'prettier'],
+  extends: ['plugin:react/recommended', 'plugin:tailwindcss/recommended', 'standard-with-typescript', 'prettier'],
   overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
@@ -11,7 +11,7 @@ module.exports = {
     project: './tsconfig.json',
   },
   parser: '@typescript-eslint/parser',
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'tailwindcss'],
   rules: {
     'react/jsx-key': 'off',
     'react/react-in-jsx-scope': 'off',
