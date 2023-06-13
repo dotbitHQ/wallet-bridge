@@ -1,43 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{ts,tsx}'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        'main-color': '#374151',
-      },
-      keyframes: {
-        bgFadeIn: {
-          from: { background: 'transparent' },
-          to: { background: 'rgba(27, 29, 33, 0.7)' },
-        },
-        bgFadeOut: {
-          from: { background: 'rgba(27, 29, 33, 0.7)' },
-          to: { background: 'transparent' },
-        },
-        fadeInDown: {
-          from: {
-            opacity: '0',
-            transform: 'translate3d(0, -20px, 0)',
-          },
-          to: {
-            opacity: '1',
-            transform: 'translate3d(0, 0, 0)',
-          },
-        },
-        fadeOutUp: {
-          from: { opacity: '1' },
-          to: {
-            opacity: '0',
-            transform: 'translate3d(0, -20px, 0)',
-          },
-        },
-      },
-      animation: {
-        bgFadeIn: 'bgFadeIn 0.2s ease forwards',
-        bgFadeOut: 'bgFadeOut 0.2s linear forwards',
-        fadeInDown: 'fadeInDown 0.2s ease forwards',
-        fadeOutUp: 'fadeOutUp 0.2s linear forwards',
+        success: '#22C493',
+        'success-hover': '#1EAE82',
+        danger: '#FF6B6B',
+        'danger-hover': '#E05656',
+        'danger-disabled': '#A0A1AB',
+        secondary: 'rgba(82, 98, 121, 0.1)',
+        'secondary-hover': 'rgba(82, 98, 121, 0.2)',
+        'secondary-active': 'rgba(82, 98, 121, 0.2)',
+        'secondary-disabled': 'rgba(17, 20, 45, 0.3)',
+        'font-primary': '#121314',
+        'font-third': '#B0B8BF',
+        'font-tips': '#31333E',
+        'mask-bg': 'rgba(27, 29, 33, 0.7)',
       },
     },
   },

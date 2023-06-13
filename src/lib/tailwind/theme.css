@@ -14,4 +14,85 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  .dialog-children-container {
+    max-height: calc(100vh * 0.7);
+  }
+
+  .iconfont {
+    display: inline-block;
+    vertical-align: middle;
+    outline: unset;
+    font-size: 1px;
+  }
+
+  @keyframes rotate-360-deg {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animation-rotate-360-deg {
+    animation: rotate-360-deg 0.9s linear infinite;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0.1;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      transform: translate3d(0, 10px, 0);
+      opacity: 0.1;
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out-down {
+    from {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+
+    to {
+      transform: translate3d(0, 10px, 0);
+      opacity: 0;
+    }
+  }
+
+  .animation-fade-in {
+    animation: fade-in 0.15s cubic-bezier(0.75, 0.25, 0.25, 0.75) forwards;
+  }
+
+  .animation-fade-out {
+    animation: fade-out 0.15s cubic-bezier(0.75, 0.25, 0.25, 0.75) forwards;
+  }
+
+  .animation-fade-in-up {
+    animation: fade-in-up 0.15s cubic-bezier(0.75, 0.25, 0.25, 0.75) forwards;
+  }
+
+  .animation-fade-out-down {
+    animation: fade-out-down 0.15s cubic-bezier(0.75, 0.25, 0.25, 0.75) forwards;
+  }
 }

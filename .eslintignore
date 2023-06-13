@@ -1,8 +1,8 @@
-src/lib/iconpark/index.js
 .eslintrc.js
 vite.config.ts
 tailwind.config.js
 prettier.config.js
+postcss.config.js
 node_modules/
 
 # VSCode
