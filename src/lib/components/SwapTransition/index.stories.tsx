@@ -24,7 +24,7 @@ const Template: ComponentStory<typeof SwapTransition> = function (args) {
       <Button onClick={() => setToggle(!toggle)}>toggle</Button>
       <SwapTransition {...args}>
         {toggle ? (
-          <div key={1}>
+          <div key={1} className="inline-block whitespace-nowrap">
             <div>Some contents...</div>
             <div>Some contents...</div>
             <div>Some contents...</div>
@@ -33,7 +33,7 @@ const Template: ComponentStory<typeof SwapTransition> = function (args) {
             <div>Some contents...</div>
           </div>
         ) : (
-          <div key={2}>
+          <div key={2} className="inline-block whitespace-nowrap">
             <div>asdlkfjalskdjf</div>
           </div>
         )}

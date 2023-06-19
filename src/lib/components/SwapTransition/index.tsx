@@ -25,21 +25,21 @@ function getTransitionClassName(state: TransitionStatus): string {
 }
 
 export function SwapTransition({ children, className, duration }: SwapTransitionProps) {
-  const nodeRef = useRef<HTMLElement>(null)
   const [childRect, setChildRect] = useState<DOMRect>()
   return (
     <TransitionGroup
-      className={clsx(className, 'relative overflow-y-hidden transition-all ease-in-out', duration)}
-      style={{ height: childRect?.height }}
+      className={clsx(className, 'relative overflow-hidden transition-all ease-in-out', duration)}
+      style={{ height: childRect?.height, width: childRect?.width }}
     >
       <Transition
         key={children.key}
-        nodeRef={nodeRef}
-        addEndListener={(done) => nodeRef.current?.addEventListener('transitionend', done, false)}
+        addEndListener={(node, done) => {
+          node.addEventListener('transitionend', done, false)
+        }}
         unmountOnExit
         appear
-        onEntering={() => {
-          nodeRef.current && setChildRect(nodeRef.current.getBoundingClientRect())
+        onEntering={(node, _) => {
+          setChildRect(node.getBoundingClientRect())
         }}
       >
         {(state) => {
@@ -50,7 +50,6 @@ export function SwapTransition({ children, className, duration }: SwapTransition
               duration,
               getTransitionClassName(state),
             ),
-            ref: nodeRef,
           })
         }}
       </Transition>
