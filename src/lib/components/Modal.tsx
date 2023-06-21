@@ -7,9 +7,10 @@ interface ModalProps {
   isOpen: boolean
   children?: ReactNode
   customRootId?: string
+  zIndex?: string
 }
 
-export function Modal({ isOpen, children, customRootId }: ModalProps) {
+export function Modal({ isOpen, children, customRootId, zIndex = 'z-[3]' }: ModalProps) {
   const [removeDOM, setRemoveDOM] = useState(!isOpen)
 
   useEffect(() => {
@@ -30,8 +31,10 @@ export function Modal({ isOpen, children, customRootId }: ModalProps) {
 
   return removeDOM ? null : (
     <Portal customRootId={customRootId}>
-      <Mask isOpen={isOpen} />
-      <div className={clsx('fixed left-0 top-0 z-[3] flex h-full w-full items-center justify-center')}>{children}</div>
+      <Mask zIndex={zIndex} isOpen={isOpen} />
+      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-center justify-center', zIndex)}>
+        {children}
+      </div>
     </Portal>
   )
 }

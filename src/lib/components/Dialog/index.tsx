@@ -7,34 +7,27 @@ export interface DialogProps {
   isOpen: boolean
   title?: string
   children?: ReactNode
+  customRootId?: string
   containerXMargin?: string
   containerYMargin?: string
+  zIndex?: string
   onClose?: () => void
   goBack?: () => void
 }
 
-/**
- * Dialog component, used exclusively as a wallet connect.
- * @param isOpen
- * @param title
- * @param children
- * @param containerXMargin
- * @param containerYMargin
- * @param onClose
- * @param goBack
- * @constructor
- */
 export function Dialog({
   isOpen,
   title,
   children,
-  containerXMargin = 'mx-8',
+  customRootId,
+  containerXMargin = 'mx-6',
   containerYMargin = 'my-0',
+  zIndex = 'z-[3]',
   onClose,
   goBack,
 }: DialogProps) {
   return (
-    <Modal customRootId="dialog-root" isOpen={isOpen}>
+    <Modal customRootId={customRootId || 'dialog-root'} isOpen={isOpen} zIndex={zIndex}>
       <div
         className={clsx(
           'box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',

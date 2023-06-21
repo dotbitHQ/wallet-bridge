@@ -21,5 +21,6 @@ module.exports = {
     '@typescript-eslint/consistent-type-assertions': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'warn',
     '@typescript-eslint/strict-boolean-expressions': 'warn',
+    '@typescript-eslint/no-misused-promises': 'warn',
   },
 }
