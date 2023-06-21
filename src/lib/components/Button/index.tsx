@@ -43,7 +43,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = ({
-  size = ButtonSize.middle,
+  size = ButtonSize.large,
   variant = ButtonVariant.primary,
   loading = false,
   outlink = false,
@@ -82,18 +82,19 @@ export const Button = ({
 
   return (
     <button
+      {...props}
       className={clsx(
         'flex cursor-pointer items-center justify-center outline-0',
         variantClasses[variant],
         sizeClasses[size],
         getRadius(shape, size),
+        props.className,
       )}
-      {...props}
       disabled={props.disabled === true || loading}
     >
       {loading ? (
         <span className="mr-1 inline-flex">
-          <LoadingIcon className="animation-rotate-360-deg h-5 w-5" />
+          <LoadingIcon className="h-5 w-5" />
         </span>
       ) : null}
       {props.children}

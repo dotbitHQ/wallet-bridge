@@ -14,9 +14,12 @@ module.exports = {
         'secondary-active': 'rgba(82, 98, 121, 0.2)',
         'secondary-disabled': 'rgba(17, 20, 45, 0.3)',
         'font-primary': '#121314',
-        'font-third': '#B0B8BF',
+        'font-secondary': '#B0B8BF',
         'font-tips': '#31333E',
         'mask-bg': 'rgba(27, 29, 33, 0.7)',
+      },
+      maxHeight: {
+        'dialog-list-max-height': '420px',
       },
     },
   },
