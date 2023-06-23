@@ -48,6 +48,7 @@ export const Button = ({
   loading = false,
   outlink = false,
   shape = ButtonShape.default,
+  className,
   ...props
 }: ButtonProps) => {
   const getRadius = (newShape: ButtonShape, newSize: ButtonSize): string => {
@@ -88,7 +89,7 @@ export const Button = ({
         variantClasses[variant],
         sizeClasses[size],
         getRadius(shape, size),
-        props.className,
+        className,
       )}
       disabled={props.disabled === true || loading}
     >
