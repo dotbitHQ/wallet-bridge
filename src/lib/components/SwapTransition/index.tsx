@@ -4,7 +4,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 import { ENTERED, ENTERING, EXITED, EXITING, TransitionStatus, UNMOUNTED } from 'react-transition-group/Transition'
 
 export interface SwapTransitionProps {
-  children: React.ReactElement
+  children: React.ReactElement<any & { className: string }>
   className?: ClassValue
   duration?: ClassValue
 }
@@ -26,6 +26,7 @@ function getTransitionClassName(state: TransitionStatus): string {
 
 export function SwapTransition({ children, className, duration }: SwapTransitionProps) {
   const [childRect, setChildRect] = useState<DOMRect>()
+  if (children.key === null || children.key === undefined) throw new Error('Child in SwapTransition must have a key')
   return (
     <TransitionGroup
       className={clsx(
