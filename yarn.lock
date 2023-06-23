@@ -11338,6 +11338,13 @@ sucrase@^3.32.0:
   dependencies:
     "qrcode-generator" "^1.4.4"
 
+"styled-qr-code@^1.0.0":
+  "integrity" "sha512-Tye/Omr8VYUUUCiBE+GNMeJ1Tt0cIsDkLXnQGG6/Xxegyd1021wQKFAFvx/hjaTUrfwpmukWTZfXs3uc/XXN0g=="
+  "resolved" "https://registry.npmjs.org/styled-qr-code/-/styled-qr-code-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "qrcode-generator" "^1.4.4"
+
 "sucrase@^3.32.0":
   "integrity" "sha512-ydQOU34rpSyj2TGyz4D2p8rbktIOZ8QY9s+DGLvFU1i5pWJE8vkpruCjGCMHsdXwnD7JDcS+noSwM/a7zyNFDQ=="
   "resolved" "https://registry.npmjs.org/sucrase/-/sucrase-3.32.0.tgz"
