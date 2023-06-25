@@ -4,6 +4,8 @@ import { Modal } from '../components/Modal'
 import clsx from 'clsx'
 import { ChainList } from './Login/ChainList'
 import { WalletList } from './Login/WalletList'
+import { isMobileOnly } from 'react-device-detect'
+import { Sheet } from '../components/Sheet'
 
 interface ConnectWalletProps {
   visible: boolean
@@ -41,7 +43,18 @@ export const ConnectWallet = ({ visible, walletSDK }: ConnectWalletProps) => {
     ),
   }
 
-  return (
+  return isMobileOnly ? (
+    <Sheet isOpen={isOpen} customRootId="ConnectWallet">
+      <div
+        className={clsx(
+          'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',
+          isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+        )}
+      >
+        {components[showComponent]}
+      </div>
+    </Sheet>
+  ) : (
     <Modal isOpen={isOpen} customRootId="ConnectWallet">
       <div
         className={clsx(
