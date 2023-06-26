@@ -15,6 +15,10 @@ const TemplateConnectWallet = () => {
     wallet.connectWallet()
   }
 
+  const onLoggedIn = async () => {
+    wallet.connectWalletInfo()
+  }
+
   return (
     <>
       <div>
@@ -23,6 +27,8 @@ const TemplateConnectWallet = () => {
         <div>address: {walletSnap.address}</div>
       </div>
       <Button onClick={onConnect}>Connect Wallet</Button>
+      <br />
+      <Button onClick={onLoggedIn}>Logged In</Button>
     </>
   )
 }
@@ -30,10 +36,11 @@ const TemplateConnectWallet = () => {
 export const ConnectWallet = TemplateConnectWallet.bind({})
 
 const TemplateInitWallet = () => {
+  const wallet = new Wallet({
+    isTestNet: true,
+  })
+
   const initWallet = async () => {
-    const wallet = new Wallet({
-      isTestNet: true,
-    })
     await wallet.initWallet()
   }
 

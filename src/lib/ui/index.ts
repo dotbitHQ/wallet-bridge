@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { ConnectWallet } from './ConnectWallet'
 import WalletSDK from '../wallets'
 import { useWalletState, walletState } from '../store'
+import { snapshot } from 'valtio'
 
 export default class Wallet {
   walletSDK: WalletSDK
@@ -12,14 +13,19 @@ export default class Wallet {
     this.walletSDK = new WalletSDK({ isTestNet })
   }
 
-  connectWallet(): void {
+  connectWallet(params: { initComponent?: string } = {}): void {
     const container = document.createElement('div')
     document.body.appendChild(container)
     const connectWalletInstance = React.createElement(ConnectWallet, {
       visible: true,
       walletSDK: this.walletSDK,
+      ...params,
     })
     createRoot(container).render(connectWalletInstance)
+  }
+
+  connectWalletInfo(): void {
+    this.connectWallet({ initComponent: 'LoggedIn' })
   }
 
   onInvolution(involution: boolean): void {
@@ -28,9 +34,9 @@ export default class Wallet {
     }
   }
 
-  async initWallet({ involution = false }: { involution?: boolean } = {}): Promise<boolean> {
+  async initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean> {
     try {
-      const { protocol, coinType } = walletState
+      const { protocol, coinType } = snapshot(walletState)
 
       if (protocol && coinType) {
         await this.walletSDK.init({

@@ -16,10 +16,14 @@ module.exports = {
         'font-primary': '#121314',
         'font-secondary': '#B0B8BF',
         'font-tips': '#31333E',
+        'font-disconnect': '#9BB1C7',
         'mask-bg': 'rgba(27, 29, 33, 0.7)',
       },
       maxHeight: {
         'dialog-list-max-height': '420px',
+      },
+      lineHeight: {
+        4.5: '18px',
       },
     },
   },

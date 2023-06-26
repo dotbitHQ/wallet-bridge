@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from 'react'
 import clsx from 'clsx'
-import { ArrowRightUpIcon, LoadingIcon } from '../Icons'
+import { ArrowRightTopIcon, LoadingIcon } from '../Icons'
 
 export enum ButtonVariant {
   primary = 'primary',
@@ -98,7 +98,7 @@ export const Button = ({
         </span>
       ) : null}
       {props.children}
-      {outlink ? <ArrowRightUpIcon className="ml-3 h-2.5 w-2.5"></ArrowRightUpIcon> : null}
+      {outlink ? <ArrowRightTopIcon className="ml-3 h-2.5 w-2.5"></ArrowRightTopIcon> : null}
     </button>
   )
 }

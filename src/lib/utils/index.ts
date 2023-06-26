@@ -7,6 +7,8 @@ import utf8 from 'utf8'
 import { MessageTypes, SignTypedDataVersion, TypedDataUtils, TypedMessage } from '@metamask/eth-sig-util'
 import { Buffer } from 'buffer'
 import { CoinType } from '../constant'
+import GraphemeSplitter from 'grapheme-splitter'
+import { isMobileOnly } from 'react-device-detect'
 
 export async function sleep(ms: number): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, ms))
@@ -185,4 +187,32 @@ export function convertTpUTXOSignature(base64SignData: string): string {
 
 export function isDogecoinChain(coinType: CoinType) {
   return coinType === CoinType.doge
+}
+
+/**
+ * String reduction
+ * @param inputString
+ * @param head
+ * @param tail
+ * @param tokenStr
+ */
+export function collapseString(inputString = '', head = 4, tail = 4, tokenStr = '...'): string {
+  const splitter = new GraphemeSplitter()
+  const split = splitter.splitGraphemes(inputString)
+  if (split.length > 12) {
+    return split.slice(0, head).join('') + tokenStr + split.slice(split.length - tail, split.length).join('')
+  }
+  return inputString
+}
+
+/**
+ * open link in different ways depending on the device.
+ * @param link
+ */
+export function smartOpen(link: string) {
+  if (isMobileOnly) {
+    window.location.href = link
+  } else {
+    window.open(link)
+  }
 }
