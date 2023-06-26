@@ -1,5 +1,5 @@
 import clsx, { ClassValue } from 'clsx'
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import { ENTERED, ENTERING, EXITED, EXITING, TransitionStatus, UNMOUNTED } from 'react-transition-group/Transition'
 
@@ -26,6 +26,13 @@ function getTransitionClassName(state: TransitionStatus): string {
 
 export function SwapTransition({ children, className, duration }: SwapTransitionProps) {
   const [childRect, setChildRect] = useState<DOMRect>()
+  const observer = useMemo(
+    () =>
+      new ResizeObserver((entries) => {
+        setChildRect(entries[0].target.getBoundingClientRect())
+      }),
+    [setChildRect],
+  )
   if (children.key === null || children.key === undefined) throw new Error('Child in SwapTransition must have a key')
   return (
     <TransitionGroup
@@ -43,8 +50,10 @@ export function SwapTransition({ children, className, duration }: SwapTransition
         }}
         unmountOnExit
         appear
-        onEntering={(node, _) => {
+        onEnter={(node, _) => {
           setChildRect(node.getBoundingClientRect())
+          observer.disconnect()
+          observer.observe(node)
         }}
       >
         {(state) => {
