@@ -1,13 +1,14 @@
 import { ReactNode } from 'react'
-import { ButtonVariant } from '../Button'
 import clsx from 'clsx'
 
 export enum TagVariant {
+  default = 'default',
   primary = 'primary',
 }
 
 export const variantClasses: Record<TagVariant, string> = {
-  [ButtonVariant.primary]: 'text-[#00A270] bg-[#E3F6ED]',
+  [TagVariant.default]: 'text-font-tips bg-secondary',
+  [TagVariant.primary]: 'text-[#00A270] bg-[#E3F6ED]',
 }
 
 export interface TagProps {
@@ -16,7 +17,7 @@ export interface TagProps {
   children: ReactNode
 }
 
-export function Tag({ variant = TagVariant.primary, children, className }: TagProps) {
+export function Tag({ variant = TagVariant.default, children, className }: TagProps) {
   return (
     <span
       className={clsx(

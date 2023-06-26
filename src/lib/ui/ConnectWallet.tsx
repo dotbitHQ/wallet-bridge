@@ -6,17 +6,20 @@ import { ChainList } from './Login/ChainList'
 import { WalletList } from './Login/WalletList'
 import { isMobileOnly } from 'react-device-detect'
 import { Sheet } from '../components/Sheet'
+import { LoggedIn } from './LoggedIn/LoggedIn'
+import { AddressList } from './LoggedIn/AddressList'
 
 interface ConnectWalletProps {
   visible: boolean
   walletSDK: WalletSDK
+  initComponent?: string
 }
 
 type IComponents = Record<string, ReactNode>
 
-export const ConnectWallet = ({ visible, walletSDK }: ConnectWalletProps) => {
+export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' }: ConnectWalletProps) => {
   const [isOpen, setIsOpen] = useState(visible)
-  const [showComponent, setShowComponent] = useState('ChainList')
+  const [showComponent, setShowComponent] = useState(initComponent)
 
   const onClose = () => {
     setIsOpen(false)
@@ -41,13 +44,40 @@ export const ConnectWallet = ({ visible, walletSDK }: ConnectWalletProps) => {
         onClose={onClose}
       ></WalletList>
     ),
+    LoggedIn: (
+      <LoggedIn
+        walletSDK={walletSDK}
+        onDisconnect={() => {
+          setShowComponent('ChainList')
+        }}
+        onSwitchAddress={() => {
+          setShowComponent('AddressList')
+        }}
+        onDevices={() => {
+          setShowComponent('Devices')
+        }}
+        onEnhanceSecurity={() => {
+          setShowComponent('EnhanceSecurity')
+        }}
+        onClose={onClose}
+      ></LoggedIn>
+    ),
+    AddressList: (
+      <AddressList
+        walletSDK={walletSDK}
+        goBack={() => {
+          setShowComponent('LoggedIn')
+        }}
+        onClose={onClose}
+      ></AddressList>
+    ),
   }
 
   return isMobileOnly ? (
     <Sheet isOpen={isOpen} customRootId="ConnectWallet">
       <div
         className={clsx(
-          'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',
+          'box-border w-full overflow-x-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',
           isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
         )}
       >
@@ -58,7 +88,7 @@ export const ConnectWallet = ({ visible, walletSDK }: ConnectWalletProps) => {
     <Modal isOpen={isOpen} customRootId="ConnectWallet">
       <div
         className={clsx(
-          'box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
+          'box-border w-[92%] max-w-[400px] overflow-x-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
           isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
         )}
       >

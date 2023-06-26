@@ -17,3 +17,7 @@ export enum WalletProtocol {
   // walletConnect = "walletConnect",
   webAuthn = 'webAuthn',
 }
+
+export const DotbitBalanceUrl = 'https://balance.did.id'
+
+export const DotbitBalanceTestUrl = 'https://testbalance.did.id'

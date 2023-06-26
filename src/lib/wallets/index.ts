@@ -8,7 +8,7 @@ import { CoinType, WalletProtocol, SIGN_TYPE } from '../constant'
 import { TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
-import { setWalletState } from '../store'
+import { resetWalletState, setWalletState } from '../store'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -76,6 +76,16 @@ class WalletSDK {
     } else {
       throw new Error('sendTransaction: Please initialize wallet first')
     }
+  }
+
+  disconnect() {
+    this.eventListener?.removeEvents()
+    if (this.walletConnector != null) {
+      this.walletConnector.disconnect()
+    } else {
+      resetWalletState()
+    }
+    this.context.emitEvent(EventEnum.Disconnect)
   }
 
   // todo-open: TxsSignedOrUnSigned and TxsWithMMJsonSignedOrUnSigned is pretty much the same, while they are from different api. We need to unify them in backend.

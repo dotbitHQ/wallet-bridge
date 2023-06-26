@@ -12,7 +12,7 @@ import {
 import { WalletProtocol, CoinType } from '../../constant'
 import { setWalletState, walletState } from '../../store'
 import WalletSDK from '../../wallets'
-import { Tag } from '../../components/Tag'
+import { Tag, TagVariant } from '../../components/Tag'
 import { ChainItem } from '../../components/ChainItem'
 import clsx from 'clsx'
 import { ReactNode, useState } from 'react'
@@ -49,7 +49,7 @@ export const ChainList = ({ walletSDK, showWalletList, onClose }: ChainListProps
         {
           icon: <DeviceIcon className="h-10 w-10"></DeviceIcon>,
           name: 'This Device',
-          tag: <Tag>Recommended</Tag>,
+          tag: <Tag variant={TagVariant.primary}>Recommended</Tag>,
           coinType: CoinType.ckb,
           protocol: WalletProtocol.webAuthn,
         },
