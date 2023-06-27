@@ -19,8 +19,8 @@ export function ChooseEmoji() {
             onClick={onClick(k)}
             key={k}
             className={clsx(
-              'relative box-border h-12 w-12 cursor-pointer select-none rounded-xl transition-none hover:bg-slate-600/10 active:bg-slate-600/20',
-              selected === k && 'border-2 border-emerald-400 bg-white',
+              'relative box-border h-12 w-12 cursor-pointer select-none rounded-xl transition-none active:bg-slate-600/20',
+              selected === k ? 'border-2 border-emerald-400 bg-white' : 'hover:bg-slate-600/10',
             )}
           >
             <img className="absolute left-1/2 top-1/2 w-8 max-w-none -translate-x-1/2 -translate-y-1/2" src={v} />
