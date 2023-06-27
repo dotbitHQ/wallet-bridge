@@ -6,11 +6,12 @@ import clsx from 'clsx'
 interface SheetProps {
   isOpen: boolean
   children?: ReactNode
+  className?: string
   customRootId?: string
   zIndex?: string
 }
 
-export function Sheet({ isOpen, children, customRootId, zIndex = 'z-[3]' }: SheetProps) {
+export function Sheet({ isOpen, children, customRootId, zIndex = 'z-[3]', className }: SheetProps) {
   const [removeDOM, setRemoveDOM] = useState(!isOpen)
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export function Sheet({ isOpen, children, customRootId, zIndex = 'z-[3]' }: Shee
   }, [isOpen])
 
   return removeDOM ? null : (
-    <Portal customRootId={customRootId}>
+    <Portal customRootId={customRootId} className={className}>
       <Mask zIndex={zIndex} isOpen={isOpen} />
       <div className={clsx('fixed left-0 top-0 flex h-full w-full items-end justify-center', zIndex)}>{children}</div>
     </Portal>

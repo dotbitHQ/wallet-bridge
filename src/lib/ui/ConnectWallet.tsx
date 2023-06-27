@@ -4,7 +4,6 @@ import { Modal } from '../components/Modal'
 import clsx from 'clsx'
 import { ChainList } from './Login/ChainList'
 import { WalletList } from './Login/WalletList'
-import { isMobileOnly } from 'react-device-detect'
 import { Sheet } from '../components/Sheet'
 import { LoggedIn } from './LoggedIn/LoggedIn'
 import { AddressList } from './LoggedIn/AddressList'
@@ -73,27 +72,28 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' 
     ),
   }
 
-  return isMobileOnly ? (
-    <Sheet isOpen={isOpen} customRootId="ConnectWallet">
-      <div
-        className={clsx(
-          'box-border w-full overflow-x-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',
-          isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
-        )}
-      >
-        {components[showComponent]}
-      </div>
-    </Sheet>
-  ) : (
-    <Modal isOpen={isOpen} customRootId="ConnectWallet">
-      <div
-        className={clsx(
-          'box-border w-[92%] max-w-[400px] overflow-x-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
-          isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
-        )}
-      >
-        {components[showComponent]}
-      </div>
-    </Modal>
+  return (
+    <>
+      <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet" className="md:hidden">
+        <div
+          className={clsx(
+            'box-border w-full overflow-x-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',
+            isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+          )}
+        >
+          {components[showComponent]}
+        </div>
+      </Sheet>
+      <Modal isOpen={isOpen} customRootId="ConnectWalletModal" className="max-md:hidden">
+        <div
+          className={clsx(
+            'box-border w-[92%] max-w-[400px] overflow-x-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
+            isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+          )}
+        >
+          {components[showComponent]}
+        </div>
+      </Modal>
+    </>
   )
 }

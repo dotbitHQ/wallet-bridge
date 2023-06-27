@@ -1,4 +1,3 @@
-import { WalletContext } from '../WalletContext'
 import { ISendTrxParams, WalletTransaction } from './WalletTransaction'
 import { toDecimal } from '../../utils'
 

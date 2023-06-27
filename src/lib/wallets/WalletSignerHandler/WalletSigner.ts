@@ -1,4 +1,5 @@
 import { WalletContext } from '../WalletContext'
+import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
 
 export abstract class WalletSigner {
   context: WalletContext
@@ -7,5 +8,5 @@ export abstract class WalletSigner {
     this.context = context
   }
 
-  abstract signData(data: string, options?: Record<string, any>): Promise<string>
+  abstract signData(data: TypedMessage<MessageTypes> | string, options?: Record<string, any>): Promise<string>
 }

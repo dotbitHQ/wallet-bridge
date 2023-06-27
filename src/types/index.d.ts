@@ -1,10 +1,12 @@
-export interface SignList {
+import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
+
+export interface SignInfo {
   sign_type: number
   sign_msg: string
 }
 
 export interface TxsList {
-  sign_list: SignList[]
+  sign_list: SignInfo[]
 }
 
 export interface TxsSignedOrUnSigned {
@@ -16,6 +18,6 @@ export interface TxsSignedOrUnSigned {
 
 export interface TxsWithMMJsonSignedOrUnSigned {
   sign_key: string
-  sign_list: SignList[]
+  sign_list: SignInfo[]
   mm_json?: TypedMessage<MessageTypes>
 }

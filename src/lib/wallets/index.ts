@@ -5,10 +5,11 @@ import { WalletContext } from './WalletContext'
 import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
 import { WalletHandlerFactory } from './WalletHandlerFactory'
 import { CoinType, WalletProtocol, SIGN_TYPE } from '../constant'
-import { TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../../types'
+import { SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
 import { resetWalletState, setWalletState } from '../store'
+import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -22,16 +23,6 @@ class WalletSDK {
   }
 
   async init({ protocol, coinType }: { protocol: WalletProtocol; coinType: CoinType }) {
-    await this.initWallet({ protocol, coinType })
-    await this.connect()
-    setWalletState({
-      protocol: this.context.protocol,
-      address: this.context.address,
-      coinType: this.context.coinType,
-    })
-  }
-
-  async initWallet({ protocol, coinType }: { protocol: WalletProtocol; coinType: CoinType }) {
     await this.context.retrieveProvider({
       protocol,
       coinType,
@@ -40,6 +31,12 @@ class WalletSDK {
     this.walletSigner = WalletHandlerFactory.createSigner(this.context)
     this.walletTransaction = WalletHandlerFactory.createTransaction(this.context)
     this.eventListener = WalletHandlerFactory.createEventListener(this.context)
+    await this.connect()
+    setWalletState({
+      protocol: this.context.protocol,
+      address: this.context.address,
+      coinType: this.context.coinType,
+    })
   }
 
   async connect(): Promise<void> {
@@ -62,7 +59,10 @@ class WalletSDK {
     }
   }
 
-  async signData(data: string, options?: Record<string, any>): Promise<string | undefined> {
+  async signData(
+    data: TypedMessage<MessageTypes> | string,
+    options?: Record<string, any>,
+  ): Promise<string | undefined> {
     if (this.walletSigner != null) {
       return await this.walletSigner.signData(data, options)
     } else {
@@ -88,6 +88,18 @@ class WalletSDK {
     this.context.emitEvent(EventEnum.Disconnect)
   }
 
+  private async signTx(signInfo: SignInfo): Promise<SignInfo> {
+    let signDataRes = await this.signData(signInfo.sign_msg)
+    if (signDataRes && this.context.coinType && isDogecoinChain(this.context.coinType)) {
+      signDataRes = convertTpUTXOSignature(signDataRes)
+    }
+    if (signDataRes) {
+      signInfo.sign_msg = signDataRes
+    }
+    await sleep(1000)
+    return signInfo
+  }
+
   // todo-open: TxsSignedOrUnSigned and TxsWithMMJsonSignedOrUnSigned is pretty much the same, while they are from different api. We need to unify them in backend.
   async signTxList(txs: TxsSignedOrUnSigned): Promise<TxsSignedOrUnSigned>
   async signTxList(txs: TxsWithMMJsonSignedOrUnSigned): Promise<TxsWithMMJsonSignedOrUnSigned>
@@ -96,40 +108,28 @@ class WalletSDK {
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
     if ('sign_list' in txs) {
       for (const signItem of txs.sign_list) {
-        if (signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign) {
-          if (signItem.sign_type === SIGN_TYPE.eth712 && txs.mm_json) {
-            const mmJson = cloneDeep(txs.mm_json)
-            mmJson.message.digest = signItem.sign_msg
-            const signDataRes = await this.signData(mmJson, { isEIP712: true })
-            if (signDataRes && mmJson.domain.chainId) {
-              signItem.sign_msg = signDataRes + mmJsonHashAndChainIdHex(mmJson, mmJson.domain.chainId)
-            }
-            await sleep(1000)
-          } else {
-            let signDataRes = await this.signData(signItem.sign_msg)
-            if (signDataRes && this.context.coinType && isDogecoinChain(this.context.coinType)) {
-              signDataRes = convertTpUTXOSignature(signDataRes)
-            }
-            if (signDataRes) {
-              signItem.sign_msg = signDataRes
-            }
-            await sleep(1000)
+        if (!(signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign)) {
+          break
+        }
+        if (signItem.sign_type === SIGN_TYPE.eth712 && txs.mm_json != null) {
+          const mmJson = cloneDeep(txs.mm_json)
+          mmJson.message.digest = signItem.sign_msg
+          const signDataRes = await this.signData(mmJson, { isEIP712: true })
+          if (signDataRes && mmJson.domain.chainId) {
+            signItem.sign_msg = signDataRes + mmJsonHashAndChainIdHex(mmJson, mmJson.domain.chainId)
           }
+          await sleep(1000)
+        } else {
+          await this.signTx(signItem)
         }
       }
     } else if ('list' in txs) {
       for (const list of txs.list) {
         for (const signItem of list.sign_list) {
-          if (signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign) {
-            let signDataRes = await this.signData(signItem.sign_msg)
-            if (signDataRes && this.context.coinType && isDogecoinChain(this.context.coinType)) {
-              signDataRes = convertTpUTXOSignature(signDataRes)
-            }
-            if (signDataRes) {
-              signItem.sign_msg = signDataRes
-            }
-            await sleep(1000)
+          if (!(signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign)) {
+            break
           }
+          await this.signTx(signItem)
         }
       }
     }

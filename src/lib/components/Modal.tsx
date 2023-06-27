@@ -6,11 +6,12 @@ import clsx from 'clsx'
 interface ModalProps {
   isOpen: boolean
   children?: ReactNode
+  className?: string
   customRootId?: string
   zIndex?: string
 }
 
-export function Modal({ isOpen, children, customRootId, zIndex = 'z-[3]' }: ModalProps) {
+export function Modal({ isOpen, children, customRootId, className, zIndex = 'z-[3]' }: ModalProps) {
   const [removeDOM, setRemoveDOM] = useState(!isOpen)
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export function Modal({ isOpen, children, customRootId, zIndex = 'z-[3]' }: Moda
   }, [isOpen])
 
   return removeDOM ? null : (
-    <Portal customRootId={customRootId}>
+    <Portal customRootId={customRootId} className={className}>
       <Mask zIndex={zIndex} isOpen={isOpen} />
       <div className={clsx('fixed left-0 top-0 flex h-full w-full items-center justify-center', zIndex)}>
         {children}
