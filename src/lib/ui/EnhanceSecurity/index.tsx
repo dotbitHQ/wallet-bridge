@@ -15,7 +15,7 @@ export function EnhanceSecurity() {
         or addresses to ensure that you can still access your assets even if this device is lost.
       </div>
       <Button shape={ButtonShape.round} size={ButtonSize.middle} className="mt-6 px-5" onClick={goNext}>
-        立即增强安全性
+        Backup device
       </Button>
     </div>
   )

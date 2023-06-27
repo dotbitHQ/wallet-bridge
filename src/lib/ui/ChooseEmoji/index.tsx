@@ -8,7 +8,6 @@ export const EmojiList = [
   '🖥️',
   '💻',
   '💾',
-  '🌺',
   '🍟',
   '🙂',
   '🌺',
@@ -43,11 +42,11 @@ export function ChooseEmoji() {
             onClick={() => setSelected(emoji)}
             key={emoji}
             className={clsx(
-              'h-12 w-12 cursor-pointer select-none rounded-xl bg-white p-2 text-center align-middle text-[32px] leading-8 text-neutral-700 hover:border hover:border-emerald-400',
-              selected === emoji && 'border border-emerald-400',
+              'relative box-border h-12 w-12 cursor-pointer select-none rounded-xl hover:bg-slate-600/10 active:bg-slate-600/20',
+              selected === emoji && 'border-2 border-emerald-400',
             )}
           >
-            {emoji}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[32px]">{emoji}</div>
           </div>
         ))}
       </div>

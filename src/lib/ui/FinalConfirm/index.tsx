@@ -22,7 +22,7 @@ export function FinalConfirm() {
       <div className="mt-16 inline-flex w-full items-center justify-center gap-3">
         <input
           type="checkbox"
-          className="h-5 w-5 rounded-md border-2 border-slate-300 border-opacity-40 accent-emerald-400"
+          className="h-5 w-5 cursor-pointer rounded-md border-2 border-slate-300 border-opacity-40 text-emerald-400 focus:ring-transparent"
           checked={checked}
           onChange={(e) => setChecked(e.target.checked)}
         />
