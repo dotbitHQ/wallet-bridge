@@ -1,5 +1,6 @@
 import { WalletProtocol } from '../constant'
 import {
+  ConnectDidConnector,
   MetaMaskConnector,
   TokenPocketUTXOConnector,
   TorusConnector,
@@ -7,14 +8,23 @@ import {
   WalletConnector,
 } from './WalletConnectorHandler'
 import {
+  ConnectDidEventListener,
   MetaMaskEventListener,
   TokenPocketUTXOEventListener,
   TorusEventListener,
   TronLinkEventListener,
   WalletEventListener,
 } from './WalletEventListenerHandler'
-import { MetaMaskSigner, TokenPocketUTXOSigner, TorusSigner, TronLinkSigner, WalletSigner } from './WalletSignerHandler'
 import {
+  ConnectDidSigner,
+  MetaMaskSigner,
+  TokenPocketUTXOSigner,
+  TorusSigner,
+  TronLinkSigner,
+  WalletSigner,
+} from './WalletSignerHandler'
+import {
+  ConnectDidTransaction,
   MetaMaskTransaction,
   TokenPocketUTXOTransaction,
   TorusTransaction,
@@ -60,10 +70,10 @@ export class WalletHandlerFactory {
       Transaction: TokenPocketUTXOTransaction,
     },
     [WalletProtocol.webAuthn]: {
-      Connector: MetaMaskConnector,
-      EventListener: MetaMaskEventListener,
-      Signer: MetaMaskSigner,
-      Transaction: MetaMaskTransaction,
+      Connector: ConnectDidConnector,
+      EventListener: ConnectDidEventListener,
+      Signer: ConnectDidSigner,
+      Transaction: ConnectDidTransaction,
     },
   }
 

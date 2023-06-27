@@ -1,8 +1,8 @@
-import { Button } from '../Button'
-import Wallet from '../../ui/index'
+import { Button } from '../../components'
+import Wallet from '../index'
 
 export default {
-  title: 'Components/Wallets',
+  title: 'UI/Wallets',
 }
 
 const TemplateConnectWallet = () => {

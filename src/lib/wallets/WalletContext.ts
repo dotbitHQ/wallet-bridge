@@ -13,6 +13,7 @@ import Torus from '@toruslabs/torus-embed'
 import Emittery from 'emittery'
 import { EventKey } from './WalletEventListenerHandler'
 import { isAndroid, isMobile } from 'react-device-detect'
+import { ConnectDID } from 'connect-did-sdk'
 
 export class WalletContext {
   // sendTrx method
@@ -36,21 +37,21 @@ export class WalletContext {
     this.coinType = coinType
 
     switch (this.protocol) {
-      case WalletProtocol.metaMask: {
+      case WalletProtocol.metaMask:
         await this.getMetaMaskProvider()
-        return
-      }
-      case WalletProtocol.tronLink: {
+        break
+      case WalletProtocol.tronLink:
         await this.getTronLinkProvider()
-        return
-      }
-      case WalletProtocol.torus: {
+        break
+      case WalletProtocol.torus:
         await this.getTorusProvider()
-        return
-      }
-      case WalletProtocol.tokenPocketUTXO: {
+        break
+      case WalletProtocol.tokenPocketUTXO:
         await this.getTokenPocketUTXOProvider()
-      }
+        break
+      case WalletProtocol.webAuthn:
+        this.getConnectDIDProvider()
+        break
     }
   }
 
@@ -168,5 +169,12 @@ export class WalletContext {
         )
       }
     }
+  }
+
+  private getConnectDIDProvider() {
+    if (this.torusWallet?.hideTorusButton) {
+      this.torusWallet.hideTorusButton()
+    }
+    this.provider = new ConnectDID(!this.isTestNet)
   }
 }
