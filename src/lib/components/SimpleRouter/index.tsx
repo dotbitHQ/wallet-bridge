@@ -21,6 +21,7 @@ const routerContext = createContext<{
   currentRouteName: string
   goNext?: () => void
   goBack?: () => void
+  goTo: (routeName: string) => void
   state: any
   setState: React.Dispatch<any>
 } | null>(null)
@@ -37,13 +38,14 @@ export function SimpleRouter({ routes, onClose }: SimpleRouterProps) {
   if (!currentRoute) throw new Error('Route does not exist')
   const goNext = useCallback(() => currentRoute.next && setCurrentRouteName(currentRoute.next), [currentRoute.next])
   const goBack = useCallback(() => currentRoute.prev && setCurrentRouteName(currentRoute.prev), [currentRoute.prev])
-
+  const goTo = useCallback((routeName: string) => setCurrentRouteName(routeName), [setCurrentRouteName])
   return (
     <routerContext.Provider
       value={{
         currentRouteName,
         goNext: currentRoute.next ? goNext : undefined,
         goBack: currentRoute.prev ? goBack : undefined,
+        goTo,
         state: globalState,
         setState: setGlobalState,
       }}
