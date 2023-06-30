@@ -80,11 +80,7 @@ class WalletSDK {
 
   disconnect() {
     this.eventListener?.removeEvents()
-    if (this.walletConnector != null) {
-      this.walletConnector.disconnect()
-    } else {
-      resetWalletState()
-    }
+    this.walletConnector?.disconnect()
     this.context.emitEvent(EventEnum.Disconnect)
   }
 

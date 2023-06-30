@@ -36,14 +36,18 @@ export default class Wallet {
 
   async initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean> {
     try {
-      const { protocol, coinType } = snapshot(walletState)
+      const { protocol, coinType, deviceData } = snapshot(walletState)
 
       if (protocol && coinType) {
-        await this.walletSDK.init({
-          protocol,
-          coinType,
-        })
-        return true
+        if (deviceData) {
+          return true
+        } else {
+          await this.walletSDK.init({
+            protocol,
+            coinType,
+          })
+          return true
+        }
       }
       this.onInvolution(involution)
       return false

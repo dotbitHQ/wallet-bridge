@@ -11,7 +11,8 @@ function isUserReject(err: any) {
   const tronReject = err === errno.tronLinkConfirmationDeclinedByUser
   const torusReject = [errno.torusUserCancelledLogin, errno.torusUserClosedPopup].includes(err.message)
   const walletConnectReject = err.message === errno.walletConnectUserRejectedTheTransaction
-  return metaMaskReject || tronReject || walletConnectReject || torusReject
+  const connectDidSdkReject = err.code === errno.connectDidSdkAbort
+  return metaMaskReject || tronReject || walletConnectReject || torusReject || connectDidSdkReject
 }
 
 interface HandleErrorRes {
@@ -69,15 +70,16 @@ export default function handleError(error: CustomError): HandleErrorRes {
       message: `Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again.`,
     }
   } else if (
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     error.toString() === errno.tronLinkInsufficientBalance ||
-    (error.message && error.message.includes(errno.walletConnectInsufficientFundsForTransfer))
+    error.message?.includes(errno.walletConnectInsufficientFundsForTransfer)
   ) {
     res = {
       isHandle: true,
       title: `Tips`,
       message: `Insufficient balance`,
     }
-  } else if (error.message && error.message.includes(errno.tronLinkTypeErrorAddUpdateDataNotFunction)) {
+  } else if (error.message?.includes(errno.tronLinkTypeErrorAddUpdateDataNotFunction)) {
     res = {
       isHandle: true,
       title: `Tips`,

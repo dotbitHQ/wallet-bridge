@@ -15,6 +15,9 @@ export class TorusConnector extends WalletConnector {
   }
 
   disconnect() {
+    if (this.context.torusWallet?.hideTorusButton) {
+      this.context.torusWallet?.hideTorusButton()
+    }
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined

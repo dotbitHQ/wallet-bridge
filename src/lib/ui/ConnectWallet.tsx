@@ -19,6 +19,18 @@ type IComponents = Record<string, ReactNode>
 export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' }: ConnectWalletProps) => {
   const [isOpen, setIsOpen] = useState(visible)
   const [showComponent, setShowComponent] = useState(initComponent)
+  const [oldComponent, setOldComponent] = useState('')
+
+  const updateShowComponent = (componentName: string) => {
+    setShowComponent((prevState) => {
+      setOldComponent(prevState)
+      return componentName
+    })
+  }
+
+  const goBack = () => {
+    setShowComponent(oldComponent)
+  }
 
   const onClose = () => {
     setIsOpen(false)
@@ -29,34 +41,29 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' 
       <ChainList
         walletSDK={walletSDK}
         showWalletList={() => {
-          setShowComponent('WalletList')
+          updateShowComponent('WalletList')
+        }}
+        showAddressList={() => {
+          updateShowComponent('AddressList')
         }}
         onClose={onClose}
       ></ChainList>
     ),
-    WalletList: (
-      <WalletList
-        walletSDK={walletSDK}
-        goBack={() => {
-          setShowComponent('ChainList')
-        }}
-        onClose={onClose}
-      ></WalletList>
-    ),
+    WalletList: <WalletList walletSDK={walletSDK} goBack={goBack} onClose={onClose}></WalletList>,
     LoggedIn: (
       <LoggedIn
         walletSDK={walletSDK}
         onDisconnect={() => {
-          setShowComponent('ChainList')
+          updateShowComponent('ChainList')
         }}
         onSwitchAddress={() => {
-          setShowComponent('AddressList')
+          updateShowComponent('AddressList')
         }}
         onDevices={() => {
-          setShowComponent('Devices')
+          updateShowComponent('Devices')
         }}
         onEnhanceSecurity={() => {
-          setShowComponent('EnhanceSecurity')
+          updateShowComponent('EnhanceSecurity')
         }}
         onClose={onClose}
       ></LoggedIn>
@@ -64,9 +71,8 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' 
     AddressList: (
       <AddressList
         walletSDK={walletSDK}
-        goBack={() => {
-          setShowComponent('LoggedIn')
-        }}
+        fromOldComponent={oldComponent}
+        goBack={goBack}
         onClose={onClose}
       ></AddressList>
     ),

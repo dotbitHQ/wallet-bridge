@@ -83,19 +83,21 @@ export const LoggedIn = ({
             <DisconnectIcon className="mr-1 h-4 w-4 text-font-disconnect"></DisconnectIcon>Disconnect
           </span>
         </div>
-        <div className="mb-2 overflow-hidden rounded-3xl border border-[#B6C4D966]">
-          <div className="flex items-center justify-between p-5 pb-4 text-font-disconnect">
-            <span>{`Current manage CKB address`}</span>
-            <InfoIcon className="h-4 w-4 text-font-secondary"></InfoIcon>
+        {walletSnap.coinType === CoinType.ckb ? (
+          <div className="mb-2 overflow-hidden rounded-3xl border border-[#B6C4D966]">
+            <div className="flex items-center justify-between p-5 pb-4 text-font-disconnect">
+              <span>{`Current manage CKB address`}</span>
+              <InfoIcon className="h-4 w-4 text-font-secondary"></InfoIcon>
+            </div>
+            <div className="px-5 text-xl font-bold">{collapseString(walletSnap.address, 8, 4)}</div>
+            <div
+              className="mt-5 flex h-[60px] cursor-pointer items-center justify-center bg-[#F6F8FA] text-center text-font-disconnect hover:bg-[#EBF0F4] active:bg-[#DEE6ED]"
+              onClick={onSwitch}
+            >
+              <SwitchIcon className="mr-4 h-4 w-4 text-font-disconnect"></SwitchIcon>Switch
+            </div>
           </div>
-          <div className="px-5 text-xl font-bold">{collapseString(walletSnap.address, 8, 4)}</div>
-          <div
-            className="mt-5 flex h-[60px] cursor-pointer items-center justify-center bg-[#F6F8FA] text-center text-font-disconnect hover:bg-[#EBF0F4] active:bg-[#DEE6ED]"
-            onClick={onSwitch}
-          >
-            <SwitchIcon className="mr-4 h-4 w-4 text-font-disconnect"></SwitchIcon>Switch
-          </div>
-        </div>
+        ) : null}
         <ul className="mb-6 overflow-hidden rounded-3xl border border-[#B6C4D966]">
           <li
             className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
@@ -106,25 +108,32 @@ export const LoggedIn = ({
             </span>
             <ArrowRightTopIcon className="h-2.5 w-2.5 text-font-tips"></ArrowRightTopIcon>
           </li>
-          <hr className="mx-5 h-px bg-[#B6C4D966]" />
-          <li
-            className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
-            onClick={onDevices}
-          >
-            <span className="inline-flex items-center text-base leading-5">
-              <DevicesIcon className="mr-3 h-6 w-6"></DevicesIcon>Devices
-            </span>
-            <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-tips"></ArrowLeftIcon>
-          </li>
-          <li
-            className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
-            onClick={onEnhanceSecurity}
-          >
-            <span className="inline-flex items-center text-base leading-5">
-              <WarningIcon className="mr-3 h-6 w-6"></WarningIcon>Enhance security
-            </span>
-            <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-tips"></ArrowLeftIcon>
-          </li>
+          {walletSnap.protocol === WalletProtocol.webAuthn ? (
+            <>
+              <hr className="mx-5 h-px bg-[#B6C4D966]" />
+              {walletSnap.enableAuthorize ? (
+                <li
+                  className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
+                  onClick={onDevices}
+                >
+                  <span className="inline-flex items-center text-base leading-5">
+                    <DevicesIcon className="mr-3 h-6 w-6"></DevicesIcon>Devices
+                  </span>
+                  <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-tips"></ArrowLeftIcon>
+                </li>
+              ) : (
+                <li
+                  className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
+                  onClick={onEnhanceSecurity}
+                >
+                  <span className="inline-flex items-center text-base leading-5">
+                    <WarningIcon className="mr-3 h-6 w-6"></WarningIcon>Enhance security
+                  </span>
+                  <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-tips"></ArrowLeftIcon>
+                </li>
+              )}
+            </>
+          ) : null}
         </ul>
       </div>
     </>
