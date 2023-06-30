@@ -175,6 +175,6 @@ export class WalletContext {
     if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
     }
-    this.provider = new ConnectDID(!this.isTestNet)
+    this.provider = new ConnectDID(this.isTestNet)
   }
 }

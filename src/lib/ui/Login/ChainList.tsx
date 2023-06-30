@@ -9,7 +9,7 @@ import {
   TorusIcon,
   TronIcon,
 } from '../../components'
-import { WalletProtocol, CoinType } from '../../constant'
+import { CoinType, WalletProtocol } from '../../constant'
 import { setWalletState, walletState } from '../../store'
 import WalletSDK from '../../wallets'
 import { Tag, TagVariant } from '../../components/Tag'
@@ -23,6 +23,7 @@ import { setLoginCacheState } from '../../store/loginCache'
 interface ChainListProps {
   walletSDK: WalletSDK
   showWalletList: () => void
+  showAddressList: () => void
   onClose: () => void
 }
 
@@ -39,7 +40,7 @@ interface IChainList {
   list: IChain[]
 }
 
-export const ChainList = ({ walletSDK, showWalletList, onClose }: ChainListProps) => {
+export const ChainList = ({ walletSDK, showWalletList, showAddressList, onClose }: ChainListProps) => {
   const [currentLogin, setCurrentLogin] = useState('')
 
   const chains: IChainList[] = [
@@ -158,11 +159,19 @@ export const ChainList = ({ walletSDK, showWalletList, onClose }: ChainListProps
     }
 
     try {
-      setCurrentLogin(name)
+      if (protocol !== WalletProtocol.webAuthn) {
+        setCurrentLogin(name)
+      }
       await walletSDK.init({
         protocol,
         coinType,
       })
+      const { ckbAddresses } = snapshot(walletState)
+      if (protocol === WalletProtocol.webAuthn && ckbAddresses && ckbAddresses.length > 0) {
+        showAddressList()
+      } else {
+        onClose()
+      }
     } catch (error: any) {
       console.error(error)
       const handleErrorRes = handleError(error)

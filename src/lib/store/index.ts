@@ -9,6 +9,8 @@ interface WalletState {
   coinType?: CoinType
   hardwareWalletTipsShow?: boolean
   deviceData?: IDeviceData
+  ckbAddresses?: string[]
+  enableAuthorize?: boolean
 }
 
 const WalletStateKey = 'WalletState'
@@ -23,11 +25,21 @@ const localWalletState = walletStateLocalStorage
       coinType: undefined,
       hardwareWalletTipsShow: true,
       deviceData: undefined,
+      ckbAddresses: [],
+      enableAuthorize: false,
     }
 
 export const walletState = proxy<WalletState>(localWalletState)
 
-export const setWalletState = ({ protocol, address, coinType, hardwareWalletTipsShow, deviceData }: WalletState) => {
+export const setWalletState = ({
+  protocol,
+  address,
+  coinType,
+  hardwareWalletTipsShow,
+  deviceData,
+  ckbAddresses,
+  enableAuthorize,
+}: WalletState) => {
   if (protocol) {
     walletState.protocol = protocol
   }
@@ -40,8 +52,14 @@ export const setWalletState = ({ protocol, address, coinType, hardwareWalletTips
   if (hardwareWalletTipsShow !== undefined) {
     walletState.hardwareWalletTipsShow = hardwareWalletTipsShow
   }
-  if (deviceData != null) {
+  if (deviceData) {
     walletState.deviceData = merge(walletState.deviceData, deviceData)
+  }
+  if (ckbAddresses) {
+    walletState.ckbAddresses = ckbAddresses
+  }
+  if (enableAuthorize !== undefined) {
+    walletState.enableAuthorize = enableAuthorize
   }
   localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
@@ -51,6 +69,8 @@ export const resetWalletState = () => {
   walletState.coinType = undefined
   walletState.address = undefined
   walletState.deviceData = undefined
+  walletState.ckbAddresses = []
+  walletState.enableAuthorize = false
   localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 

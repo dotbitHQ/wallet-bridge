@@ -1,4 +1,8 @@
+import { ActionErrorCode } from 'connect-did-sdk'
+
 const errno = {
+  success: 0,
+  networkError: -1,
   // MetaMask
   metaMaskUserDeniedMessageSignature: 4001,
   metaMaskWalletRequestPermissions: -32002,
@@ -24,6 +28,12 @@ const errno = {
   // torus
   torusUserCancelledLogin: 'User cancelled login',
   torusUserClosedPopup: 'user closed popup',
+  // connect did sdk
+  connectDidSdkAbort: ActionErrorCode.ABORT,
+  connectDidSdkNotFound: ActionErrorCode.NOT_FOUND,
+  connectDidSdkNotExist: ActionErrorCode.NOT_EXIST,
+  connectDidSdkError: ActionErrorCode.ERROR,
+  connectDidSdkSuccess: ActionErrorCode.SUCCESS,
 }
 
 export enum TronLinkRequestAccountsResponseCode {

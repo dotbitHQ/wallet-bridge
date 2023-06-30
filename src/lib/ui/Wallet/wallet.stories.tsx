@@ -5,10 +5,11 @@ export default {
   title: 'UI/Wallets',
 }
 
+const wallet = new Wallet({
+  isTestNet: true,
+})
+
 const TemplateConnectWallet = () => {
-  const wallet = new Wallet({
-    isTestNet: true,
-  })
   const { walletSnap } = wallet.useWalletState()
 
   const onConnect = async () => {
@@ -36,10 +37,6 @@ const TemplateConnectWallet = () => {
 export const ConnectWallet = TemplateConnectWallet.bind({})
 
 const TemplateInitWallet = () => {
-  const wallet = new Wallet({
-    isTestNet: true,
-  })
-
   const initWallet = async () => {
     await wallet.initWallet()
   }
