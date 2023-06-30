@@ -1,8 +1,16 @@
-import { useCallback, useState } from 'react'
+import { ImgHTMLAttributes, useCallback, useState } from 'react'
 import { Button, ButtonShape, ButtonSize } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
-import clsx from 'clsx'
+import clsx, { ClassValue } from 'clsx'
 import { emojis } from './png'
+
+type EmojiProps = React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> & {
+  name: string
+}
+
+export function Emoji({ name, ...rest }: EmojiProps) {
+  return <img {...rest} src={emojis[name as any as keyof typeof emojis] || ''} />
+}
 
 export function ChooseEmoji() {
   const goNext = useSimpleRouter()?.goNext
@@ -14,7 +22,7 @@ export function ChooseEmoji() {
         Choose an Emoji for the new device for easy identification.
       </div>
       <div className="mt-6 grid w-full grid-cols-6 rounded-2xl border border-stone-300 border-opacity-20 bg-gray-50 p-2">
-        {Object.entries(emojis).map(([k, v]) => (
+        {Object.keys(emojis).map((k) => (
           <div
             onClick={onClick(k)}
             key={k}
@@ -23,7 +31,7 @@ export function ChooseEmoji() {
               selected === k ? 'border-2 border-emerald-400 bg-white' : 'hover:bg-slate-600/10',
             )}
           >
-            <img className="absolute left-1/2 top-1/2 w-8 max-w-none -translate-x-1/2 -translate-y-1/2" src={v} />
+            <Emoji className="absolute left-1/2 top-1/2 w-8 max-w-none -translate-x-1/2 -translate-y-1/2" name={k} />
           </div>
         ))}
       </div>
@@ -32,7 +40,7 @@ export function ChooseEmoji() {
         shape={ButtonShape.round}
         size={ButtonSize.middle}
         className="mt-7 w-full px-5"
-        onClick={goNext}
+        onClick={() => goNext && goNext((state) => ({ ...(state || {}), selectedEmoji: selected }))}
       >
         Next
       </Button>

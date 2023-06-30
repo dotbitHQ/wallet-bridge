@@ -1,8 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import Clipboard from 'clipboard'
+import { ConnectDID } from 'connect-did-sdk'
 import { Button, ButtonShape, ButtonSize, CopyIcon } from '../../components'
 import { QRCode } from '../../components/QRCode'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { useWalletState } from '../../store'
+
+const connectDID = new ConnectDID(true)
+
 export function ShowQRCode() {
   const goNext = useSimpleRouter()?.goNext
   const nodeRef = useRef(null)
@@ -10,6 +15,11 @@ export function ShowQRCode() {
     if (!nodeRef.current) return
     new Clipboard(nodeRef.current)
   }, [nodeRef])
+  const { walletSnap } = useWalletState()
+  const url = useMemo(
+    () => connectDID.requestBackupData({ ckbAddr: walletSnap.address!, isOpen: false }),
+    [walletSnap.address],
+  )
   return (
     <div className="flex w-full max-w-[400px] flex-col items-center justify-start px-6 py-20">
       <div className="text-center text-[14px] leading-tight text-neutral-700">
@@ -23,11 +33,16 @@ export function ShowQRCode() {
           id="copy-url"
           className="inline-block w-[141px] overflow-auto overflow-ellipsis align-middle text-[14px] text-blue-800"
         >
-          https://10.143.1.26:20203/DID
+          {url}
         </a>
         <CopyIcon className="ml-1 inline-block h-[13px] w-3 align-middle text-[#B0B8BF]" />
       </span>
-      <Button className="m-6 min-w-[130px] px-5" size={ButtonSize.middle} shape={ButtonShape.round} onClick={goNext}>
+      <Button
+        className="m-6 min-w-[130px] px-5"
+        size={ButtonSize.middle}
+        shape={ButtonShape.round}
+        onClick={() => goNext && goNext()}
+      >
         Next
       </Button>
     </div>

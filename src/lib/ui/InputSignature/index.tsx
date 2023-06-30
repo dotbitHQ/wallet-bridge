@@ -13,6 +13,7 @@ import { useSimpleRouter } from '../../components/SimpleRouter'
 import { Result } from '@zxing/library'
 import clsx from 'clsx'
 import { QrCodeScanner, getCamera } from '../../components/QrCodeScanner/new'
+import { ConnectDID } from 'connect-did-sdk'
 
 function exceptionToMessage(err: DOMException) {
   if (err.name === 'NotAllowedError') {
@@ -50,6 +51,18 @@ function DomException({ err, className }: { err: DOMException; className?: strin
       </div>
     </div>
   )
+}
+
+const connectDID = new ConnectDID()
+
+function verifyData(data: string) {
+  let result = true
+  try {
+    connectDID.decodeQRCode(data)
+  } catch (err) {
+    result = false
+  }
+  return result
 }
 
 export function InputSignature() {
@@ -93,10 +106,11 @@ export function InputSignature() {
     }
   }, [setPermissionError, setRequiringPermission, setMedia])
 
-  const isValidAddress = data.length > 10
+  const isValidData = verifyData(data)
+
   return (
     <div className="relative flex w-full max-w-[400px] flex-col items-center justify-start p-6">
-      <SwapTransition duration="duration-300" className="w-full">
+      <SwapTransition duration="duration-300" className="w-full overflow-visible">
         {media ? (
           <QrCodeScanner
             key={1}
@@ -111,7 +125,7 @@ export function InputSignature() {
             </div>
             <div className="relative mt-6 w-full">
               <textarea
-                className="block h-[108px] w-full resize-none rounded-xl border border-stone-300 border-opacity-20 bg-neutral-100 py-3 pl-4 pr-3 text-[16px] text-neutral-700 focus:border-emerald-400 focus:bg-white focus:outline-offset-1 focus:outline-emerald-400/20"
+                className="block h-[108px] w-full resize-none rounded-xl border border-stone-300 border-opacity-20 bg-neutral-100 py-3 pl-4 pr-3 text-[16px] text-neutral-700 focus:border-emerald-400 focus:bg-white focus:outline-offset-1 focus:outline-emerald-400/20 focus:ring-0"
                 placeholder="Paste data or scan QR code"
                 value={data}
                 onChange={onChange}
@@ -125,16 +139,18 @@ export function InputSignature() {
                 )}
               </div>
             </div>
-            {data.length > 0 && !isValidAddress && (
+            {data.length > 0 && !isValidData && (
               <div className="mt-1 w-full text-[14px] font-normal text-red-400">Incorrect data</div>
             )}
             {permissionError && <DomException className="mt-6" err={permissionError} />}
             <Button
-              disabled={!isValidAddress}
+              disabled={data.length === 0 || !isValidData}
               className="m-6 w-full px-5"
               size={ButtonSize.middle}
               shape={ButtonShape.round}
-              onClick={goNext}
+              onClick={() =>
+                goNext && goNext((state) => ({ ...(state ?? {}), backupDeviceData: connectDID.decodeQRCode(data) }))
+              }
             >
               Next
             </Button>
