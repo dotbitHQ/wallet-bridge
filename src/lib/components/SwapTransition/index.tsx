@@ -38,7 +38,7 @@ export function SwapTransition({ children, className, duration }: SwapTransition
     <TransitionGroup
       className={clsx(
         className,
-        'translate-z-0 relative overflow-hidden transition-[height,width] ease-in-out',
+        'relative max-w-full transform-gpu overflow-hidden transition-[height,width] ease-in-out ',
         duration,
       )}
       style={{ height: childRect?.height, width: childRect?.width }}
@@ -60,7 +60,7 @@ export function SwapTransition({ children, className, duration }: SwapTransition
           return React.cloneElement(children, {
             className: clsx(
               children.props.className,
-              'translate-z-0 absolute transition-[opacity] ease-in-out',
+              'absolute transform-gpu transition-[opacity] ease-in-out',
               duration,
               getTransitionClassName(state),
             ),

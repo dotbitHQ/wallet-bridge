@@ -33,7 +33,7 @@ export function Modal({ isOpen, children, customRootId, className, zIndex = 'z-[
   return removeDOM ? null : (
     <Portal customRootId={customRootId} className={className}>
       <Mask zIndex={zIndex} isOpen={isOpen} />
-      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-center justify-center', zIndex)}>
+      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-end justify-center sm:items-center', zIndex)}>
         {children}
       </div>
     </Portal>
