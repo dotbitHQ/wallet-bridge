@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { DeviceList } from '.'
+import { SimpleRouter } from '../../components/SimpleRouter'
 
 export default {
   title: 'UI/DeviceList',
@@ -7,7 +8,7 @@ export default {
 } as ComponentMeta<typeof DeviceList>
 
 const TemplateDefault: ComponentStory<typeof DeviceList> = () => {
-  return <DeviceList />
+  return <SimpleRouter initialRouteName="index" onClose={() => {}} routes={{ index: { el: <DeviceList /> } }} />
 }
 
 export const DefaultDeviceList = TemplateDefault.bind({})

@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { FinalConfirm } from '.'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { SimpleRouter } from '../../components/SimpleRouter'
 
 export default {
   title: 'UI/FinalConfirm',
@@ -12,7 +13,7 @@ const queryClient = new QueryClient()
 const TemplateDefault: ComponentStory<typeof FinalConfirm> = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <FinalConfirm />
+      <SimpleRouter initialRouteName="index" onClose={() => {}} routes={{ index: { el: <FinalConfirm /> } }} />
     </QueryClientProvider>
   )
 }
