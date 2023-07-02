@@ -1,9 +1,8 @@
-import { ReactElement, ReactNode, cloneElement, createContext, useCallback, useContext, useState } from 'react'
+import { ReactElement, ReactNode, cloneElement, createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { Header } from '../Header'
 import { SwapTransition } from '../SwapTransition'
 
 interface Route {
-  title: string
   el: ReactElement
   next?: string
   prev?: string
@@ -12,70 +11,64 @@ interface Route {
 interface SimpleRouterProps {
   initialRouteName: string
   routes: {
-    index: Route
     [k: string]: Route | undefined
   }
   onClose: () => void
 }
 
-type State = any
-type StateTransition<T> = (state?: T) => T
-
 const routerContext = createContext<{
   currentRouteName: string
-  goNext?: (stateTransition?: StateTransition<any>) => void
-  goBack?: (stateTransition?: StateTransition<any>) => void
-  goTo: (routeName: string, state: State) => void
-  state: State
-  setState: React.Dispatch<State>
+  prevRouteName?: string
+  goNext?: () => void
+  goBack?: () => void
+  goTo: (routeName: string) => void
+  onClose: () => void
 } | null>(null)
 
-export function useSimpleRouter<T>() {
-  return useContext<{
-    currentRouteName: string
-    goNext?: (stateTransition?: StateTransition<T>) => void
-    goBack?: (stateTransition?: StateTransition<T>) => void
-    goTo: (routeName: string, state: State) => void
-    state: State
-    setState: React.Dispatch<State>
-  } | null>(routerContext)
+export function useSimpleRouter() {
+  return useContext(routerContext)
 }
 
-export function SimpleRouter<T>({ routes, onClose, initialRouteName = 'index' }: SimpleRouterProps) {
+export function SimpleRouter({ routes, onClose, initialRouteName = 'index' }: SimpleRouterProps) {
+  const history: string[] = useMemo(() => [], [])
   const [currentRouteName, setCurrentRouteName] = useState(initialRouteName)
-  const [globalState, setGlobalState] = useState<T>()
 
   const currentRoute = routes[currentRouteName]
   if (!currentRoute) throw new Error('Route does not exist')
-  const goNext = useCallback(
-    (stateTransition?: StateTransition<T>) => {
-      if (stateTransition) setGlobalState(stateTransition(globalState))
-      currentRoute.next && setCurrentRouteName(currentRoute.next)
+  const goNext = currentRoute.next
+    ? () => {
+        history.push(currentRouteName)
+        setCurrentRouteName(currentRoute.next!)
+      }
+    : undefined
+  const goBack =
+    history.length > 0 || currentRoute.prev
+      ? () => {
+          const prevRoute = history.pop()
+          if (prevRoute) setCurrentRouteName(prevRoute)
+          else if (currentRoute.prev) setCurrentRouteName(currentRoute.prev)
+        }
+      : undefined
+  const goTo = useCallback(
+    (routeName: string) => {
+      history.push(currentRouteName)
+      setCurrentRouteName(routeName)
     },
-    [currentRoute.next, setGlobalState],
+    [setCurrentRouteName, currentRouteName],
   )
-  const goBack = useCallback(
-    (stateTransition?: StateTransition<T>) => {
-      if (stateTransition) setGlobalState(stateTransition(globalState))
-      currentRoute.prev && setCurrentRouteName(currentRoute.prev)
-    },
-    [currentRoute.prev, setGlobalState],
-  )
-  const goTo = useCallback((routeName: string) => setCurrentRouteName(routeName), [setCurrentRouteName])
   return (
     <routerContext.Provider
       value={{
         currentRouteName,
-        goNext: currentRoute.next ? goNext : undefined,
-        goBack: currentRoute.prev ? goBack : undefined,
+        prevRouteName: history[history.length - 1],
+        goNext,
+        goBack,
         goTo,
-        state: globalState,
-        setState: setGlobalState,
+        onClose,
       }}
     >
       <SwapTransition>
-        <div key={currentRouteName}>
-          <Header title={currentRoute.title} onClose={onClose} goBack={goBack} />
+        <div className="w-full" key={currentRouteName}>
           {currentRoute.el}
         </div>
       </SwapTransition>
