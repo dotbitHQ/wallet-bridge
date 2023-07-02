@@ -39,7 +39,7 @@ export default class Wallet {
       const { protocol, coinType, deviceData } = snapshot(walletState)
 
       if (protocol && coinType) {
-        if (deviceData) {
+        if (deviceData != null) {
           return true
         } else {
           await this.walletSDK.init({

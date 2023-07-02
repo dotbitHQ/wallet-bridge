@@ -10,9 +10,7 @@ interface Route {
 
 interface SimpleRouterProps {
   initialRouteName: string
-  routes: {
-    [k: string]: Route | undefined
-  }
+  routes: Record<string, Route | undefined>
   onClose: () => void
 }
 
@@ -34,7 +32,7 @@ export function SimpleRouter({ routes, onClose, initialRouteName = 'index' }: Si
   const [currentRouteName, setCurrentRouteName] = useState(initialRouteName)
 
   const currentRoute = routes[currentRouteName]
-  if (!currentRoute) throw new Error('Route does not exist')
+  if (currentRoute === undefined) throw new Error('Route does not exist')
   const goNext = currentRoute.next
     ? () => {
         history.push(currentRouteName)
@@ -54,7 +52,7 @@ export function SimpleRouter({ routes, onClose, initialRouteName = 'index' }: Si
       history.push(currentRouteName)
       setCurrentRouteName(routeName)
     },
-    [setCurrentRouteName, currentRouteName],
+    [setCurrentRouteName, currentRouteName, history],
   )
   return (
     <routerContext.Provider

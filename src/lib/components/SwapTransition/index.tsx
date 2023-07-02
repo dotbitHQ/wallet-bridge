@@ -60,7 +60,7 @@ export function SwapTransition({ children, className, duration }: SwapTransition
           return React.cloneElement(children, {
             className: clsx(
               children.props.className,
-              'transition-[opacity] ease-in-out absolute translate-z-0',
+              'translate-z-0 absolute transition-[opacity] ease-in-out',
               duration,
               getTransitionClassName(state),
             ),

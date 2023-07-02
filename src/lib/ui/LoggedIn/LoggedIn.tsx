@@ -36,10 +36,18 @@ export const LoggedIn = () => {
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)!
   const { goTo, onClose } = useSimpleRouter()!
-  const onDisconnect = () => goTo('ChainList')
-  const onSwitchAddress = () => goTo('AddressList')
-  const onDevices = () => goTo('DeviceList')
-  const onEnhanceSecurity = () => goTo('EnhanceSecurity')
+  const onDisconnect = () => {
+    goTo('ChainList')
+  }
+  const onSwitchAddress = () => {
+    goTo('AddressList')
+  }
+  const onDevices = () => {
+    goTo('DeviceList')
+  }
+  const onEnhanceSecurity = () => {
+    goTo('EnhanceSecurity')
+  }
 
   const icons: Record<CoinType, ReactNode> = {
     [CoinType.btc]: <DeviceIcon className="h-[72px] w-[72px]"></DeviceIcon>,

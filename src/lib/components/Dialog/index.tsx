@@ -27,7 +27,7 @@ export function Dialog({
   goBack,
 }: DialogProps) {
   return (
-    <Modal customRootId={customRootId || 'dialog-root'} isOpen={isOpen} zIndex={zIndex}>
+    <Modal customRootId={customRootId ?? 'dialog-root'} isOpen={isOpen} zIndex={zIndex}>
       <div
         className={clsx(
           'box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',

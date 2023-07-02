@@ -1,7 +1,7 @@
-import { ImgHTMLAttributes, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Button, ButtonShape, ButtonSize, Header } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
-import clsx, { ClassValue } from 'clsx'
+import clsx from 'clsx'
 import { emojis } from './png'
 import { setSelectedEmoji } from '../../store/webAuthnState'
 
@@ -14,9 +14,14 @@ export function Emoji({ name, ...rest }: EmojiProps) {
 }
 
 export function ChooseEmoji() {
-  const { goNext, goBack, goTo, onClose } = useSimpleRouter()!
+  const { goNext, goBack, onClose } = useSimpleRouter()!
   const [selected, setSelected] = useState<string>()
-  const onClick = useCallback((k: string) => () => setSelected(k), [setSelected])
+  const onClick = useCallback(
+    (k: string) => () => {
+      setSelected(k)
+    },
+    [setSelected],
+  )
   return (
     <>
       <Header title="Add Device" className="p-6" goBack={goBack} onClose={onClose} />
@@ -24,7 +29,7 @@ export function ChooseEmoji() {
         <div className="w-full text-center text-[16px] leading-normal text-neutral-700">
           Choose an Emoji for the new device for easy identification.
         </div>
-        <div className="mt-6 grid w-full grid-cols-6 rounded-2xl border border-stone-300 border-opacity-20 bg-gray-50 p-2">
+        <div className="mt-6 grid w-full grid-cols-6 rounded-2xl border border-stone-300/20 bg-gray-50 p-2">
           {Object.keys(emojis).map((k) => (
             <div
               onClick={onClick(k)}
@@ -45,7 +50,7 @@ export function ChooseEmoji() {
           className="mt-7 w-full px-5"
           onClick={() => {
             setSelectedEmoji(selected)
-            goNext && goNext()
+            goNext?.()
           }}
         >
           Next

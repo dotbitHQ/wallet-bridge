@@ -27,7 +27,7 @@ export function BottomSheet({
   goBack,
 }: BottomSheetProps) {
   return (
-    <Sheet customRootId={customRootId || 'dialog-root'} isOpen={isOpen} zIndex={zIndex}>
+    <Sheet customRootId={customRootId ?? 'dialog-root'} isOpen={isOpen} zIndex={zIndex}>
       <div
         className={clsx(
           'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',

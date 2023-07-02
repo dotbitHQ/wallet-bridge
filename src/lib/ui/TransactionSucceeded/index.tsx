@@ -4,7 +4,7 @@ import { useSimpleRouter } from '../../components/SimpleRouter'
 export function TransactionSucceeded() {
   const goNext = useSimpleRouter()?.goNext
   return (
-    <div className="relative flex w-full max-w-[400px] flex-col items-center justify-start pb-6 pl-6 pr-6">
+    <div className="relative flex w-full max-w-[400px] flex-col items-center justify-start px-6 pb-6">
       <SafeIcon className="h-[80px] w-[80px] text-green-500" />
       <div className="mt-3 text-center text-[16px] font-bold text-neutral-700">Successfully Associated</div>
       <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">

@@ -24,7 +24,7 @@ export const AddressList = () => {
     if (fromOldComponent === 'ChainList') {
       onClose()
     } else {
-      goBack && goBack()
+      goBack?.()
     }
   }
 

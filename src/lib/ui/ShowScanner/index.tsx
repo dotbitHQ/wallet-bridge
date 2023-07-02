@@ -1,11 +1,10 @@
 import clsx from 'clsx'
-import { QrCodeScanner } from '../../components/QrCodeScanner/new'
-import { setMediaStream, setQrCodeData, useWebAuthnState } from '../../store/webAuthnState'
+import { QrCodeScanner } from '../../components/QrCodeScanner'
+import { setQrCodeData, useWebAuthnState } from '../../store/webAuthnState'
 import { useCallback } from 'react'
 import { Result } from '@zxing/library'
 import { Header } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
-import { snapshot } from 'valtio'
 
 export function ShowScanner() {
   const webAuthnState = useWebAuthnState()
@@ -15,7 +14,7 @@ export function ShowScanner() {
       setQrCodeData(result.getText())
       goBack!()
     },
-    [setMediaStream, setQrCodeData, goBack!],
+    [goBack],
   )
 
   return (

@@ -2,7 +2,7 @@ import { ArrowLeftIcon, LoadingIconGradient } from '../../components'
 
 export function TransactionStatus() {
   return (
-    <div className="relative flex w-full max-w-[400px] flex-col items-center justify-start pb-6 pl-6 pr-6">
+    <div className="relative flex w-full max-w-[400px] flex-col items-center justify-start px-6 pb-6">
       <LoadingIconGradient className="animation-rotate-360-deg h-[64px] w-[64px] text-emerald-500" />
       <div className="mt-4 text-center text-[16px] font-bold text-neutral-700">Device Adding</div>
       <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">Approximately 3 minutes.</div>

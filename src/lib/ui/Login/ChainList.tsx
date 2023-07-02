@@ -46,8 +46,12 @@ export const ChainList = () => {
   const [currentLogin, setCurrentLogin] = useState('')
   const walletSDK = useContext(WalletSDKContext)!
   const router = useSimpleRouter()!
-  const showWalletList = () => router?.goTo('WalletList')
-  const showAddressList = () => router?.goTo('AddressList')
+  const showWalletList = () => {
+    router?.goTo('WalletList')
+  }
+  const showAddressList = () => {
+    router?.goTo('AddressList')
+  }
   const onClose = router?.onClose
 
   const chains: IChainList[] = [
@@ -174,7 +178,7 @@ export const ChainList = () => {
         coinType,
       })
       const { ckbAddresses } = snapshot(walletState)
-      if (protocol === WalletProtocol.webAuthn && ckbAddresses && ckbAddresses.length > 0) {
+      if (protocol === WalletProtocol.webAuthn && ckbAddresses != null && ckbAddresses.length > 0) {
         showAddressList()
       } else {
         onClose()

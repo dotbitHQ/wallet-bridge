@@ -5,6 +5,7 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
     'plugin:tailwindcss/recommended',
     'plugin:valtio/recommended',
     'standard-with-typescript',
@@ -25,8 +26,10 @@ module.exports = {
     'no-console': 'warn',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/consistent-type-assertions': 'warn',
-    '@typescript-eslint/explicit-function-return-type': 'warn',
-    '@typescript-eslint/strict-boolean-expressions': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/no-misused-promises': 'warn',
+    '@typescript-eslint/no-non-null-assertion': 'warn',
+    'react-hooks/exhaustive-deps': 'error',
   },
 }

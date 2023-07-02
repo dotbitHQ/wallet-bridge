@@ -51,7 +51,7 @@ export function DeviceList() {
         </div>
         <ul className="mt-2 flex w-full flex-col items-stretch justify-start gap-2">
           <li className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4">
-            <img className="h-[28px] w-[28px] flex-none" src={emojis['laptop']} />
+            <img className="h-[28px] w-[28px] flex-none" src={emojis.laptop} />
             <div className="flex-1 text-[14px] font-semibold text-neutral-700">
               <div>Chrome-dotbit-1217</div>
               <span className="flex-none rounded bg-green-100 px-1 py-0.5 text-[12px] text-emerald-600">
@@ -60,7 +60,7 @@ export function DeviceList() {
             </div>
           </li>
           <li className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4">
-            <img className="h-[28px] w-[28px] flex-none" src={emojis['fire']} />
+            <img className="h-[28px] w-[28px] flex-none" src={emojis.fire} />
             <div className="flex-1 text-[14px] font-semibold text-neutral-700">
               <div>Chrome-dotbit-1217</div>
             </div>
@@ -68,7 +68,9 @@ export function DeviceList() {
           </li>
         </ul>
         <div
-          onClick={() => goTo('EnhanceSecurity')}
+          onClick={() => {
+            goTo('EnhanceSecurity')
+          }}
           className="mt-2 flex h-[60px] w-full cursor-pointer flex-row items-center justify-between gap-4 rounded-2xl border border-dashed border-stone-300/20 bg-white p-4 hover:bg-slate-600/10 active:bg-slate-600/20"
         >
           <PlusIcon className="h-[24px] w-[24px] flex-none" />

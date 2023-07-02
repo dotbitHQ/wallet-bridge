@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useRef, useState } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 import {
   Button,
   ButtonShape,
@@ -7,13 +7,11 @@ import {
   LoadingIcon,
   PasteIcon,
   ScanIcon,
-  SwapTransition,
   WarningOutlineIcon,
 } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
-import { Result } from '@zxing/library'
 import clsx from 'clsx'
-import { QrCodeScanner, getCamera } from '../../components/QrCodeScanner/new'
+import { getCamera } from '../../components/QrCodeScanner'
 import { ConnectDID } from 'connect-did-sdk'
 import { setBackupDeviceData, setMediaStream, setQrCodeData, useWebAuthnState } from '../../store/webAuthnState'
 
@@ -41,7 +39,7 @@ function DomException({ err, className }: { err: DOMException; className?: strin
   return (
     <div
       className={clsx(
-        'flex w-full flex-row items-start justify-start gap-2 rounded-xl border border-amber-300 border-opacity-40 bg-amber-300 bg-opacity-5 p-3',
+        'flex w-full flex-row items-start justify-start gap-2 rounded-xl border border-amber-300/40 bg-amber-300/5 p-3',
         className,
       )}
     >
@@ -72,25 +70,14 @@ export function InputSignature() {
   // const [data, setData] = useState('')
   const [permissionError, setPermissionError] = useState<DOMException | undefined>(undefined)
   const [requiringPermission, setRequiringPermission] = useState(false)
-  const { mediaStream: media, qrCodeData: data } = useWebAuthnState()
-  const onChange = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setQrCodeData(e.target.value)
-    },
-    [setQrCodeData],
-  )
-
-  const onSuccess = useCallback(
-    (result: Result) => {
-      setQrCodeData(result.getText())
-      setRequiringPermission(false)
-    },
-    [setQrCodeData],
-  )
+  const { qrCodeData: data } = useWebAuthnState()
+  const onChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+    setQrCodeData(e.target.value)
+  }, [])
 
   const onPaste = useCallback(() => {
     navigator.clipboard.readText().then(setQrCodeData, console.error)
-  }, [setQrCodeData])
+  }, [])
 
   const onClickScan = useCallback(async () => {
     try {
@@ -107,7 +94,7 @@ export function InputSignature() {
     } finally {
       setRequiringPermission(false)
     }
-  }, [setPermissionError, setRequiringPermission, setMediaStream])
+  }, [setPermissionError, setRequiringPermission, goTo])
 
   const isValidData = verifyData(data)
 
@@ -120,7 +107,7 @@ export function InputSignature() {
         </div>
         <div className="relative mt-6 w-full">
           <textarea
-            className="block h-[108px] w-full resize-none rounded-xl border border-stone-300 border-opacity-20 bg-neutral-100 py-3 pl-4 pr-3 text-[16px] text-neutral-700 focus:border-emerald-400 focus:bg-white focus:outline-offset-1 focus:outline-emerald-400/20 focus:ring-0"
+            className="block h-[108px] w-full resize-none rounded-xl border border-stone-300/20 bg-neutral-100 py-3 pl-4 pr-3 text-[16px] text-neutral-700 focus:border-emerald-400 focus:bg-white focus:outline-offset-1 focus:outline-emerald-400/20 focus:ring-0"
             placeholder="Paste data or scan QR code"
             value={data}
             onChange={onChange}
@@ -137,7 +124,7 @@ export function InputSignature() {
         {data.length > 0 && !isValidData && (
           <div className="mt-1 w-full text-[14px] font-normal text-red-400">Incorrect data</div>
         )}
-        {permissionError && <DomException className="mt-6" err={permissionError} />}
+        {permissionError != null && <DomException className="mt-6" err={permissionError} />}
         <Button
           disabled={data.length === 0 || !isValidData}
           className="m-6 w-full px-5"
@@ -145,7 +132,7 @@ export function InputSignature() {
           shape={ButtonShape.round}
           onClick={() => {
             setBackupDeviceData(connectDID.decodeQRCode(data))
-            goNext && goNext()
+            goNext?.()
           }}
         >
           Next
