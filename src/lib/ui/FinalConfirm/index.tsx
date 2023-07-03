@@ -44,8 +44,10 @@ export function FinalConfirm() {
     retry: false,
     mutationFn: async (signData: any) => {
       // const signature = await walletSDK?.signData(signData.sign_list[0].sign_msg)
-      const signature = await new ConnectDID(true).requestSignData(signData.sign_list[0].sign_msg.replace('0x', ''))
-      const res = await fetch('https://test-webauthn-api.did.id/transaction/send', {
+      const signature = await new ConnectDID(true).requestSignData({
+        msg: signData.sign_list[0].sign_msg.replace('0x', ''),
+      })
+      const res = await fetch('https://test-webauthn-api.did.id/v1/transaction/send', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -56,7 +58,7 @@ export function FinalConfirm() {
           sign_list: [
             {
               sign_type: 8,
-              sign_msg: signature,
+              sign_msg: signature.data,
             },
           ],
           sign_address: walletSnap.address,

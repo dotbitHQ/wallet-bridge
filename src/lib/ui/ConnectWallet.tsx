@@ -99,7 +99,7 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' 
         <Modal isOpen={isOpen} customRootId="ConnectWalletModal">
           <div
             className={clsx(
-              'box-border w-full max-w-[400px] overflow-x-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white sm:rounded-[32px]',
+              'box-border w-full max-w-[400px] overflow-x-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white sm:max-h-[500px] sm:rounded-[32px]',
               isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
             )}
           >
