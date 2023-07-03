@@ -49,10 +49,11 @@ export function SimpleRouter({ routes, onClose, initialRouteName = 'index' }: Si
       : undefined
   const goTo = useCallback(
     (routeName: string) => {
+      if (routes[routeName] === undefined) throw new Error('Route does not exist')
       history.push(currentRouteName)
       setCurrentRouteName(routeName)
     },
-    [setCurrentRouteName, currentRouteName, history],
+    [setCurrentRouteName, currentRouteName, history, routes],
   )
   return (
     <routerContext.Provider
