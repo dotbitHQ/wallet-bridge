@@ -170,15 +170,14 @@ export const ChainList = () => {
     }
 
     try {
-      if (protocol !== WalletProtocol.webAuthn) {
-        setCurrentLogin(name)
-      }
+      setCurrentLogin(name)
       await walletSDK.init({
         protocol,
         coinType,
       })
+      await walletSDK.connect()
       const { ckbAddresses } = snapshot(walletState)
-      if (protocol === WalletProtocol.webAuthn && ckbAddresses != null && ckbAddresses.length > 0) {
+      if (protocol === WalletProtocol.webAuthn && ckbAddresses && ckbAddresses.length > 0) {
         showAddressList()
       } else {
         onClose()

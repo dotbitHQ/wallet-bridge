@@ -1,3 +1,7 @@
+import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import { snapshot } from 'valtio'
 import { WalletConnector } from './WalletConnectorHandler'
 import { WalletSigner } from './WalletSignerHandler'
 import { ISendTrxParams, WalletTransaction } from './WalletTransactionHandler'
@@ -8,8 +12,10 @@ import { CoinType, WalletProtocol, SIGN_TYPE } from '../constant'
 import { SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
-import { resetWalletState, setWalletState } from '../store'
-import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
+import { setWalletState, walletState } from '../store'
+import { ConnectWallet } from '../ui/ConnectWallet'
+import CustomError from '../utils/CustomError'
+import errno from '../constant/errno'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -31,12 +37,6 @@ class WalletSDK {
     this.walletSigner = WalletHandlerFactory.createSigner(this.context)
     this.walletTransaction = WalletHandlerFactory.createTransaction(this.context)
     this.eventListener = WalletHandlerFactory.createEventListener(this.context)
-    await this.connect()
-    setWalletState({
-      protocol: this.context.protocol,
-      address: this.context.address,
-      coinType: this.context.coinType,
-    })
   }
 
   async connect(): Promise<void> {
@@ -44,38 +44,85 @@ class WalletSDK {
     this.eventListener?.removeEvents()
     this.eventListener?.listenEvents()
     this.context.emitEvent(EventEnum.Connect)
+    setWalletState({
+      protocol: this.context.protocol,
+      address: this.context.address,
+      coinType: this.context.coinType,
+    })
+  }
+
+  connectWallet(params: { initComponent?: string } = {}): void {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const connectWalletInstance = React.createElement(ConnectWallet, {
+      visible: true,
+      walletSDK: this,
+      ...params,
+    })
+    createRoot(container).render(connectWalletInstance)
+  }
+
+  onInvolution(involution: boolean): void {
+    if (involution) {
+      this.connectWallet()
+    }
+  }
+
+  async initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean> {
+    try {
+      const { protocol, coinType, deviceData } = snapshot(walletState)
+
+      if (protocol && coinType) {
+        await this.init({
+          protocol,
+          coinType,
+        })
+        if (protocol === WalletProtocol.webAuthn && deviceData) {
+          return true
+        } else {
+          await this.connect()
+          return true
+        }
+      }
+      this.onInvolution(involution)
+      return false
+    } catch (error) {
+      console.error(error)
+      this.onInvolution(involution)
+      return false
+    }
   }
 
   async switchNetwork(chainId: number) {
     if (!chainId) throw new Error('connect: Please provide a valid chainId')
-    if (this.walletConnector != null) {
-      this.eventListener?.removeEvents()
-      this.walletConnector.disconnect()
-      this.walletConnector.switchNetwork(chainId)
-      await this.connect()
-      this.context.emitEvent(EventEnum.Connect)
-    } else {
-      throw new Error('connect: Please initialize wallet first')
+    const isInit = await this.initWallet()
+    if (!isInit && !this.walletConnector) {
+      throw new CustomError(errno.failedToInitializeWallet, 'switchNetwork: Please initialize wallet first')
     }
+    this.eventListener?.removeEvents()
+    this.walletConnector?.disconnect()
+    this.walletConnector?.switchNetwork(chainId)
+    await this.connect()
+    this.context.emitEvent(EventEnum.Connect)
   }
 
   async signData(
     data: TypedMessage<MessageTypes> | string,
     options?: Record<string, any>,
   ): Promise<string | undefined> {
-    if (this.walletSigner != null) {
-      return await this.walletSigner.signData(data, options)
-    } else {
-      throw new Error('signData: Please initialize wallet first')
+    const isInit = await this.initWallet()
+    if (!isInit && !this.walletSigner) {
+      throw new CustomError(errno.failedToInitializeWallet, 'signData: Please initialize wallet first')
     }
+    return await this.walletSigner?.signData(data, options)
   }
 
-  async sendTransaction(data: ISendTrxParams): Promise<string> {
-    if (this.walletTransaction != null) {
-      return await this.walletTransaction.sendTrx(data)
-    } else {
-      throw new Error('sendTransaction: Please initialize wallet first')
+  async sendTransaction(data: ISendTrxParams): Promise<string | undefined> {
+    const isInit = await this.initWallet()
+    if (!isInit && !this.walletTransaction) {
+      throw new CustomError(errno.failedToInitializeWallet, 'sendTransaction: Please initialize wallet first')
     }
+    return await this.walletTransaction?.sendTrx(data)
   }
 
   disconnect() {
@@ -102,6 +149,11 @@ class WalletSDK {
   async signTxList(
     txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
+    const isInit = await this.initWallet()
+    if (!isInit) {
+      throw new CustomError(errno.failedToInitializeWallet, 'signTxList: Please initialize wallet first')
+    }
+
     if ('sign_list' in txs) {
       for (const signItem of txs.sign_list) {
         if (!(signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign)) {
