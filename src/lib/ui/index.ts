@@ -1,9 +1,5 @@
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { ConnectWallet } from './ConnectWallet'
 import WalletSDK from '../wallets'
-import { useWalletState, walletState } from '../store'
-import { snapshot } from 'valtio'
+import { useWalletState } from '../store'
 
 export default class Wallet {
   walletSDK: WalletSDK
@@ -13,48 +9,15 @@ export default class Wallet {
     this.walletSDK = new WalletSDK({ isTestNet })
   }
 
-  connectWallet(params: { initComponent?: string } = {}): void {
-    const container = document.createElement('div')
-    document.body.appendChild(container)
-    const connectWalletInstance = React.createElement(ConnectWallet, {
-      visible: true,
-      walletSDK: this.walletSDK,
-      ...params,
-    })
-    createRoot(container).render(connectWalletInstance)
+  connectWallet() {
+    this.walletSDK.connectWallet()
   }
 
-  connectWalletInfo(): void {
-    this.connectWallet({ initComponent: 'LoggedIn' })
-  }
-
-  onInvolution(involution: boolean): void {
-    if (involution) {
-      this.connectWallet()
-    }
+  connectWalletInfo() {
+    this.walletSDK.connectWallet({ initComponent: 'LoggedIn' })
   }
 
   async initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean> {
-    try {
-      const { protocol, coinType, deviceData } = snapshot(walletState)
-
-      if (protocol && coinType) {
-        if (deviceData != null) {
-          return true
-        } else {
-          await this.walletSDK.init({
-            protocol,
-            coinType,
-          })
-          return true
-        }
-      }
-      this.onInvolution(involution)
-      return false
-    } catch (error) {
-      console.error(error)
-      this.onInvolution(involution)
-      return false
-    }
+    return await this.walletSDK.initWallet({ involution })
   }
 }

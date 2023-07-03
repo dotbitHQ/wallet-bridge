@@ -102,6 +102,7 @@ export const WalletList = () => {
           protocol,
           coinType,
         })
+        await walletSDK.connect()
       }
       onClose?.()
     } catch (error: any) {

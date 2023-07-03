@@ -52,10 +52,10 @@ export const setWalletState = ({
   if (hardwareWalletTipsShow !== undefined) {
     walletState.hardwareWalletTipsShow = hardwareWalletTipsShow
   }
-  if (deviceData != null) {
+  if (deviceData) {
     walletState.deviceData = merge(walletState.deviceData, deviceData)
   }
-  if (ckbAddresses != null) {
+  if (ckbAddresses) {
     walletState.ckbAddresses = ckbAddresses
   }
   if (enableAuthorize !== undefined) {
