@@ -15,10 +15,12 @@ import WalletSDK from '../../wallets'
 import { Tag, TagVariant } from '../../components/Tag'
 import { ChainItem } from '../../components/ChainItem'
 import clsx from 'clsx'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useContext, useState } from 'react'
 import handleError from '../../utils/handleError'
 import { snapshot } from 'valtio'
 import { setLoginCacheState } from '../../store/loginCache'
+import { WalletSDKContext } from '../ConnectWallet'
+import { useSimpleRouter } from '../../components/SimpleRouter'
 
 interface ChainListProps {
   walletSDK: WalletSDK
@@ -40,8 +42,17 @@ interface IChainList {
   list: IChain[]
 }
 
-export const ChainList = ({ walletSDK, showWalletList, showAddressList, onClose }: ChainListProps) => {
+export const ChainList = () => {
   const [currentLogin, setCurrentLogin] = useState('')
+  const walletSDK = useContext(WalletSDKContext)!
+  const router = useSimpleRouter()!
+  const showWalletList = () => {
+    router?.goTo('WalletList')
+  }
+  const showAddressList = () => {
+    router?.goTo('AddressList')
+  }
+  const onClose = router?.onClose
 
   const chains: IChainList[] = [
     {
@@ -159,13 +170,12 @@ export const ChainList = ({ walletSDK, showWalletList, showAddressList, onClose 
     }
 
     try {
-      if (protocol !== WalletProtocol.webAuthn) {
-        setCurrentLogin(name)
-      }
+      setCurrentLogin(name)
       await walletSDK.init({
         protocol,
         coinType,
       })
+      await walletSDK.connect()
       const { ckbAddresses } = snapshot(walletState)
       if (protocol === WalletProtocol.webAuthn && ckbAddresses && ckbAddresses.length > 0) {
         showAddressList()

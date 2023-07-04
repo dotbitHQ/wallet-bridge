@@ -31,10 +31,7 @@ export class ConnectDidConnector extends WalletConnector {
         enableAuthorize: !!res.data.data.enable_authorize,
       })
     } else {
-      throw new CustomError(
-        res.data?.err_no || res?.statusText || errno.networkError,
-        res.statusText || res.data?.err_msg || 'Network Error',
-      )
+      throw new CustomError(res.data?.err_no, res.data?.err_msg)
     }
   }
 

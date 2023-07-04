@@ -20,6 +20,11 @@ const TemplateConnectWallet = () => {
     wallet.connectWalletInfo()
   }
 
+  const onSignData = async () => {
+    const res = await wallet.walletSDK.signData('0x123abc')
+    console.log(res)
+  }
+
   return (
     <>
       <div>
@@ -30,6 +35,8 @@ const TemplateConnectWallet = () => {
       <Button onClick={onConnect}>Connect Wallet</Button>
       <br />
       <Button onClick={onLoggedIn}>Logged In</Button>
+      <br />
+      <Button onClick={onSignData}>Sign data</Button>
     </>
   )
 }

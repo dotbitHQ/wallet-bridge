@@ -3,6 +3,9 @@ import { useWalletState, setWalletState } from '../../store'
 import WalletSDK from '../../wallets'
 import { AddressItem } from '../../components/AddressItem'
 import { collapseString } from '../../utils'
+import { useContext } from 'react'
+import { WalletSDKContext } from '../ConnectWallet'
+import { useSimpleRouter } from '../../components/SimpleRouter'
 
 interface AddressListProps {
   walletSDK: WalletSDK
@@ -11,14 +14,17 @@ interface AddressListProps {
   goBack: () => void
 }
 
-export const AddressList = ({ walletSDK, goBack, onClose, fromOldComponent }: AddressListProps) => {
+export const AddressList = () => {
+  const walletSDK = useContext(WalletSDKContext)
+  const router = useSimpleRouter()!
+  const { goBack, onClose, prevRouteName: fromOldComponent } = router
   const { walletSnap } = useWalletState()
 
   const back = () => {
     if (fromOldComponent === 'ChainList') {
       onClose()
     } else {
-      goBack()
+      goBack?.()
     }
   }
 

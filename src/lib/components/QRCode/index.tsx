@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import QR, { Options } from 'styled-qr-code'
 
 export function QRCode(props: Omit<Options, 'type'>) {
@@ -25,8 +25,8 @@ export function QRCode(props: Omit<Options, 'type'>) {
       ...rest,
     })
 
-    qr.getRawData().then(setBlob)
-  }, [props])
+    qr.getRawData().then(setBlob).catch(console.error)
+  }, [width, height, dotsOptions, cornersDotOptions, cornersSquareOptions, qrOptions, rest])
 
-  return <img width={width} height={height} src={blob ? window.URL.createObjectURL(blob) : undefined} />
+  return <img width={width} height={height} src={blob != null ? window.URL.createObjectURL(blob) : undefined} />
 }

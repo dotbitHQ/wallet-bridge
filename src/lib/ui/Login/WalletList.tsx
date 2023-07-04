@@ -12,11 +12,13 @@ import {
 import { WalletProtocol } from '../../constant'
 import WalletSDK from '../../wallets'
 import clsx from 'clsx'
-import { ReactNode, useMemo, useState } from 'react'
+import { ReactNode, useContext, useMemo, useState } from 'react'
 import { WalletItem } from '../../components/WalletItem'
 import { snapshot } from 'valtio'
 import handleError from '../../utils/handleError'
 import { loginCacheState, useLoginCacheState } from '../../store/loginCache'
+import { WalletSDKContext } from '../ConnectWallet'
+import { useSimpleRouter } from '../../components/SimpleRouter'
 
 interface WalletListProps {
   walletSDK: WalletSDK
@@ -30,7 +32,11 @@ interface IWallet {
   protocol: WalletProtocol[]
 }
 
-export const WalletList = ({ walletSDK, goBack, onClose }: WalletListProps) => {
+export const WalletList = () => {
+  const walletSDK = useContext(WalletSDKContext)!
+  const router = useSimpleRouter()!
+  const goBack = router.goBack
+  const onClose = router.onClose
   const [currentLogin, setCurrentLogin] = useState('')
   const { loginCacheSnap } = useLoginCacheState()
 
@@ -96,6 +102,7 @@ export const WalletList = ({ walletSDK, goBack, onClose }: WalletListProps) => {
           protocol,
           coinType,
         })
+        await walletSDK.connect()
       }
       onClose?.()
     } catch (error: any) {

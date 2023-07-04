@@ -72,7 +72,7 @@ export class WalletContext {
   }
 
   private async getMetaMaskProvider() {
-    if (this.torusWallet?.hideTorusButton) {
+    if (this.torusWallet?.hideTorusButton != null) {
       this.torusWallet.hideTorusButton()
     }
 
@@ -93,7 +93,7 @@ export class WalletContext {
   }
 
   private async getTokenPocketUTXOProvider() {
-    if (this.torusWallet?.hideTorusButton) {
+    if (this.torusWallet?.hideTorusButton != null) {
       this.torusWallet.hideTorusButton()
     }
 
@@ -147,7 +147,7 @@ export class WalletContext {
   }
 
   private async getTronLinkProvider() {
-    if (this.torusWallet?.hideTorusButton) {
+    if (this.torusWallet?.hideTorusButton != null) {
       this.torusWallet.hideTorusButton()
     }
 
@@ -172,7 +172,7 @@ export class WalletContext {
   }
 
   private getConnectDIDProvider() {
-    if (this.torusWallet?.hideTorusButton) {
+    if (this.torusWallet?.hideTorusButton != null) {
       this.torusWallet.hideTorusButton()
     }
     this.provider = new ConnectDID(this.isTestNet)

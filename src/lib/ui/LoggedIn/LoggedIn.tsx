@@ -18,8 +18,10 @@ import {
 import { WalletProtocol, CoinType, DotbitBalanceUrl, DotbitBalanceTestUrl } from '../../constant'
 import { useWalletState } from '../../store'
 import WalletSDK from '../../wallets'
-import { ReactNode } from 'react'
+import { ReactNode, useContext } from 'react'
 import { collapseString, smartOpen } from '../../utils'
+import { WalletSDKContext } from '../ConnectWallet'
+import { useSimpleRouter } from '../../components/SimpleRouter'
 
 interface LoggedInProps {
   walletSDK: WalletSDK
@@ -30,15 +32,22 @@ interface LoggedInProps {
   onClose: () => void
 }
 
-export const LoggedIn = ({
-  walletSDK,
-  onDisconnect,
-  onSwitchAddress,
-  onDevices,
-  onEnhanceSecurity,
-  onClose,
-}: LoggedInProps) => {
+export const LoggedIn = () => {
   const { walletSnap } = useWalletState()
+  const walletSDK = useContext(WalletSDKContext)!
+  const { goTo, onClose } = useSimpleRouter()!
+  const onDisconnect = () => {
+    goTo('ChainList')
+  }
+  const onSwitchAddress = () => {
+    goTo('AddressList')
+  }
+  const onDevices = () => {
+    goTo('DeviceList')
+  }
+  const onEnhanceSecurity = () => {
+    goTo('EnhanceSecurity')
+  }
 
   const icons: Record<CoinType, ReactNode> = {
     [CoinType.btc]: <DeviceIcon className="h-[72px] w-[72px]"></DeviceIcon>,
