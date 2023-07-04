@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ArrowLeftIcon, Header, LoadingIconGradient } from '../../components'
 import { useWebAuthnState } from '../../store/webAuthnState'
 import { collapseString } from '../../utils'
-import { useWalletState } from '../../store'
+import { setWalletState, useWalletState } from '../../store'
 import { useEffect } from 'react'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 
@@ -34,12 +34,15 @@ export function TransactionStatus() {
     if (query.isLoading) return
     if (query.data?.hash === webAuthnState.pendingTxHash) {
       if (query.data?.status === 1) {
+        setWalletState({
+          ckbAddresses: walletSnap.ckbAddresses!.concat([webAuthnState.backupDeviceData!.ckbAddr]),
+        })
         goNext?.()
       } else if (query.data?.status === -1) {
-        goTo('Error')
+        goTo('TransactionFailed')
       }
     } else {
-      goTo('Error')
+      goTo('TransactionFailed')
     }
     // eslint-disable-next-line
   }, [query.data, query.isLoading, webAuthnState.pendingTxHash])

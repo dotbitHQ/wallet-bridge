@@ -1,10 +1,22 @@
-import { Header, MoreIcon, PlusIcon, RevokeIcon, SafeIcon } from '../../components'
+import { Header, MoreIcon, NervosIcon, PlusIcon, RevokeIcon, SafeIcon } from '../../components'
 import { Menu, Transition } from '@headlessui/react'
 import { emojis } from '../ChooseEmoji/png'
-import { Fragment } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { setWalletState, useWalletState } from '../../store'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { LetterAvatar } from '../../components/LetterAvatar'
+import { collapseString } from '../../utils'
+import { useWebAuthnState } from '../../store/webAuthnState'
+import { TxsWithMMJsonSignedOrUnSigned } from '../../../types'
+import { WalletSDKContext } from '../ConnectWallet'
 
-function More() {
+interface MoreProps {
+  address: string
+  onRevoke: () => Promise<void>
+}
+
+function More({ address, onRevoke }: MoreProps) {
   return (
     <Menu as="div" className="relative inline-block flex-none">
       <Menu.Button>
@@ -19,9 +31,12 @@ function More() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -right-4 z-10 mt-2 h-[60px] w-[150px] origin-top-right rounded-xl border border-slate-300 border-opacity-40 bg-white p-3 shadow">
+        <Menu.Items className="absolute -right-4 z-10 mt-2 h-[60px] w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
           <Menu.Item>
-            <div className="relative h-full w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500">
+            <div
+              className="relative h-full w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500"
+              onClick={onRevoke}
+            >
               <RevokeIcon className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2" />
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] font-medium leading-tight">
                 Revoke
@@ -34,8 +49,169 @@ function More() {
   )
 }
 
+interface DeviceProps {
+  address: string
+  managingAddress: string
+}
+
+function Device({ address, managingAddress }: DeviceProps) {
+  const { walletSnap } = useWalletState()
+  const walletSDK = useContext(WalletSDKContext)
+  const signDataQuery = useQuery({
+    queryKey: ['FetchSignData', { master: walletSnap.address, slave: address }],
+    enabled: false,
+    retry: false,
+    queryFn: async () => {
+      if (walletSnap.address === undefined) throw new Error('unreachable')
+      const res = await fetch('https://test-webauthn-api.did.id/v1/webauthn/authorize', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          master_ckb_address: walletSnap.address,
+          slave_ckb_address: address,
+          operation: 'delete',
+        }),
+      }).then(async (res) => await res.json())
+      if (res.err_no !== 0) throw new Error(res.err_msg)
+      return res.data
+    },
+  })
+
+  const sendTransactionMutation = useMutation({
+    retry: false,
+    mutationFn: async (signData: TxsWithMMJsonSignedOrUnSigned) => {
+      const signList = await walletSDK?.signTxList({
+        ...signData,
+        // eslint-disable-next-line
+        sign_list: signData.sign_list.map(({ sign_type, sign_msg }) => ({
+          sign_type,
+          sign_msg: sign_msg.replace('0x', ''),
+        })),
+      })
+      const res = await fetch('https://test-webauthn-api.did.id/v1/transaction/send', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sign_key: signData.sign_key,
+          sign_list: signList?.sign_list,
+          sign_address: walletSnap.deviceData?.ckbAddr,
+        }),
+      }).then(async (res) => await res.json())
+      if (res.err_no !== 0) throw new Error(res.err_msg)
+      return res.data
+    },
+  })
+
+  const [statusConverged, setStatusConverged] = useState(false)
+
+  const transactionStatusQuery = useQuery({
+    enabled: sendTransactionMutation.isSuccess && !statusConverged,
+    networkMode: 'always',
+    queryKey: ['RevokingTransactionStatus', address],
+    cacheTime: 0,
+    refetchInterval: 10000,
+    queryFn: async () => {
+      const res = await fetch(`https://test-webauthn-api.did.id/v1/transaction/status`, {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({
+          actions: [30],
+          chain_type: 8,
+          address: walletSnap.address,
+        }),
+      }).then(async (res) => await res.json())
+      if (res.err_no !== 0) throw new Error(res.err_msg)
+      return res.data
+    },
+  })
+
+  const onRevoke = async () => {
+    const signData = signDataQuery.data || (await signDataQuery.refetch()).data
+    sendTransactionMutation.mutate(signData)
+  }
+
+  const revoking =
+    signDataQuery.isInitialLoading ||
+    sendTransactionMutation.isLoading ||
+    transactionStatusQuery.isInitialLoading ||
+    (sendTransactionMutation.data?.tx_hash !== undefined &&
+      transactionStatusQuery.data?.hash !== sendTransactionMutation.data?.tx_hash) ||
+    transactionStatusQuery.data?.status === 0
+  const [revokeError, setRevokeError] = useState(false)
+  const isRevokingError = signDataQuery.isError || sendTransactionMutation.isError || revokeError
+  useEffect(() => {
+    if (revoking) return
+    if (transactionStatusQuery.data?.hash === sendTransactionMutation.data?.hash) {
+      if (transactionStatusQuery.data?.status === 1) {
+        setWalletState({
+          ckbAddresses: walletSnap.ckbAddresses?.filter((a) => a !== address),
+        })
+        setStatusConverged(true)
+      } else if (transactionStatusQuery.data?.status === -1) {
+        setRevokeError(true)
+        setStatusConverged(true)
+      }
+    }
+  }, [
+    transactionStatusQuery.data,
+    revoking,
+    setRevokeError,
+    address,
+    sendTransactionMutation.data?.hash,
+    walletSnap.ckbAddresses,
+  ])
+  return (
+    <li
+      key={address}
+      className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4"
+    >
+      <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
+      <div className="flex-1 text-[14px] font-semibold text-neutral-700">
+        <div className="font-mono">
+          {getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 14)}
+        </div>
+        {address === managingAddress ? (
+          <span className="flex-none rounded bg-green-100 px-1 py-0.5 text-[12px] text-emerald-600">This device</span>
+        ) : revoking ? (
+          <span className="text-[12px] font-medium text-red-500">Revoking...</span>
+        ) : isRevokingError ? (
+          <span className="text-[12px] font-medium text-red-500">Revoke Failed</span>
+        ) : null}
+      </div>
+      {address !== managingAddress && <More address={address} onRevoke={onRevoke} />}
+    </li>
+  )
+}
+
+interface LeadingIconProps {
+  name?: string
+  emoji?: string
+  address: string
+}
+function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
+  const selectedEmoji = (emojis as Record<string, string>)[emoji as any]
+  if (selectedEmoji) {
+    return <img className="h-[28px] w-[28px] flex-none" src={selectedEmoji} />
+  } else if (name) {
+    return <LetterAvatar data={name} className="h-[28px] w-[28px] flex-none" />
+  } else {
+    return <NervosIcon className="h-[28px] w-[28px] flex-none rounded-full border border-stone-300/20" />
+  }
+}
+
+function getNameAndEmojiFromLocalStorage(address: string) {
+  return JSON.parse(localStorage.getItem('.bit-memos') ?? '{}')[address]
+}
+
 export function DeviceList() {
   const { goBack, onClose, goTo } = useSimpleRouter()!
+  const { walletSnap } = useWalletState()
   return (
     <>
       <Header className="p-6" title="Devices" goBack={goBack} onClose={onClose} />
@@ -50,22 +226,9 @@ export function DeviceList() {
           Full control over the address belongs to the device/address.
         </div>
         <ul className="mt-2 flex w-full flex-col items-stretch justify-start gap-2">
-          <li className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4">
-            <img className="h-[28px] w-[28px] flex-none" src={emojis.laptop} />
-            <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-              <div>Chrome-dotbit-1217</div>
-              <span className="flex-none rounded bg-green-100 px-1 py-0.5 text-[12px] text-emerald-600">
-                This device
-              </span>
-            </div>
-          </li>
-          <li className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4">
-            <img className="h-[28px] w-[28px] flex-none" src={emojis.fire} />
-            <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-              <div>Chrome-dotbit-1217</div>
-            </div>
-            <More />
-          </li>
+          {[walletSnap.address!].concat(walletSnap.ckbAddresses ?? []).map((address) => (
+            <Device key={address} address={address} managingAddress={walletSnap.address!} />
+          ))}
         </ul>
         <div
           onClick={() => {

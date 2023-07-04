@@ -18,6 +18,7 @@ import { TransactionSucceeded } from './TransactionSucceeded'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { DeviceList } from './DeviceList'
 import { ShowScanner } from './ShowScanner'
+import { TransactionFailed } from './TransactionFailed'
 
 interface ConnectWalletProps {
   visible: boolean
@@ -72,6 +73,9 @@ const routes = {
   TransactionSucceeded: {
     el: <TransactionSucceeded />,
     next: 'LoggedIn',
+  },
+  TransactionFailed: {
+    el: <TransactionFailed />,
   },
   DeviceList: {
     el: <DeviceList />,
