@@ -58,7 +58,7 @@ function Device({ address, managingAddress }: DeviceProps) {
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)
   const signDataQuery = useQuery({
-    queryKey: ['FetchSignData', { master: walletSnap.address, slave: address }],
+    queryKey: ['FetchSignDataDelete', { master: walletSnap.address, slave: address }],
     enabled: false,
     retry: false,
     queryFn: async () => {
@@ -152,6 +152,7 @@ function Device({ address, managingAddress }: DeviceProps) {
         setWalletState({
           ckbAddresses: walletSnap.ckbAddresses?.filter((a) => a !== address),
         })
+        removeNameAndEmojiFromLocalStorage(address)
         setStatusConverged(true)
       } else if (transactionStatusQuery.data?.status === -1) {
         setRevokeError(true)
@@ -207,6 +208,13 @@ function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
 
 function getNameAndEmojiFromLocalStorage(address: string) {
   return JSON.parse(localStorage.getItem('.bit-memos') ?? '{}')[address]
+}
+
+function removeNameAndEmojiFromLocalStorage(address: string) {
+  const data = JSON.parse(localStorage.getItem('.bit-memos') ?? '{}')
+  // eslint-disable-next-line
+  delete data[address]
+  localStorage.setItem('.bit-memos', JSON.stringify(data))
 }
 
 export function DeviceList() {
