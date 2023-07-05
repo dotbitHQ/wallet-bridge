@@ -113,7 +113,7 @@ function Device({ address, managingAddress }: DeviceProps) {
   const transactionStatusQuery = useQuery({
     enabled: sendTransactionMutation.isSuccess && !statusConverged,
     networkMode: 'always',
-    queryKey: ['RevokingTransactionStatus', address],
+    queryKey: ['RevokingTransactionStatus', sendTransactionMutation.data?.hash],
     cacheTime: 0,
     refetchInterval: 10000,
     queryFn: async () => {
@@ -121,9 +121,7 @@ function Device({ address, managingAddress }: DeviceProps) {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
-          actions: [30],
-          chain_type: 8,
-          address: walletSnap.address,
+          tx_hash: sendTransactionMutation.data?.hash,
         }),
       }).then(async (res) => await res.json())
       if (res.err_no !== 0) throw new Error(res.err_msg)
@@ -140,27 +138,23 @@ function Device({ address, managingAddress }: DeviceProps) {
     signDataQuery.isInitialLoading ||
     sendTransactionMutation.isLoading ||
     transactionStatusQuery.isInitialLoading ||
-    (sendTransactionMutation.data?.tx_hash !== undefined &&
-      transactionStatusQuery.data?.hash !== sendTransactionMutation.data?.tx_hash) ||
     transactionStatusQuery.data?.status === 0
   const [revokeError, setRevokeError] = useState(false)
   const isRevokingError = signDataQuery.isError || sendTransactionMutation.isError || revokeError
   useEffect(() => {
     if (revoking) return
-    if (transactionStatusQuery.data?.hash === sendTransactionMutation.data?.hash) {
-      if (transactionStatusQuery.data?.status === 1) {
-        setWalletState({
-          ckbAddresses: walletSnap.ckbAddresses?.filter((a) => a !== address),
-        })
-        removeNameAndEmojiFromLocalStorage(address)
-        setStatusConverged(true)
-      } else if (transactionStatusQuery.data?.status === -1) {
-        setRevokeError(true)
-        setStatusConverged(true)
-      }
+    if (transactionStatusQuery.data?.status === 1) {
+      setWalletState({
+        ckbAddresses: walletSnap.ckbAddresses?.filter((a) => a !== address),
+      })
+      removeNameAndEmojiFromLocalStorage(address)
+      setStatusConverged(true)
+    } else if (transactionStatusQuery.data?.status === -1) {
+      setRevokeError(true)
+      setStatusConverged(true)
     }
   }, [
-    transactionStatusQuery.data,
+    transactionStatusQuery.data?.status,
     revoking,
     setRevokeError,
     address,

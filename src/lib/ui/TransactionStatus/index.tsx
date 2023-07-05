@@ -12,7 +12,7 @@ export function TransactionStatus() {
   const { goTo, goNext, onClose } = useSimpleRouter()!
   const query = useQuery({
     networkMode: 'always',
-    queryKey: ['TransactionStatus'],
+    queryKey: ['TransactionStatus', webAuthnState.pendingTxHash],
     cacheTime: 0,
     refetchInterval: 10000,
     queryFn: async () => {
@@ -20,9 +20,7 @@ export function TransactionStatus() {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({
-          actions: [30],
-          chain_type: 8,
-          address: walletSnap.address,
+          tx_hash: webAuthnState.pendingTxHash,
         }),
       }).then(async (res) => await res.json())
       if (res.err_no !== 0) throw new Error(res.err_msg)
