@@ -1,5 +1,4 @@
-import { ReactElement, ReactNode, cloneElement, createContext, useCallback, useContext, useMemo, useState } from 'react'
-import { Header } from '../Header'
+import { ReactElement, createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { SwapTransition } from '../SwapTransition'
 
 interface Route {

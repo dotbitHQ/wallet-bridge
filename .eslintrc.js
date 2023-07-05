@@ -20,10 +20,10 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react', '@typescript-eslint', 'tailwindcss'],
   rules: {
-    'react/jsx-key': 'off',
+    'react/jsx-key': 'error',
     'react/react-in-jsx-scope': 'off',
-    'no-unused-vars': 'off',
-    'no-console': 'warn',
+    'no-unused-vars': 'error',
+    'no-console': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/consistent-type-assertions': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -33,4 +33,5 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     'react-hooks/exhaustive-deps': 'error',
   },
+  ignorePatterns: ['*.stories.tsx'],
 }

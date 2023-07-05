@@ -11,7 +11,6 @@ import {
 } from '../../components'
 import { CoinType, WalletProtocol } from '../../constant'
 import { setWalletState, walletState } from '../../store'
-import WalletSDK from '../../wallets'
 import { Tag, TagVariant } from '../../components/Tag'
 import { ChainItem } from '../../components/ChainItem'
 import clsx from 'clsx'
@@ -21,13 +20,6 @@ import { snapshot } from 'valtio'
 import { setLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
-
-interface ChainListProps {
-  walletSDK: WalletSDK
-  showWalletList: () => void
-  showAddressList: () => void
-  onClose: () => void
-}
 
 interface IChain {
   icon: ReactNode

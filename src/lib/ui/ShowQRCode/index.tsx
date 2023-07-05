@@ -13,7 +13,8 @@ export function ShowQRCode() {
   const nodeRef = useRef(null)
   useEffect(() => {
     if (!nodeRef.current) return
-    const clipboard = new Clipboard(nodeRef.current)
+    // eslint-disable-next-line
+    new Clipboard(nodeRef.current)
   }, [nodeRef])
   const { walletSnap } = useWalletState()
   const url = useMemo(

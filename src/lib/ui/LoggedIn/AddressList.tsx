@@ -1,21 +1,10 @@
 import { Header } from '../../components'
 import { useWalletState, setWalletState } from '../../store'
-import WalletSDK from '../../wallets'
 import { AddressItem } from '../../components/AddressItem'
 import { collapseString } from '../../utils'
-import { useContext } from 'react'
-import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 
-interface AddressListProps {
-  walletSDK: WalletSDK
-  fromOldComponent: string
-  onClose: () => void
-  goBack: () => void
-}
-
 export const AddressList = () => {
-  const walletSDK = useContext(WalletSDKContext)
   const router = useSimpleRouter()!
   const { goBack, onClose, prevRouteName: fromOldComponent } = router
   const { walletSnap } = useWalletState()
@@ -54,6 +43,7 @@ export const AddressList = () => {
           {walletSnap.ckbAddresses?.map((address) => {
             return (
               <AddressItem
+                key={address}
                 className="mb-2"
                 address={collapseString(address, 8, 4)}
                 isCurrent={address === walletSnap.address}
