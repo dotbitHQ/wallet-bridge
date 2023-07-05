@@ -29,6 +29,7 @@
   "dependencies": {
     "@metamask/eth-sig-util": "^5.1.0",
     "@toruslabs/torus-embed": "^2.1.7",
+    "@types/color": "^3.0.3",
     "@zxing/library": "^0.20.0",
     "axios": "^1.4.0",
     "bn.js": "^5.2.1",
@@ -77,6 +78,7 @@
     "babel-loader": "^8.3.0",
     "chromatic": "^6.19.5",
     "clipboard": "^2.0.11",
+    "color": "^4.2.3",
     "connect-did-sdk": "github:dotbitHQ/connect-did-sdk",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.6.0",

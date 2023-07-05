@@ -10,6 +10,12 @@ import { WalletSDKContext } from '../ConnectWallet'
 import { setPendingTx, useWebAuthnState } from '../../store/webAuthnState'
 import { TxsWithMMJsonSignedOrUnSigned } from '../../../types'
 
+function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: string) {
+  const memos = JSON.parse(localStorage.getItem('.bit-memos') ?? '{}')
+  memos[address] = { name, emoji }
+  localStorage.setItem('.bit-memos', JSON.stringify(memos))
+}
+
 export function FinalConfirm() {
   const { goNext, goBack, onClose } = useSimpleRouter()!
   const { walletSnap } = useWalletState()
@@ -61,7 +67,7 @@ export function FinalConfirm() {
         body: JSON.stringify({
           sign_key: signData.sign_key,
           sign_list: signList?.sign_list,
-          sign_address: walletSnap.address,
+          sign_address: walletSnap.deviceData?.ckbAddr,
         }),
       }).then(async (res) => await res.json())
       if (res.err_no !== 0) throw new Error(res.err_msg)
@@ -77,6 +83,11 @@ export function FinalConfirm() {
   useEffect(() => {
     if (sendTransactionMutation.data?.hash) {
       setPendingTx(sendTransactionMutation.data.hash)
+      setNameAndEmojiToLocalStorage(
+        webAuthnState.backupDeviceData!.ckbAddr,
+        webAuthnState.backupDeviceData?.name,
+        webAuthnState.selectedEmoji,
+      )
       goNext?.()
     }
     // eslint-disable-next-line
@@ -124,7 +135,9 @@ export function FinalConfirm() {
           Next
         </Button>
         {signDataQuery.isError || sendTransactionMutation.isError ? (
-          <div>{(signDataQuery?.error as any)?.toString() || (sendTransactionMutation?.error as any)?.toString()} </div>
+          <div className="mt-2 w-full break-words text-center text-[14px] font-normal leading-normal text-red-400">
+            {(signDataQuery?.error as any)?.toString() || (sendTransactionMutation?.error as any)?.toString()}{' '}
+          </div>
         ) : null}
       </div>
     </>
