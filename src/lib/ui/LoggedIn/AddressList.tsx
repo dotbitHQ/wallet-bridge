@@ -47,7 +47,9 @@ export const AddressList = () => {
             }}
           ></AddressItem>
         </ul>
-        <label className="mb-2 block text-[13px] text-[#5F6570]">Associated with this device</label>
+        {walletSnap.ckbAddresses && walletSnap.ckbAddresses?.length > 0 ? (
+          <label className="mb-2 block text-[13px] text-[#5F6570]">Associated with this device</label>
+        ) : null}
         <ul className="mb-6">
           {walletSnap.ckbAddresses?.map((address) => {
             return (
