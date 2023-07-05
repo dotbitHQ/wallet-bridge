@@ -1,4 +1,4 @@
-import { proxy, useSnapshot } from 'valtio'
+import { proxy, snapshot, useSnapshot } from 'valtio'
 import { CoinType, WalletProtocol } from '../constant'
 import { IDeviceData } from 'connect-did-sdk'
 import { merge } from 'lodash-es'
@@ -76,5 +76,10 @@ export const resetWalletState = () => {
 
 export function useWalletState() {
   const walletSnap = useSnapshot(walletState)
+  return { walletSnap }
+}
+
+export function getWalletState() {
+  const walletSnap = snapshot(walletState)
   return { walletSnap }
 }
