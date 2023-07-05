@@ -17,20 +17,10 @@ import {
 } from '../../components'
 import { WalletProtocol, CoinType, DotbitBalanceUrl, DotbitBalanceTestUrl } from '../../constant'
 import { useWalletState } from '../../store'
-import WalletSDK from '../../wallets'
 import { ReactNode, useContext } from 'react'
 import { collapseString, smartOpen } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
-
-interface LoggedInProps {
-  walletSDK: WalletSDK
-  onDisconnect: () => void
-  onSwitchAddress: () => void
-  onDevices: () => void
-  onEnhanceSecurity: () => void
-  onClose: () => void
-}
 
 export const LoggedIn = () => {
   const { walletSnap } = useWalletState()

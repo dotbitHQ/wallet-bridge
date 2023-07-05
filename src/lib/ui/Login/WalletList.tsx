@@ -10,7 +10,6 @@ import {
   TrustWalletIcon,
 } from '../../components'
 import { WalletProtocol } from '../../constant'
-import WalletSDK from '../../wallets'
 import clsx from 'clsx'
 import { ReactNode, useContext, useMemo, useState } from 'react'
 import { WalletItem } from '../../components/WalletItem'
@@ -19,12 +18,6 @@ import handleError from '../../utils/handleError'
 import { loginCacheState, useLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
-
-interface WalletListProps {
-  walletSDK: WalletSDK
-  onClose?: () => void
-  goBack?: () => void
-}
 
 interface IWallet {
   icon: ReactNode

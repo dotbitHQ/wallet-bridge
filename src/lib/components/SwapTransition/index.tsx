@@ -1,5 +1,5 @@
 import clsx, { ClassValue } from 'clsx'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import { ENTERED, ENTERING, EXITED, EXITING, TransitionStatus, UNMOUNTED } from 'react-transition-group/Transition'
 

@@ -1,5 +1,4 @@
 import clsx from 'clsx'
-import { DetailedHTMLProps } from 'react'
 
 export function CloseIcon(props: { className?: string }) {
   return (

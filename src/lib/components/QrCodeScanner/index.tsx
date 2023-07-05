@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { BrowserCodeReader, BrowserQRCodeReader, IBrowserCodeReaderOptions } from '@zxing/browser'
+import { useEffect, useMemo, useRef } from 'react'
+import { BrowserQRCodeReader, IBrowserCodeReaderOptions } from '@zxing/browser'
 import { Result } from '@zxing/library'
 import clsx from 'clsx'
 
