@@ -28,7 +28,7 @@ module.exports = {
     '@typescript-eslint/consistent-type-assertions': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
-    '@typescript-eslint/no-misused-promises': 'warn',
+    '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     'react-hooks/exhaustive-deps': 'error',
