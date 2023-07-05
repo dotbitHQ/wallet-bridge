@@ -1,4 +1,4 @@
-import { Header, MoreIcon, NervosIcon, PlusIcon, RevokeIcon, SafeIcon } from '../../components'
+import { DeviceIcon, Header, MoreIcon, NervosIcon, PlusIcon, RevokeIcon, SafeIcon } from '../../components'
 import { Menu, Transition } from '@headlessui/react'
 import { emojis } from '../ChooseEmoji/png'
 import { Fragment, useContext, useEffect, useState } from 'react'
@@ -7,7 +7,6 @@ import { setWalletState, useWalletState } from '../../store'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LetterAvatar } from '../../components/LetterAvatar'
 import { collapseString } from '../../utils'
-import { useWebAuthnState } from '../../store/webAuthnState'
 import { TxsWithMMJsonSignedOrUnSigned } from '../../../types'
 import { WalletSDKContext } from '../ConnectWallet'
 
@@ -166,10 +165,16 @@ function Device({ address, managingAddress }: DeviceProps) {
       key={address}
       className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4"
     >
-      <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
+      {address === managingAddress ? (
+        <DeviceIcon className="h-7 w-7" />
+      ) : (
+        <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
+      )}
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
         <div className="font-mono">
-          {getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 14)}
+          {address === managingAddress
+            ? walletSnap.deviceData?.name
+            : getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 14)}
         </div>
         {address === managingAddress ? (
           <span className="flex-none rounded bg-green-100 px-1 py-0.5 text-[12px] text-emerald-600">This device</span>
@@ -228,7 +233,8 @@ export function DeviceList() {
           Full control over the address belongs to the device/address.
         </div>
         <ul className="mt-2 flex w-full flex-col items-stretch justify-start gap-2">
-          {[walletSnap.address!].concat(walletSnap.ckbAddresses ?? []).map((address) => (
+          <Device key={walletSnap.address} address={walletSnap.address!} managingAddress={walletSnap.address!} />
+          {walletSnap.ckbAddresses?.map((address) => (
             <Device key={address} address={address} managingAddress={walletSnap.address!} />
           ))}
         </ul>
