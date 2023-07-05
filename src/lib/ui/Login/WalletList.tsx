@@ -40,43 +40,45 @@ export const WalletList = () => {
   const [currentLogin, setCurrentLogin] = useState('')
   const { loginCacheSnap } = useLoginCacheState()
 
-  const wallets: IWallet[] = [
-    {
-      icon: <MetaMaskIcon className="h-10 w-10"></MetaMaskIcon>,
-      name: 'MetaMask',
-      protocol: [WalletProtocol.metaMask],
-    },
-    {
-      icon: <TrustWalletIcon className="h-10 w-10"></TrustWalletIcon>,
-      name: 'TrustWallet',
-      protocol: [WalletProtocol.metaMask],
-    },
-    {
-      icon: <ImTokenIcon className="h-10 w-10"></ImTokenIcon>,
-      name: 'imToken',
-      protocol: [WalletProtocol.metaMask, WalletProtocol.tronLink],
-    },
-    {
-      icon: <TokenPocketIcon className="h-10 w-10"></TokenPocketIcon>,
-      name: 'TokenPocket',
-      protocol: [WalletProtocol.metaMask, WalletProtocol.tokenPocketUTXO, WalletProtocol.tronLink],
-    },
-    {
-      icon: <OneKeyIcon className="h-10 w-10"></OneKeyIcon>,
-      name: 'OneKey',
-      protocol: [WalletProtocol.metaMask],
-    },
-    {
-      icon: <ITokenIcon className="h-10 w-10"></ITokenIcon>,
-      name: 'iToken',
-      protocol: [WalletProtocol.metaMask],
-    },
-    {
-      icon: <TronLinkIcon className="h-10 w-10"></TronLinkIcon>,
-      name: 'TronLink',
-      protocol: [WalletProtocol.tronLink],
-    },
-  ]
+  const wallets = useMemo<IWallet[]>(() => {
+    return [
+      {
+        icon: <MetaMaskIcon className="h-10 w-10"></MetaMaskIcon>,
+        name: 'MetaMask',
+        protocol: [WalletProtocol.metaMask],
+      },
+      {
+        icon: <TrustWalletIcon className="h-10 w-10"></TrustWalletIcon>,
+        name: 'TrustWallet',
+        protocol: [WalletProtocol.metaMask],
+      },
+      {
+        icon: <ImTokenIcon className="h-10 w-10"></ImTokenIcon>,
+        name: 'imToken',
+        protocol: [WalletProtocol.metaMask, WalletProtocol.tronLink],
+      },
+      {
+        icon: <TokenPocketIcon className="h-10 w-10"></TokenPocketIcon>,
+        name: 'TokenPocket',
+        protocol: [WalletProtocol.metaMask, WalletProtocol.tokenPocketUTXO, WalletProtocol.tronLink],
+      },
+      {
+        icon: <OneKeyIcon className="h-10 w-10"></OneKeyIcon>,
+        name: 'OneKey',
+        protocol: [WalletProtocol.metaMask],
+      },
+      {
+        icon: <ITokenIcon className="h-10 w-10"></ITokenIcon>,
+        name: 'iToken',
+        protocol: [WalletProtocol.metaMask],
+      },
+      {
+        icon: <TronLinkIcon className="h-10 w-10"></TronLinkIcon>,
+        name: 'TronLink',
+        protocol: [WalletProtocol.tronLink],
+      },
+    ]
+  }, [])
 
   const showWallets = useMemo(() => {
     const { protocol } = loginCacheSnap
@@ -86,7 +88,7 @@ export const WalletList = () => {
       })
     }
     return wallets
-  }, [loginCacheSnap.protocol])
+  }, [loginCacheSnap, wallets])
 
   const onLogin = async (wallet: IWallet) => {
     const { name } = wallet

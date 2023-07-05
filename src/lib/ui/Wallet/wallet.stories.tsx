@@ -17,7 +17,7 @@ const TemplateConnectWallet = () => {
   }
 
   const onLoggedIn = async () => {
-    wallet.connectWalletInfo()
+    wallet.loggedInfo()
   }
 
   const onSignData = async () => {

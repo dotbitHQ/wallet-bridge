@@ -1,3 +1,4 @@
+vite-env.d.ts
 .eslintrc.js
 vite.config.ts
 tailwind.config.js
