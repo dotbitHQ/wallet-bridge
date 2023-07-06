@@ -3,6 +3,8 @@ import { CoinType, WalletProtocol, WebAuthnApi, WebAuthnTestApi } from '../const
 import { IDeviceData } from 'connect-did-sdk'
 import { merge } from 'lodash-es'
 import Axios from 'axios'
+import errno from '../constant/errno'
+import CustomError from '../utils/CustomError'
 
 interface WalletState {
   protocol?: WalletProtocol
@@ -40,7 +42,11 @@ async function getAuthorizeInfo(address: string) {
   const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
     ckb_address: address,
   })
-  walletState.enableAuthorize = res.data.data.ckb_address.length > 1
+  if (res.data?.err_no === errno.success) {
+    walletState.enableAuthorize = res.data.data.ckb_address.length > 1
+  } else {
+    throw new CustomError(res.data?.err_no, res.data?.err_msg)
+  }
 }
 
 export const setWalletState = ({
