@@ -209,11 +209,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         onClose={close}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
-      <div
-        className="scrollbar-hide mx-6 my-0 max-h-dialog-list-max-height overflow-y-auto"
-        style={transitionStyle}
-        ref={transitionRef}
-      >
+      <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
         <ul>
           {chains.map((item, index) => {
             return (

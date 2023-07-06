@@ -141,7 +141,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
         goBack={back}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
-      <div className="px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
+      <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
         <ul>
           {showWallets.map((wallet, index) => {
             return (

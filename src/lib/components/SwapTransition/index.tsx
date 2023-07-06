@@ -43,7 +43,7 @@ export function SwapTransition({ children, className, duration }: SwapTransition
     <TransitionGroup
       className={clsx(
         className,
-        'max-w-full transition-[height,width] ease-in-out',
+        'scrollbar-hide max-w-full transition-[height,width] ease-in-out',
         animating ? 'overflow-hidden' : 'overflow-scroll',
       )}
       style={{ height: childRect?.height, width: childRect?.width, transitionDuration: `${duration}ms` }}
