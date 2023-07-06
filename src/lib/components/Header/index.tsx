@@ -1,16 +1,19 @@
 import clsx from 'clsx'
 import { ArrowLeftIcon, CloseIcon } from '../Icons'
+import { CSSProperties } from 'react'
 
 export interface HeaderProps {
   title?: string
   className?: string
+  style?: CSSProperties
   onClose?: () => void
   goBack?: () => void
 }
 
-export function Header({ title, className, goBack, onClose }: HeaderProps) {
+export function Header({ title, className, goBack, onClose, style }: HeaderProps) {
   return (
     <div
+      style={style}
       className={clsx('relative flex items-center', goBack != null ? 'justify-around' : 'justify-between', className)}
     >
       {goBack != null ? (

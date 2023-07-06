@@ -12,6 +12,7 @@ import {
   InfoIcon,
   PolygonIcon,
   SwitchIcon,
+  SwapChildProps,
   TronIcon,
   WarningIcon,
 } from '../../components'
@@ -22,7 +23,7 @@ import { collapseString, smartOpen } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 
-export const LoggedIn = () => {
+export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)!
   const { goTo, onClose } = useSimpleRouter()!
@@ -68,8 +69,12 @@ export const LoggedIn = () => {
 
   return (
     <>
-      <Header className="p-6" onClose={close} />
-      <div className="scrollbar-hide dialog-children-container mx-6 my-0 overflow-y-auto">
+      <Header
+        onClose={close}
+        className="z-10 w-full bg-white p-6"
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div className="w-full px-6 pb-6 pt-[76px]" ref={transitionRef} style={transitionStyle}>
         <div className="mb-10 text-center">
           {walletSnap.coinType && icons[walletSnap.coinType]}
           <h2 className="my-2 text-2xl font-extrabold leading-7">

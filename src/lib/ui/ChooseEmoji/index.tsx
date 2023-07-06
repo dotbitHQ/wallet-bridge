@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Button, ButtonShape, ButtonSize, Header } from '../../components'
+import { Button, ButtonShape, ButtonSize, Header, SwapChildProps } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import clsx from 'clsx'
 import { emojis } from './png'
@@ -13,7 +13,7 @@ export function Emoji({ name, ...rest }: EmojiProps) {
   return <img {...rest} src={emojis[name as any as keyof typeof emojis] || ''} />
 }
 
-export function ChooseEmoji() {
+export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, goBack, onClose } = useSimpleRouter()!
   const [selected, setSelected] = useState<string>()
   const onClick = useCallback(
@@ -24,8 +24,18 @@ export function ChooseEmoji() {
   )
   return (
     <>
-      <Header title="Add Device" className="p-6" goBack={goBack} onClose={onClose} />
-      <div className="flex w-full flex-col items-center justify-start px-6 py-20">
+      <Header
+        title="Add Device"
+        goBack={goBack}
+        onClose={onClose}
+        className="z-10 w-full bg-white p-6"
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div
+        className="flex w-full flex-col items-center justify-start px-6 py-20"
+        ref={transitionRef}
+        style={transitionStyle}
+      >
         <div className="w-full text-center text-[16px] leading-normal text-neutral-700">
           Choose an Emoji for the new device for easy identification.
         </div>
