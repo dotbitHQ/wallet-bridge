@@ -14,33 +14,24 @@ export class ConnectDidConnector extends WalletConnector {
     }
     if (res.data) {
       this.context.address = res.data.ckbAddr
-      await this.getAuthorizeInfo(res.data.ckbAddr, res.data.credential.rawId)
+      await this.getMastersAddress(res.data.credential.rawId)
       setWalletState({ deviceData: res.data })
     }
   }
 
-  async getAuthorizeInfo(ckbAddress: string, cid: string) {
+  async getMastersAddress(cid: string) {
     const { isTestNet } = this.context
     const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
 
-    const [authorizeInfo, mastersAddress] = await Promise.all([
-      Axios.post(`${api}/v1/webauthn/authorize-info`, {
-        ckb_address: ckbAddress,
-      }),
-      Axios.post(`${api}/v1/webauthn/get-masters-addr`, {
-        cid,
-      }),
-    ])
-    if (authorizeInfo.data?.err_no === errno.success && mastersAddress.data?.err_no === errno.success) {
+    const mastersAddress = await Axios.post(`${api}/v1/webauthn/get-masters-addr`, {
+      cid,
+    })
+    if (mastersAddress.data?.err_no === errno.success) {
       setWalletState({
-        enableAuthorize: !!authorizeInfo.data.data.enable_authorize,
         ckbAddresses: mastersAddress.data.data.ckb_address,
       })
     } else {
-      throw new CustomError(
-        authorizeInfo.data?.err_no || mastersAddress.data?.err_no,
-        authorizeInfo.data?.err_msg || mastersAddress.data?.err_msg,
-      )
+      throw new CustomError(mastersAddress.data?.err_no, mastersAddress.data?.err_msg)
     }
   }
 

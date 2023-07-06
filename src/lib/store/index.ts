@@ -1,7 +1,8 @@
 import { proxy, snapshot, useSnapshot } from 'valtio'
-import { CoinType, WalletProtocol } from '../constant'
+import { CoinType, WalletProtocol, WebAuthnApi, WebAuthnTestApi } from '../constant'
 import { IDeviceData } from 'connect-did-sdk'
 import { merge } from 'lodash-es'
+import Axios from 'axios'
 
 interface WalletState {
   protocol?: WalletProtocol
@@ -11,6 +12,7 @@ interface WalletState {
   deviceData?: IDeviceData
   ckbAddresses?: string[]
   enableAuthorize?: boolean
+  isTestNet?: boolean
 }
 
 const WalletStateKey = 'WalletState'
@@ -27,9 +29,19 @@ const localWalletState = walletStateLocalStorage
       deviceData: undefined,
       ckbAddresses: [],
       enableAuthorize: false,
+      isTestNet: false,
     }
 
 export const walletState = proxy<WalletState>(localWalletState)
+
+async function getAuthorizeInfo(address: string) {
+  const { isTestNet } = snapshot(walletState)
+  const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
+  const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
+    ckb_address: address,
+  })
+  walletState.enableAuthorize = res.data.data.ckb_address.length > 1
+}
 
 export const setWalletState = ({
   protocol,
@@ -39,12 +51,14 @@ export const setWalletState = ({
   deviceData,
   ckbAddresses,
   enableAuthorize,
+  isTestNet,
 }: WalletState) => {
   if (protocol) {
     walletState.protocol = protocol
   }
   if (address) {
     walletState.address = address
+    void getAuthorizeInfo(address)
   }
   if (coinType) {
     walletState.coinType = coinType
@@ -58,8 +72,8 @@ export const setWalletState = ({
   if (ckbAddresses) {
     walletState.ckbAddresses = ckbAddresses
   }
-  if (enableAuthorize !== undefined) {
-    walletState.enableAuthorize = enableAuthorize
+  if (isTestNet !== undefined) {
+    walletState.isTestNet = isTestNet
   }
   localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
@@ -71,6 +85,7 @@ export const resetWalletState = () => {
   walletState.deviceData = undefined
   walletState.ckbAddresses = []
   walletState.enableAuthorize = false
+  walletState.isTestNet = false
   localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 
