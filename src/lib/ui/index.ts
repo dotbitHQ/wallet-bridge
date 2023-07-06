@@ -1,5 +1,5 @@
 import WalletSDK from '../wallets'
-import { useWalletState, getWalletState } from '../store'
+import { useWalletState, getWalletState, setWalletState } from '../store'
 import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
 
@@ -9,6 +9,7 @@ export default class Wallet {
   getWalletState = getWalletState
 
   constructor({ isTestNet = false }: { isTestNet?: boolean }) {
+    setWalletState({ isTestNet })
     this.walletSDK = new WalletSDK({ isTestNet })
   }
 

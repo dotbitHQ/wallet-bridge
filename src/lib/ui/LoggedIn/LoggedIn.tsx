@@ -110,7 +110,7 @@ export const LoggedIn = () => {
           {walletSnap.protocol === WalletProtocol.webAuthn ? (
             <>
               <hr className="mx-5 h-px bg-[#B6C4D966]" />
-              {walletSnap.ckbAddresses && walletSnap.ckbAddresses?.length > 0 ? (
+              {walletSnap.enableAuthorize ? (
                 <li
                   className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
                   onClick={onDevices}
