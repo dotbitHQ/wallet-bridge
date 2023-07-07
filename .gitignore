@@ -31,3 +31,5 @@ coverage
 
 # yarn
 yarn.lock
+
+!src/deps/dist

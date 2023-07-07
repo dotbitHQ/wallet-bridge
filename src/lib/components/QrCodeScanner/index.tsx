@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { BrowserQRCodeReader, IBrowserCodeReaderOptions } from '@zxing/browser'
-import { Result } from '@zxing/library'
+import { Result, BrowserQRCodeReader } from '../../../deps/zxing/dist/esnext'
 import clsx from 'clsx'
 
 export async function getCamera(constraints: MediaStreamConstraints) {
@@ -10,7 +9,7 @@ export async function getCamera(constraints: MediaStreamConstraints) {
 
 interface QrCodeScannerProps {
   stream: MediaStream
-  config?: IBrowserCodeReaderOptions
+  timeBetweenScansMillis?: number
   onSuccess: (res: Result) => void
   onError?: (err: any) => void
   className?: string
@@ -18,8 +17,8 @@ interface QrCodeScannerProps {
 
 export function QrCodeScanner(props: QrCodeScannerProps) {
   const nodeRef = useRef<HTMLVideoElement>(null)
-  const { stream, config, onSuccess, onError = console.error, className } = props
-  const codeReader = useMemo(() => new BrowserQRCodeReader(undefined, config), [config])
+  const { stream, timeBetweenScansMillis, onSuccess, onError = console.error, className } = props
+  const codeReader = useMemo(() => new BrowserQRCodeReader(timeBetweenScansMillis), [timeBetweenScansMillis])
   useEffect(() => {
     if (nodeRef.current == null) return
     codeReader.decodeOnceFromStream(stream, nodeRef.current).then(onSuccess, onError)
