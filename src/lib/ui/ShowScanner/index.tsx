@@ -2,8 +2,8 @@ import clsx from 'clsx'
 import { QrCodeScanner } from '../../components/QrCodeScanner'
 import { setQrCodeData, useWebAuthnState } from '../../store/webAuthnState'
 import { useCallback } from 'react'
-import { Result } from '@zxing/library'
 import { Header, SwapChildProps } from '../../components'
+import { Result } from '../../../deps/zxing/dist/esnext'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 
 export function ShowScanner({ transitionRef, transitionStyle }: SwapChildProps) {
