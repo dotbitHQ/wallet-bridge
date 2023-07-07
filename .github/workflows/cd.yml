@@ -53,11 +53,11 @@ jobs:
           name: ${{ env.ARTIFACT_FILENAME }}
       - name: Stop Service
         # SSH_HOST is fetched from Project Settings -> Environment
-        run: ssh ${{ vars.SSH_HOST }} 'pm2 delete storybook.d.id'
+        run: ssh ${{ vars.SSH_HOST }} 'pm2 delete storybook.d.id2'
       - name: Rsync
         # TARGET_FOLDER is fetched from Project Settings -> Environment
-        run: rsync -a das_database_server ${{ vars.SSH_HOST }}:${{ vars.TARGET_FOLDER }}/storybook.d.id
-      - name: yarn install
-        run: ssh ${{ vars.SSH_HOST }}:${{ vars.TARGET_FOLDER }}/storybook.d.id 'yarn install'
+        run: rsync -a das_database_server ${{ vars.SSH_HOST }}:${{ vars.TARGET_FOLDER }}/storybook.d.id2
+      - name: npm install
+        run: ssh ${{ vars.SSH_HOST }}:${{ vars.TARGET_FOLDER }}/storybook.d.id 'npm install'
       - name: Restart Service
-        run: ssh ${{ vars.SSH_HOST }}:${{ vars.TARGET_FOLDER }}/storybook.d.id 'pm2 start npm --name "storybook.d.id" -- run dev'
+        run: ssh ${{ vars.SSH_HOST }}:${{ vars.TARGET_FOLDER }}/storybook.d.id 'pm2 start npm --name "storybook.d.id2" -- run dev'
