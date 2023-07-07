@@ -16,7 +16,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "dev": "start-storybook -p 6002",
+    "dev": "start-storybook -p 6006",
     "build": "build-storybook",
     "build:lib": "tsc && vite build",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix ./src",

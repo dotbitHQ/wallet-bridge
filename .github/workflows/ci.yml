@@ -39,7 +39,7 @@ jobs:
       # Format and output the final ARTIFACT_NAME
       - name: Set Artifact Name
         id: generate-artifact-name
-        run: echo "ARTIFACT_NAME=das_database_server_${{env.FORMATTED_BRANCH_NAME}}_${{steps.current-time.outputs.formattedTime}}_${{env.SHA_SHORT}}"  >> $GITHUB_OUTPUT
+        run: echo "ARTIFACT_NAME=storybook_${{env.FORMATTED_BRANCH_NAME}}_${{steps.current-time.outputs.formattedTime}}_${{env.SHA_SHORT}}"  >> $GITHUB_OUTPUT
   build:
     runs-on: self-hosted
     # Defines the dependency for this job
