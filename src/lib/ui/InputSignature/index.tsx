@@ -118,17 +118,23 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
         </div>
         <div className="relative mt-6 w-full">
           <textarea
-            className="block h-[108px] w-full resize-none rounded-xl border border-stone-300/20 bg-neutral-100 py-3 pl-4 pr-3 text-[16px] text-neutral-700 focus:border-emerald-400 focus:bg-white focus:outline-offset-1 focus:outline-emerald-400/20 focus:ring-0"
+            className="block h-[146px] w-full resize-none rounded-xl border border-stone-300/20 bg-neutral-100 py-3 pl-4 pr-3 text-[16px] text-neutral-700 focus:border-emerald-400 focus:bg-white focus:outline-offset-1 focus:outline-emerald-400/20 focus:ring-0"
             placeholder="Paste data or scan QR code"
             value={data}
             onChange={onChange}
           />
-          <div className="absolute bottom-0 right-0 inline-block p-3">
-            <PasteIcon onClick={onPaste} className="w-[21px] cursor-pointer" />
+          <div className="absolute bottom-0 right-0 p-3 align-middle">
+            <div className="inline-flex h-[30px] w-[30px] items-center justify-center  rounded-lg border border-slate-600/10 bg-white">
+              <PasteIcon onClick={onPaste} className="w-[16px] cursor-pointer" />
+            </div>
             {requiringPermission ? (
-              <LoadingIcon className="animation-rotate-360-deg ml-4 w-[23px] cursor-pointer" />
+              <div className="ml-4 inline-flex h-[30px] w-[30px] items-center justify-center  rounded-lg border border-slate-600/10 bg-white">
+                <LoadingIcon className="animation-rotate-360-deg w-[18px] cursor-pointer" />
+              </div>
             ) : (
-              <ScanIcon onClick={onClickScan} className="ml-4 w-[23px] cursor-pointer" />
+              <div className="ml-4 inline-flex h-[30px] w-[30px] items-center justify-center  rounded-lg border border-slate-600/10 bg-white">
+                <ScanIcon onClick={onClickScan} className="w-[18px] cursor-pointer" />
+              </div>
             )}
           </div>
         </div>
