@@ -7,6 +7,7 @@ import {
   Header,
   PolygonIcon,
   TorusIcon,
+  SwapChildProps,
   TronIcon,
 } from '../../components'
 import { CoinType, WalletProtocol } from '../../constant'
@@ -34,7 +35,7 @@ interface IChainList {
   list: IChain[]
 }
 
-export const ChainList = () => {
+export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) => {
   const [currentLogin, setCurrentLogin] = useState('')
   const walletSDK = useContext(WalletSDKContext)!
   const router = useSimpleRouter()!
@@ -203,8 +204,12 @@ export const ChainList = () => {
 
   return (
     <>
-      <Header className="p-6" title="Connect" onClose={close} />
-      <div className="scrollbar-hide mx-6 my-0 max-h-dialog-list-max-height overflow-y-auto">
+      <Header
+        className="z-10 w-full bg-white p-6"
+        onClose={close}
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
         <ul>
           {chains.map((item, index) => {
             return (

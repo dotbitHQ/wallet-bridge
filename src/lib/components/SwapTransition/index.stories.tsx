@@ -7,12 +7,12 @@ export default {
   title: 'Components/SwapTransition',
   component: SwapTransition,
   argTypes: {
-    duration: { type: 'string' },
+    duration: { type: 'number' },
     className: { type: 'string' },
   },
   args: {
     className: 'border border-solid',
-    duration: 'duration-1000',
+    duration: 300,
   },
 } as ComponentMeta<typeof SwapTransition>
 

@@ -1,7 +1,16 @@
-import { DeviceIcon, Header, MoreIcon, NervosIcon, PlusIcon, RevokeIcon, SafeIcon } from '../../components'
+import {
+  DeviceIcon,
+  Header,
+  MoreIcon,
+  NervosIcon,
+  PlusIcon,
+  RevokeIcon,
+  SafeIcon,
+  SwapChildProps,
+} from '../../components'
 import { Menu, Transition } from '@headlessui/react'
 import { emojis } from '../ChooseEmoji/png'
-import { Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { setWalletState, useWalletState } from '../../store'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -216,13 +225,23 @@ function removeNameAndEmojiFromLocalStorage(address: string) {
   localStorage.setItem('.bit-memos', JSON.stringify(data))
 }
 
-export function DeviceList() {
+export function DeviceList({ transitionStyle, transitionRef }: SwapChildProps) {
   const { goBack, onClose, goTo } = useSimpleRouter()!
   const { walletSnap } = useWalletState()
   return (
     <>
-      <Header className="p-6" title="Devices" goBack={goBack} onClose={onClose} />
-      <div className="relative flex w-full select-none flex-col items-center justify-start p-6">
+      <Header
+        className="z-10 w-full bg-white p-6"
+        title="Devices"
+        goBack={goBack}
+        onClose={onClose}
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div
+        className="relative flex w-full select-none flex-col items-center justify-start px-6 pb-6 pt-[76px]"
+        style={transitionStyle}
+        ref={transitionRef}
+      >
         <div className="flex w-full flex-row items-start justify-between gap-1 rounded-xl border border-amber-300/40 bg-amber-300/5 p-3">
           <SafeIcon className="h-[20px] w-[20px] flex-none text-amber-500" />
           <div className="flex-1 text-[14px] font-normal leading-[17px] text-yellow-700">

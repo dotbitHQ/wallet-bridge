@@ -1,12 +1,20 @@
-import { Button, ButtonShape, ButtonSize, Header, SafeIcon } from '../../components'
+import { Button, ButtonShape, ButtonSize, Header, SafeIcon, SwapChildProps } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 
-export function TransactionSucceeded() {
+export function TransactionSucceeded({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, onClose } = useSimpleRouter()!
   return (
     <>
-      <Header onClose={onClose} className="p-6" />
-      <div className="relative flex w-full max-w-[400px] flex-col items-center justify-start px-6 pb-6">
+      <Header
+        onClose={onClose}
+        className="z-10 w-full bg-white p-6"
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div
+        className="relative flex w-full max-w-[400px] flex-col items-center justify-start px-6 pb-6 pt-[76px]"
+        ref={transitionRef}
+        style={transitionStyle}
+      >
         <SafeIcon className="h-[80px] w-[80px] text-green-500" />
         <div className="mt-3 text-center text-[16px] font-bold text-neutral-700">Successfully Associated</div>
         <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">

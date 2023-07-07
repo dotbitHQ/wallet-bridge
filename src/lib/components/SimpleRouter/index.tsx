@@ -65,10 +65,8 @@ export function SimpleRouter({ routes, onClose, initialRouteName = 'index' }: Si
         onClose,
       }}
     >
-      <SwapTransition>
-        <div className="w-full" key={currentRouteName}>
-          {currentRoute.el}
-        </div>
+      <SwapTransition className="w-full sm:max-h-[500px]" duration={300}>
+        {currentRoute.el}
       </SwapTransition>
     </routerContext.Provider>
   )

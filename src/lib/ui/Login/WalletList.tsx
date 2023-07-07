@@ -5,6 +5,7 @@ import {
   ITokenIcon,
   MetaMaskIcon,
   OneKeyIcon,
+  SwapChildProps,
   TokenPocketIcon,
   TronLinkIcon,
   TrustWalletIcon,
@@ -25,7 +26,7 @@ interface IWallet {
   protocol: WalletProtocol[]
 }
 
-export const WalletList = () => {
+export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const walletSDK = useContext(WalletSDKContext)!
   const router = useSimpleRouter()!
   const goBack = router.goBack
@@ -133,8 +134,14 @@ export const WalletList = () => {
 
   return (
     <>
-      <Header className="p-6" title="Select Wallet" onClose={close} goBack={back} />
-      <div className="scrollbar-hide mx-6 my-0 max-h-dialog-list-max-height overflow-y-auto">
+      <Header
+        className="z-10 w-full bg-white p-6"
+        title="Select Wallet"
+        onClose={close}
+        goBack={back}
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
         <ul>
           {showWallets.map((wallet, index) => {
             return (

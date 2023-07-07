@@ -1,15 +1,23 @@
-import { Header, Exlaimation, ArrowLeftIcon } from '../../components'
+import { Header, Exlaimation, ArrowLeftIcon, SwapChildProps } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWebAuthnState } from '../../store/webAuthnState'
 import { collapseString } from '../../utils'
 
-export function TransactionFailed() {
+export function TransactionFailed({ transitionRef, transitionStyle }: SwapChildProps) {
   const { onClose } = useSimpleRouter()!
   const webAuthnState = useWebAuthnState()
   return (
     <>
-      <Header onClose={onClose} className="p-6" />
-      <div className="relative flex w-full max-w-[400px] flex-col items-center justify-start px-6 pb-6">
+      <Header
+        onClose={onClose}
+        className="z-10 w-full bg-white p-6"
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div
+        className="relative flex w-full max-w-[400px] flex-col items-center justify-start px-6 pb-6 pt-[76px]"
+        ref={transitionRef}
+        style={transitionStyle}
+      >
         <Exlaimation className="h-[80px] w-[80px] text-red-500" />
         <div className="mt-3 text-center text-[16px] font-bold text-red-500">Failed</div>
         <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">

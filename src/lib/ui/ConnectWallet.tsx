@@ -27,60 +27,60 @@ interface ConnectWalletProps {
 
 const routes = {
   ChainList: {
-    el: <ChainList />,
+    el: <ChainList key="ChainList" />,
   },
   WalletList: {
-    el: <WalletList />,
+    el: <WalletList key="WalletList" />,
     prev: 'ChainList',
   },
   AddressList: {
-    el: <AddressList />,
+    el: <AddressList key="AddressList" />,
     prev: 'ChainList',
   },
   LoggedIn: {
-    el: <LoggedIn />,
+    el: <LoggedIn key="LoggedIn" />,
   },
   EnhanceSecurity: {
-    el: <EnhanceSecurity />,
+    el: <EnhanceSecurity key="EnhanceSecurity" />,
     prev: 'LoggedIn',
     next: 'ShowQRCode',
   },
   ShowQRCode: {
-    el: <ShowQRCode />,
+    el: <ShowQRCode key="ShowQRCode" />,
     prev: 'EnhanceSecurity',
     next: 'InputSignature',
   },
   InputSignature: {
-    el: <InputSignature />,
+    el: <InputSignature key="InputSignature" />,
     prev: 'ShowQRCode',
     next: 'ChooseEmoji',
   },
   ChooseEmoji: {
-    el: <ChooseEmoji />,
+    el: <ChooseEmoji key="ChooseEmoji" />,
     prev: 'InputSignature',
     next: 'FinalConfirm',
   },
   FinalConfirm: {
-    el: <FinalConfirm />,
+    el: <FinalConfirm key="FinalConfirm" />,
     prev: 'ChooseEmoji',
     next: 'TransactionStatus',
   },
   TransactionStatus: {
-    el: <TransactionStatus />,
+    el: <TransactionStatus key="TransactionStatus" />,
     next: 'TransactionSucceeded',
   },
   TransactionSucceeded: {
-    el: <TransactionSucceeded />,
+    el: <TransactionSucceeded key="TransactionSucceeded" />,
     next: 'LoggedIn',
   },
   TransactionFailed: {
-    el: <TransactionFailed />,
+    el: <TransactionFailed key="TransactionFailed" />,
   },
   DeviceList: {
-    el: <DeviceList />,
+    el: <DeviceList key="DeviceList" />,
   },
   ShowScanner: {
-    el: <ShowScanner />,
+    el: <ShowScanner key="ShowScanner" />,
   },
 }
 
@@ -102,7 +102,7 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' 
         <Modal isOpen={isOpen} customRootId="ConnectWalletModal">
           <div
             className={clsx(
-              'box-border w-full max-w-[400px] overflow-x-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white sm:max-h-[500px] sm:rounded-[32px]',
+              'box-border w-full max-w-[400px] overflow-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white sm:rounded-[32px]',
               isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
             )}
           >

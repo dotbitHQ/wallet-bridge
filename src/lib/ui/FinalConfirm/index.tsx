@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Button, ButtonShape, ButtonSize, Header } from '../../components'
+import { Button, ButtonShape, ButtonSize, Header, SwapChildProps } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
 import { Emoji } from '../ChooseEmoji'
@@ -15,7 +15,7 @@ function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: s
   localStorage.setItem('.bit-memos', JSON.stringify(memos))
 }
 
-export function FinalConfirm() {
+export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, goBack, onClose } = useSimpleRouter()!
   const { walletSnap } = useWalletState()
   const webAuthnState = useWebAuthnState()
@@ -94,8 +94,18 @@ export function FinalConfirm() {
 
   return (
     <>
-      <Header className="p-6" title="Add Device" onClose={onClose} goBack={goBack} />
-      <div className="relative flex w-full flex-col items-center justify-start p-6">
+      <Header
+        title="Add Device"
+        onClose={onClose}
+        goBack={goBack}
+        className="z-10 w-full bg-white p-6"
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div
+        className="relative flex w-full flex-col items-center justify-start px-6 pb-6 pt-[76px]"
+        ref={transitionRef}
+        style={transitionStyle}
+      >
         <div className="w-full text-center text-[16px] leading-normal text-neutral-700">
           You are associating the following devices with {collapseString(walletSnap.address, 6, 3)}
         </div>

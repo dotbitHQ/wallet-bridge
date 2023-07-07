@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef } from 'react'
 import Clipboard from 'clipboard'
 import { ConnectDID } from 'connect-did-sdk'
-import { Button, ButtonShape, ButtonSize, CopyIcon, Header } from '../../components'
+import { Button, ButtonShape, ButtonSize, CopyIcon, Header, SwapChildProps } from '../../components'
 import { QRCode } from '../../components/QRCode'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
 
 const connectDID = new ConnectDID(true)
 
-export function ShowQRCode() {
+export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, onClose, goBack } = useSimpleRouter()!
   const nodeRef = useRef(null)
   useEffect(() => {
@@ -23,8 +23,18 @@ export function ShowQRCode() {
   )
   return (
     <>
-      <Header className="p-6" title="Add Device" onClose={onClose} goBack={goBack} />
-      <div className="flex w-full flex-col items-center justify-start px-6 py-20">
+      <Header
+        title="Add Device"
+        onClose={onClose}
+        goBack={goBack}
+        className="z-10 w-full bg-white p-6"
+        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
+      />
+      <div
+        className="flex w-full flex-col items-center justify-start px-6 pb-20 pt-[124px]"
+        ref={transitionRef}
+        style={transitionStyle}
+      >
         <div className="text-center text-[14px] leading-tight text-neutral-700">
           Scan the QR code (or access the link) below with your another device, and follow the instructions provided.
         </div>
