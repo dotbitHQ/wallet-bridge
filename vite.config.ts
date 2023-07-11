@@ -7,6 +7,8 @@ import tailwindcss from 'tailwindcss'
 import { UserConfigExport } from 'vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import alias from '@rollup/plugin-alias'
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
+
 import { name } from './package.json'
 
 const app = async (): Promise<UserConfigExport> => {
@@ -21,6 +23,7 @@ const app = async (): Promise<UserConfigExport> => {
         ],
       }),
       preact(),
+      cssInjectedByJsPlugin(),
       // dts({
       //   insertTypesEntry: true,
       // }),
@@ -33,9 +36,7 @@ const app = async (): Promise<UserConfigExport> => {
       // })
     ],
     css: {
-      postcss: {
-        plugins: [tailwindcss],
-      },
+      postcss: {},
     },
     build: {
       lib: {
