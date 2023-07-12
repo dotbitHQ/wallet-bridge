@@ -28,6 +28,7 @@ const app = async (): Promise<UserConfigExport> => {
       },
     },
     build: {
+      sourcemap: 'inline',
       lib: {
         entry: path.resolve(__dirname, 'src/lib/index.ts'),
         name,
