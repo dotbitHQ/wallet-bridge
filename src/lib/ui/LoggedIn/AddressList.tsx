@@ -3,9 +3,13 @@ import { useWalletState, setWalletState } from '../../store'
 import { AddressItem } from '../../components/AddressItem'
 import { collapseString } from '../../utils'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { useContext } from 'react'
+import { WalletSDKContext } from '../ConnectWallet'
+import { EventEnum } from '../../wallets/WalletEventListenerHandler'
 
 export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const router = useSimpleRouter()!
+  const walletSDK = useContext(WalletSDKContext)!
   const { goBack, onClose, prevRouteName: fromOldComponent } = router
   const { walletSnap } = useWalletState()
 
@@ -18,7 +22,10 @@ export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) 
   }
 
   const onSwitchAddress = (address: string) => {
-    setWalletState({ address })
+    if (address.toLowerCase() !== String(walletSnap.address).toLowerCase()) {
+      setWalletState({ address })
+      walletSDK.context.emitEvent(EventEnum.Change)
+    }
     back()
   }
 

@@ -1,14 +1,14 @@
 {
-  "name": "vite-component-library-template",
+  "name": "wallet-bridge",
   "private": false,
-  "version": "1.5.11",
-  "main": "./dist/vite-component-library-template.umd.js",
-  "module": "./dist/vite-component-library-template.es.js",
+  "version": "0.0.1",
+  "main": "./dist/wallet-bridge.umd.js",
+  "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/vite-component-library-template.es.js",
-      "require": "./dist/vite-component-library-template.umd.js"
+      "import": "./dist/wallet-bridge.es.js",
+      "require": "./dist/wallet-bridge.umd.js"
     },
     "./dist/style.css": "./dist/style.css"
   },
@@ -27,7 +27,7 @@
     "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
   },
   "dependencies": {
-    "@metamask/eth-sig-util": "^5.1.0",
+    "@metamask/eth-sig-util": "^4.0.1",
     "@toruslabs/torus-embed": "^2.1.7",
     "@types/color": "^3.0.3",
     "axios": "^1.4.0",

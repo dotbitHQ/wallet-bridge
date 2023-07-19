@@ -206,6 +206,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
     <>
       <Header
         className="z-10 w-full bg-white p-6"
+        title="Connect"
         onClose={close}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />

@@ -99,6 +99,7 @@ export enum SIGN_TYPE {
   eth712,
   ed25519,
   doge,
+  webauthn,
 }
 
 export interface IMainChain {

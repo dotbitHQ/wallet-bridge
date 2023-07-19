@@ -114,7 +114,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
           </li>
           {walletSnap.protocol === WalletProtocol.webAuthn ? (
             <>
-              <hr className="mx-5 h-px bg-[#B6C4D966]" />
+              <hr className="mx-5 border-[#B6C4D966]" />
               {walletSnap.enableAuthorize ? (
                 <li
                   className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
