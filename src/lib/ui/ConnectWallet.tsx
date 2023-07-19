@@ -18,6 +18,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { DeviceList } from './DeviceList'
 import { ShowScanner } from './ShowScanner'
 import { TransactionFailed } from './TransactionFailed'
+import { Sheet } from '../components/Sheet'
 
 interface ConnectWalletProps {
   visible: boolean
@@ -99,10 +100,20 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' 
   return (
     <WalletSDKContext.Provider value={walletSDK}>
       <QueryClientProvider client={queryClient}>
-        <Modal isOpen={isOpen} customRootId="ConnectWalletModal">
+        <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet" className="md:hidden">
           <div
             className={clsx(
-              'box-border w-full max-w-[400px] overflow-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white sm:rounded-[32px]',
+              'box-border w-full overflow-x-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',
+              isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+            )}
+          >
+            {el}
+          </div>
+        </Sheet>
+        <Modal isOpen={isOpen} customRootId="ConnectWalletModal" className="max-md:hidden">
+          <div
+            className={clsx(
+              'box-border w-[92%] max-w-[400px] overflow-x-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
               isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
             )}
           >

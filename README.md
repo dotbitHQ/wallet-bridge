@@ -1,32 +1,4 @@
-# ⚛️⚡ Vite + React + Typescript Component Library Template
-
-## Features
-
-- ⚛️ [React 18](https://reactjs.org/)
-- 📚 [Storybook 6](https://storybook.js.org/) - Components preview
-- 🖌️ [Tailwind CSS 3](https://tailwindcss.com/)
-- ⏩ [Vite](https://vitejs.dev/) - Run and build the project blazingly fast!
-- ⚡ [Vitest](https://vitest.dev/) - Components Unit Testing
-- 📐 [ESLint](https://eslint.org/) & [Prettier](https://prettier.io/) - Formatting and Linting
-- 🌟 [Typescript](https://www.typescriptlang.org/)
-- 🐶 [Husky](https://typicode.github.io/husky) & [Lint Staged](https://www.npmjs.com/package/lint-staged) - Pre-commit Hooks
-- ⏰ [Release Please](https://github.com/googleapis/release-please) — Generate the changelog with the release-please workflow
-- 👷 [Github Actions](https://github.com/features/actions) — Releasing versions to NPM
-- Initial components setup using [Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/)
-
-## Getting Started
-
-1. Create a new repository using this one as template
-
-2. Create 2 core branches: `develop` and `main`.
-
-   2.1 `develop` will serve all your versions.
-
-   2.2 new additions should be pushed to `main` when they have been approved/tested appropriately.
-
-3. Clone your repo
-4. Install dependencies with `yarn`
-5. Run `yarn prepare` command to setup [Husky](https://typicode.github.io/husky) pre-commit hooks.
+# wallet-bridge
 
 ### Main Scripts
 
@@ -64,13 +36,13 @@ Example: `git commit -m "chore: v1.2.0" -m "Release-As: 1.2.0"`
 
 ## Using the library in a React frontend app
 
-Install the library running `yarn <your-library>`.
+Install the library running `yarn add wallet-bridge`.
 
 To import the styles the library needs:
 
 ```js
 /* _app.tsx */
-import '<your-library>/dist/style.css'
+import 'wallet-bridge/dist/style.css'
 // More imports and your App component ...
 ```
 
@@ -78,13 +50,9 @@ To import library components:
 
 ```js
 /* pages/index.tsx */
-import { AtButton } from '<your-library>'
+import { Wallet } from 'wallet-bridge'
 // More imports and your Page component...
 ```
-
-## Author
-
-[Ignacio Miranda Figueroa](https://www.linkedin.com/in/ignacio-miranda-figueroa/)
 
 ## License
 

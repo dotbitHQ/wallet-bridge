@@ -19,7 +19,7 @@
     max-height: calc(100vh * 0.7);
   }
 
-  .iconfont {
+  .icon {
     display: inline-block;
     vertical-align: middle;
     outline: unset;

@@ -3,7 +3,7 @@ import clsx from 'clsx'
 export function CloseIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="12"
       height="12"
       viewBox="0 0 12 12"
@@ -21,7 +21,7 @@ export function CloseIcon(props: { className?: string }) {
 export function ArrowLeftIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="12"
       height="12"
       viewBox="0 0 12 12"
@@ -41,7 +41,7 @@ export function ArrowLeftIcon(props: { className?: string }) {
 export function LoadingIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont animation-rotate-360-deg', props.className)}
+      className={clsx('icon animation-rotate-360-deg', props.className)}
       width="10"
       height="10"
       viewBox="0 0 10 10"
@@ -61,7 +61,7 @@ export function LoadingIcon(props: { className?: string }) {
 export function ArrowRightTopIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="12"
       height="12"
       viewBox="0 0 12 12"
@@ -79,7 +79,7 @@ export function ArrowRightTopIcon(props: { className?: string }) {
 export function DeviceIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="72"
       height="72"
       viewBox="0 0 72 72"
@@ -99,7 +99,7 @@ export function DeviceIcon(props: { className?: string }) {
 export function EthIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="72"
       height="72"
       viewBox="0 0 72 72"
@@ -163,7 +163,7 @@ export function EthIcon(props: { className?: string }) {
 export function BscIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="72"
       height="72"
       viewBox="0 0 72 72"
@@ -199,7 +199,7 @@ export function BscIcon(props: { className?: string }) {
 export function PolygonIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="72"
       height="72"
       viewBox="0 0 72 72"
@@ -226,7 +226,7 @@ export function PolygonIcon(props: { className?: string }) {
 export function TronIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="72"
       height="72"
       viewBox="0 0 72 72"
@@ -260,7 +260,7 @@ export function TronIcon(props: { className?: string }) {
 export function DogecoinIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="72"
       height="72"
       viewBox="0 0 72 72"
@@ -997,7 +997,7 @@ export function DogecoinIcon(props: { className?: string }) {
 export function TorusIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="40"
       height="40"
       viewBox="0 0 40 40"
@@ -1021,7 +1021,7 @@ export function TorusIcon(props: { className?: string }) {
 export function MetaMaskIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="40"
       height="40"
       viewBox="0 0 40 40"
@@ -1269,7 +1269,7 @@ export function MetaMaskIcon(props: { className?: string }) {
 export function TrustWalletIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="40"
       height="40"
       viewBox="0 0 40 40"
@@ -1291,7 +1291,7 @@ export function TrustWalletIcon(props: { className?: string }) {
 export function ImTokenIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="40"
       height="40"
       viewBox="0 0 40 40"
@@ -1315,7 +1315,7 @@ export function ImTokenIcon(props: { className?: string }) {
 export function TokenPocketIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="40"
       height="40"
       viewBox="0 0 40 40"
@@ -1384,7 +1384,7 @@ export function TokenPocketIcon(props: { className?: string }) {
 export function OneKeyIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="40"
       height="40"
       viewBox="0 0 40 40"
@@ -1406,7 +1406,7 @@ export function OneKeyIcon(props: { className?: string }) {
 export function ITokenIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="40"
       height="40"
       viewBox="0 0 40 40"
@@ -1430,7 +1430,7 @@ export function ITokenIcon(props: { className?: string }) {
 export function TronLinkIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="40"
       height="40"
       viewBox="0 0 40 40"
@@ -1456,7 +1456,7 @@ export function TronLinkIcon(props: { className?: string }) {
 export function DisconnectIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="16"
       height="16"
       viewBox="0 0 16 16"
@@ -1476,7 +1476,7 @@ export function DisconnectIcon(props: { className?: string }) {
 export function InfoIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="16"
       height="16"
       viewBox="0 0 16 16"
@@ -1494,7 +1494,7 @@ export function InfoIcon(props: { className?: string }) {
 export function DotbitBalanceIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -1515,7 +1515,7 @@ export function DotbitBalanceIcon(props: { className?: string }) {
 export function DevicesIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -1534,7 +1534,7 @@ export function DevicesIcon(props: { className?: string }) {
 export function WarningIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="24"
       height="24"
       viewBox="0 0 24 24"
@@ -1561,7 +1561,7 @@ export function WarningIcon(props: { className?: string }) {
 export function SwitchIcon(props: { className?: string }) {
   return (
     <svg
-      className={clsx('iconfont', props.className)}
+      className={clsx('icon', props.className)}
       width="16"
       height="16"
       viewBox="0 0 16 16"
@@ -1578,12 +1578,7 @@ export function SwitchIcon(props: { className?: string }) {
 
 export function CopyIcon(props: { className?: string }) {
   return (
-    <svg
-      className={clsx('iconfont', props.className)}
-      viewBox="0 0 13 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={clsx('icon', props.className)} viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="Icons/Profile/Copy" clipPath="url(#clip0_413_184220)">
         <path
           id="copy"
@@ -1604,7 +1599,7 @@ export function PasteIcon(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 18 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1622,7 +1617,7 @@ export function ScanIcon(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 18 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1640,7 +1635,7 @@ export function WarningOutlineIcon(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 21 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1659,7 +1654,7 @@ export function LoadingIconGradient(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 600 600"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1698,7 +1693,7 @@ export function SafeIcon(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 80 80"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1720,7 +1715,7 @@ export function MoreIcon(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       width="16"
       height="17"
       viewBox="0 0 16 17"
@@ -1745,7 +1740,7 @@ export function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 16 17"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1766,7 +1761,7 @@ export function RevokeIcon(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1800,7 +1795,7 @@ export function NervosIcon(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -1841,7 +1836,7 @@ export function Exlaimation(props: React.SVGProps<SVGSVGElement>) {
   const { className, ...rest } = props
   return (
     <svg
-      className={clsx('iconfont', className)}
+      className={clsx('icon', className)}
       viewBox="0 0 80 80"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

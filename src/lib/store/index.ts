@@ -6,7 +6,7 @@ import Axios from 'axios'
 import errno from '../constant/errno'
 import CustomError from '../utils/CustomError'
 
-interface WalletState {
+export interface WalletState {
   protocol?: WalletProtocol
   address?: string
   coinType?: CoinType
@@ -62,12 +62,15 @@ export const setWalletState = ({
   if (protocol) {
     walletState.protocol = protocol
   }
-  if (address) {
-    walletState.address = address
-    void getAuthorizeInfo(address)
-  }
   if (coinType) {
     walletState.coinType = coinType
+  }
+  if (address) {
+    walletState.address = address
+    const walletSnap = snapshot(walletState)
+    if (walletSnap.protocol === WalletProtocol.webAuthn) {
+      void getAuthorizeInfo(address)
+    }
   }
   if (hardwareWalletTipsShow !== undefined) {
     walletState.hardwareWalletTipsShow = hardwareWalletTipsShow

@@ -14,10 +14,12 @@ export interface TxsSignedOrUnSigned {
   list: TxsList[]
   sign_key: string
   sub_action?: string
+  sign_address?: string
 }
 
 export interface TxsWithMMJsonSignedOrUnSigned {
   sign_key: string
   sign_list: SignInfo[]
   mm_json?: TypedMessage<MessageTypes>
+  sign_address?: string
 }

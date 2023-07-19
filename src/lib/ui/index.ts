@@ -1,9 +1,10 @@
 import WalletSDK from '../wallets'
 import { useWalletState, getWalletState, setWalletState } from '../store'
 import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
+import { TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
 
-export default class Wallet {
+export class Wallet {
   walletSDK: WalletSDK
   useWalletState = useWalletState
   getWalletState = getWalletState
@@ -34,5 +35,13 @@ export default class Wallet {
 
   async initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean> {
     return await this.walletSDK.initWallet({ involution })
+  }
+
+  async signTxList(txs: TxsSignedOrUnSigned): Promise<TxsSignedOrUnSigned>
+  async signTxList(txs: TxsWithMMJsonSignedOrUnSigned): Promise<TxsWithMMJsonSignedOrUnSigned>
+  async signTxList(
+    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
+  ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
+    return await this.walletSDK.signTxList(txs as any)
   }
 }

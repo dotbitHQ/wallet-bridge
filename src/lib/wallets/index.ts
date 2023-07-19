@@ -39,16 +39,18 @@ class WalletSDK {
     this.eventListener = WalletHandlerFactory.createEventListener(this.context)
   }
 
-  async connect(): Promise<void> {
+  async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }): Promise<void> {
     await this.walletConnector?.connect()
     this.eventListener?.removeEvents()
     this.eventListener?.listenEvents()
-    this.context.emitEvent(EventEnum.Connect)
     setWalletState({
       protocol: this.context.protocol,
       address: this.context.address,
       coinType: this.context.coinType,
     })
+    if (!ignoreEvent) {
+      this.context.emitEvent(EventEnum.Connect)
+    }
   }
 
   connectWallet(params: { initComponent?: string } = {}): void {
@@ -80,7 +82,7 @@ class WalletSDK {
         if (protocol === WalletProtocol.webAuthn && deviceData) {
           return true
         } else {
-          await this.connect()
+          await this.connect({ ignoreEvent: true })
           return true
         }
       }
@@ -180,6 +182,11 @@ class WalletSDK {
           await this.signTx(signItem)
         }
       }
+    }
+
+    const { deviceData } = snapshot(walletState)
+    if (deviceData?.ckbAddr) {
+      txs.sign_address = deviceData.ckbAddr
     }
 
     return txs

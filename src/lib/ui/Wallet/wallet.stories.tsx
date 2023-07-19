@@ -1,5 +1,5 @@
 import { Button } from '../../components'
-import Wallet from '../index'
+import { Wallet } from '../index'
 
 export default {
   title: 'UI/Wallets',
