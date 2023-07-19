@@ -10,4 +10,4 @@ jobs:
     steps:
       - name: Deploy storybook.d.id
         run: |
-          ssh ${{ secrets.rsync_user }}@${{ secrets.prod_host_ip }} 'source ~/.zshrc && cd /data/code/storybook.d.id && npm install && pm2 delete storybook.d.id && pm2 start npm --name "storybook.d.id" -- run dev'
+          ssh ${{ secrets.rsync_user }}@${{ secrets.prod_host_ip }} 'source ~/.zshrc && cd /data/code/storybook.d.id && git reset --hard && git pull && npm install && pm2 delete storybook.d.id && pm2 start npm --name "storybook.d.id" -- run dev'
