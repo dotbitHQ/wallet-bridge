@@ -39,7 +39,7 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
           Scan the QR code (or access the link) below with your another device, and follow the instructions provided.
         </div>
         <div className="my-3 h-[130px] w-[130px] rounded-2xl border-stone-300/20 p-5">
-          <QRCode data="https://10.143.1.26:20203/DID" />
+          <QRCode data={url} />
         </div>
         <span className="inline-block cursor-pointer whitespace-nowrap" ref={nodeRef} data-clipboard-target="#copy-url">
           <a
