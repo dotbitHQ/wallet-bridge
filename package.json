@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -23,8 +23,7 @@
     "format:prettier": "prettier --write \"src/**/*.{ts,tsx,js,mdx}\"",
     "test": "vitest",
     "test:cov": "vitest run --coverage",
-    "prepare": "husky install",
-    "prepack": "json -f package.json -I -e \"delete this.devDependencies; delete this.dependencies\""
+    "prepare": "husky install"
   },
   "dependencies": {
     "@metamask/eth-sig-util": "^4.0.1",
