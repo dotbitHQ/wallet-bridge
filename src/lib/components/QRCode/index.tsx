@@ -9,6 +9,7 @@ export function QRCode(props: Omit<Options, 'type'>) {
     cornersSquareOptions = { color: '#000000', type: 'extra-rounded' },
     cornersDotOptions = { color: '#000000', type: 'dot' },
     qrOptions = { typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'L' },
+    margin = 0,
     ...rest
   } = props
 
@@ -16,12 +17,14 @@ export function QRCode(props: Omit<Options, 'type'>) {
 
   useEffect(() => {
     const qr = new QR({
+      type: 'svg',
       width,
       height,
       dotsOptions,
       cornersDotOptions,
       cornersSquareOptions,
       qrOptions,
+      margin,
       ...rest,
     })
 
