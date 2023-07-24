@@ -58,7 +58,7 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
           <QRCode data={url} />
           <div
             className={clsx(
-              'absolute left-1/2 top-[24px] -translate-x-1/2 whitespace-nowrap rounded-lg bg-black p-2.5 leading-tight text-white opacity-0 transition-opacity',
+              'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-black p-2.5 leading-tight text-white opacity-0 transition-opacity',
               copied && 'opacity-100',
             )}
           >
