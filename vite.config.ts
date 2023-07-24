@@ -6,10 +6,17 @@ import tailwindcss from 'tailwindcss'
 import { UserConfigExport } from 'vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { name } from './package.json'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 const app = async (): Promise<UserConfigExport> => {
   return defineConfig({
     plugins: [
+      nodePolyfills({
+        globals: {
+          Buffer: true,
+          global: true,
+        },
+      }),
       react(),
       dts({
         insertTypesEntry: true,
@@ -28,6 +35,7 @@ const app = async (): Promise<UserConfigExport> => {
       },
     },
     build: {
+      minify: false,
       lib: {
         entry: path.resolve(__dirname, 'src/lib/index.ts'),
         name,

@@ -65,7 +65,7 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
             👌 Copied
           </div>
         </div>
-        <span className="inline-block cursor-pointer whitespace-nowrap" ref={nodeRef} data-clipboard-target="#copy-url">
+        <span className="inline-block cursor-pointer whitespace-nowrap" ref={nodeRef} data-clipboard-text={url}>
           <a
             id="copy-url"
             className="inline-block w-[141px] overflow-auto text-ellipsis align-middle text-[14px] text-blue-800"
