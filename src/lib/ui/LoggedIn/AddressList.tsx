@@ -1,5 +1,5 @@
 import { Header, SwapChildProps } from '../../components'
-import { useWalletState, setWalletState } from '../../store'
+import { useWalletState, setWalletState, getAuthorizeInfo } from '../../store'
 import { AddressItem } from '../../components/AddressItem'
 import { collapseString } from '../../utils'
 import { useSimpleRouter } from '../../components/SimpleRouter'
@@ -21,9 +21,10 @@ export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) 
     }
   }
 
-  const onSwitchAddress = (address: string) => {
+  const onSwitchAddress = async (address: string) => {
     if (address.toLowerCase() !== String(walletSnap.address).toLowerCase()) {
       setWalletState({ address })
+      await getAuthorizeInfo()
       walletSDK.context.emitEvent(EventEnum.Change)
     }
     back()
@@ -44,8 +45,8 @@ export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) 
           <AddressItem
             address={collapseString(walletSnap.deviceData?.ckbAddr, 8, 4)}
             isCurrent={walletSnap.deviceData?.ckbAddr === walletSnap.address}
-            onClick={() => {
-              onSwitchAddress(walletSnap.deviceData?.ckbAddr as string)
+            onClick={async () => {
+              await onSwitchAddress(walletSnap.deviceData?.ckbAddr as string)
             }}
           ></AddressItem>
         </ul>
@@ -60,8 +61,8 @@ export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) 
                 className="mb-2"
                 address={collapseString(address, 8, 4)}
                 isCurrent={address === walletSnap.address}
-                onClick={() => {
-                  onSwitchAddress(address)
+                onClick={async () => {
+                  await onSwitchAddress(address)
                 }}
               ></AddressItem>
             )

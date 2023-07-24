@@ -1,13 +1,13 @@
 import { EventEnum, WalletEventListener } from './WalletEventListener'
 import { WalletContext } from '../WalletContext'
 import { chainIdHexToNumber } from '../../utils'
-import { setWalletState } from '../../store'
+import { getAuthorizeInfo, setWalletState } from '../../store'
 import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap, CoinType } from '../../constant'
 import { debounce } from 'lodash-es'
 import { createTips } from '../../components'
 
 export class TronLinkEventListener extends WalletEventListener {
-  messageEvent(event: MessageEvent, context: WalletContext) {
+  async messageEvent(event: MessageEvent, context: WalletContext) {
     if (!event?.data?.isTronLink) {
       return
     }
@@ -25,6 +25,7 @@ export class TronLinkEventListener extends WalletEventListener {
         setWalletState({
           address: account,
         })
+        await getAuthorizeInfo()
         context.emitEvent(EventEnum.Change)
       }
     }
@@ -68,8 +69,8 @@ export class TronLinkEventListener extends WalletEventListener {
     }
   }
 
-  handleMessageEvent = (event: MessageEvent) => {
-    this.messageEvent(event, this.context)
+  handleMessageEvent = async (event: MessageEvent) => {
+    await this.messageEvent(event, this.context)
   }
 
   listenEvents(): void {

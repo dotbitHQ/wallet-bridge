@@ -12,7 +12,7 @@ import { CoinType, WalletProtocol, SIGN_TYPE } from '../constant'
 import { SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
-import { setWalletState, walletState } from '../store'
+import { getAuthorizeInfo, setWalletState, walletState } from '../store'
 import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
@@ -48,6 +48,7 @@ class WalletSDK {
       address: this.context.address,
       coinType: this.context.coinType,
     })
+    await getAuthorizeInfo()
     if (!ignoreEvent) {
       this.context.emitEvent(EventEnum.Connect)
     }

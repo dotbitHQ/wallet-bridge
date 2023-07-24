@@ -36,16 +36,18 @@ const localWalletState = walletStateLocalStorage
 
 export const walletState = proxy<WalletState>(localWalletState)
 
-async function getAuthorizeInfo(address: string) {
-  const { isTestNet } = snapshot(walletState)
-  const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
-  const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
-    ckb_address: address,
-  })
-  if (res.data?.err_no === errno.success) {
-    walletState.enableAuthorize = res.data.data.ckb_address.length > 1
-  } else {
-    throw new CustomError(res.data?.err_no, res.data?.err_msg)
+export async function getAuthorizeInfo() {
+  const { protocol, isTestNet, address } = snapshot(walletState)
+  if (protocol === WalletProtocol.webAuthn) {
+    const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
+    const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
+      ckb_address: address,
+    })
+    if (res.data?.err_no === errno.success) {
+      walletState.enableAuthorize = res.data.data.ckb_address.length > 1
+    } else {
+      throw new CustomError(res.data?.err_no, res.data?.err_msg)
+    }
   }
 }
 
@@ -67,10 +69,6 @@ export const setWalletState = ({
   }
   if (address) {
     walletState.address = address
-    const walletSnap = snapshot(walletState)
-    if (walletSnap.protocol === WalletProtocol.webAuthn) {
-      void getAuthorizeInfo(address)
-    }
   }
   if (hardwareWalletTipsShow !== undefined) {
     walletState.hardwareWalletTipsShow = hardwareWalletTipsShow
