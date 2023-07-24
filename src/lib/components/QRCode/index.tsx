@@ -12,7 +12,7 @@ export function QRCode(props: Omit<Options, 'type'>) {
     ...rest
   } = props
 
-  const [blob, setBlob] = useState<Blob | null>(null)
+  const [blobUrl, setBlobUrl] = useState<string>()
 
   useEffect(() => {
     const qr = new QR({
@@ -25,8 +25,13 @@ export function QRCode(props: Omit<Options, 'type'>) {
       ...rest,
     })
 
-    qr.getRawData().then(setBlob).catch(console.error)
-  }, [width, height, dotsOptions, cornersDotOptions, cornersSquareOptions, qrOptions, rest])
+    qr.getRawData()
+      .then((blob) => {
+        setBlobUrl(window.URL.createObjectURL(blob!))
+      })
+      .catch(console.error)
+    // eslint-disable-next-line
+  }, [])
 
-  return <img width={width} height={height} src={blob != null ? window.URL.createObjectURL(blob) : undefined} />
+  return <img width={width} height={height} src={blobUrl} />
 }

@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@metamask/eth-sig-util": "^4.0.1",
-    "@toruslabs/torus-embed": "^2.1.7",
+    "@toruslabs/torus-embed": "2.1.7",
     "@types/color": "^3.0.3",
     "axios": "^1.4.0",
     "bn.js": "^5.2.1",
