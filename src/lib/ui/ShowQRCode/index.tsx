@@ -54,11 +54,11 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
         <div className="text-center text-[14px] leading-tight text-neutral-700">
           Scan the QR code (or access the link) below with your another device, and follow the instructions provided.
         </div>
-        <div className="relative my-3 h-[130px] w-[130px] rounded-2xl border border-stone-300/20">
+        <div className="relative my-3 h-[260px] w-[260px] rounded-2xl border border-stone-300/20 p-4">
           <QRCode data={url} />
           <div
             className={clsx(
-              'absolute left-1/2 top-[24px] -translate-x-1/2 whitespace-nowrap rounded-lg bg-black p-2.5 leading-tight text-white opacity-0 transition-opacity',
+              'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-black p-2.5 leading-tight text-white opacity-0 transition-opacity',
               copied && 'opacity-100',
             )}
           >
