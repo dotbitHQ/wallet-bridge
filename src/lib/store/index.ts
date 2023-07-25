@@ -44,7 +44,7 @@ export async function getAuthorizeInfo() {
       ckb_address: address,
     })
     if (res.data?.err_no === errno.success) {
-      walletState.enableAuthorize = res.data.data.ckb_address.length > 1
+      walletState.enableAuthorize = res.data.data.ckb_address.length > 0
       localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
     } else {
       throw new CustomError(res.data?.err_no, res.data?.err_msg)
