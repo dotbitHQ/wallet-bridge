@@ -17,8 +17,8 @@ import {
   WarningIcon,
 } from '../../components'
 import { WalletProtocol, CoinType, DotbitBalanceUrl, DotbitBalanceTestUrl } from '../../constant'
-import { useWalletState } from '../../store'
-import { ReactNode, useContext } from 'react'
+import { getAuthorizeInfo, getMastersAddress, useWalletState } from '../../store'
+import { ReactNode, useContext, useEffect } from 'react'
 import { collapseString, smartOpen } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
@@ -66,6 +66,11 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   const onDotbitBalance = () => {
     smartOpen(walletSDK.context.isTestNet ? DotbitBalanceTestUrl : DotbitBalanceUrl)
   }
+
+  useEffect(() => {
+    void getAuthorizeInfo()
+    void getMastersAddress()
+  }, [])
 
   return (
     <>
@@ -115,7 +120,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
           {walletSnap.protocol === WalletProtocol.webAuthn ? (
             <>
               <hr className="mx-5 border-[#B6C4D966]" />
-              {walletSnap.enableAuthorize ? (
+              {walletSnap.deviceList && walletSnap.deviceList.length > 0 ? (
                 <li
                   className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
                   onClick={onDevices}

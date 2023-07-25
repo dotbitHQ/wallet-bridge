@@ -33,7 +33,7 @@ export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildP
     if (query.data?.hash === webAuthnState.pendingTxHash) {
       if (query.data?.status === 1) {
         setWalletState({
-          ckbAddresses: walletSnap.ckbAddresses!.concat([webAuthnState.backupDeviceData!.ckbAddr]),
+          deviceList: walletSnap.deviceList!.concat([webAuthnState.backupDeviceData!.ckbAddr]),
         })
         goNext?.()
       } else if (query.data?.status === -1) {
