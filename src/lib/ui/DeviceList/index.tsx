@@ -153,7 +153,7 @@ function Device({ address, managingAddress }: DeviceProps) {
     if (revoking) return
     if (transactionStatusQuery.data?.status === 1) {
       setWalletState({
-        ckbAddresses: walletSnap.ckbAddresses?.filter((a) => a !== address),
+        deviceList: walletSnap.deviceList?.filter((a) => a !== address),
       })
       removeNameAndEmojiFromLocalStorage(address)
       setStatusConverged(true)
@@ -167,7 +167,7 @@ function Device({ address, managingAddress }: DeviceProps) {
     setRevokeError,
     address,
     sendTransactionMutation.data?.hash,
-    walletSnap.ckbAddresses,
+    walletSnap.deviceList,
   ])
   return (
     <li
@@ -252,8 +252,14 @@ export function DeviceList({ transitionStyle, transitionRef }: SwapChildProps) {
           Full control over the address belongs to the device/address.
         </div>
         <ul className="mt-2 flex w-full flex-col items-stretch justify-start gap-2">
-          <Device key={walletSnap.address} address={walletSnap.address!} managingAddress={walletSnap.address!} />
-          {walletSnap.ckbAddresses?.map((address) => (
+          {walletSnap.deviceData?.ckbAddr ? (
+            <Device
+              key={walletSnap.deviceData.ckbAddr}
+              address={walletSnap.deviceData.ckbAddr}
+              managingAddress={walletSnap.deviceData.ckbAddr}
+            />
+          ) : null}
+          {walletSnap.deviceList?.map((address) => (
             <Device key={address} address={address} managingAddress={walletSnap.address!} />
           ))}
         </ul>

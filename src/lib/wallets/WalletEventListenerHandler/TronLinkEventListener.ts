@@ -1,7 +1,7 @@
 import { EventEnum, WalletEventListener } from './WalletEventListener'
 import { WalletContext } from '../WalletContext'
 import { chainIdHexToNumber } from '../../utils'
-import { getAuthorizeInfo, setWalletState } from '../../store'
+import { setWalletState } from '../../store'
 import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap, CoinType } from '../../constant'
 import { debounce } from 'lodash-es'
 import { createTips } from '../../components'
@@ -25,7 +25,6 @@ export class TronLinkEventListener extends WalletEventListener {
         setWalletState({
           address: account,
         })
-        await getAuthorizeInfo()
         context.emitEvent(EventEnum.Change)
       }
     }

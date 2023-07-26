@@ -13,7 +13,7 @@ export interface WalletState {
   hardwareWalletTipsShow?: boolean
   deviceData?: IDeviceData
   ckbAddresses?: string[]
-  enableAuthorize?: boolean
+  deviceList?: string[]
   isTestNet?: boolean
 }
 
@@ -30,7 +30,7 @@ const localWalletState = walletStateLocalStorage
       hardwareWalletTipsShow: true,
       deviceData: undefined,
       ckbAddresses: [],
-      enableAuthorize: false,
+      deviceList: [],
       isTestNet: false,
     }
 
@@ -44,10 +44,29 @@ export async function getAuthorizeInfo() {
       ckb_address: address,
     })
     if (res.data?.err_no === errno.success) {
-      walletState.enableAuthorize = res.data.data.ckb_address.length > 0
-      localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
+      setWalletState({
+        deviceList: res.data.data.ckb_address,
+      })
     } else {
       throw new CustomError(res.data?.err_no, res.data?.err_msg)
+    }
+  }
+}
+
+export async function getMastersAddress() {
+  const { protocol, isTestNet, deviceData } = snapshot(walletState)
+  if (protocol === WalletProtocol.webAuthn) {
+    const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
+
+    const mastersAddress = await Axios.post(`${api}/v1/webauthn/get-masters-addr`, {
+      cid: deviceData?.credential.rawId,
+    })
+    if (mastersAddress.data?.err_no === errno.success) {
+      setWalletState({
+        ckbAddresses: mastersAddress.data.data.ckb_address,
+      })
+    } else {
+      throw new CustomError(mastersAddress.data?.err_no, mastersAddress.data?.err_msg)
     }
   }
 }
@@ -59,7 +78,7 @@ export const setWalletState = ({
   hardwareWalletTipsShow,
   deviceData,
   ckbAddresses,
-  enableAuthorize,
+  deviceList,
   isTestNet,
 }: WalletState) => {
   if (protocol) {
@@ -80,6 +99,9 @@ export const setWalletState = ({
   if (ckbAddresses) {
     walletState.ckbAddresses = ckbAddresses
   }
+  if (deviceList) {
+    walletState.deviceList = deviceList
+  }
   if (isTestNet !== undefined) {
     walletState.isTestNet = isTestNet
   }
@@ -92,7 +114,7 @@ export const resetWalletState = () => {
   walletState.address = undefined
   walletState.deviceData = undefined
   walletState.ckbAddresses = []
-  walletState.enableAuthorize = false
+  walletState.deviceList = []
   walletState.isTestNet = false
   localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }

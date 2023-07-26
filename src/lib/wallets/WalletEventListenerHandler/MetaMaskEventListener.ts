@@ -1,7 +1,7 @@
 import { EventEnum, WalletEventListener } from './WalletEventListener'
 import { chainIdHexToNumber, toChecksumAddress } from '../../utils'
 import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap, CoinType } from '../../constant'
-import { getAuthorizeInfo, setWalletState } from '../../store'
+import { setWalletState } from '../../store'
 import { createTips } from '../../components'
 
 export class MetaMaskEventListener extends WalletEventListener {
@@ -21,7 +21,6 @@ export class MetaMaskEventListener extends WalletEventListener {
         setWalletState({
           address: toChecksumAddress(account),
         })
-        await getAuthorizeInfo()
         this.context.emitEvent(EventEnum.Change)
       }
     })
