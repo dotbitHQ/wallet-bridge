@@ -1,11 +1,13 @@
 import { Header, Exlaimation, ArrowLeftIcon, SwapChildProps } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { useWalletState } from '../../store'
 import { useWebAuthnState } from '../../store/webAuthnState'
 import { collapseString } from '../../utils'
 
 export function TransactionFailed({ transitionRef, transitionStyle }: SwapChildProps) {
   const { onClose } = useSimpleRouter()!
   const webAuthnState = useWebAuthnState()
+  const { walletSnap } = useWalletState()
   return (
     <>
       <Header
@@ -25,7 +27,16 @@ export function TransactionFailed({ transitionRef, transitionStyle }: SwapChildP
           <div>Please try again.</div>
         </div>
         <div className="mb-8 mt-3 text-[12px] font-normal leading-[12px] text-gray-400">
-          <span className="inline-block align-middle">{collapseString(webAuthnState.pendingTxHash, 6, 3)}</span>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={`https://${walletSnap.isTestNet ? 'pudge.' : ''}explorer.nervos.org/transaction/${
+              webAuthnState.pendingTxHash ?? ''
+            }`}
+            className="inline-block align-middle"
+          >
+            {collapseString(webAuthnState.pendingTxHash, 6, 3)}
+          </a>
           <ArrowLeftIcon className="h-[12px] rotate-180" />
         </div>
       </div>
