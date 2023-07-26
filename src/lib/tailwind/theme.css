@@ -19,6 +19,10 @@
     max-height: calc(100vh * 0.7);
   }
 
+  .simple-router-mobile-max-h {
+    max-height: calc(100vh * 0.9);
+  }
+
   .icon {
     display: inline-block;
     vertical-align: middle;

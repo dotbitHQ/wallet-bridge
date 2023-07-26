@@ -127,7 +127,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
             </div>
           </div>
         ) : null}
-        <ul className="mb-6 overflow-hidden rounded-3xl border border-[#B6C4D966]">
+        <ul className="overflow-hidden rounded-3xl border border-[#B6C4D966]">
           <li
             className="flex cursor-pointer items-center justify-between p-3 pr-5 hover:bg-secondary active:bg-secondary-active"
             onClick={onDotbitBalance}

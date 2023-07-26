@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -33,7 +33,7 @@
     "axios": "^1.4.0",
     "bn.js": "^5.2.1",
     "clsx": "^1.2.1",
-    "connect-did-sdk": "^0.1.4",
+    "connect-did-sdk": "^0.1.5",
     "decimal.js": "^10.4.3",
     "emittery": "^1.0.1",
     "grapheme-splitter": "^1.0.4",
