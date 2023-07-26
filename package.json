@@ -29,6 +29,7 @@
     "@metamask/eth-sig-util": "^4.0.1",
     "@toruslabs/torus-embed": "2.1.7",
     "@types/color": "^3.0.3",
+    "abc-copy": "^0.0.11",
     "axios": "^1.4.0",
     "bn.js": "^5.2.1",
     "clsx": "^1.2.1",

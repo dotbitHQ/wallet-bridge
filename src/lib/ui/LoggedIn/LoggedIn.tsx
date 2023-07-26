@@ -15,13 +15,15 @@ import {
   SwapChildProps,
   TronIcon,
   WarningIcon,
+  CopyIcon,
 } from '../../components'
 import { WalletProtocol, CoinType, DotbitBalanceUrl, DotbitBalanceTestUrl } from '../../constant'
 import { getAuthorizeInfo, getMastersAddress, useWalletState } from '../../store'
 import { ReactNode, useContext, useEffect } from 'react'
-import { collapseString, smartOpen } from '../../utils'
+import { collapseString, copyText, smartOpen } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { createToast } from '../../components/Toast'
 
 export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const { walletSnap } = useWalletState()
@@ -67,6 +69,14 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
     smartOpen(walletSDK.context.isTestNet ? DotbitBalanceTestUrl : DotbitBalanceUrl)
   }
 
+  const onCopy = (text: string) => {
+    void copyText(text).then(() => {
+      createToast({
+        message: '👌 Copied',
+      })
+    })
+  }
+
   useEffect(() => {
     void getAuthorizeInfo()
     void getMastersAddress()
@@ -98,7 +108,17 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
               <span>{`Current manage CKB address`}</span>
               <InfoIcon className="h-4 w-4 text-font-secondary"></InfoIcon>
             </div>
-            <div className="px-5 text-xl font-bold">{collapseString(walletSnap.address, 8, 4)}</div>
+            <div className="px-5 text-xl font-bold">
+              <span
+                className="cursor-pointer"
+                onClick={() => {
+                  walletSnap.address && onCopy(walletSnap.address)
+                }}
+              >
+                {collapseString(walletSnap.address, 8, 4)}
+                <CopyIcon className="ml-1 inline-block h-[13px] w-3 select-none align-middle text-[#B0B8BF]" />
+              </span>
+            </div>
             <div
               className="mt-5 flex h-[60px] cursor-pointer items-center justify-center bg-[#F6F8FA] text-center text-font-disconnect hover:bg-[#EBF0F4] active:bg-[#DEE6ED]"
               onClick={onSwitch}

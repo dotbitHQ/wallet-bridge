@@ -9,6 +9,8 @@ import { Buffer } from 'buffer'
 import { CoinType } from '../constant'
 import GraphemeSplitter from 'grapheme-splitter'
 import { isMobileOnly } from 'react-device-detect'
+// @ts-expect-error
+import abcCopy from 'abc-copy'
 
 export async function sleep(ms: number): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, ms))
@@ -215,4 +217,15 @@ export function smartOpen(link: string) {
   } else {
     window.open(link)
   }
+}
+
+/**
+ * Copy data to the clipboard
+ * @param text
+ * @param el
+ */
+export async function copyText(text: string, el?: Element): Promise<void> {
+  return abcCopy(text, {
+    target: el,
+  })
 }

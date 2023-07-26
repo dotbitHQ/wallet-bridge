@@ -25,6 +25,9 @@ module.exports = {
       lineHeight: {
         4.5: '18px',
       },
+      boxShadow: {
+        toast: '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],
