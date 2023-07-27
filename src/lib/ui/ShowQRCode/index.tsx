@@ -1,25 +1,22 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import Clipboard from 'clipboard'
 import { ConnectDID } from 'connect-did-sdk'
 import { Button, ButtonShape, ButtonSize, CopyIcon, Header, SwapChildProps } from '../../components'
 import { QRCode } from '../../components/QRCode'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
-import clsx from 'clsx'
+import { createToast } from '../../components/Toast'
 
 const connectDID = new ConnectDID(true)
 
 export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, onClose, goBack } = useSimpleRouter()!
-  const [copied, setCopied] = useState(false)
   const nodeRef = useRef(null)
   const handleCopied = useCallback(() => {
-    if (copied) return
-    setCopied(true)
-    setTimeout(() => {
-      setCopied(false)
-    }, 2000)
-  }, [setCopied, copied])
+    createToast({
+      message: '👌 Copied',
+    })
+  }, [])
   useEffect(() => {
     if (!nodeRef.current) return
     const clipboard = new Clipboard(nodeRef.current)
@@ -56,14 +53,6 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
         </div>
         <div className="relative my-3 h-[260px] w-[260px] rounded-2xl border border-stone-300/20 p-2">
           <QRCode data={url} />
-          <div
-            className={clsx(
-              'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-black p-2.5 leading-tight text-white opacity-0 transition-opacity',
-              copied && 'opacity-100',
-            )}
-          >
-            👌 Copied
-          </div>
         </div>
         <span
           className="inline-block cursor-pointer whitespace-nowrap leading-none hover:opacity-60"

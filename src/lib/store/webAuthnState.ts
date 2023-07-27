@@ -11,6 +11,7 @@ interface WebAuthnState {
   pendingTxHash?: string
   qrCodeData: string
   mediaStream: { inner?: MediaStream }
+  signData?: any
 }
 
 export const webAuthnState = proxy<WebAuthnState>({
@@ -39,6 +40,10 @@ export const setSelectedEmoji = (emoji?: string) => {
 
 export const setMediaStream = (mediaStream?: MediaStream) => {
   webAuthnState.mediaStream.inner = mediaStream
+}
+
+export const setSignData = (signData?: any) => {
+  webAuthnState.signData = signData
 }
 
 export function useWebAuthnState() {

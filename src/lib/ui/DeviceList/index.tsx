@@ -62,12 +62,27 @@ interface DeviceProps {
   managingAddress: string
 }
 
+function ThisDevice({ address, managingAddress }: DeviceProps) {
+  const { walletSnap } = useWalletState()
+  return (
+    <li
+      key={address}
+      className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4"
+    >
+      <DeviceIcon className="h-7 w-7" />
+      <div className="flex-1 text-[14px] font-semibold text-neutral-700">
+        <div className="font-mono">{walletSnap.deviceData?.name}</div>
+        <span className="flex-none rounded bg-green-100 px-1 py-0.5 text-[12px] text-emerald-600">This device</span>
+      </div>
+    </li>
+  )
+}
+
 function Device({ address, managingAddress }: DeviceProps) {
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)
   const signDataQuery = useQuery({
     queryKey: ['FetchSignDataDelete', { master: walletSnap.address, slave: address }],
-    enabled: false,
     retry: false,
     queryFn: async () => {
       if (walletSnap.address === undefined) throw new Error('unreachable')
@@ -138,7 +153,7 @@ function Device({ address, managingAddress }: DeviceProps) {
   })
 
   const onRevoke = async () => {
-    const signData = signDataQuery.data || (await signDataQuery.refetch()).data
+    const signData = signDataQuery.data
     sendTransactionMutation.mutate(signData)
   }
 
@@ -169,31 +184,34 @@ function Device({ address, managingAddress }: DeviceProps) {
     sendTransactionMutation.data?.hash,
     walletSnap.deviceList,
   ])
+  if (signDataQuery.isInitialLoading) {
+    return (
+      <li
+        key={address}
+        className="flex h-[60px] w-full flex-row items-center justify-start gap-4 rounded-2xl border border-stone-300/20 bg-slate-600/5 p-4"
+      >
+        <div className="h-7 w-7 rounded-full bg-slate-600/5 opacity-60" />
+        <div className="h-4 w-[156px] rounded bg-slate-600/5 opacity-60" />
+      </li>
+    )
+  }
   return (
     <li
       key={address}
       className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4"
     >
-      {address === managingAddress ? (
-        <DeviceIcon className="h-7 w-7" />
-      ) : (
-        <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
-      )}
+      <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
         <div className="font-mono">
-          {address === managingAddress
-            ? walletSnap.deviceData?.name
-            : getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 14)}
+          {getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 14)}
         </div>
-        {address === managingAddress ? (
-          <span className="flex-none rounded bg-green-100 px-1 py-0.5 text-[12px] text-emerald-600">This device</span>
-        ) : revoking ? (
+        {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
         ) : isRevokingError ? (
           <span className="text-[12px] font-medium text-red-500">Revoke Failed</span>
         ) : null}
       </div>
-      {address !== managingAddress && <More address={address} onRevoke={onRevoke} />}
+      <More address={address} onRevoke={onRevoke} />
     </li>
   )
 }
@@ -253,7 +271,7 @@ export function DeviceList({ transitionStyle, transitionRef }: SwapChildProps) {
         </div>
         <ul className="mt-2 flex w-full flex-col items-stretch justify-start gap-2">
           {walletSnap.deviceData?.ckbAddr ? (
-            <Device
+            <ThisDevice
               key={walletSnap.deviceData.ckbAddr}
               address={walletSnap.deviceData.ckbAddr}
               managingAddress={walletSnap.deviceData.ckbAddr}

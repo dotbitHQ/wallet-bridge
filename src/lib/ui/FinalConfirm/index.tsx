@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Button, ButtonShape, ButtonSize, Header, SwapChildProps } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
@@ -22,29 +22,28 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
   const [checked, setChecked] = useState(false)
   const walletSDK = useContext(WalletSDKContext)
 
-  const signDataQuery = useQuery({
-    queryKey: ['FetchSignData', { master: walletSnap.address, slave: webAuthnState.backupDeviceData?.ckbAddr }],
-    enabled: false,
-    retry: false,
-    queryFn: async () => {
-      if (walletSnap.address === undefined || webAuthnState.backupDeviceData?.ckbAddr === undefined)
-        throw new Error('unreachable')
-      const res = await fetch('https://test-webauthn-api.did.id/v1/webauthn/authorize', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          master_ckb_address: walletSnap.address,
-          slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
-          operation: 'add',
-        }),
-      }).then(async (res) => await res.json())
-      if (res.err_no !== 0) throw new Error(res.err_msg)
-      return res.data
-    },
-  })
+  // const signDataQuery = useQuery({
+  //   queryKey: ['FetchSignData', { master: walletSnap.address, slave: webAuthnState.backupDeviceData?.ckbAddr }],
+  //   retry: false,
+  //   queryFn: async () => {
+  //     if (walletSnap.address === undefined || webAuthnState.backupDeviceData?.ckbAddr === undefined)
+  //       throw new Error('unreachable')
+  //     const res = await fetch('https://test-webauthn-api.did.id/v1/webauthn/authorize', {
+  //       method: 'POST',
+  //       mode: 'cors',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         master_ckb_address: walletSnap.address,
+  //         slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
+  //         operation: 'add',
+  //       }),
+  //     }).then(async (res) => await res.json())
+  //     if (res.err_no !== 0) throw new Error(res.err_msg)
+  //     return res.data
+  //   },
+  // })
 
   const sendTransactionMutation = useMutation({
     retry: false,
@@ -75,7 +74,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
   })
 
   const onClickNext = async () => {
-    const signData = signDataQuery.data || (await signDataQuery.refetch()).data
+    const signData = webAuthnState.signData
     sendTransactionMutation.mutate(signData)
   }
 
@@ -138,14 +137,14 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
           className="m-6 w-full px-5"
           size={ButtonSize.middle}
           shape={ButtonShape.round}
-          loading={signDataQuery.isInitialLoading || sendTransactionMutation.isLoading}
+          loading={sendTransactionMutation.isLoading}
           onClick={onClickNext}
         >
           Next
         </Button>
-        {signDataQuery.isError || sendTransactionMutation.isError ? (
+        {sendTransactionMutation.isError ? (
           <div className="mt-2 w-full break-words text-center text-[14px] font-normal leading-normal text-red-400">
-            {(signDataQuery?.error as any)?.toString() || (sendTransactionMutation?.error as any)?.toString()}{' '}
+            {(sendTransactionMutation?.error as any)?.toString()}{' '}
           </div>
         ) : null}
       </div>
