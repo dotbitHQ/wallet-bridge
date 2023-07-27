@@ -19,7 +19,7 @@ export interface WalletState {
 
 const WalletStateKey = 'WalletState'
 
-const walletStateLocalStorage = localStorage.getItem(WalletStateKey)
+const walletStateLocalStorage = globalThis.localStorage ? localStorage.getItem(WalletStateKey) : null
 
 const localWalletState = walletStateLocalStorage
   ? JSON.parse(walletStateLocalStorage)
@@ -105,7 +105,7 @@ export const setWalletState = ({
   if (isTestNet !== undefined) {
     walletState.isTestNet = isTestNet
   }
-  localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
+  globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 
 export const resetWalletState = () => {
@@ -116,7 +116,7 @@ export const resetWalletState = () => {
   walletState.ckbAddresses = []
   walletState.deviceList = []
   walletState.isTestNet = false
-  localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
+  globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 
 export function useWalletState() {

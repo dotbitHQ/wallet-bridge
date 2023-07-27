@@ -215,14 +215,14 @@ function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
 }
 
 function getNameAndEmojiFromLocalStorage(address: string) {
-  return JSON.parse(localStorage.getItem('.bit-memos') ?? '{}')[address]
+  return JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')[address]
 }
 
 function removeNameAndEmojiFromLocalStorage(address: string) {
-  const data = JSON.parse(localStorage.getItem('.bit-memos') ?? '{}')
+  const data = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
   // eslint-disable-next-line
   delete data[address]
-  localStorage.setItem('.bit-memos', JSON.stringify(data))
+  globalThis.localStorage.setItem('.bit-memos', JSON.stringify(data))
 }
 
 export function DeviceList({ transitionStyle, transitionRef }: SwapChildProps) {

@@ -10,9 +10,9 @@ import { setPendingTx, useWebAuthnState } from '../../store/webAuthnState'
 import { TxsWithMMJsonSignedOrUnSigned } from '../../../types'
 
 function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: string) {
-  const memos = JSON.parse(localStorage.getItem('.bit-memos') ?? '{}')
+  const memos = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
   memos[address] = { name, emoji }
-  localStorage.setItem('.bit-memos', JSON.stringify(memos))
+  globalThis.localStorage.setItem('.bit-memos', JSON.stringify(memos))
 }
 
 export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps) {
