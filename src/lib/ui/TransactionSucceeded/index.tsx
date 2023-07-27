@@ -11,7 +11,7 @@ export function TransactionSucceeded({ transitionRef, transitionStyle }: SwapChi
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div
-        className="relative flex w-full max-w-[400px] flex-col items-center justify-start px-6 pb-6 pt-[76px]"
+        className="relative flex w-full flex-col items-center justify-start px-6 pb-6 pt-[76px]"
         ref={transitionRef}
         style={transitionStyle}
       >
