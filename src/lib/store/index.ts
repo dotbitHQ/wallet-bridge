@@ -15,6 +15,7 @@ export interface WalletState {
   ckbAddresses?: string[]
   deviceList?: string[]
   isTestNet?: boolean
+  loggedInSelectAddress?: boolean
 }
 
 const WalletStateKey = 'WalletState'
@@ -32,6 +33,7 @@ const localWalletState = walletStateLocalStorage
       ckbAddresses: [],
       deviceList: [],
       isTestNet: false,
+      loggedInSelectAddress: true,
     }
 
 export const walletState = proxy<WalletState>(localWalletState)
@@ -80,6 +82,7 @@ export const setWalletState = ({
   ckbAddresses,
   deviceList,
   isTestNet,
+  loggedInSelectAddress,
 }: WalletState) => {
   if (protocol) {
     walletState.protocol = protocol
@@ -105,6 +108,9 @@ export const setWalletState = ({
   if (isTestNet !== undefined) {
     walletState.isTestNet = isTestNet
   }
+  if (loggedInSelectAddress !== undefined) {
+    walletState.loggedInSelectAddress = loggedInSelectAddress
+  }
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 
@@ -115,7 +121,6 @@ export const resetWalletState = () => {
   walletState.deviceData = undefined
   walletState.ckbAddresses = []
   walletState.deviceList = []
-  walletState.isTestNet = false
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 

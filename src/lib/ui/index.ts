@@ -9,8 +9,14 @@ export class Wallet {
   useWalletState = useWalletState
   getWalletState = getWalletState
 
-  constructor({ isTestNet = false }: { isTestNet?: boolean }) {
-    setWalletState({ isTestNet })
+  constructor({
+    isTestNet = false,
+    loggedInSelectAddress = true,
+  }: {
+    isTestNet?: boolean
+    loggedInSelectAddress?: boolean
+  }) {
+    setWalletState({ isTestNet, loggedInSelectAddress })
     this.walletSDK = new WalletSDK({ isTestNet })
   }
 

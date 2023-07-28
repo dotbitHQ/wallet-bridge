@@ -169,8 +169,8 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         coinType,
       })
       await walletSDK.connect()
-      const { ckbAddresses } = snapshot(walletState)
-      if (protocol === WalletProtocol.webAuthn && ckbAddresses && ckbAddresses.length > 0) {
+      const { ckbAddresses, loggedInSelectAddress } = snapshot(walletState)
+      if (protocol === WalletProtocol.webAuthn && ckbAddresses && ckbAddresses.length > 0 && loggedInSelectAddress) {
         showAddressList()
       } else {
         onClose()
