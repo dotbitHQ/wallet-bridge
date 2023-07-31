@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.1.9",
+  "version": "0.1.10",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -26,8 +26,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@metamask/eth-sig-util": "^4.0.1",
-    "@toruslabs/torus-embed": "2.1.7",
+    "@metamask/eth-sig-util": "^6.0.0",
+    "@toruslabs/torus-embed": "^2.2.6",
     "@types/color": "^3.0.3",
     "abc-copy": "^0.0.11",
     "axios": "^1.4.0",
@@ -73,8 +73,6 @@
     "@vitest/coverage-c8": "^0.27.3",
     "autoprefixer": "^10.4.13",
     "babel-loader": "^8.3.0",
-    "buffer": "^6.0.3",
-    "chromatic": "^6.19.5",
     "clipboard": "^2.0.11",
     "color": "^4.2.3",
     "eslint": "^8.0.1",
@@ -103,7 +101,6 @@
     "typescript": "*",
     "vite": "^4.0.0",
     "vite-plugin-dts": "^1.7.1",
-    "vite-plugin-node-polyfills": "^0.9.0",
     "vitest": "^0.27.2"
   },
   "peerDependencies": {
