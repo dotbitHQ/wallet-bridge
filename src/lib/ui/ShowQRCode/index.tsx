@@ -1,39 +1,30 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
-import Clipboard from 'clipboard'
+import { useCallback, useMemo } from 'react'
 import { ConnectDID } from 'connect-did-sdk'
-import { Button, ButtonShape, ButtonSize, CopyIcon, Header, SwapChildProps } from '../../components'
+import { Button, ButtonShape, ButtonSize, Header, SwapChildProps } from '../../components'
 import { QRCode } from '../../components/QRCode'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
 import { createToast } from '../../components/Toast'
+import { copyText } from '../../utils'
 
 const connectDID = new ConnectDID(true)
 
 export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, onClose, goBack } = useSimpleRouter()!
-  const nodeRef = useRef(null)
-  const handleCopied = useCallback(() => {
-    createToast({
-      message: '👌 Copied',
-    })
-  }, [])
-  useEffect(() => {
-    if (!nodeRef.current) return
-    const clipboard = new Clipboard(nodeRef.current)
-
-    clipboard.on('success', handleCopied)
-    clipboard.on('error', (e) => {
-      console.error(e)
-    })
-    return () => {
-      clipboard.destroy()
-    }
-  }, [nodeRef, handleCopied])
   const { walletSnap } = useWalletState()
   const url = useMemo(
     () => connectDID.requestBackupData({ ckbAddr: walletSnap.address!, isOpen: false }),
     [walletSnap.address],
   )
+  const handleCopy = useCallback(() => {
+    copyText(url)
+      .then(() => {
+        createToast({
+          message: '👌 Copied',
+        })
+      })
+      .catch(console.error)
+  }, [url])
   return (
     <>
       <Header
@@ -54,19 +45,17 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
         <div className="relative my-3 h-[260px] w-[260px] rounded-2xl border border-stone-300/20 p-2">
           <QRCode data={url} />
         </div>
-        <span
-          className="inline-block cursor-pointer whitespace-nowrap leading-none hover:opacity-60"
-          ref={nodeRef}
-          data-clipboard-text={url}
+        <div
+          id="copy-url"
+          className="inline-flex w-[260px] items-center gap-1 rounded-md border border-slate-300/40 bg-gray-50 p-1"
         >
-          <a
-            id="copy-url"
-            className="inline-block w-[141px] overflow-auto text-ellipsis align-middle text-[14px] leading-none text-blue-800"
-          >
+          <span className="scrollbar-hide flex-1 overflow-x-scroll whitespace-nowrap text-sm font-normal leading-tight text-gray-500">
             {url}
-          </a>
-          <CopyIcon className="ml-1 inline-block h-[13px] w-3 select-none align-middle leading-none text-[#B0B8BF]" />
-        </span>
+          </span>
+          <Button className="flex-none" onClick={handleCopy} size={ButtonSize.small}>
+            Copy
+          </Button>
+        </div>
         <Button className="mt-6 min-w-[130px] px-5" size={ButtonSize.middle} shape={ButtonShape.round} onClick={goNext}>
           Next
         </Button>

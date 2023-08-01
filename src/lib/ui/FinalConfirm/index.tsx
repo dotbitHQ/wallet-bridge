@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { Button, ButtonShape, ButtonSize, Header, SwapChildProps } from '../../components'
+import { Button, ButtonShape, ButtonSize, Header, SwapChildProps, createTips } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
 import { Emoji } from '../ChooseEmoji'
@@ -21,29 +21,6 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
   const webAuthnState = useWebAuthnState()
   const [checked, setChecked] = useState(false)
   const walletSDK = useContext(WalletSDKContext)
-
-  // const signDataQuery = useQuery({
-  //   queryKey: ['FetchSignData', { master: walletSnap.address, slave: webAuthnState.backupDeviceData?.ckbAddr }],
-  //   retry: false,
-  //   queryFn: async () => {
-  //     if (walletSnap.address === undefined || webAuthnState.backupDeviceData?.ckbAddr === undefined)
-  //       throw new Error('unreachable')
-  //     const res = await fetch('https://test-webauthn-api.did.id/v1/webauthn/authorize', {
-  //       method: 'POST',
-  //       mode: 'cors',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         master_ckb_address: walletSnap.address,
-  //         slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
-  //         operation: 'add',
-  //       }),
-  //     }).then(async (res) => await res.json())
-  //     if (res.err_no !== 0) throw new Error(res.err_msg)
-  //     return res.data
-  //   },
-  // })
 
   const sendTransactionMutation = useMutation({
     retry: false,
@@ -91,6 +68,18 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
     // eslint-disable-next-line
   }, [sendTransactionMutation.data?.hash])
 
+  useEffect(() => {
+    if (sendTransactionMutation.isError) {
+      createTips({
+        title: 'Error',
+        content: (
+          <div className="mt-2 w-full break-words text-[14px] font-normal leading-normal text-red-400">
+            {(sendTransactionMutation?.error as any)?.toString()}{' '}
+          </div>
+        ),
+      })
+    }
+  }, [sendTransactionMutation.error, sendTransactionMutation.isError])
   return (
     <>
       <Header
@@ -142,11 +131,6 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
         >
           Next
         </Button>
-        {sendTransactionMutation.isError ? (
-          <div className="mt-2 w-full break-words text-center text-[14px] font-normal leading-normal text-red-400">
-            {(sendTransactionMutation?.error as any)?.toString()}{' '}
-          </div>
-        ) : null}
       </div>
     </>
   )

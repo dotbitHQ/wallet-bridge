@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react'
-import { Button, ButtonShape, ButtonSize, Header, SwapChildProps } from '../../components'
+import { useCallback, useEffect, useState } from 'react'
+import { Button, ButtonShape, ButtonSize, Header, SwapChildProps, createTips } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import clsx from 'clsx'
 import { emojis } from './png'
@@ -50,6 +50,19 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
       return res.data
     },
   })
+
+  useEffect(() => {
+    if (signDataQuery.isError) {
+      createTips({
+        title: 'Error',
+        content: (
+          <div className="mt-2 w-full break-words text-[14px] font-normal leading-normal text-red-400">
+            {(signDataQuery?.error as any)?.toString()}{' '}
+          </div>
+        ),
+      })
+    }
+  }, [signDataQuery.isError, signDataQuery.error])
   return (
     <>
       <Header
@@ -102,11 +115,6 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
         >
           Next
         </Button>
-        {signDataQuery.isError && (
-          <div className="mt-2 w-full break-words text-center text-[14px] font-normal leading-normal text-red-400">
-            {(signDataQuery?.error as any)?.toString()}
-          </div>
-        )}
       </div>
     </>
   )

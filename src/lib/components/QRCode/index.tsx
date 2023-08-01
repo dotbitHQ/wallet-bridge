@@ -28,7 +28,7 @@ export function QRCode(props: Omit<Options, 'type'>) {
       ...rest,
     })
 
-    qr.getRawData()
+    qr.getRawData('svg')
       .then((blob) => {
         setBlobUrl(window.URL.createObjectURL(blob!))
       })
