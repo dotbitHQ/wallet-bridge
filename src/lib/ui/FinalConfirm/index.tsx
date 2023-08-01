@@ -7,7 +7,7 @@ import { Emoji } from '../ChooseEmoji'
 import { collapseString } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
 import { setPendingTx, useWebAuthnState } from '../../store/webAuthnState'
-import { TxsWithMMJsonSignedOrUnSigned } from '../../../types'
+import { TxsWithMMJsonSignedOrUnSigned } from '../../types'
 
 function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: string) {
   const memos = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')

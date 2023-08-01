@@ -1,5 +1,6 @@
 import { Button } from '../../components'
 import { Wallet } from '../index'
+import { sleep } from '../../utils'
 
 export default {
   title: 'UI/Wallets',
@@ -16,12 +17,24 @@ const TemplateConnectWallet = () => {
     wallet.connectWallet()
   }
 
+  const onConnectOnlyETH = async () => {
+    wallet.connectWallet({ onlyEth: true })
+  }
+
   const onLoggedIn = async () => {
     wallet.loggedInfo()
   }
 
   const onSignData = async () => {
     const res = await wallet.walletSDK.signData('0x123abc')
+    console.log(res)
+  }
+
+  const onSignDataWithFunction = async () => {
+    const res = await wallet.walletSDK.signData(async (): Promise<string> => {
+      await sleep(5000)
+      return '0x123abc'
+    })
     console.log(res)
   }
 
@@ -34,9 +47,13 @@ const TemplateConnectWallet = () => {
       </div>
       <Button onClick={onConnect}>Connect Wallet</Button>
       <br />
+      <Button onClick={onConnectOnlyETH}>Connect Wallet only ETH</Button>
+      <br />
       <Button onClick={onLoggedIn}>Logged In</Button>
       <br />
       <Button onClick={onSignData}>Sign data</Button>
+      <br />
+      <Button onClick={onSignDataWithFunction}>Sign data with function</Button>
     </>
   )
 }

@@ -16,7 +16,7 @@ import { setWalletState, useWalletState } from '../../store'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LetterAvatar } from '../../components/LetterAvatar'
 import { collapseString } from '../../utils'
-import { TxsWithMMJsonSignedOrUnSigned } from '../../../types'
+import { TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { WalletSDKContext } from '../ConnectWallet'
 
 interface MoreProps {
