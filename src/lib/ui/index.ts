@@ -1,8 +1,8 @@
 import WalletSDK from '../wallets'
 import { useWalletState, getWalletState, setWalletState } from '../store'
-import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
-import { TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../../types'
+import { TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
+import { DataFunction, SignDataType } from '../wallets/WalletSignerHandler'
 
 export class Wallet {
   walletSDK: WalletSDK
@@ -20,18 +20,15 @@ export class Wallet {
     this.walletSDK = new WalletSDK({ isTestNet })
   }
 
-  connectWallet() {
-    this.walletSDK.connectWallet()
+  connectWallet(params: { onlyEth?: boolean } = {}) {
+    this.walletSDK.connectWallet(params)
   }
 
   loggedInfo() {
     this.walletSDK.connectWallet({ initComponent: 'LoggedIn' })
   }
 
-  async signData(
-    data: TypedMessage<MessageTypes> | string,
-    options?: Record<string, any>,
-  ): Promise<string | undefined> {
+  async signData(data: SignDataType, options?: Record<string, any>): Promise<string | undefined> {
     return await this.walletSDK.signData(data, options)
   }
 
@@ -44,9 +41,11 @@ export class Wallet {
   }
 
   async signTxList(txs: TxsSignedOrUnSigned): Promise<TxsSignedOrUnSigned>
+  async signTxList(txs: DataFunction): Promise<TxsSignedOrUnSigned>
+  async signTxList(txs: DataFunction): Promise<TxsWithMMJsonSignedOrUnSigned>
   async signTxList(txs: TxsWithMMJsonSignedOrUnSigned): Promise<TxsWithMMJsonSignedOrUnSigned>
   async signTxList(
-    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
+    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned | DataFunction,
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
     return await this.walletSDK.signTxList(txs as any)
   }

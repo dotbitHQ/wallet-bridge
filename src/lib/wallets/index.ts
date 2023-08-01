@@ -1,21 +1,21 @@
-import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { snapshot } from 'valtio'
 import { WalletConnector } from './WalletConnectorHandler'
-import { WalletSigner } from './WalletSignerHandler'
+import { DataFunction, SignDataType, WalletSigner } from './WalletSignerHandler'
 import { ISendTrxParams, WalletTransaction } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
 import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
 import { WalletHandlerFactory } from './WalletHandlerFactory'
 import { CoinType, WalletProtocol, SIGN_TYPE } from '../constant'
-import { SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../../types'
+import { SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
 import { getAuthorizeInfo, getMastersAddress, setWalletState, walletState } from '../store'
 import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
+import { IData } from 'connect-did-sdk'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -23,6 +23,7 @@ class WalletSDK {
   walletTransaction?: WalletTransaction
   eventListener?: WalletEventListener
   context: WalletContext
+  onlyEth = false
 
   constructor({ isTestNet }: { isTestNet: boolean }) {
     this.context = new WalletContext({ isTestNet })
@@ -55,9 +56,10 @@ class WalletSDK {
     }
   }
 
-  connectWallet(params: { initComponent?: string } = {}): void {
+  connectWallet(params: { initComponent?: string; onlyEth?: boolean } = {}): void {
     const container = document.createElement('div')
     document.body.appendChild(container)
+    this.onlyEth = params.onlyEth ?? false
     const connectWalletInstance = React.createElement(ConnectWallet, {
       visible: true,
       walletSDK: this,
@@ -110,10 +112,7 @@ class WalletSDK {
     this.context.emitEvent(EventEnum.Connect)
   }
 
-  async signData(
-    data: TypedMessage<MessageTypes> | string,
-    options?: Record<string, any>,
-  ): Promise<string | undefined> {
+  async signData(data: SignDataType, options?: Record<string, any>): Promise<string | undefined> {
     const isInit = await this.initWallet()
     if (!isInit && !this.walletSigner) {
       throw new CustomError(errno.failedToInitializeWallet, 'signData: Please initialize wallet first')
@@ -135,8 +134,8 @@ class WalletSDK {
     this.context.emitEvent(EventEnum.Disconnect)
   }
 
-  private async signTx(signInfo: SignInfo): Promise<SignInfo> {
-    let signDataRes = await this.signData(signInfo.sign_msg)
+  private async signTx(signInfo: SignInfo, options?: Record<string, any>): Promise<SignInfo> {
+    let signDataRes = await this.signData(signInfo.sign_msg, options)
     if (signDataRes && this.context.coinType && isDogecoinChain(this.context.coinType)) {
       signDataRes = convertTpUTXOSignature(signDataRes)
     }
@@ -149,19 +148,40 @@ class WalletSDK {
 
   // todo-open: TxsSignedOrUnSigned and TxsWithMMJsonSignedOrUnSigned is pretty much the same, while they are from different api. We need to unify them in backend.
   async signTxList(txs: TxsSignedOrUnSigned): Promise<TxsSignedOrUnSigned>
+  async signTxList(txs: DataFunction): Promise<TxsSignedOrUnSigned>
+  async signTxList(txs: DataFunction): Promise<TxsWithMMJsonSignedOrUnSigned>
   async signTxList(txs: TxsWithMMJsonSignedOrUnSigned): Promise<TxsWithMMJsonSignedOrUnSigned>
   async signTxList(
-    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
+    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned | DataFunction,
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
     const isInit = await this.initWallet()
     if (!isInit) {
       throw new CustomError(errno.failedToInitializeWallet, 'signTxList: Please initialize wallet first')
     }
 
+    let provider
+
+    if (this.context.protocol === WalletProtocol.webAuthn) {
+      provider = this.context.provider.requestWaitingPage((err: IData<any>) => {
+        console.error(err)
+        throw new CustomError(err.code, err.msg)
+      })
+    }
+
+    if (typeof txs === 'function') {
+      try {
+        txs = await txs()
+      } catch (err) {
+        console.log(err)
+        await provider.onFailed()
+        throw err
+      }
+    }
+
     if ('sign_list' in txs) {
       for (const signItem of txs.sign_list) {
         if (!(signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign)) {
-          break
+          continue
         }
         if (signItem.sign_type === SIGN_TYPE.eth712 && txs.mm_json != null) {
           const mmJson = cloneDeep(txs.mm_json)
@@ -172,26 +192,26 @@ class WalletSDK {
           }
           await sleep(1000)
         } else {
-          await this.signTx(signItem)
+          await this.signTx(signItem, { provider })
         }
       }
     } else if ('list' in txs) {
       for (const list of txs.list) {
         for (const signItem of list.sign_list) {
           if (!(signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign)) {
-            break
+            continue
           }
-          await this.signTx(signItem)
+          await this.signTx(signItem, { provider })
         }
       }
     }
 
     const { deviceData } = snapshot(walletState)
-    if (deviceData?.ckbAddr) {
+    if (deviceData?.ckbAddr && typeof txs !== 'function') {
       txs.sign_address = deviceData.ckbAddr
     }
 
-    return txs
+    return txs as TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned
   }
 }
 export default WalletSDK

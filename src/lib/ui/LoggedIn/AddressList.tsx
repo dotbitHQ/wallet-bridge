@@ -10,11 +10,11 @@ import { EventEnum } from '../../wallets/WalletEventListenerHandler'
 export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const router = useSimpleRouter()!
   const walletSDK = useContext(WalletSDKContext)!
-  const { goBack, onClose, prevRouteName: fromOldComponent } = router
+  const { goBack, onClose, prevRouteName } = router
   const { walletSnap } = useWalletState()
 
   const back = () => {
-    if (fromOldComponent === 'ChainList') {
+    if (prevRouteName === 'ChainList') {
       onClose()
     } else {
       goBack?.()

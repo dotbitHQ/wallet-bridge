@@ -15,7 +15,7 @@ import { setWalletState, walletState } from '../../store'
 import { Tag, TagVariant } from '../../components/Tag'
 import { ChainItem } from '../../components/ChainItem'
 import clsx from 'clsx'
-import { ReactNode, useContext, useState } from 'react'
+import { ReactNode, useContext, useMemo, useState } from 'react'
 import handleError from '../../utils/handleError'
 import { snapshot } from 'valtio'
 import { setLoginCacheState } from '../../store/loginCache'
@@ -47,66 +47,83 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
   }
   const onClose = router?.onClose
 
-  const chains: IChainList[] = [
-    {
-      label: 'by Device',
-      list: [
-        {
-          icon: <DeviceIcon className="h-10 w-10"></DeviceIcon>,
-          name: 'This Device',
-          tag: <Tag variant={TagVariant.primary}>Recommended</Tag>,
-          coinType: CoinType.ckb,
-          protocol: WalletProtocol.webAuthn,
-        },
-      ],
-    },
-    {
-      label: 'by Wallet',
-      list: [
-        {
-          icon: <EthIcon className="h-10 w-10"></EthIcon>,
-          name: 'ETH',
-          coinType: CoinType.eth,
-          protocol: WalletProtocol.metaMask,
-        },
-        {
-          icon: <BscIcon className="h-10 w-10"></BscIcon>,
-          name: 'BSC',
-          coinType: CoinType.bsc,
-          protocol: WalletProtocol.metaMask,
-        },
-        {
-          icon: <PolygonIcon className="h-10 w-10"></PolygonIcon>,
-          name: 'Polygon',
-          coinType: CoinType.matic,
-          protocol: WalletProtocol.metaMask,
-        },
-        {
-          icon: <TronIcon className="h-10 w-10"></TronIcon>,
-          name: 'Tron',
-          coinType: CoinType.trx,
-          protocol: WalletProtocol.tronLink,
-        },
-        {
-          icon: <DogecoinIcon className="h-10 w-10"></DogecoinIcon>,
-          name: 'Dogecoin',
-          coinType: CoinType.doge,
-          protocol: WalletProtocol.tokenPocketUTXO,
-        },
-      ],
-    },
-    {
-      label: 'by Social',
-      list: [
-        {
-          icon: <TorusIcon className="h-10 w-10"></TorusIcon>,
-          name: 'Torus',
-          coinType: CoinType.eth,
-          protocol: WalletProtocol.torus,
-        },
-      ],
-    },
-  ]
+  const chains: IChainList[] = useMemo(() => {
+    const list = [
+      {
+        label: 'by Device',
+        list: [
+          {
+            icon: <DeviceIcon className="h-10 w-10"></DeviceIcon>,
+            name: 'This Device',
+            tag: <Tag variant={TagVariant.primary}>Recommended</Tag>,
+            coinType: CoinType.ckb,
+            protocol: WalletProtocol.webAuthn,
+          },
+        ],
+      },
+      {
+        label: 'by Wallet',
+        list: [
+          {
+            icon: <EthIcon className="h-10 w-10"></EthIcon>,
+            name: 'ETH',
+            coinType: CoinType.eth,
+            protocol: WalletProtocol.metaMask,
+          },
+          {
+            icon: <BscIcon className="h-10 w-10"></BscIcon>,
+            name: 'BSC',
+            coinType: CoinType.bsc,
+            protocol: WalletProtocol.metaMask,
+          },
+          {
+            icon: <PolygonIcon className="h-10 w-10"></PolygonIcon>,
+            name: 'Polygon',
+            coinType: CoinType.matic,
+            protocol: WalletProtocol.metaMask,
+          },
+          {
+            icon: <TronIcon className="h-10 w-10"></TronIcon>,
+            name: 'Tron',
+            coinType: CoinType.trx,
+            protocol: WalletProtocol.tronLink,
+          },
+          {
+            icon: <DogecoinIcon className="h-10 w-10"></DogecoinIcon>,
+            name: 'Dogecoin',
+            coinType: CoinType.doge,
+            protocol: WalletProtocol.tokenPocketUTXO,
+          },
+        ],
+      },
+      {
+        label: 'by Social',
+        list: [
+          {
+            icon: <TorusIcon className="h-10 w-10"></TorusIcon>,
+            name: 'Torus',
+            coinType: CoinType.eth,
+            protocol: WalletProtocol.torus,
+          },
+        ],
+      },
+    ]
+
+    const onlyEth = [
+      {
+        label: 'by Wallet',
+        list: [
+          {
+            icon: <EthIcon className="h-10 w-10"></EthIcon>,
+            name: 'ETH',
+            coinType: CoinType.eth,
+            protocol: WalletProtocol.metaMask,
+          },
+        ],
+      },
+    ]
+    return walletSDK.onlyEth ? onlyEth : list
+  }, [walletSDK.onlyEth])
 
   const createHardwareWalletTips = (chain: IChain) => {
     createTips({
