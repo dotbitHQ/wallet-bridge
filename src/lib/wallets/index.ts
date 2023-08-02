@@ -8,7 +8,7 @@ import { WalletContext } from './WalletContext'
 import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
 import { WalletHandlerFactory } from './WalletHandlerFactory'
 import { CoinType, WalletProtocol, SIGN_TYPE } from '../constant'
-import { SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
+import { GetSignMethodRes, SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
 import { getAuthorizeInfo, getMastersAddress, setWalletState, walletState } from '../store'
@@ -210,7 +210,7 @@ class WalletSDK {
     return txs
   }
 
-  async getSignMethod(): Promise<Record<string, any> | undefined> {
+  async getSignMethod(): Promise<GetSignMethodRes> {
     const isInit = await this.initWallet()
     if (!isInit) {
       throw new CustomError(errno.failedToInitializeWallet, 'getSignMethod: Please initialize wallet first')

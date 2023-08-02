@@ -1,4 +1,5 @@
 import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
+import { SignDataType } from '../wallets/WalletSignerHandler'
 
 export interface SignInfo {
   sign_type: number
@@ -22,4 +23,12 @@ export interface TxsWithMMJsonSignedOrUnSigned {
   sign_list: SignInfo[]
   mm_json?: TypedMessage<MessageTypes>
   sign_address?: string
+}
+
+export interface GetSignMethodRes {
+  signTxList: (
+    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
+  ) => Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned>
+  signData: (data: SignDataType, options?: Record<string, any>) => Promise<string | undefined>
+  onFailed: (k: any) => Promise<any>
 }
