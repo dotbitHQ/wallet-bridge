@@ -14,20 +14,11 @@ export class ConnectDidSigner extends WalletSigner {
         throw new CustomError(err.code, err.msg)
       })
     }
-    let _data = data
-    if (typeof _data === 'function') {
-      try {
-        _data = await _data()
-      } catch (err) {
-        console.log(err)
-        await provider.onFailed()
-        throw err
-      }
-    }
+
     const res = await provider.onNext({
       method: EnumRequestMethods.REQUEST_SIGN_DATA,
       params: {
-        msg: _data,
+        msg: data,
       },
     })
     if (res.code !== errno.connectDidSdkSuccess) {

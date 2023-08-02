@@ -2,7 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { snapshot } from 'valtio'
 import { WalletConnector } from './WalletConnectorHandler'
-import { DataFunction, SignDataType, WalletSigner } from './WalletSignerHandler'
+import { SignDataType, WalletSigner } from './WalletSignerHandler'
 import { ISendTrxParams, WalletTransaction } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
 import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
@@ -148,14 +148,12 @@ class WalletSDK {
 
   // todo-open: TxsSignedOrUnSigned and TxsWithMMJsonSignedOrUnSigned is pretty much the same, while they are from different api. We need to unify them in backend.
   async signTxList(txs: TxsSignedOrUnSigned, options?: Record<string, any>): Promise<TxsSignedOrUnSigned>
-  async signTxList(txs: DataFunction, options?: Record<string, any>): Promise<TxsSignedOrUnSigned>
-  async signTxList(txs: DataFunction, options?: Record<string, any>): Promise<TxsWithMMJsonSignedOrUnSigned>
   async signTxList(
     txs: TxsWithMMJsonSignedOrUnSigned,
     options?: Record<string, any>,
   ): Promise<TxsWithMMJsonSignedOrUnSigned>
   async signTxList(
-    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned | DataFunction,
+    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
     options?: Record<string, any>,
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
     const isInit = await this.initWallet()
@@ -173,16 +171,6 @@ class WalletSDK {
           console.error(err)
           throw new CustomError(err.code, err.msg)
         })
-      }
-    }
-
-    if (typeof txs === 'function') {
-      try {
-        txs = await txs()
-      } catch (err) {
-        console.log(err)
-        await provider.onFailed()
-        throw err
       }
     }
 
@@ -215,14 +203,19 @@ class WalletSDK {
     }
 
     const { deviceData } = snapshot(walletState)
-    if (deviceData?.ckbAddr && typeof txs !== 'function') {
+    if (deviceData?.ckbAddr) {
       txs.sign_address = deviceData.ckbAddr
     }
 
-    return txs as TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned
+    return txs
   }
 
-  async signTxListWithWindow(): Promise<Record<string, any> | undefined> {
+  async getSignMethod(): Promise<Record<string, any> | undefined> {
+    const isInit = await this.initWallet()
+    if (!isInit) {
+      throw new CustomError(errno.failedToInitializeWallet, 'getSignMethod: Please initialize wallet first')
+    }
+
     let provider: any
     if (this.context.protocol === WalletProtocol.webAuthn) {
       const timestamp = Date.now()
@@ -239,9 +232,10 @@ class WalletSDK {
       ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> => {
         return await this.signTxList(txs as any, { provider })
       },
-      signData: async (data: SignDataType): Promise<string | undefined> => {
-        return await this.signData(data, { provider })
+      signData: async (data: SignDataType, options?: Record<string, any>): Promise<string | undefined> => {
+        return await this.signData(data, { ...options, provider })
       },
+      onFailed: provider.onFailed,
     }
   }
 }

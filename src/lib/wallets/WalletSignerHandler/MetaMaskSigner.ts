@@ -4,20 +4,17 @@ import { isHexStrict } from '../../utils'
 export class MetaMaskSigner extends WalletSigner {
   async signData(data: SignDataType, options?: Record<string, any>): Promise<string> {
     let res
-    let _data = data
-    if (typeof _data === 'function') {
-      _data = await _data()
-    }
     if (options?.isEIP712) {
       res = await this.context.provider.request({
         method: 'eth_signTypedData_v4',
-        params: [this.context.address, JSON.stringify(_data)],
+        params: [this.context.address, JSON.stringify(data)],
       })
     } else {
+      let _data = data
       // eslint-disable-next-line @typescript-eslint/no-base-to-string,@typescript-eslint/restrict-plus-operands
-      if (isHexStrict('0x' + _data)) {
+      if (isHexStrict('0x' + data)) {
         // eslint-disable-next-line @typescript-eslint/no-base-to-string,@typescript-eslint/restrict-plus-operands
-        _data = '0x' + _data
+        _data = '0x' + data
       }
       res = await this.context.provider.request({
         method: 'personal_sign',
