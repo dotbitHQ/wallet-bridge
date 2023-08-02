@@ -1,6 +1,6 @@
 import WalletSDK from '../wallets'
 import { useWalletState, getWalletState, setWalletState } from '../store'
-import { TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
+import { GetSignMethodRes, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
 import { SignDataType } from '../wallets/WalletSignerHandler'
 
@@ -48,7 +48,7 @@ export class Wallet {
     return await this.walletSDK.signTxList(txs as any)
   }
 
-  async getSignMethod(): Promise<Record<string, any> | undefined> {
+  async getSignMethod(): Promise<GetSignMethodRes> {
     return await this.walletSDK.getSignMethod()
   }
 }
