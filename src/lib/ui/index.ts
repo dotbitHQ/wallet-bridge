@@ -49,4 +49,8 @@ export class Wallet {
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
     return await this.walletSDK.signTxList(txs as any)
   }
+
+  async signTxListWithWindow(): Promise<Record<string, any> | undefined> {
+    return await this.walletSDK.signTxListWithWindow()
+  }
 }

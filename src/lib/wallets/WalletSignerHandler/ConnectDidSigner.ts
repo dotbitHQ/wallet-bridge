@@ -5,12 +5,15 @@ import { EnumRequestMethods, IData } from 'connect-did-sdk'
 
 export class ConnectDidSigner extends WalletSigner {
   async signData(data: SignDataType, options?: Record<string, any>): Promise<string> {
-    const provider =
-      options?.provider ||
-      this.context.provider.requestWaitingPage((err: IData<any>) => {
+    let provider
+    if (options?.provider) {
+      provider = options?.provider
+    } else {
+      provider = await this.context.provider.requestWaitingPage((err: IData<any>) => {
         console.error(err)
         throw new CustomError(err.code, err.msg)
       })
+    }
     let _data = data
     if (typeof _data === 'function') {
       try {

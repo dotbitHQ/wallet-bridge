@@ -147,12 +147,16 @@ class WalletSDK {
   }
 
   // todo-open: TxsSignedOrUnSigned and TxsWithMMJsonSignedOrUnSigned is pretty much the same, while they are from different api. We need to unify them in backend.
-  async signTxList(txs: TxsSignedOrUnSigned): Promise<TxsSignedOrUnSigned>
-  async signTxList(txs: DataFunction): Promise<TxsSignedOrUnSigned>
-  async signTxList(txs: DataFunction): Promise<TxsWithMMJsonSignedOrUnSigned>
-  async signTxList(txs: TxsWithMMJsonSignedOrUnSigned): Promise<TxsWithMMJsonSignedOrUnSigned>
+  async signTxList(txs: TxsSignedOrUnSigned, options?: Record<string, any>): Promise<TxsSignedOrUnSigned>
+  async signTxList(txs: DataFunction, options?: Record<string, any>): Promise<TxsSignedOrUnSigned>
+  async signTxList(txs: DataFunction, options?: Record<string, any>): Promise<TxsWithMMJsonSignedOrUnSigned>
+  async signTxList(
+    txs: TxsWithMMJsonSignedOrUnSigned,
+    options?: Record<string, any>,
+  ): Promise<TxsWithMMJsonSignedOrUnSigned>
   async signTxList(
     txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned | DataFunction,
+    options?: Record<string, any>,
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
     const isInit = await this.initWallet()
     if (!isInit) {
@@ -162,10 +166,14 @@ class WalletSDK {
     let provider
 
     if (this.context.protocol === WalletProtocol.webAuthn) {
-      provider = this.context.provider.requestWaitingPage((err: IData<any>) => {
-        console.error(err)
-        throw new CustomError(err.code, err.msg)
-      })
+      if (options?.provider) {
+        provider = options?.provider
+      } else {
+        provider = await this.context.provider.requestWaitingPage((err: IData<any>) => {
+          console.error(err)
+          throw new CustomError(err.code, err.msg)
+        })
+      }
     }
 
     if (typeof txs === 'function') {
@@ -212,6 +220,29 @@ class WalletSDK {
     }
 
     return txs as TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned
+  }
+
+  async signTxListWithWindow(): Promise<Record<string, any> | undefined> {
+    let provider: any
+    if (this.context.protocol === WalletProtocol.webAuthn) {
+      const timestamp = Date.now()
+      provider = await this.context.provider.requestWaitingPage((err: IData<any>) => {
+        console.error(err)
+        throw new CustomError(err.code, err.msg)
+      })
+      console.log('requestWaitingPage', Date.now() - timestamp)
+    }
+
+    return {
+      signTxList: async (
+        txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
+      ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> => {
+        return await this.signTxList(txs as any, { provider })
+      },
+      signData: async (data: SignDataType): Promise<string | undefined> => {
+        return await this.signData(data, { provider })
+      },
+    }
   }
 }
 export default WalletSDK
