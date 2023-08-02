@@ -1,6 +1,5 @@
 import { Button } from '../../components'
 import { Wallet } from '../index'
-import { sleep } from '../../utils'
 
 export default {
   title: 'UI/Wallets',
@@ -30,14 +29,6 @@ const TemplateConnectWallet = () => {
     console.log(res)
   }
 
-  const onSignDataWithFunction = async () => {
-    const res = await wallet.walletSDK.signData(async (): Promise<string> => {
-      await sleep(5000)
-      return '0x123abc'
-    })
-    console.log(res)
-  }
-
   return (
     <>
       <div>
@@ -52,8 +43,6 @@ const TemplateConnectWallet = () => {
       <Button onClick={onLoggedIn}>Logged In</Button>
       <br />
       <Button onClick={onSignData}>Sign data</Button>
-      <br />
-      <Button onClick={onSignDataWithFunction}>Sign data with function</Button>
     </>
   )
 }
