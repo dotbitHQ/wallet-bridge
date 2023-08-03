@@ -10,10 +10,11 @@ export enum ButtonVariant {
 
 const variantClasses: Record<ButtonVariant, string> = {
   [ButtonVariant.primary]:
-    'text-white bg-success hover:bg-success-hover active:bg-success-active disabled:cursor-no-drop disabled:opacity-50',
+    'text-white bg-success hover:bg-success-hover active:bg-success-active disabled:cursor-no-drop disabled:opacity-50 disabled:bg-success',
   [ButtonVariant.secondary]:
-    'text-font-primary bg-secondary hover:secondary-hover active:bg-secondary-active disabled:cursor-no-drop disabled:opacity-50',
-  [ButtonVariant.danger]: 'text-white bg-danger hover:bg-danger-hover disabled:cursor-no-drop disabled:opacity-50',
+    'text-font-primary bg-secondary hover:secondary-hover active:bg-secondary-active disabled:cursor-no-drop disabled:opacity-50 disabled:bg-secondary',
+  [ButtonVariant.danger]:
+    'text-white bg-danger hover:bg-danger-hover disabled:cursor-no-drop disabled:opacity-50 disabled:bg-danger',
 }
 
 export enum ButtonSize {

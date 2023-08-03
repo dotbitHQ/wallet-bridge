@@ -243,6 +243,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
           <Button
             className="w-40"
             loading={currentLogin === device.name}
+            disabled={!isSupportWebAuthn}
             size={ButtonSize.large}
             shape={ButtonShape.default}
             onClick={async () => {
