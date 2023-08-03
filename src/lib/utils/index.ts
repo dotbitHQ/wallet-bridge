@@ -229,3 +229,28 @@ export async function copyText(text: string, el?: Element): Promise<void> {
     target: el,
   })
 }
+
+/**
+ * This function checks if the basic WebAuthn API is supported by the current browser.
+ * It does so by checking if the 'credentials' property exists on the 'navigator' object
+ * and if the 'PublicKeyCredential' property exists on the 'window' object.
+ *
+ * @returns {boolean} Returns true if the basic WebAuthn API is supported, false otherwise.
+ */
+export async function checkWebAuthnSupport(): Promise<boolean> {
+  if ('credentials' in navigator && 'PublicKeyCredential' in window) {
+    try {
+      const isAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+      if (isAvailable) {
+        return true
+      } else {
+        return false
+      }
+    } catch (error) {
+      console.error(error)
+      return false
+    }
+  } else {
+    return false
+  }
+}

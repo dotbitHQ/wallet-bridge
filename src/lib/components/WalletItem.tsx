@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ArrowLeftIcon, LoadingIcon } from './Icons'
+import { LoadingIcon } from './Icons'
 import clsx from 'clsx'
 
 export function WalletItem(props: {
@@ -23,13 +23,11 @@ export function WalletItem(props: {
     >
       <span className="inline-flex items-center">
         {props.icon}
-        <span className="ml-4 text-base leading-5">{props.name}</span>
+        <span className="ml-4 text-base font-semibold leading-5">{props.name}</span>
       </span>
       {props.name === props.currentLogin ? (
         <LoadingIcon className="h-2.5 w-2.5 text-font-secondary"></LoadingIcon>
-      ) : (
-        <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
-      )}
+      ) : null}
     </li>
   )
 }

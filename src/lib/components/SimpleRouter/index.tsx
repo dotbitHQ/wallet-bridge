@@ -65,7 +65,7 @@ export function SimpleRouter({ routes, onClose, initialRouteName = 'index' }: Si
         onClose,
       }}
     >
-      <SwapTransition className="max-sm:simple-router-mobile-max-h w-full sm:max-h-[560px]" duration={300}>
+      <SwapTransition className="max-sm:simple-router-mobile-max-h w-full sm:max-h-[588px]" duration={300}>
         {currentRoute.el}
       </SwapTransition>
     </routerContext.Provider>

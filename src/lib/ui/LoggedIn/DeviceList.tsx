@@ -1,23 +1,14 @@
-import {
-  DeviceIcon,
-  Header,
-  MoreIcon,
-  NervosIcon,
-  PlusIcon,
-  RevokeIcon,
-  SafeIcon,
-  SwapChildProps,
-} from '../../components'
+import { DeviceIcon, MoreIcon, NervosIcon, PlusIcon, RevokeIcon } from '../../components'
 import { Menu, Transition } from '@headlessui/react'
 import { emojis } from '../ChooseEmoji/png'
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { useSimpleRouter } from '../../components/SimpleRouter'
 import { setWalletState, useWalletState } from '../../store'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LetterAvatar } from '../../components/LetterAvatar'
 import { collapseString } from '../../utils'
 import { TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { WalletSDKContext } from '../ConnectWallet'
+import clsx from 'clsx'
 
 interface MoreProps {
   address: string
@@ -27,7 +18,7 @@ interface MoreProps {
 function More({ address, onRevoke }: MoreProps) {
   return (
     <Menu as="div" className="relative inline-block flex-none">
-      <Menu.Button>
+      <Menu.Button className="flex">
         <MoreIcon className="h-[16px] w-[16px] flex-none cursor-pointer text-zinc-300 active:opacity-60" />
       </Menu.Button>
       <Transition
@@ -39,7 +30,7 @@ function More({ address, onRevoke }: MoreProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -right-4 z-10 mt-2 h-[60px] w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
+        <Menu.Items className="absolute -right-4 z-10 mt-2 h-[48px] w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
           <Menu.Item>
             <div
               className="relative h-full w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500"
@@ -65,15 +56,9 @@ interface DeviceProps {
 function ThisDevice({ address, managingAddress }: DeviceProps) {
   const { walletSnap } = useWalletState()
   return (
-    <li
-      key={address}
-      className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4"
-    >
-      <DeviceIcon className="h-7 w-7" />
-      <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-        <div className="font-mono">{walletSnap.deviceData?.name}</div>
-        <span className="flex-none rounded bg-green-100 px-1 py-0.5 text-[12px] text-emerald-600">This device</span>
-      </div>
+    <li key={address} className="flex h-[48px] items-center gap-4 pl-3 pr-4">
+      <DeviceIcon className="h-6 w-6" />
+      <div className="flex-1 text-[14px] font-semibold text-neutral-700">{walletSnap.deviceData?.name}</div>
     </li>
   )
 }
@@ -186,25 +171,17 @@ function Device({ address, managingAddress }: DeviceProps) {
   ])
   if (signDataQuery.isInitialLoading) {
     return (
-      <li
-        key={address}
-        className="flex h-[60px] w-full flex-row items-center justify-start gap-4 rounded-2xl border border-stone-300/20 bg-slate-600/5 p-4"
-      >
+      <li key={address} className="flex h-[48px] items-center gap-4 bg-slate-600/5 pl-3 pr-4">
         <div className="h-7 w-7 rounded-full bg-slate-600/5 opacity-60" />
         <div className="h-4 w-[156px] rounded bg-slate-600/5 opacity-60" />
       </li>
     )
   }
   return (
-    <li
-      key={address}
-      className="flex h-[60px] w-full flex-row items-center justify-between gap-4 rounded-2xl border border-stone-300/20 bg-white p-4"
-    >
+    <li key={address} className="flex h-[48px] items-center gap-4 pl-3 pr-4">
       <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-        <div className="font-mono">
-          {getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 14)}
-        </div>
+        <div>{getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 14)}</div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
         ) : isRevokingError ? (
@@ -221,14 +198,15 @@ interface LeadingIconProps {
   emoji?: string
   address: string
 }
+
 function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
   const selectedEmoji = (emojis as Record<string, string>)[emoji as any]
   if (selectedEmoji) {
-    return <img className="h-[28px] w-[28px] flex-none" src={selectedEmoji} />
+    return <img className="h-6 w-6" src={selectedEmoji} />
   } else if (name) {
     return <LetterAvatar data={name} className="h-[28px] w-[28px] flex-none" />
   } else {
-    return <NervosIcon className="h-[28px] w-[28px] flex-none rounded-full border border-stone-300/20" />
+    return <NervosIcon className="h-6 w-6 flex-none rounded-full border border-stone-300/20" />
   }
 }
 
@@ -243,54 +221,41 @@ function removeNameAndEmojiFromLocalStorage(address: string) {
   globalThis.localStorage.setItem('.bit-memos', JSON.stringify(data))
 }
 
-export function DeviceList({ transitionStyle, transitionRef }: SwapChildProps) {
-  const { goBack, onClose, goTo } = useSimpleRouter()!
+interface DeviceListProps {
+  onShowQRCode: () => void
+  className?: string
+}
+
+export function DeviceList({ onShowQRCode, className }: DeviceListProps) {
   const { walletSnap } = useWalletState()
+
   return (
-    <>
-      <Header
-        className="z-10 w-full bg-white p-6"
-        title="Devices"
-        goBack={goBack}
-        onClose={onClose}
-        style={{ ...transitionStyle, position: 'fixed', top: 0 }}
-      />
-      <div
-        className="relative flex w-full select-none flex-col items-center justify-start px-6 pb-6 pt-[76px]"
-        style={transitionStyle}
-        ref={transitionRef}
-      >
-        <div className="flex w-full flex-row items-start justify-between gap-1 rounded-xl border border-amber-300/40 bg-amber-300/5 p-3">
-          <SafeIcon className="h-[20px] w-[20px] flex-none text-amber-500" />
-          <div className="flex-1 text-[14px] font-normal leading-[17px] text-yellow-700">
-            You can back up to more devices to enhance security.
-          </div>
-        </div>
-        <div className="mt-6 text-[13px] font-normal text-zinc-500">
-          Full control over the address belongs to the device/address.
-        </div>
-        <ul className="mt-2 flex w-full flex-col items-stretch justify-start gap-2">
-          {walletSnap.deviceData?.ckbAddr ? (
-            <ThisDevice
-              key={walletSnap.deviceData.ckbAddr}
-              address={walletSnap.deviceData.ckbAddr}
-              managingAddress={walletSnap.deviceData.ckbAddr}
-            />
-          ) : null}
-          {walletSnap.deviceList?.map((address) => (
+    <div className={clsx('select-none', className)}>
+      <div className="mb-3 text-base font-medium text-[#5F6570]">Trusted Devices of CKB Address</div>
+      <ul className="overflow-hidden rounded-2xl border border-[#B6C4D966]">
+        {walletSnap.deviceData?.ckbAddr ? (
+          <ThisDevice
+            key={walletSnap.deviceData.ckbAddr}
+            address={walletSnap.deviceData.ckbAddr}
+            managingAddress={walletSnap.deviceData.ckbAddr}
+          />
+        ) : null}
+        <hr className="mx-5 border-[#B6C4D966]" />
+        {walletSnap.deviceList?.map((address) => (
+          <div key={address}>
             <Device key={address} address={address} managingAddress={walletSnap.address!} />
-          ))}
-        </ul>
+            <hr className="mx-5 border-[#B6C4D966]" />
+          </div>
+        ))}
         <div
-          onClick={() => {
-            goTo('EnhanceSecurity')
-          }}
-          className="mt-2 flex h-[60px] w-full cursor-pointer flex-row items-center justify-between gap-4 rounded-2xl border border-dashed border-stone-300/20 bg-white p-4 hover:bg-slate-600/10 active:bg-slate-600/20"
+          onClick={onShowQRCode}
+          className="flex h-[48px] cursor-pointer items-center gap-4 pl-3 pr-4 hover:bg-secondary-5 active:bg-secondary"
         >
-          <PlusIcon className="h-[24px] w-[24px] flex-none" />
-          <div className="flex-1 text-[14px] font-semibold text-neutral-700">Add New Device</div>
+          <PlusIcon className="h-6 w-6" />
+          <div className="flex-1 text-[14px] font-semibold text-success">Add New</div>
         </div>
-      </div>
-    </>
+      </ul>
+      <div className="mt-3 text-[#5F6570]">Every trusted device can access the assets on the CKB address.</div>
+    </div>
   )
 }

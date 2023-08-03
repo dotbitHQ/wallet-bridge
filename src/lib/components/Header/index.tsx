@@ -19,7 +19,7 @@ export function Header({ title, className, goBack, onClose, style }: HeaderProps
       {goBack != null ? (
         <div
           className={clsx(
-            'absolute left-4 inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg hover:bg-secondary active:bg-secondary-active',
+            'absolute left-6 inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg hover:bg-secondary active:bg-secondary-active',
           )}
           onClick={goBack}
         >
@@ -37,7 +37,7 @@ export function Header({ title, className, goBack, onClose, style }: HeaderProps
       </div>
       <div
         className={clsx(
-          'absolute right-4 inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg hover:bg-secondary active:bg-secondary-active',
+          'absolute right-6 inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg hover:bg-secondary active:bg-secondary-active',
         )}
         onClick={onClose}
       >
