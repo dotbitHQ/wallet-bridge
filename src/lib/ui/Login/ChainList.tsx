@@ -1,7 +1,6 @@
 import {
   BscIcon,
   createTips,
-  DeviceIcon,
   DogecoinIcon,
   EthIcon,
   Header,
@@ -9,18 +8,23 @@ import {
   TorusIcon,
   SwapChildProps,
   TronIcon,
+  Button,
+  ButtonSize,
+  ButtonShape,
+  Alert,
+  AlertType,
+  NoticeIcon,
 } from '../../components'
 import { CoinType, WalletProtocol } from '../../constant'
 import { setWalletState, walletState } from '../../store'
-import { Tag, TagVariant } from '../../components/Tag'
 import { ChainItem } from '../../components/ChainItem'
-import clsx from 'clsx'
-import { ReactNode, useContext, useMemo, useState } from 'react'
+import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import handleError from '../../utils/handleError'
 import { snapshot } from 'valtio'
 import { setLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { checkWebAuthnSupport } from '../../utils'
 
 interface IChain {
   icon: ReactNode
@@ -37,6 +41,7 @@ interface IChainList {
 
 export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) => {
   const [currentLogin, setCurrentLogin] = useState('')
+  const [isSupportWebAuthn, setIsSupportWebAuthn] = useState(true)
   const walletSDK = useContext(WalletSDKContext)!
   const router = useSimpleRouter()!
   const showWalletList = () => {
@@ -47,20 +52,15 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
   }
   const onClose = router?.onClose
 
+  const device: IChain = {
+    icon: undefined,
+    name: 'This Device',
+    coinType: CoinType.ckb,
+    protocol: WalletProtocol.webAuthn,
+  }
+
   const chains: IChainList[] = useMemo(() => {
     const list = [
-      {
-        label: 'by Device',
-        list: [
-          {
-            icon: <DeviceIcon className="h-10 w-10"></DeviceIcon>,
-            name: 'This Device',
-            tag: <Tag variant={TagVariant.primary}>Recommended</Tag>,
-            coinType: CoinType.ckb,
-            protocol: WalletProtocol.webAuthn,
-          },
-        ],
-      },
       {
         label: 'by Wallet',
         list: [
@@ -124,6 +124,17 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
     ]
     return walletSDK.onlyEth ? onlyEth : list
   }, [walletSDK.onlyEth])
+
+  useEffect(() => {
+    checkWebAuthnSupport()
+      .then((res) => {
+        setIsSupportWebAuthn(res)
+      })
+      .catch((err) => {
+        console.error(err)
+        setIsSupportWebAuthn(false)
+      })
+  }, [])
 
   const createHardwareWalletTips = (chain: IChain) => {
     createTips({
@@ -228,26 +239,54 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
-        <ul>
+        <div className="mb-6 flex flex-col items-center py-4">
+          <Button
+            className="w-40"
+            loading={currentLogin === device.name}
+            size={ButtonSize.large}
+            shape={ButtonShape.default}
+            onClick={async () => {
+              await onLogin(device)
+            }}
+          >
+            by Passkey
+          </Button>
+          <div className="mt-2 text-font-secondary">Seedless but still decentralized</div>
+          {isSupportWebAuthn ? null : (
+            <Alert
+              className="mt-2"
+              type={AlertType.warning}
+              icon={<NoticeIcon className="h-[18px] w-[18px] text-[#FFB02E]"></NoticeIcon>}
+            >
+              This device or browser unsupported. Try connect by social or chain.
+            </Alert>
+          )}
+        </div>
+        <ul className="flex flex-col gap-6">
           {chains.map((item, index) => {
             return (
               <div key={`container-${index}`}>
                 <li key={`label-${index}`} className="mx-2 font-bold text-font-secondary">
                   {item.label}
                 </li>
-                {item.list.map((chain, index) => {
-                  return (
-                    <ChainItem
-                      key={chain.name}
-                      className={clsx('mt-2', { 'mb-6': index === item.list.length - 1 })}
-                      {...chain}
-                      currentLogin={currentLogin}
-                      onClick={async () => {
-                        await onLogin(chain)
-                      }}
-                    ></ChainItem>
-                  )
-                })}
+                <div className="mt-2 overflow-hidden rounded-2xl border border-[#B6C4D966]">
+                  {item.list.map((chain, i) => {
+                    return (
+                      <div key={chain.name}>
+                        <ChainItem
+                          {...chain}
+                          currentLogin={currentLogin}
+                          onClick={async () => {
+                            await onLogin(chain)
+                          }}
+                        ></ChainItem>
+                        {item.list.length > 2 && i !== item.list.length - 1 ? (
+                          <hr className="mx-5 border-[#B6C4D966]" />
+                        ) : null}
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             )
           })}

@@ -47,7 +47,7 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
         </div>
         <div
           id="copy-url"
-          className="inline-flex w-[260px] items-center gap-1 rounded-md border border-slate-300/40 bg-gray-50 p-1"
+          className="inline-flex w-[260px] items-center gap-1 rounded-md border border-slate-300/40 bg-gray-50 p-1 pl-3"
         >
           <span className="scrollbar-hide flex-1 overflow-x-scroll whitespace-nowrap text-sm font-normal leading-tight text-gray-500">
             {url}

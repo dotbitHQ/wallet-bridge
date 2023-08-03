@@ -128,7 +128,11 @@ class WalletSDK {
     return await this.walletTransaction?.sendTrx(data)
   }
 
-  disconnect() {
+  async disconnect() {
+    const isInit = await this.initWallet({ involution: false })
+    if (!isInit) {
+      throw new CustomError(errno.failedToInitializeWallet, 'disconnect: Please initialize wallet first')
+    }
     this.eventListener?.removeEvents()
     this.walletConnector?.disconnect()
     this.context.emitEvent(EventEnum.Disconnect)

@@ -6,7 +6,7 @@ export enum TagVariant {
   primary = 'primary',
 }
 
-export const variantClasses: Record<TagVariant, string> = {
+const variantClasses: Record<TagVariant, string> = {
   [TagVariant.default]: 'text-font-tips bg-secondary',
   [TagVariant.primary]: 'text-[#00A270] bg-[#E3F6ED]',
 }

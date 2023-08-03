@@ -11,7 +11,6 @@ import {
   TrustWalletIcon,
 } from '../../components'
 import { WalletProtocol } from '../../constant'
-import clsx from 'clsx'
 import { ReactNode, useContext, useMemo, useState } from 'react'
 import { WalletItem } from '../../components/WalletItem'
 import { snapshot } from 'valtio'
@@ -142,12 +141,11 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
-        <ul>
+        <ul className="flex flex-col gap-2">
           {showWallets.map((wallet, index) => {
             return (
               <WalletItem
-                key={wallet.name}
-                className={clsx('mt-2', { 'mb-6': index === showWallets.length - 1 })}
+                key={index}
                 {...wallet}
                 currentLogin={currentLogin}
                 onClick={async () => {

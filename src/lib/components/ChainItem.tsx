@@ -17,7 +17,7 @@ export function ChainItem(props: {
   return (
     <li
       className={clsx(
-        'box-border flex cursor-pointer items-center justify-between rounded-2xl border border-[#bec0c229] py-[7px] pl-2 pr-4 hover:bg-secondary active:bg-secondary-active',
+        'box-border flex cursor-pointer items-center justify-between py-3 pl-3 pr-5 hover:bg-secondary-5 active:bg-secondary',
         props.className,
       )}
       onClick={click}
@@ -25,7 +25,7 @@ export function ChainItem(props: {
       <span className="inline-flex items-center">
         {props.icon}
         <span className="ml-4 inline-flex flex-col">
-          <span className="text-base leading-5">{props.name}</span>
+          <span className="text-base font-semibold leading-5">{props.name}</span>
           {props.tag}
         </span>
       </span>

@@ -7,7 +7,6 @@ import { WalletList } from './Login/WalletList'
 import { LoggedIn } from './LoggedIn/LoggedIn'
 import { AddressList } from './LoggedIn/AddressList'
 import { SimpleRouter } from '../components/SimpleRouter'
-import { EnhanceSecurity } from './EnhanceSecurity'
 import { ShowQRCode } from './ShowQRCode'
 import { InputSignature } from './InputSignature'
 import { ChooseEmoji } from './ChooseEmoji'
@@ -15,7 +14,6 @@ import { FinalConfirm } from './FinalConfirm'
 import { TransactionStatus } from './TransactionStatus'
 import { TransactionSucceeded } from './TransactionSucceeded'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { DeviceList } from './DeviceList'
 import { ShowScanner } from './ShowScanner'
 import { TransactionFailed } from './TransactionFailed'
 import { Sheet } from '../components/Sheet'
@@ -41,14 +39,9 @@ const routes = {
   LoggedIn: {
     el: <LoggedIn key="LoggedIn" />,
   },
-  EnhanceSecurity: {
-    el: <EnhanceSecurity key="EnhanceSecurity" />,
-    prev: 'LoggedIn',
-    next: 'ShowQRCode',
-  },
   ShowQRCode: {
     el: <ShowQRCode key="ShowQRCode" />,
-    prev: 'EnhanceSecurity',
+    prev: 'LoggedIn',
     next: 'InputSignature',
   },
   InputSignature: {
@@ -76,9 +69,6 @@ const routes = {
   },
   TransactionFailed: {
     el: <TransactionFailed key="TransactionFailed" />,
-  },
-  DeviceList: {
-    el: <DeviceList key="DeviceList" />,
   },
   ShowScanner: {
     el: <ShowScanner key="ShowScanner" />,

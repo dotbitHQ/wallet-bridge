@@ -74,7 +74,6 @@
     "autoprefixer": "^10.4.13",
     "babel-loader": "^8.3.0",
     "buffer": "^6.0.3",
-    "chromatic": "^6.19.5",
     "color": "^4.2.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.6.0",
