@@ -16,6 +16,7 @@ export interface WalletState {
   deviceList?: string[]
   isTestNet?: boolean
   loggedInSelectAddress?: boolean
+  canAddDevice?: boolean
 }
 
 const WalletStateKey = 'WalletState'
@@ -34,6 +35,7 @@ const localWalletState = walletStateLocalStorage
       deviceList: [],
       isTestNet: false,
       loggedInSelectAddress: true,
+      canAddDevice: false,
     }
 
 export const walletState = proxy<WalletState>(localWalletState)
@@ -47,6 +49,7 @@ export async function getAuthorizeInfo() {
     })
     if (res.data?.err_no === errno.success) {
       setWalletState({
+        canAddDevice: res.data.data.can_authorize,
         deviceList: res.data.data.ckb_address,
       })
     } else {
@@ -83,6 +86,7 @@ export const setWalletState = ({
   deviceList,
   isTestNet,
   loggedInSelectAddress,
+  canAddDevice,
 }: WalletState) => {
   if (protocol) {
     walletState.protocol = protocol
@@ -111,6 +115,9 @@ export const setWalletState = ({
   if (loggedInSelectAddress !== undefined) {
     walletState.loggedInSelectAddress = loggedInSelectAddress
   }
+  if (canAddDevice !== undefined) {
+    walletState.canAddDevice = canAddDevice
+  }
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 
@@ -121,6 +128,7 @@ export const resetWalletState = () => {
   walletState.deviceData = undefined
   walletState.ckbAddresses = []
   walletState.deviceList = []
+  walletState.canAddDevice = false
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 

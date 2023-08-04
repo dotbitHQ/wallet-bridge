@@ -30,18 +30,16 @@ function More({ address, onRevoke }: MoreProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -right-4 z-10 mt-2 h-[48px] w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
-          <Menu.Item>
-            <div
-              className="relative h-full w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500"
-              onClick={onRevoke}
-            >
-              <RevokeIcon className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2" />
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] font-medium leading-tight">
-                Revoke
-              </div>
+        <Menu.Items className="fixed right-6 z-10 mt-2 w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
+          <div
+            className="relative h-[36px] w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500"
+            onClick={onRevoke}
+          >
+            <RevokeIcon className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2" />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] font-medium leading-tight">
+              Revoke
             </div>
-          </Menu.Item>
+          </div>
         </Menu.Items>
       </Transition>
     </Menu>
@@ -181,7 +179,7 @@ function Device({ address, managingAddress }: DeviceProps) {
     <li key={address} className="flex h-[48px] items-center gap-4 pl-3 pr-4">
       <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-        <div>{getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 14)}</div>
+        <div>{getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}</div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
         ) : isRevokingError ? (
@@ -231,7 +229,7 @@ export function DeviceList({ onShowQRCode, className }: DeviceListProps) {
 
   return (
     <div className={clsx('select-none', className)}>
-      <div className="mb-3 text-base font-medium text-[#5F6570]">Trusted Devices of CKB Address</div>
+      <div className="mb-3 text-base font-medium leading-[normal] text-[#5F6570]">Trusted Devices of CKB Address</div>
       <ul className="overflow-hidden rounded-2xl border border-[#B6C4D966]">
         {walletSnap.deviceData?.ckbAddr ? (
           <ThisDevice
@@ -240,11 +238,11 @@ export function DeviceList({ onShowQRCode, className }: DeviceListProps) {
             managingAddress={walletSnap.deviceData.ckbAddr}
           />
         ) : null}
-        <hr className="mx-5 border-[#B6C4D966]" />
+        <hr className="mx-3 border-[#B6C4D966]" />
         {walletSnap.deviceList?.map((address) => (
           <div key={address}>
             <Device key={address} address={address} managingAddress={walletSnap.address!} />
-            <hr className="mx-5 border-[#B6C4D966]" />
+            <hr className="mx-3 border-[#B6C4D966]" />
           </div>
         ))}
         <div
@@ -255,7 +253,9 @@ export function DeviceList({ onShowQRCode, className }: DeviceListProps) {
           <div className="flex-1 text-[14px] font-semibold text-success">Add New</div>
         </div>
       </ul>
-      <div className="mt-3 text-[#5F6570]">Every trusted device can access the assets on the CKB address.</div>
+      <div className="mt-3 leading-[normal] text-[#5F6570]">
+        Every trusted device can access the assets on the CKB address.
+      </div>
     </div>
   )
 }

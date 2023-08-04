@@ -180,7 +180,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
     }
 
     const { hardwareWalletTipsShow } = snapshot(walletState)
-    if (hardwareWalletTipsShow) {
+    if (hardwareWalletTipsShow && ![WalletProtocol.torus, WalletProtocol.webAuthn].includes(protocol)) {
       createHardwareWalletTips(chain)
       return
     }
@@ -239,30 +239,32 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
-        <div className="mb-6 flex flex-col items-center py-4">
-          <Button
-            className="w-40"
-            loading={currentLogin === device.name}
-            disabled={!isSupportWebAuthn}
-            size={ButtonSize.large}
-            shape={ButtonShape.default}
-            onClick={async () => {
-              await onLogin(device)
-            }}
-          >
-            by Passkey
-          </Button>
-          <div className="mt-2 text-font-secondary">Seedless but still decentralized</div>
-          {isSupportWebAuthn ? null : (
-            <Alert
-              className="mt-2"
-              type={AlertType.warning}
-              icon={<NoticeIcon className="h-[18px] w-[18px] text-[#FFB02E]"></NoticeIcon>}
+        {!walletSDK.onlyEth ? (
+          <div className="mb-6 flex flex-col items-center py-4">
+            <Button
+              className="w-40"
+              loading={currentLogin === device.name}
+              disabled={!isSupportWebAuthn}
+              size={ButtonSize.large}
+              shape={ButtonShape.default}
+              onClick={async () => {
+                await onLogin(device)
+              }}
             >
-              This device or browser unsupported. Try connect by social or chain.
-            </Alert>
-          )}
-        </div>
+              <span className="font-bold">by Passkey</span>
+            </Button>
+            <div className="mt-2 text-font-secondary">Seedless but still decentralized</div>
+            {isSupportWebAuthn ? null : (
+              <Alert
+                className="mt-2"
+                type={AlertType.warning}
+                icon={<NoticeIcon className="h-[18px] w-[18px] text-[#FFB02E]"></NoticeIcon>}
+              >
+                This device or browser unsupported. Try connect by social or chain.
+              </Alert>
+            )}
+          </div>
+        ) : null}
         <ul className="flex flex-col gap-6">
           {chains.map((item, index) => {
             return (

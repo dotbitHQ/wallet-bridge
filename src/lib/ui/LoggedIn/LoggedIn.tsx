@@ -15,7 +15,7 @@ import {
 } from '../../components'
 import { WalletProtocol, CoinType } from '../../constant'
 import { getAuthorizeInfo, getMastersAddress, useWalletState } from '../../store'
-import { ReactNode, useContext, useEffect, useState } from 'react'
+import { ReactNode, useContext, useEffect } from 'react'
 import { collapseString, copyText } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
@@ -25,7 +25,6 @@ import { DeviceList } from './DeviceList'
 
 export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const { walletSnap } = useWalletState()
-  const [isAddDevice, setIsAddDevice] = useState(false)
   const walletSDK = useContext(WalletSDKContext)!
   const { goTo, onClose } = useSimpleRouter()!
   const onDisconnect = () => {
@@ -69,10 +68,6 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
     })
   }
 
-  const addDevice = () => {
-    setIsAddDevice(true)
-  }
-
   useEffect(() => {
     void getAuthorizeInfo()
     void getMastersAddress()
@@ -88,7 +83,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
       <div className="w-full px-6 pb-6 pt-[76px]" ref={transitionRef} style={transitionStyle}>
         <div className="mb-10 text-center">
           {walletSnap.coinType && icons[walletSnap.coinType]}
-          <h2 className="my-2 text-2xl font-extrabold leading-7">
+          <h2 className="mb-1.5 mt-2 text-2xl font-extrabold leading-7">
             {walletSnap.protocol === WalletProtocol.webAuthn
               ? walletSnap.deviceData?.name
               : collapseString(walletSnap.address)}
@@ -96,29 +91,31 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
           {walletSnap.protocol === WalletProtocol.webAuthn ? (
             <div className="flex items-center justify-center">
               <span
-                className="cursor-pointer text-base font-medium text-[#B0B8BF]"
+                className="cursor-pointer text-base font-medium leading-[normal] text-font-secondary"
                 onClick={() => {
                   walletSnap.address && onCopy(walletSnap.address)
                 }}
               >
                 {collapseString(walletSnap.address, 8, 4)}
               </span>
-              <SwitchIcon
-                onClick={onSwitch}
-                className="ml-3 h-4 w-4 cursor-pointer text-[#5F6570] hover:text-font-tips active:text-font-primary"
-              ></SwitchIcon>
+              {walletSnap.ckbAddresses && walletSnap.ckbAddresses?.length > 0 ? (
+                <SwitchIcon
+                  onClick={onSwitch}
+                  className="ml-3 h-4 w-4 cursor-pointer text-font-secondary hover:text-[#5F6570]"
+                ></SwitchIcon>
+              ) : null}
             </div>
           ) : null}
         </div>
-        {walletSnap.protocol === WalletProtocol.webAuthn ? (
-          isAddDevice || (walletSnap.deviceList && walletSnap.deviceList.length > 0) ? (
+        {walletSnap.protocol === WalletProtocol.webAuthn && walletSnap.canAddDevice ? (
+          walletSnap.deviceList && walletSnap.deviceList.length > 0 ? (
             <DeviceList onShowQRCode={onShowQRCode}></DeviceList>
           ) : (
-            <BackupTips addDevice={addDevice}></BackupTips>
+            <BackupTips onShowQRCode={onShowQRCode}></BackupTips>
           )
         ) : null}
         <Button className="mt-6 w-full" size={ButtonSize.large} variant={ButtonVariant.secondary} onClick={disconnect}>
-          <DisconnectIcon className="mr-2 h-4 w-4 text-font-disconnect"></DisconnectIcon>Disconnect
+          <DisconnectIcon className="mr-2 h-4 w-4 text-font-secondary"></DisconnectIcon>Disconnect
         </Button>
       </div>
     </>
