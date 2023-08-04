@@ -105,7 +105,7 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
         title="Add Device"
         goBack={goBack}
         onClose={onClose}
-        className="z-10 w-full bg-white p-6"
+        className="bg-blur z-10 w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div

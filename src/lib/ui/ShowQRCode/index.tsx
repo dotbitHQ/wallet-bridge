@@ -31,7 +31,7 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
         title="Add Device"
         onClose={onClose}
         goBack={goBack}
-        className="z-10 w-full bg-white p-6"
+        className="bg-blur z-10 w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div

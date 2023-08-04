@@ -16,9 +16,9 @@ export function TransactionSucceeded({ transitionRef, transitionStyle }: SwapChi
         style={transitionStyle}
       >
         <SafeIcon className="h-[80px] w-[80px] text-green-500" />
-        <div className="mt-3 text-center text-[16px] font-bold text-neutral-700">Successfully Associated</div>
+        <div className="mt-3 text-center text-[16px] font-bold text-neutral-700">New Trusted Device Added</div>
         <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">
-          The new device has full control over this address.
+          The new trusted device has full control over this address.
         </div>
         <Button
           className="mb-8 mt-4 min-w-[130px] px-5"

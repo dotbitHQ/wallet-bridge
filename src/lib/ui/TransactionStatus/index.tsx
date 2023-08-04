@@ -58,7 +58,7 @@ export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildP
         style={transitionStyle}
       >
         <LoadingIconGradient className="animation-rotate-360-deg h-[64px] w-[64px] text-emerald-500" />
-        <div className="mt-4 text-center text-[16px] font-bold text-neutral-700">Device Adding</div>
+        <div className="mt-4 text-center text-[16px] font-bold text-neutral-700">Adding Trusted Device</div>
         <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">Approximately 3 minutes.</div>
         <div className="mb-8 mt-3 text-[12px] font-normal leading-[12px] text-gray-400">
           <a

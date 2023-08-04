@@ -99,4 +99,9 @@
   .animation-fade-out-down {
     animation: fade-out-down 0.15s cubic-bezier(0.75, 0.25, 0.25, 0.75) forwards;
   }
+
+  .bg-blur {
+    backdrop-filter: blur(22px);
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255));
+  }
 }
