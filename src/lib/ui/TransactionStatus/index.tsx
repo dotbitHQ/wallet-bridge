@@ -60,7 +60,7 @@ export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildP
         <LoadingIconGradient className="animation-rotate-360-deg h-[64px] w-[64px] text-emerald-500" />
         <div className="mt-4 text-center text-[16px] font-bold text-neutral-700">Adding Trusted Device</div>
         <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">Approximately 3 minutes.</div>
-        <div className="mb-8 mt-3 text-[12px] font-normal leading-[12px] text-gray-400">
+        <div className="mb-8 mt-3 text-[12px] font-normal leading-[12px] text-font-secondary">
           <a
             target="_blank"
             rel="noreferrer"
@@ -71,7 +71,7 @@ export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildP
           >
             {collapseString(webAuthnState.pendingTxHash, 6, 3)}
           </a>
-          <ArrowLeftIcon className="h-[12px] rotate-180" />
+          <ArrowLeftIcon className="h-[12px] rotate-180 text-font-secondary" />
         </div>
       </div>
     </>

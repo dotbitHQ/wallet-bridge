@@ -15,7 +15,7 @@ import {
   AlertType,
   NoticeIcon,
 } from '../../components'
-import { CoinType, WalletProtocol } from '../../constant'
+import { BSC, CoinType, DOGE, ETH, Polygon, TRON, WalletProtocol } from '../../constant'
 import { setWalletState, walletState } from '../../store'
 import { ChainItem } from '../../components/ChainItem'
 import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
@@ -66,31 +66,31 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         list: [
           {
             icon: <EthIcon className="h-10 w-10"></EthIcon>,
-            name: 'ETH',
+            name: ETH.name,
             coinType: CoinType.eth,
             protocol: WalletProtocol.metaMask,
           },
           {
             icon: <BscIcon className="h-10 w-10"></BscIcon>,
-            name: 'BSC',
+            name: BSC.name,
             coinType: CoinType.bsc,
             protocol: WalletProtocol.metaMask,
           },
           {
             icon: <PolygonIcon className="h-10 w-10"></PolygonIcon>,
-            name: 'Polygon',
+            name: Polygon.name,
             coinType: CoinType.matic,
             protocol: WalletProtocol.metaMask,
           },
           {
             icon: <TronIcon className="h-10 w-10"></TronIcon>,
-            name: 'Tron',
+            name: TRON.name,
             coinType: CoinType.trx,
             protocol: WalletProtocol.tronLink,
           },
           {
             icon: <DogecoinIcon className="h-10 w-10"></DogecoinIcon>,
-            name: 'Dogecoin',
+            name: DOGE.name,
             coinType: CoinType.doge,
             protocol: WalletProtocol.tokenPocketUTXO,
           },
@@ -115,7 +115,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         list: [
           {
             icon: <EthIcon className="h-10 w-10"></EthIcon>,
-            name: 'ETH',
+            name: ETH.name,
             coinType: CoinType.eth,
             protocol: WalletProtocol.metaMask,
           },

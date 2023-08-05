@@ -82,7 +82,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
   return (
     <>
       <Header
-        title="Add Device"
+        title="Add Trusted Device"
         onClose={onClose}
         goBack={goBack}
         className="bg-blur z-10 w-full bg-white p-6"
@@ -93,11 +93,11 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
         ref={transitionRef}
         style={transitionStyle}
       >
-        <div className="mt-6 flex w-full items-center justify-between gap-4 rounded-2xl border border-slate-300/40 bg-gray-50 p-3">
-          <div className="h-[44px] flex-none text-center text-[44px] leading-[44px] text-neutral-700">
+        <div className="mt-6 flex w-full items-center gap-4 rounded-2xl border border-slate-300/40 bg-gray-50 p-6">
+          <div className="flex-none text-center text-neutral-700">
             <Emoji name={webAuthnState.selectedEmoji!} className="w-8" />
           </div>
-          <div className="flex-1 text-[16px] font-semibold leading-[19px] text-neutral-700">
+          <div className="h-[19px] text-[16px] font-semibold leading-[19px] text-neutral-700">
             {webAuthnState.backupDeviceData?.name}
           </div>
         </div>
@@ -114,7 +114,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
         </div>
         <Button
           disabled={!checked}
-          className="m-6 w-full px-5"
+          className="mt-6 w-full"
           size={ButtonSize.middle}
           shape={ButtonShape.round}
           loading={sendTransactionMutation.isLoading}

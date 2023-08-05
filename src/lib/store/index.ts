@@ -49,7 +49,7 @@ export async function getAuthorizeInfo() {
     })
     if (res.data?.err_no === errno.success) {
       setWalletState({
-        canAddDevice: res.data.data.can_authorize,
+        canAddDevice: res.data.data.can_authorize !== 0,
         deviceList: res.data.data.ckb_address,
       })
     } else {

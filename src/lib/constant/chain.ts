@@ -147,7 +147,7 @@ export const TRON: IMainChain = {
 }
 
 export const BSC: IMainChain = {
-  name: 'Binance Smart Chain',
+  name: 'BNB Smart Chain',
   symbol: 'BNB',
   coinType: CoinType.bsc,
   decimals: 18,

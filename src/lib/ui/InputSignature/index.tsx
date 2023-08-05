@@ -102,7 +102,7 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
   return (
     <>
       <Header
-        title="Add Device"
+        title="Add Trusted Device"
         goBack={goBack}
         onClose={onClose}
         className="bg-blur z-10 w-full bg-white p-6"
@@ -144,7 +144,7 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
         {permissionError != null && <DomException className="mt-6" err={permissionError} />}
         <Button
           disabled={data.length === 0 || !isValidData}
-          className="m-6 w-full px-5"
+          className="mt-6 w-full"
           size={ButtonSize.middle}
           shape={ButtonShape.round}
           onClick={() => {

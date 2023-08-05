@@ -28,19 +28,19 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
   return (
     <>
       <Header
-        title="Add Device"
+        title="Add Trusted Device"
         onClose={onClose}
         goBack={goBack}
         className="bg-blur z-10 w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div
-        className="flex w-full flex-col items-center justify-start px-6 pb-4 pt-[76px]"
+        className="flex w-full flex-col items-center justify-start px-6 pb-6 pt-[76px]"
         ref={transitionRef}
         style={transitionStyle}
       >
         <div className="text-center text-[14px] leading-tight text-neutral-700">
-          Scan the QR code (or access the link) below with your another device, and follow the instructions provided.
+          Use the QR code or link below on your other trusted devices and follow the instructions inside.
         </div>
         <div className="relative my-3 h-[260px] w-[260px] rounded-2xl border border-stone-300/20 p-2">
           <QRCode data={url} />
@@ -56,7 +56,7 @@ export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
             Copy
           </Button>
         </div>
-        <Button className="mt-6 min-w-[130px] px-5" size={ButtonSize.middle} shape={ButtonShape.round} onClick={goNext}>
+        <Button className="mt-6 w-full" size={ButtonSize.middle} shape={ButtonShape.round} onClick={goNext}>
           Next
         </Button>
       </div>

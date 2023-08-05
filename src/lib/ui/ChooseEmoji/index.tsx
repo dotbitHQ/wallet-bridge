@@ -66,19 +66,19 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
   return (
     <>
       <Header
-        title="Add Device"
+        title="Add Trusted Device"
         goBack={goBack}
         onClose={onClose}
         className="bg-blur z-10 w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div
-        className="flex w-full flex-col items-center justify-start px-6 py-20"
+        className="flex w-full flex-col items-center justify-start px-6 pb-6 pt-20"
         ref={transitionRef}
         style={transitionStyle}
       >
         <div className="w-full text-center text-[16px] leading-normal text-neutral-700">
-          Choose an Emoji for the new device for easy identification.
+          Choose a emoji to label the device.
         </div>
         <div className="mt-6 grid w-full grid-cols-6 rounded-2xl border border-stone-300/20 bg-gray-50 p-2">
           {Object.keys(emojis).map((k) => (
@@ -98,7 +98,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
           disabled={selected === undefined}
           shape={ButtonShape.round}
           size={ButtonSize.middle}
-          className="mt-7 w-full px-5"
+          className="mt-7 w-full"
           onClick={() => {
             setSelectedEmoji(selected)
             signDataQuery
