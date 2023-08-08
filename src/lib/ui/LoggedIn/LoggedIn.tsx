@@ -84,9 +84,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
         <div className="mb-10 text-center">
           {walletSnap.coinType && icons[walletSnap.coinType]}
           <h2 className="mb-1.5 mt-2 text-2xl font-extrabold leading-7">
-            {walletSnap.protocol === WalletProtocol.webAuthn
-              ? walletSnap.deviceData?.name
-              : collapseString(walletSnap.address)}
+            {walletSnap.protocol === WalletProtocol.webAuthn ? null : collapseString(walletSnap.address)}
           </h2>
           {walletSnap.protocol === WalletProtocol.webAuthn ? (
             <div className="flex items-center justify-center">

@@ -1,4 +1,4 @@
-import { DeviceIcon, MoreIcon, NervosIcon, PlusIcon, RevokeIcon } from '../../components'
+import { MoreIcon, NervosIcon, PlusIcon, RevokeIcon, createTips } from '../../components'
 import { Menu, Transition } from '@headlessui/react'
 import { emojis } from '../ChooseEmoji/png'
 import React, { Fragment, useContext, useEffect, useState } from 'react'
@@ -6,7 +6,7 @@ import { setWalletState, useWalletState } from '../../store'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LetterAvatar } from '../../components/LetterAvatar'
 import { collapseString } from '../../utils'
-import { TxsWithMMJsonSignedOrUnSigned } from '../../types'
+import { SignInfo, TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { WalletSDKContext } from '../ConnectWallet'
 import clsx from 'clsx'
 
@@ -54,15 +54,6 @@ interface DeviceProps {
   onDisconnect?: () => void
 }
 
-function ThisDevice({ address, managingAddress }: DeviceProps) {
-  const { walletSnap } = useWalletState()
-  return (
-    <li key={address} className="flex h-[48px] items-center gap-4 pl-3 pr-4">
-      <DeviceIcon className="h-6 w-6" />
-      <div className="flex-1 text-[14px] font-semibold text-neutral-700">{walletSnap.deviceData?.name}</div>
-    </li>
-  )
-}
 
 function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const { walletSnap } = useWalletState()
@@ -70,6 +61,7 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const signDataQuery = useQuery({
     queryKey: ['FetchSignDataDelete', { master: walletSnap.address, slave: address }],
     retry: false,
+    enabled: false,
     queryFn: async () => {
       if (walletSnap.address === undefined) throw new Error('unreachable')
       const res = await fetch('https://test-webauthn-api.did.id/v1/webauthn/authorize', {
@@ -92,25 +84,13 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const sendTransactionMutation = useMutation({
     retry: false,
     mutationFn: async (signData: TxsWithMMJsonSignedOrUnSigned) => {
-      const signList = await walletSDK?.signTxList({
-        ...signData,
-        // eslint-disable-next-line
-        sign_list: signData.sign_list.map(({ sign_type, sign_msg }) => ({
-          sign_type,
-          sign_msg: sign_msg.replace('0x', ''),
-        })),
-      })
       const res = await fetch('https://test-webauthn-api.did.id/v1/transaction/send', {
         method: 'POST',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          sign_key: signData.sign_key,
-          sign_list: signList?.sign_list,
-          sign_address: walletSnap.deviceData?.ckbAddr,
-        }),
+        body: JSON.stringify(signData),
       }).then(async (res) => await res.json())
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
@@ -139,8 +119,34 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   })
 
   const onRevoke = async () => {
-    const signData = signDataQuery.data
-    sendTransactionMutation.mutate(signData)
+    const { signTxList, onFailed } = await walletSDK!.getSignMethod()
+    try {
+      const { data, isError } = await signDataQuery.refetch()
+      if (isError) {
+        await onFailed()
+      } else {
+        const res = await signTxList({
+          ...data,
+          // eslint-disable-next-line
+          sign_list: data.sign_list.map(({ sign_type, sign_msg }: SignInfo) => ({
+            sign_type,
+            sign_msg: sign_msg.replace('0x', ''),
+          })),
+        })
+        await sendTransactionMutation.mutateAsync(res as TxsWithMMJsonSignedOrUnSigned)
+      }
+    } catch (err) {
+      console.error(err)
+      await onFailed()
+      createTips({
+        title: 'Error',
+        content: (
+          <div className="mt-2 w-full break-words text-[14px] font-normal leading-normal text-red-400">
+            {(err as any).toString()}{' '}
+          </div>
+        ),
+      })
+    }
   }
 
   const revoking =
@@ -175,19 +181,20 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
     sendTransactionMutation.data?.hash,
     walletSnap.deviceList,
   ])
-  if (signDataQuery.isInitialLoading) {
-    return (
-      <li key={address} className="flex h-[48px] items-center gap-4 bg-slate-600/5 pl-3 pr-4">
-        <div className="h-7 w-7 rounded-full bg-slate-600/5 opacity-60" />
-        <div className="h-4 w-[156px] rounded bg-slate-600/5 opacity-60" />
-      </li>
-    )
-  }
+
+  const isMasterDevice = address === walletSnap.address
+  const isCurrentDevice = address === walletSnap.deviceData?.ckbAddr
+
   return (
-    <li key={address} className="flex h-[48px] items-center gap-4 pl-3 pr-4">
+    <li className="flex h-[48px] items-center gap-4 pl-3 pr-4">
       <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-        <div>{getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}</div>
+        <div>
+          {isMasterDevice && '主设备'}
+          {isMasterDevice && isCurrentDevice && '/'}
+          {isCurrentDevice && '当前设备'}
+          {getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}
+        </div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
         ) : isRevokingError ? (
@@ -236,19 +243,14 @@ interface DeviceListProps {
 export function DeviceList({ onShowQRCode, className, onDisconnect }: DeviceListProps) {
   const { walletSnap } = useWalletState()
 
+  const mergedList = [...walletSnap.deviceList!]
+  if (!mergedList.find((addr) => addr === walletSnap.address!)) mergedList.unshift(walletSnap.address!)
+
   return (
     <div className={clsx('select-none', className)}>
       <div className="mb-3 text-base font-medium leading-[normal] text-[#5F6570]">Trusted Devices of CKB Address</div>
       <ul className="overflow-hidden rounded-2xl border border-[#B6C4D966]">
-        {walletSnap.deviceData?.ckbAddr ? (
-          <ThisDevice
-            key={walletSnap.deviceData.ckbAddr}
-            address={walletSnap.deviceData.ckbAddr}
-            managingAddress={walletSnap.deviceData.ckbAddr}
-          />
-        ) : null}
-        <hr className="mx-3 border-[#B6C4D966]" />
-        {walletSnap.deviceList?.map((address) => (
+        {mergedList.map((address) => (
           <div key={address}>
             <Device key={address} address={address} managingAddress={walletSnap.address!} onDisconnect={onDisconnect} />
             <hr className="mx-3 border-[#B6C4D966]" />
