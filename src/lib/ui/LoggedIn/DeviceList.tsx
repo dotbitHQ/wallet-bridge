@@ -70,6 +70,7 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const signDataQuery = useQuery({
     queryKey: ['FetchSignDataDelete', { master: walletSnap.address, slave: address }],
     retry: false,
+    enabled: false,
     queryFn: async () => {
       if (walletSnap.address === undefined) throw new Error('unreachable')
       const res = await fetch('https://test-webauthn-api.did.id/v1/webauthn/authorize', {
@@ -106,11 +107,7 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          sign_key: signData.sign_key,
-          sign_list: signList?.sign_list,
-          sign_address: walletSnap.deviceData?.ckbAddr,
-        }),
+        body: JSON.stringify(signData),
       }).then(async (res) => await res.json())
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
@@ -139,8 +136,34 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   })
 
   const onRevoke = async () => {
-    const signData = signDataQuery.data
-    sendTransactionMutation.mutate(signData)
+    const { signTxList, onFailed } = await walletSDK!.getSignMethod()
+    try {
+      const { data, isError } = await signDataQuery.refetch()
+      if (isError) {
+        await onFailed()
+      } else {
+        const res = await signTxList({
+          ...data,
+          // eslint-disable-next-line
+          sign_list: data.sign_list.map(({ sign_type, sign_msg }: SignInfo) => ({
+            sign_type,
+            sign_msg: sign_msg.replace('0x', ''),
+          })),
+        })
+        await sendTransactionMutation.mutateAsync(res as TxsWithMMJsonSignedOrUnSigned)
+      }
+    } catch (err) {
+      console.error(err)
+      await onFailed()
+      createTips({
+        title: 'Error',
+        content: (
+          <div className="mt-2 w-full break-words text-[14px] font-normal leading-normal text-red-400">
+            {(err as any).toString()}{' '}
+          </div>
+        ),
+      })
+    }
   }
 
   const revoking =
