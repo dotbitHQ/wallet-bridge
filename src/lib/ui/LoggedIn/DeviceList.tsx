@@ -31,15 +31,17 @@ function More({ address, onRevoke }: MoreProps) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="fixed right-6 z-10 mt-2 w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
-          <div
-            className="relative h-[36px] w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500"
-            onClick={onRevoke}
-          >
-            <RevokeIcon className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2" />
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] font-medium leading-tight">
-              Revoke
+          <Menu.Item>
+            <div
+              className="relative h-[36px] w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500"
+              onClick={onRevoke}
+            >
+              <RevokeIcon className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2" />
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] font-medium leading-tight">
+                Revoke
+              </div>
             </div>
-          </div>
+          </Menu.Item>
         </Menu.Items>
       </Transition>
     </Menu>
@@ -49,6 +51,7 @@ function More({ address, onRevoke }: MoreProps) {
 interface DeviceProps {
   address: string
   managingAddress: string
+  onDisconnect?: () => void
 }
 
 function ThisDevice({ address, managingAddress }: DeviceProps) {
@@ -61,7 +64,7 @@ function ThisDevice({ address, managingAddress }: DeviceProps) {
   )
 }
 
-function Device({ address, managingAddress }: DeviceProps) {
+function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)
   const signDataQuery = useQuery({
@@ -155,6 +158,9 @@ function Device({ address, managingAddress }: DeviceProps) {
       })
       removeNameAndEmojiFromLocalStorage(address)
       setStatusConverged(true)
+      if (address === walletSnap.deviceData?.ckbAddr) {
+        onDisconnect?.()
+      }
     } else if (transactionStatusQuery.data?.status === -1) {
       setRevokeError(true)
       setStatusConverged(true)
@@ -164,6 +170,8 @@ function Device({ address, managingAddress }: DeviceProps) {
     revoking,
     setRevokeError,
     address,
+    onDisconnect,
+    walletSnap.deviceData?.ckbAddr,
     sendTransactionMutation.data?.hash,
     walletSnap.deviceList,
   ])
@@ -221,10 +229,11 @@ function removeNameAndEmojiFromLocalStorage(address: string) {
 
 interface DeviceListProps {
   onShowQRCode: () => void
+  onDisconnect: () => void
   className?: string
 }
 
-export function DeviceList({ onShowQRCode, className }: DeviceListProps) {
+export function DeviceList({ onShowQRCode, className, onDisconnect }: DeviceListProps) {
   const { walletSnap } = useWalletState()
 
   return (
@@ -241,7 +250,7 @@ export function DeviceList({ onShowQRCode, className }: DeviceListProps) {
         <hr className="mx-3 border-[#B6C4D966]" />
         {walletSnap.deviceList?.map((address) => (
           <div key={address}>
-            <Device key={address} address={address} managingAddress={walletSnap.address!} />
+            <Device key={address} address={address} managingAddress={walletSnap.address!} onDisconnect={onDisconnect} />
             <hr className="mx-3 border-[#B6C4D966]" />
           </div>
         ))}

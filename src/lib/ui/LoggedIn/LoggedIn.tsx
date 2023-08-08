@@ -109,7 +109,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
         </div>
         {walletSnap.protocol === WalletProtocol.webAuthn && walletSnap.canAddDevice ? (
           walletSnap.deviceList && walletSnap.deviceList.length > 0 ? (
-            <DeviceList onShowQRCode={onShowQRCode}></DeviceList>
+            <DeviceList onShowQRCode={onShowQRCode} onDisconnect={disconnect}></DeviceList>
           ) : (
             <BackupTips onShowQRCode={onShowQRCode}></BackupTips>
           )
