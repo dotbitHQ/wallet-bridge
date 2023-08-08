@@ -84,6 +84,8 @@ class WalletSDK {
           coinType,
         })
         if (protocol === WalletProtocol.webAuthn && deviceData) {
+          await getAuthorizeInfo()
+          await getMastersAddress()
           return true
         } else {
           await this.connect({ ignoreEvent: true })

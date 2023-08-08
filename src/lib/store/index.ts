@@ -42,7 +42,7 @@ export const walletState = proxy<WalletState>(localWalletState)
 
 export async function getAuthorizeInfo() {
   const { protocol, isTestNet, address } = snapshot(walletState)
-  if (protocol === WalletProtocol.webAuthn) {
+  if (protocol === WalletProtocol.webAuthn && address) {
     const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
     const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
       ckb_address: address,
@@ -60,11 +60,12 @@ export async function getAuthorizeInfo() {
 
 export async function getMastersAddress() {
   const { protocol, isTestNet, deviceData } = snapshot(walletState)
-  if (protocol === WalletProtocol.webAuthn) {
+  const cid = deviceData?.credential.rawId
+  if (protocol === WalletProtocol.webAuthn && cid) {
     const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
 
     const mastersAddress = await Axios.post(`${api}/v1/webauthn/get-masters-addr`, {
-      cid: deviceData?.credential.rawId,
+      cid,
     })
     if (mastersAddress.data?.err_no === errno.success) {
       setWalletState({
