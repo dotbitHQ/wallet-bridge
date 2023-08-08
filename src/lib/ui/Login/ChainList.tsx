@@ -16,7 +16,7 @@ import {
   NoticeIcon,
 } from '../../components'
 import { BSC, CoinType, DOGE, ETH, Polygon, TRON, WalletProtocol } from '../../constant'
-import { setWalletState, walletState } from '../../store'
+import { walletState } from '../../store'
 import { ChainItem } from '../../components/ChainItem'
 import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import handleError from '../../utils/handleError'
@@ -136,33 +136,33 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
       })
   }, [])
 
-  const createHardwareWalletTips = (chain: IChain) => {
-    createTips({
-      title: 'Tips',
-      content: (
-        <div className="text-center">
-          <div className="mb-3 font-medium text-danger-hover">
-            DO NOT use .bit with ANY hardware wallet except Ledger and the latest version of OneKey!
-          </div>
-          <div>Since most hardware wallets have incompatibility problems.</div>
-        </div>
-      ),
-      confirmBtnText: 'Understand, Continue',
-      onConfirm: () => {
-        closeHardwareWalletTips(chain)
-      },
-      onClose: () => {
-        closeHardwareWalletTips(chain)
-      },
-    })
-  }
+  // const createHardwareWalletTips = (chain: IChain) => {
+  //   createTips({
+  //     title: 'Tips',
+  //     content: (
+  //       <div className="text-center">
+  //         <div className="mb-3 font-medium text-danger-hover">
+  //           DO NOT use .bit with ANY hardware wallet except Ledger and the latest version of OneKey!
+  //         </div>
+  //         <div>Since most hardware wallets have incompatibility problems.</div>
+  //       </div>
+  //     ),
+  //     confirmBtnText: 'Understand, Continue',
+  //     onConfirm: () => {
+  //       closeHardwareWalletTips(chain)
+  //     },
+  //     onClose: () => {
+  //       closeHardwareWalletTips(chain)
+  //     },
+  //   })
+  // }
 
-  const closeHardwareWalletTips = (chain: IChain) => {
-    setWalletState({
-      hardwareWalletTipsShow: false,
-    })
-    void onLogin(chain)
-  }
+  // const closeHardwareWalletTips = (chain: IChain) => {
+  //   setWalletState({
+  //     hardwareWalletTipsShow: false,
+  //   })
+  //   void onLogin(chain)
+  // }
 
   const selectChain = (chain: IChain) => {
     const { protocol, coinType } = chain
@@ -179,11 +179,11 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
       return
     }
 
-    const { hardwareWalletTipsShow } = snapshot(walletState)
-    if (hardwareWalletTipsShow && ![WalletProtocol.torus, WalletProtocol.webAuthn].includes(protocol)) {
-      createHardwareWalletTips(chain)
-      return
-    }
+    // const { hardwareWalletTipsShow } = snapshot(walletState)
+    // if (hardwareWalletTipsShow && ![WalletProtocol.torus, WalletProtocol.webAuthn].includes(protocol)) {
+    //   createHardwareWalletTips(chain)
+    //   return
+    // }
 
     if (![WalletProtocol.torus, WalletProtocol.webAuthn].includes(protocol)) {
       selectChain(chain)
