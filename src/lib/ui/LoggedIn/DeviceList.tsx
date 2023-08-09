@@ -54,7 +54,6 @@ interface DeviceProps {
   onDisconnect?: () => void
 }
 
-
 function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)
@@ -190,9 +189,9 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
       <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
         <div>
-          {isMasterDevice && '主设备'}
+          {isMasterDevice && 'Master'}
           {isMasterDevice && isCurrentDevice && '/'}
-          {isCurrentDevice && '当前设备'}
+          {isCurrentDevice && 'Current'}
           {getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}
         </div>
         {revoking ? (
