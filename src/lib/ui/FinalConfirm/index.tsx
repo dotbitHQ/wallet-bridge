@@ -7,6 +7,7 @@ import { Emoji } from '../ChooseEmoji'
 import { WalletSDKContext } from '../ConnectWallet'
 import { setPendingTx, useWebAuthnState } from '../../store/webAuthnState'
 import { TxsWithMMJsonSignedOrUnSigned } from '../../types'
+import handleError from '../../utils/handleError'
 
 function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: string) {
   const memos = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
@@ -69,14 +70,22 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
 
   useEffect(() => {
     if (sendTransactionMutation.isError) {
-      createTips({
-        title: 'Error',
-        content: (
-          <div className="mt-2 w-full break-words text-[14px] font-normal leading-normal text-red-400">
-            {(sendTransactionMutation?.error as any)?.toString()}{' '}
-          </div>
-        ),
-      })
+      const error: any = sendTransactionMutation.error
+      const handleErrorRes = handleError(error)
+      if (handleErrorRes.isHandle) {
+        if (handleErrorRes.title && handleErrorRes.message) {
+          createTips({
+            title: handleErrorRes.title,
+            content: handleErrorRes.message,
+          })
+        }
+      } else {
+        createTips({
+          title: `Tips`,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
+        })
+      }
     }
   }, [sendTransactionMutation.error, sendTransactionMutation.isError])
   return (

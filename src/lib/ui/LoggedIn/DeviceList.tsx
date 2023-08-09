@@ -9,6 +9,7 @@ import { collapseString } from '../../utils'
 import { SignInfo, TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { WalletSDKContext } from '../ConnectWallet'
 import clsx from 'clsx'
+import handleError from '../../utils/handleError'
 
 interface MoreProps {
   address: string
@@ -117,12 +118,23 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
     },
   })
 
+  const isMasterDevice = walletSnap.address === address
+  const isCurrentDevice = walletSnap.deviceData?.ckbAddr === address
+
   const onRevoke = async () => {
+    if (isMasterDevice) {
+      createTips({
+        title: 'Tips',
+        content: '临时文案： Cannot remove master device, for details, please see community.did.id',
+      })
+      return
+    }
+
     const { signTxList, onFailed } = await walletSDK!.getSignMethod()
     try {
       const { data, isError } = await signDataQuery.refetch()
       if (isError) {
-        await onFailed()
+        onFailed().catch(console.error)
       } else {
         const res = await signTxList({
           ...data,
@@ -134,17 +146,23 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
         })
         await sendTransactionMutation.mutateAsync(res as TxsWithMMJsonSignedOrUnSigned)
       }
-    } catch (err) {
-      console.error(err)
-      await onFailed()
-      createTips({
-        title: 'Error',
-        content: (
-          <div className="mt-2 w-full break-words text-[14px] font-normal leading-normal text-red-400">
-            {(err as any).toString()}{' '}
-          </div>
-        ),
-      })
+    } catch (error: any) {
+      onFailed().catch(console.error)
+      const handleErrorRes = handleError(error)
+      if (handleErrorRes.isHandle) {
+        if (handleErrorRes.title && handleErrorRes.message) {
+          createTips({
+            title: handleErrorRes.title,
+            content: handleErrorRes.message,
+          })
+        }
+      } else {
+        createTips({
+          title: `Tips`,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
+        })
+      }
     }
   }
 
@@ -181,23 +199,17 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
     walletSnap.deviceList,
   ])
 
-  const isMasterDevice = address === walletSnap.address
-  const isCurrentDevice = address === walletSnap.deviceData?.ckbAddr
-
   return (
     <li className="flex h-[48px] items-center gap-4 pl-3 pr-4">
       <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-        <div>
-          {isMasterDevice && 'Master'}
-          {isMasterDevice && isCurrentDevice && '/'}
-          {isCurrentDevice && 'Current'}
-          {getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}
-        </div>
+        <div>{getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}</div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
         ) : isRevokingError ? (
           <span className="text-[12px] font-medium text-red-500">Revoke Failed</span>
+        ) : isCurrentDevice ? (
+          <span className="rounded bg-green-100 px-1 py-0.5 text-xs font-medium text-emerald-600">Current Device</span>
         ) : null}
       </div>
       <More address={address} onRevoke={onRevoke} />
