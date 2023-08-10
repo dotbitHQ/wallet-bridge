@@ -203,7 +203,11 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
     <li className="flex h-[48px] items-center gap-4 pl-3 pr-4">
       <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-        <div>{getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}</div>
+        <div>
+          {isCurrentDevice
+            ? walletSnap.deviceData.name
+            : getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}
+        </div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
         ) : isRevokingError ? (
