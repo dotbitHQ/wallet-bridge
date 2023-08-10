@@ -124,8 +124,8 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const onRevoke = async () => {
     if (isMasterDevice) {
       createTips({
-        title: 'Tips',
-        content: '临时文案： Cannot remove master device, for details, please see community.did.id',
+        title: 'Info',
+        content: 'For safety concerns, you can not revoke the master device.',
       })
       return
     }
