@@ -15,7 +15,7 @@ import { getAuthorizeInfo, getMastersAddress, setWalletState, walletState } from
 import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
-import { IData } from 'connect-did-sdk'
+import { DeviceAuthError } from 'connect-did-sdk'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -173,9 +173,9 @@ class WalletSDK {
       if (options?.provider) {
         provider = options?.provider
       } else {
-        provider = await this.context.provider.requestWaitingPage((err: IData<any>) => {
+        provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
           console.error(err)
-          throw new CustomError(err.code, err.msg)
+          throw new CustomError(err.code, err.message)
         })
       }
     }
@@ -225,9 +225,9 @@ class WalletSDK {
     let provider: any
     if (this.context.protocol === WalletProtocol.webAuthn) {
       const timestamp = Date.now()
-      provider = await this.context.provider.requestWaitingPage((err: IData<any>) => {
+      provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
         console.error(err)
-        throw new CustomError(err.code, err.msg)
+        throw new CustomError(err.code, err.message)
       })
       console.log('requestWaitingPage', Date.now() - timestamp)
     }

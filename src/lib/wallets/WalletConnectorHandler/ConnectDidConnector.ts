@@ -8,7 +8,7 @@ export class ConnectDidConnector extends WalletConnector {
     const { provider } = this.context
     const res = await provider.requestDeviceData()
     if (res.code !== errno.connectDidSdkSuccess) {
-      throw new CustomError(res.code, res.msg)
+      throw new CustomError(res.code, res.message)
     }
     if (res.data) {
       this.context.address = res.data.ckbAddr

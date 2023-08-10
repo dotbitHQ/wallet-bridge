@@ -1,6 +1,6 @@
 import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
 import { SignDataType } from '../wallets/WalletSignerHandler'
-import { IData } from 'connect-did-sdk'
+import { DeviceAuthError } from 'connect-did-sdk'
 
 export interface SignInfo {
   sign_type: number
@@ -31,5 +31,5 @@ export interface GetSignMethodRes {
     txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
   ) => Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned>
   signData: (data: SignDataType, options?: Record<string, any>) => Promise<string | undefined>
-  onFailed: () => Promise<IData<any>>
+  onFailed: () => Promise<DeviceAuthError>
 }
