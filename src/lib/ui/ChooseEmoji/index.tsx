@@ -6,6 +6,7 @@ import { emojis } from './png'
 import { setSelectedEmoji, setSignData, useWebAuthnState } from '../../store/webAuthnState'
 import { useQuery } from '@tanstack/react-query'
 import { useWalletState } from '../../store'
+import { useWebAuthnService } from '../../services'
 
 type EmojiProps = React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> & {
   name: string
@@ -27,6 +28,8 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
     [setSelected],
   )
 
+  const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
+
   const signDataQuery = useQuery({
     queryKey: ['FetchSignData', { master: walletSnap.address, slave: webAuthnState.backupDeviceData?.ckbAddr }],
     enabled: false,
@@ -34,18 +37,11 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
     queryFn: async () => {
       if (walletSnap.address === undefined || webAuthnState.backupDeviceData?.ckbAddr === undefined)
         throw new Error('unreachable')
-      const res = await fetch('https://test-webauthn-api.did.id/v1/webauthn/authorize', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          master_ckb_address: walletSnap.address,
-          slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
-          operation: 'add',
-        }),
-      }).then(async (res) => await res.json())
+      const res = await webAuthnService.buildTransaction({
+        master_ckb_address: walletSnap.address,
+        slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
+        operation: 'add',
+      })
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
     },
