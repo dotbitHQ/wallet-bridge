@@ -5,24 +5,20 @@ import { collapseString } from '../../utils'
 import { setWalletState, useWalletState } from '../../store'
 import { useEffect } from 'react'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { useWebAuthnService } from '../../services'
 
 export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildProps) {
   const { walletSnap } = useWalletState()
   const webAuthnState = useWebAuthnState()
   const { goTo, goNext, onClose } = useSimpleRouter()!
+  const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
   const query = useQuery({
     networkMode: 'always',
     queryKey: ['TransactionStatus', webAuthnState.pendingTxHash],
     cacheTime: 0,
     refetchInterval: 10000,
     queryFn: async () => {
-      const res = await fetch(`https://test-webauthn-api.did.id/v1/transaction/status`, {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify({
-          tx_hash: webAuthnState.pendingTxHash,
-        }),
-      }).then(async (res) => await res.json())
+      const res = await webAuthnService.getTransactionStatus(webAuthnState.pendingTxHash!)
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
     },

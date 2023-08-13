@@ -10,6 +10,7 @@ import { SignInfo, TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import { WalletSDKContext } from '../ConnectWallet'
 import clsx from 'clsx'
 import handleError from '../../utils/handleError'
+import { useWebAuthnService } from '../../services'
 
 interface MoreProps {
   address: string
@@ -58,24 +59,18 @@ interface DeviceProps {
 function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)
+  const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
   const signDataQuery = useQuery({
     queryKey: ['FetchSignDataDelete', { master: walletSnap.address, slave: address }],
     retry: false,
     enabled: false,
     queryFn: async () => {
       if (walletSnap.address === undefined) throw new Error('unreachable')
-      const res = await fetch('https://test-webauthn-api.did.id/v1/webauthn/authorize', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          master_ckb_address: walletSnap.address,
-          slave_ckb_address: address,
-          operation: 'delete',
-        }),
-      }).then(async (res) => await res.json())
+      const res = await webAuthnService.buildTransaction({
+        master_ckb_address: walletSnap.address,
+        slave_ckb_address: address,
+        operation: 'delete',
+      })
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
     },
@@ -84,14 +79,7 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
   const sendTransactionMutation = useMutation({
     retry: false,
     mutationFn: async (signData: TxsWithMMJsonSignedOrUnSigned) => {
-      const res = await fetch('https://test-webauthn-api.did.id/v1/transaction/send', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(signData),
-      }).then(async (res) => await res.json())
+      const res = await webAuthnService.sendTransaction(signData)
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
     },
@@ -106,13 +94,7 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
     cacheTime: 0,
     refetchInterval: 10000,
     queryFn: async () => {
-      const res = await fetch(`https://test-webauthn-api.did.id/v1/transaction/status`, {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify({
-          tx_hash: sendTransactionMutation.data?.hash,
-        }),
-      }).then(async (res) => await res.json())
+      const res = await webAuthnService.getTransactionStatus(sendTransactionMutation.data.hash)
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
     },

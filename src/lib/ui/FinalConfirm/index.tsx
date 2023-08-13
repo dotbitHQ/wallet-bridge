@@ -8,6 +8,7 @@ import { WalletSDKContext } from '../ConnectWallet'
 import { setPendingTx, useWebAuthnState } from '../../store/webAuthnState'
 import { TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import handleError from '../../utils/handleError'
+import { useWebAuthnService } from '../../services'
 
 function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: string) {
   const memos = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
@@ -21,6 +22,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
   const webAuthnState = useWebAuthnState()
   const [checked, setChecked] = useState(false)
   const walletSDK = useContext(WalletSDKContext)
+  const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
 
   const sendTransactionMutation = useMutation({
     retry: false,
@@ -33,18 +35,11 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
           sign_msg: sign_msg.replace('0x', ''),
         })),
       })
-      const res = await fetch('https://test-webauthn-api.did.id/v1/transaction/send', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sign_key: signData.sign_key,
-          sign_list: signList?.sign_list,
-          sign_address: walletSnap.deviceData?.ckbAddr,
-        }),
-      }).then(async (res) => await res.json())
+      const res = await webAuthnService.sendTransaction({
+        sign_key: signData.sign_key,
+        sign_list: signList?.sign_list,
+        sign_address: walletSnap.deviceData?.ckbAddr,
+      })
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
     },
