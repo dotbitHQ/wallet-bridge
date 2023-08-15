@@ -216,10 +216,10 @@ class WalletSDK {
     return txs
   }
 
-  async _initSignContext(): Promise<InitSignContextRes> {
+  async initSignContext(): Promise<InitSignContextRes> {
     const isInit = await this.initWallet()
     if (!isInit) {
-      throw new CustomError(errno.failedToInitializeWallet, '_initSignContext: Please initialize wallet first')
+      throw new CustomError(errno.failedToInitializeWallet, 'initSignContext: Please initialize wallet first')
     }
 
     let provider: any

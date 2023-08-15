@@ -1,8 +1,7 @@
 import WalletSDK from '../wallets'
 import { useWalletState, getWalletState, setWalletState } from '../store'
-import { InitSignContextRes, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
+import { InitSignContextRes } from '../types'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
-import { SignDataType } from '../wallets/WalletSignerHandler'
 
 export class Wallet {
   walletSDK: WalletSDK
@@ -28,10 +27,6 @@ export class Wallet {
     this.walletSDK.connectWallet({ initComponent: 'LoggedIn' })
   }
 
-  async signData(data: SignDataType, options?: Record<string, any>): Promise<string | undefined> {
-    return await this.walletSDK.signData(data, options)
-  }
-
   async sendTransaction(data: ISendTrxParams): Promise<string | undefined> {
     return await this.walletSDK.sendTransaction(data)
   }
@@ -40,15 +35,7 @@ export class Wallet {
     return await this.walletSDK.initWallet({ involution })
   }
 
-  async signTxList(txs: TxsSignedOrUnSigned): Promise<TxsSignedOrUnSigned>
-  async signTxList(txs: TxsWithMMJsonSignedOrUnSigned): Promise<TxsWithMMJsonSignedOrUnSigned>
-  async signTxList(
-    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
-  ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
-    return await this.walletSDK.signTxList(txs as any)
-  }
-
-  async _initSignContext(): Promise<InitSignContextRes> {
-    return await this.walletSDK._initSignContext()
+  async initSignContext(): Promise<InitSignContextRes> {
+    return await this.walletSDK.initSignContext()
   }
 }
