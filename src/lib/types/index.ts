@@ -26,7 +26,7 @@ export interface TxsWithMMJsonSignedOrUnSigned {
   sign_address?: string
 }
 
-export interface GetSignMethodRes {
+export interface InitSignContextRes {
   signTxList: (
     txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
   ) => Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned>

@@ -11,6 +11,7 @@ import GraphemeSplitter from 'grapheme-splitter'
 import { isMobileOnly } from 'react-device-detect'
 // @ts-expect-error
 import abcCopy from 'abc-copy'
+import UAParser from 'ua-parser-js'
 
 export async function sleep(ms: number): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, ms))
@@ -238,6 +239,17 @@ export async function copyText(text: string, el?: Element): Promise<void> {
  * @returns {boolean} Returns true if the basic WebAuthn API is supported, false otherwise.
  */
 export async function checkWebAuthnSupport(): Promise<boolean> {
+  const uaParser = new UAParser(globalThis.navigator?.userAgent)
+
+  if (
+    (uaParser.getOS().name === 'iOS' && parseInt(uaParser.getOS().version?.split('.')[0] ?? '0', 10) < 16) ||
+    (uaParser.getOS().name === 'Mac OS' &&
+      uaParser.getBrowser().name === 'Safari' &&
+      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) < 16)
+  ) {
+    return false
+  }
+
   if ('credentials' in navigator && 'PublicKeyCredential' in window) {
     try {
       const isAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
@@ -253,4 +265,22 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
   } else {
     return false
   }
+}
+
+/**
+ * Checks if the current device runs on iOS and has a version greater than or equal to 16.
+ *
+ * @returns {boolean} Returns true if the device is on iOS version 16 or higher, otherwise false.
+ */
+export function checkPasskeysSupport() {
+  const uaParser = new UAParser(globalThis.navigator?.userAgent)
+  if (
+    (uaParser.getOS().name === 'iOS' && parseInt(uaParser.getOS().version?.split('.')[0] ?? '0', 10) >= 16) ||
+    (uaParser.getOS().name === 'Mac OS' &&
+      uaParser.getBrowser().name === 'Safari' &&
+      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) >= 16)
+  ) {
+    return true
+  }
+  return false
 }

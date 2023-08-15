@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.1.27",
+  "version": "0.1.28",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -33,7 +33,7 @@
     "axios": "^1.4.0",
     "bn.js": "^5.2.1",
     "clsx": "^1.2.1",
-    "connect-did-sdk": "^0.1.9",
+    "connect-did-sdk": "^0.1.10",
     "decimal.js": "^10.4.3",
     "emittery": "^1.0.1",
     "grapheme-splitter": "^1.0.4",
@@ -43,6 +43,7 @@
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "sha3": "^2.1.4",
+    "ua-parser-js": "^1.0.35",
     "utf8": "^3.0.0",
     "valtio": "^1.10.5"
   },
@@ -66,6 +67,7 @@
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@types/react-transition-group": "^4.4.6",
+    "@types/ua-parser-js": "^0.7.36",
     "@types/utf8": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.59.9",

@@ -112,7 +112,7 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
       return
     }
 
-    const { signTxList, onFailed } = await walletSDK!.getSignMethod()
+    const { signTxList, onFailed } = await walletSDK!._initSignContext()
     try {
       const { data, isError } = await signDataQuery.refetch()
       if (isError) {
