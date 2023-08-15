@@ -14,7 +14,11 @@ export function Header({ title, className, goBack, onClose, style }: HeaderProps
   return (
     <div
       style={style}
-      className={clsx('relative flex items-center', goBack != null ? 'justify-around' : 'justify-between', className)}
+      className={clsx(
+        'relative flex items-center rounded-t-[32px]',
+        goBack != null ? 'justify-around' : 'justify-between',
+        className,
+      )}
     >
       {goBack != null ? (
         <div
