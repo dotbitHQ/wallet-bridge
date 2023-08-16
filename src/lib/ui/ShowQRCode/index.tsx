@@ -7,14 +7,13 @@ import { useWalletState } from '../../store'
 import { createToast } from '../../components/Toast'
 import { copyText } from '../../utils'
 
-const connectDID = new ConnectDID(true)
-
 export function ShowQRCode({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, onClose, goBack } = useSimpleRouter()!
   const { walletSnap } = useWalletState()
+  const connectDID = useMemo(() => new ConnectDID(walletSnap.isTestNet), [walletSnap.isTestNet])
   const url = useMemo(
     () => connectDID.requestBackupData({ ckbAddr: walletSnap.address!, isOpen: false }),
-    [walletSnap.address],
+    [walletSnap.address, connectDID],
   )
   const handleCopy = useCallback(() => {
     copyText(url)
