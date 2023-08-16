@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import {
   Button,
   ButtonShape,
@@ -69,6 +69,7 @@ function verifyData(data: string, isTestNet?: boolean) {
 export function InputSignature({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, goBack, goTo, onClose } = useSimpleRouter()!
   const { walletSnap } = useWalletState()
+  const connectDID = useMemo(() => new ConnectDID(walletSnap.isTestNet), [walletSnap.isTestNet])
   // const [data, setData] = useState('')
   const [permissionError, setPermissionError] = useState<DOMException | undefined>(undefined)
   const [requiringPermission, setRequiringPermission] = useState(false)
