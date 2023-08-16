@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import {
   Button,
   ButtonShape,
@@ -15,6 +15,7 @@ import clsx from 'clsx'
 import { getCamera } from '../../components/QrCodeScanner'
 import { ConnectDID } from 'connect-did-sdk'
 import { setBackupDeviceData, setMediaStream, setQrCodeData, useWebAuthnState } from '../../store/webAuthnState'
+import { useWalletState } from '../../store'
 
 function exceptionToMessage(err: DOMException) {
   if (err.name === 'NotAllowedError') {
@@ -54,9 +55,8 @@ function DomException({ err, className }: { err: DOMException; className?: strin
   )
 }
 
-const connectDID = new ConnectDID()
-
-function verifyData(data: string) {
+function verifyData(data: string, isTestNet?: boolean) {
+  const connectDID = new ConnectDID(isTestNet)
   let result = true
   try {
     connectDID.decodeQRCode(data)
@@ -68,6 +68,8 @@ function verifyData(data: string) {
 
 export function InputSignature({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, goBack, goTo, onClose } = useSimpleRouter()!
+  const { walletSnap } = useWalletState()
+  const connectDID = useMemo(() => new ConnectDID(walletSnap.isTestNet), [walletSnap.isTestNet])
   // const [data, setData] = useState('')
   const [permissionError, setPermissionError] = useState<DOMException | undefined>(undefined)
   const [requiringPermission, setRequiringPermission] = useState(false)
@@ -97,7 +99,7 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
     }
   }, [setPermissionError, setRequiringPermission, goTo])
 
-  const isValidData = verifyData(data)
+  const isValidData = verifyData(data, walletSnap.isTestNet)
 
   return (
     <>
