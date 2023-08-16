@@ -24,13 +24,18 @@ export const BackupTips = ({ onShowQRCode, className }: BackupTipsProps) => {
       <img className="w-[90px]" src={IcloudBackupTipsIcon} />
       <h3 className="mb-2 mt-4 font-bold leading-[normal] text-black">Passkey secured with iCloud</h3>
       <div className="text-center text-sm leading-[normal] text-black">
-        For Mac Safari users, your passkey created is safely stored in your iCloud, and can be accessed with other Macs
-        using Safari, or iPhone using Safari and Chrome. If you want to access with other devices, please add your
-        trusted device{' '}
-        <span className="cursor-pointer underline decoration-1" onClick={onShowQRCode}>
-          here
-        </span>
-        .
+        <div>
+          For Safari users, your passkey created is safely stored in your iCloud, and can be accessed with other Macs
+          using Safari, or iPhone using Safari and Chrome.
+        </div>
+        <div>{"Can't login with your Apple devices? Make sure that iCloud keychain is enabled in that device."}</div>
+        <div>
+          Need access with other devices? Add your trusted device{' '}
+          <span className="cursor-pointer underline decoration-1" onClick={onShowQRCode}>
+            here
+          </span>
+          .
+        </div>
       </div>
     </div>
   ) : (
