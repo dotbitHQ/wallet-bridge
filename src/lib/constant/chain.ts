@@ -102,6 +102,16 @@ export enum SIGN_TYPE {
   webauthn,
 }
 
+export enum CustomChain {
+  passkey = 'passkey',
+  eth = 'Ethereum',
+  bsc = 'BNB Smart Chain',
+  tron = 'TRON',
+  doge = 'Dogecoin',
+  polygon = 'Polygon',
+  torus = 'Torus',
+}
+
 export interface IMainChain {
   name: string
   symbol: string
@@ -125,7 +135,7 @@ export const CKB: IMainChain = {
 }
 
 export const ETH: IMainChain = {
-  name: 'Ethereum',
+  name: CustomChain.eth,
   symbol: 'ETH',
   coinType: CoinType.eth,
   decimals: 18,
@@ -136,7 +146,7 @@ export const ETH: IMainChain = {
 }
 
 export const TRON: IMainChain = {
-  name: 'TRON',
+  name: CustomChain.tron,
   symbol: 'TRX',
   coinType: CoinType.trx,
   decimals: 6,
@@ -147,7 +157,7 @@ export const TRON: IMainChain = {
 }
 
 export const BSC: IMainChain = {
-  name: 'BNB Smart Chain',
+  name: CustomChain.bsc,
   symbol: 'BNB',
   coinType: CoinType.bsc,
   decimals: 18,
@@ -158,7 +168,7 @@ export const BSC: IMainChain = {
 }
 
 export const Polygon: IMainChain = {
-  name: 'Polygon',
+  name: CustomChain.polygon,
   symbol: 'MATIC',
   coinType: CoinType.matic,
   decimals: 18,
@@ -179,7 +189,7 @@ export const BTC: IMainChain = {
   testExplorerTrx: '',
 }
 export const DOGE: IMainChain = {
-  name: 'Dogecoin',
+  name: CustomChain.doge,
   symbol: 'DOGE',
   coinType: CoinType.doge,
   decimals: 8,
@@ -195,12 +205,6 @@ export const CoinTypeToChainMap: Record<string, IMainChain> = {
   [CoinType.matic]: Polygon,
   [CoinType.trx]: TRON,
   [CoinType.doge]: DOGE,
-}
-
-export interface ICoinTypeInfo {
-  text: string
-  value: string
-  coinType: string
 }
 
 export const ChainIdToChainInfoMap: Record<string, any> = {
@@ -246,4 +250,14 @@ export const ChainIdToChainInfoMap: Record<string, any> = {
     rpcUrl: 'https://matic-mumbai.chainstacklabs.com',
     blockExplorerUrl: 'https://mumbai.polygonscan.com',
   },
+}
+
+export enum CustomWallet {
+  metaMask = 'MetaMask',
+  trustWallet = 'TrustWallet',
+  imToken = 'imToken',
+  tokenPocket = 'TokenPocket',
+  oneKey = 'OneKey',
+  iToken = 'iToken',
+  tronLink = 'TronLink',
 }

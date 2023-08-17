@@ -10,7 +10,7 @@ import {
   TronLinkIcon,
   TrustWalletIcon,
 } from '../../components'
-import { WalletProtocol } from '../../constant'
+import { CustomWallet, WalletProtocol } from '../../constant'
 import { ReactNode, useContext, useMemo, useState } from 'react'
 import { WalletItem } from '../../components/WalletItem'
 import { snapshot } from 'valtio'
@@ -18,10 +18,11 @@ import handleError from '../../utils/handleError'
 import { loginCacheState, useLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { useWalletState } from '../../store'
 
 interface IWallet {
   icon: ReactNode
-  name: string
+  name: CustomWallet
   protocol: WalletProtocol[]
 }
 
@@ -32,42 +33,43 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
   const onClose = router.onClose
   const [currentLogin, setCurrentLogin] = useState('')
   const { loginCacheSnap } = useLoginCacheState()
+  const { walletSnap } = useWalletState()
 
   const wallets = useMemo<IWallet[]>(() => {
     return [
       {
         icon: <MetaMaskIcon className="h-10 w-10"></MetaMaskIcon>,
-        name: 'MetaMask',
+        name: CustomWallet.metaMask,
         protocol: [WalletProtocol.metaMask],
       },
       {
         icon: <TrustWalletIcon className="h-10 w-10"></TrustWalletIcon>,
-        name: 'TrustWallet',
+        name: CustomWallet.trustWallet,
         protocol: [WalletProtocol.metaMask],
       },
       {
         icon: <ImTokenIcon className="h-10 w-10"></ImTokenIcon>,
-        name: 'imToken',
+        name: CustomWallet.imToken,
         protocol: [WalletProtocol.metaMask, WalletProtocol.tronLink],
       },
       {
         icon: <TokenPocketIcon className="h-10 w-10"></TokenPocketIcon>,
-        name: 'TokenPocket',
+        name: CustomWallet.tokenPocket,
         protocol: [WalletProtocol.metaMask, WalletProtocol.tokenPocketUTXO, WalletProtocol.tronLink],
       },
       {
         icon: <OneKeyIcon className="h-10 w-10"></OneKeyIcon>,
-        name: 'OneKey',
+        name: CustomWallet.oneKey,
         protocol: [WalletProtocol.metaMask],
       },
       {
         icon: <ITokenIcon className="h-10 w-10"></ITokenIcon>,
-        name: 'iToken',
+        name: CustomWallet.iToken,
         protocol: [WalletProtocol.metaMask],
       },
       {
         icon: <TronLinkIcon className="h-10 w-10"></TronLinkIcon>,
-        name: 'TronLink',
+        name: CustomWallet.tronLink,
         protocol: [WalletProtocol.tronLink],
       },
     ]
@@ -77,11 +79,16 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
     const { protocol } = loginCacheSnap
     if (protocol) {
       return wallets.filter((wallet) => {
-        return wallet.protocol.includes(protocol)
+        return (
+          wallet.protocol.includes(protocol) &&
+          (walletSnap.customWallets && walletSnap.customWallets?.length > 0
+            ? walletSnap.customWallets.includes(wallet.name)
+            : true)
+        )
       })
     }
     return wallets
-  }, [loginCacheSnap, wallets])
+  }, [loginCacheSnap, walletSnap.customWallets, wallets])
 
   const onLogin = async (wallet: IWallet) => {
     const { name } = wallet

@@ -2,6 +2,7 @@ import WalletSDK from '../wallets'
 import { useWalletState, getWalletState, setWalletState } from '../store'
 import { InitSignContextRes } from '../types'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
+import { CustomChain, CustomWallet } from '../constant'
 
 export class Wallet {
   walletSDK: WalletSDK
@@ -11,11 +12,15 @@ export class Wallet {
   constructor({
     isTestNet = false,
     loggedInSelectAddress = true,
+    customChains = [],
+    customWallets = [],
   }: {
     isTestNet?: boolean
     loggedInSelectAddress?: boolean
+    customChains?: CustomChain[]
+    customWallets?: CustomWallet[]
   }) {
-    setWalletState({ isTestNet, loggedInSelectAddress })
+    setWalletState({ isTestNet, loggedInSelectAddress, customChains, customWallets })
     this.walletSDK = new WalletSDK({ isTestNet })
   }
 

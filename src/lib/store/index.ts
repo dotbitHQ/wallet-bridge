@@ -1,10 +1,11 @@
 import { proxy, snapshot, useSnapshot } from 'valtio'
-import { CoinType, WalletProtocol, WebAuthnApi, WebAuthnTestApi } from '../constant'
+import { CoinType, CustomChain, CustomWallet, WalletProtocol, WebAuthnApi, WebAuthnTestApi } from '../constant'
 import { IDeviceData } from 'connect-did-sdk'
 import { merge } from 'lodash-es'
 import Axios from 'axios'
 import errno from '../constant/errno'
 import CustomError from '../utils/CustomError'
+import { checkPasskeysSupport } from '../utils'
 
 export interface WalletState {
   protocol?: WalletProtocol
@@ -17,6 +18,9 @@ export interface WalletState {
   isTestNet?: boolean
   loggedInSelectAddress?: boolean
   canAddDevice?: boolean
+  iCloudPasskeySupport?: boolean
+  customChains?: CustomChain[]
+  customWallets?: CustomWallet[]
 }
 
 const WalletStateKey = 'WalletState'
@@ -36,6 +40,9 @@ const localWalletState = walletStateLocalStorage
       isTestNet: false,
       loggedInSelectAddress: true,
       canAddDevice: false,
+      iCloudPasskeySupport: false,
+      customChains: [],
+      customWallets: [],
     }
 
 export const walletState = proxy<WalletState>(localWalletState)
@@ -88,6 +95,8 @@ export const setWalletState = ({
   isTestNet,
   loggedInSelectAddress,
   canAddDevice,
+  customChains,
+  customWallets,
 }: WalletState) => {
   if (protocol) {
     walletState.protocol = protocol
@@ -119,6 +128,14 @@ export const setWalletState = ({
   if (canAddDevice !== undefined) {
     walletState.canAddDevice = canAddDevice
   }
+  if (customChains !== undefined) {
+    walletState.customChains = customChains
+  }
+  if (customWallets !== undefined) {
+    walletState.customWallets = customWallets
+  }
+
+  walletState.iCloudPasskeySupport = checkPasskeysSupport()
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 

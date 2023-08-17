@@ -176,6 +176,7 @@ await onFailed()
   - `isTestNet`: 是否为测试网，类型为`boolean`。
   - `loggedInSelectAddress`: 是否在 Passkey 登录时，有多个地址的情况下选择地址，默认为`true`。
   - `canAddDevice`: 是否可以添加备份设备，类型为`boolean`。
+  - `iCloudPasskeySupport`: 当前环境是否支持将 passkey 存储在 iCloud 中，类型为`boolean`。
 
 **示例**:
 

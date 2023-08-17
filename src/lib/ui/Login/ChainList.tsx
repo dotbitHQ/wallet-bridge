@@ -15,8 +15,8 @@ import {
   AlertType,
   NoticeIcon,
 } from '../../components'
-import { BSC, CoinType, DOGE, ETH, Polygon, TRON, WalletProtocol } from '../../constant'
-import { walletState } from '../../store'
+import { CoinType, CustomChain, WalletProtocol } from '../../constant'
+import { useWalletState, walletState } from '../../store'
 import { ChainItem } from '../../components/ChainItem'
 import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import handleError from '../../utils/handleError'
@@ -28,7 +28,7 @@ import { checkWebAuthnSupport } from '../../utils'
 
 interface IChain {
   icon: ReactNode
-  name: string
+  name: CustomChain
   tag?: ReactNode
   coinType: CoinType
   protocol: WalletProtocol
@@ -39,11 +39,62 @@ interface IChainList {
   list: IChain[]
 }
 
+const passkey: IChain = {
+  icon: undefined,
+  name: CustomChain.passkey,
+  coinType: CoinType.ckb,
+  protocol: WalletProtocol.webAuthn,
+}
+
+const eth: IChain = {
+  icon: <EthIcon className="h-10 w-10"></EthIcon>,
+  name: CustomChain.eth,
+  coinType: CoinType.eth,
+  protocol: WalletProtocol.metaMask,
+}
+
+const bsc: IChain = {
+  icon: <BscIcon className="h-10 w-10"></BscIcon>,
+  name: CustomChain.bsc,
+  coinType: CoinType.bsc,
+  protocol: WalletProtocol.metaMask,
+}
+
+const polygon: IChain = {
+  icon: <PolygonIcon className="h-10 w-10"></PolygonIcon>,
+  name: CustomChain.polygon,
+  coinType: CoinType.matic,
+  protocol: WalletProtocol.metaMask,
+}
+
+const tron: IChain = {
+  icon: <TronIcon className="h-10 w-10"></TronIcon>,
+  name: CustomChain.tron,
+  coinType: CoinType.trx,
+  protocol: WalletProtocol.tronLink,
+}
+
+const doge: IChain = {
+  icon: <DogecoinIcon className="h-10 w-10"></DogecoinIcon>,
+  name: CustomChain.doge,
+  coinType: CoinType.doge,
+  protocol: WalletProtocol.tokenPocketUTXO,
+}
+
+const torus: IChain = {
+  icon: <TorusIcon className="h-10 w-10"></TorusIcon>,
+  name: CustomChain.torus,
+  coinType: CoinType.eth,
+  protocol: WalletProtocol.torus,
+}
+
 export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) => {
   const [currentLogin, setCurrentLogin] = useState('')
   const [isSupportWebAuthn, setIsSupportWebAuthn] = useState(true)
   const walletSDK = useContext(WalletSDKContext)!
   const router = useSimpleRouter()!
+  const { walletSnap } = useWalletState()
+
   const showWalletList = () => {
     router?.goTo('WalletList')
   }
@@ -52,78 +103,66 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
   }
   const onClose = router?.onClose
 
-  const device: IChain = {
-    icon: undefined,
-    name: 'This Device',
-    coinType: CoinType.ckb,
-    protocol: WalletProtocol.webAuthn,
-  }
+  const showPasskey = useMemo(() => {
+    return (
+      !walletSDK.onlyEth &&
+      (walletSnap.customChains && walletSnap.customChains.length > 0
+        ? walletSnap.customChains.includes(CustomChain.passkey)
+        : true)
+    )
+  }, [walletSDK.onlyEth, walletSnap.customChains])
 
   const chains: IChainList[] = useMemo(() => {
-    const list = [
-      {
-        label: 'by Wallet',
-        list: [
-          {
-            icon: <EthIcon className="h-10 w-10"></EthIcon>,
-            name: ETH.name,
-            coinType: CoinType.eth,
-            protocol: WalletProtocol.metaMask,
-          },
-          {
-            icon: <BscIcon className="h-10 w-10"></BscIcon>,
-            name: BSC.name,
-            coinType: CoinType.bsc,
-            protocol: WalletProtocol.metaMask,
-          },
-          {
-            icon: <PolygonIcon className="h-10 w-10"></PolygonIcon>,
-            name: Polygon.name,
-            coinType: CoinType.matic,
-            protocol: WalletProtocol.metaMask,
-          },
-          {
-            icon: <TronIcon className="h-10 w-10"></TronIcon>,
-            name: TRON.name,
-            coinType: CoinType.trx,
-            protocol: WalletProtocol.tronLink,
-          },
-          {
-            icon: <DogecoinIcon className="h-10 w-10"></DogecoinIcon>,
-            name: DOGE.name,
-            coinType: CoinType.doge,
-            protocol: WalletProtocol.tokenPocketUTXO,
-          },
-        ],
-      },
-      {
-        label: 'by Social',
-        list: [
-          {
-            icon: <TorusIcon className="h-10 w-10"></TorusIcon>,
-            name: 'Torus',
-            coinType: CoinType.eth,
-            protocol: WalletProtocol.torus,
-          },
-        ],
-      },
-    ]
+    const customChains = walletSnap.customChains
+    let walletList: IChain[] = [eth, bsc, polygon, tron, doge]
+    let socialList: IChain[] = [torus]
+
+    const list = []
+
+    if (customChains && customChains.length > 0) {
+      walletList = walletList.filter((item) => {
+        return customChains.includes(item.name)
+      })
+      socialList = socialList.filter((item) => {
+        return customChains.includes(item.name)
+      })
+      if (walletList.length > 0) {
+        list.push({
+          label: 'by Wallet',
+          list: walletList.filter((item) => {
+            return customChains.includes(item.name)
+          }),
+        })
+      }
+      if (socialList.length > 0) {
+        list.push({
+          label: 'by Social',
+          list: socialList.filter((item) => {
+            return customChains.includes(item.name)
+          }),
+        })
+      }
+    } else {
+      list.push(
+        {
+          label: 'by Wallet',
+          list: walletList,
+        },
+        {
+          label: 'by Social',
+          list: socialList,
+        },
+      )
+    }
 
     const onlyEth = [
       {
         label: 'by Wallet',
-        list: [
-          {
-            icon: <EthIcon className="h-10 w-10"></EthIcon>,
-            name: ETH.name,
-            coinType: CoinType.eth,
-            protocol: WalletProtocol.metaMask,
-          },
-        ],
+        list: [eth],
       },
     ]
     return walletSDK.onlyEth ? onlyEth : list
-  }, [walletSDK.onlyEth])
+  }, [walletSDK.onlyEth, walletSnap.customChains])
 
   useEffect(() => {
     checkWebAuthnSupport()
@@ -239,16 +278,16 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
-        {!walletSDK.onlyEth ? (
+        {showPasskey ? (
           <div className="mb-6 flex flex-col items-center py-4">
             <Button
               className="w-40"
-              loading={currentLogin === device.name}
+              loading={currentLogin === passkey.name}
               disabled={!isSupportWebAuthn}
               size={ButtonSize.large}
               shape={ButtonShape.default}
               onClick={async () => {
-                await onLogin(device)
+                await onLogin(passkey)
               }}
             >
               <span className="font-bold">by Passkey</span>
