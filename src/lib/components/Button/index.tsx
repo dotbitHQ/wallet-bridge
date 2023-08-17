@@ -6,6 +6,7 @@ export enum ButtonVariant {
   primary = 'primary',
   secondary = 'secondary',
   danger = 'danger',
+  passkey = 'passkey',
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -15,6 +16,8 @@ const variantClasses: Record<ButtonVariant, string> = {
     'text-font-primary bg-secondary hover:bg-secondary-hover active:bg-secondary-active disabled:cursor-no-drop disabled:opacity-50 disabled:bg-secondary',
   [ButtonVariant.danger]:
     'text-white bg-danger hover:bg-danger-hover disabled:cursor-no-drop disabled:opacity-50 disabled:bg-danger',
+  [ButtonVariant.passkey]:
+    'text-white bg-passkey shadow-passkey hover:bg-passkey-hover hover:shadow-none active:bg-passkey-active active:shadow-none disabled:shadow-none disabled:cursor-no-drop disabled:opacity-50 disabled:bg-passkey',
 }
 
 export enum ButtonSize {

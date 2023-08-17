@@ -14,6 +14,7 @@ import {
   Alert,
   AlertType,
   NoticeIcon,
+  ButtonVariant,
 } from '../../components'
 import { CoinType, CustomChain, WalletProtocol } from '../../constant'
 import { useWalletState, walletState } from '../../store'
@@ -284,8 +285,9 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
               className="w-40"
               loading={currentLogin === passkey.name}
               disabled={!isSupportWebAuthn}
+              variant={ButtonVariant.passkey}
               size={ButtonSize.large}
-              shape={ButtonShape.default}
+              shape={ButtonShape.round}
               onClick={async () => {
                 await onLogin(passkey)
               }}
