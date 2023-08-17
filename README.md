@@ -1,10 +1,13 @@
 # wallet-bridge
 
-`wallet-bridge` 支持多链和多种登录方式（Passkey、Ethereum、BNB Smart Chain、Polygon、TRON、Dogecoin、Torus），它主要提供了连接钱包、发送交易、签名消息的功能，同时也提供了获取钱包状态的方法。
+`wallet-bridge` 是一个多链、多登录方式的 Web3 钱包连接库，支持如下链和登录方式：
+
+- **链**: Ethereum、BNB Smart Chain、Polygon 、TRON、Dogecoin
+- **登录方式**: Passkey、Torus
+
+该库主要提供连接钱包、发送交易、签名消息的功能，并允许用户获取钱包的当前状态。
 
 ### Main Scripts
-
-Always prepending yarn:
 
 - `dev`: Bootstrap the Storybook preview with Hot Reload.
 - `build`: Builds the static storybook project.
@@ -28,15 +31,15 @@ yarn add wallet-bridge
 import 'wallet-bridge/dist/style.css'
 ```
 
-### 3.To import library components:
+### 3.To import Wallet:
 
 ```js
 import { Wallet } from 'wallet-bridge'
 ```
 
-**Note:** wallet-bridge 暂不支持 SSR，如果你的项目使用了 SSR，请在使用 wallet-bridge 之前判断是否为浏览器环境。wallet-bridge 虽然使用 react.js 开发，但是依然可以用于任何前端项目。
+> **注意**: `wallet-bridge` 不支持 SSR。如果你的项目使用了 SSR，确保在使用 `wallet-bridge` 之前检测是否处于浏览器环境。虽然此库基于 react.js 开发，但可在任何前端项目中使用。
 
-有些情况你可能需要按需导入 `Wallet`，这时你可以使用 `import()` 方法：
+若需要按需导入 `Wallet`，可以使用 `import()` 方法：
 
 ```js
 const { Wallet } = await import('wallet-bridge')
@@ -58,7 +61,9 @@ const wallet = new Wallet({
 - `isTestNet` (可选): 类型为`boolean`。是否使用测试网络，默认为 `false`。
 - `loggedInSelectAddress` (可选): 类型为`boolean`。是否在 Passkey 登录时，有多个地址的情况下选择地址，默认为 `true`。
 
-### 5.Wallet 实例方法
+### 5. Wallet 实例方法：
+
+以下列出了主要的实例方法：
 
 ### 5.1 `initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean>`
 
