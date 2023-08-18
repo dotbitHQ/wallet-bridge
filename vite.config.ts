@@ -28,6 +28,7 @@ const app = async (): Promise<UserConfigExport> => {
       },
     },
     build: {
+      emptyOutDir: false,
       minify: false,
       lib: {
         entry: path.resolve(__dirname, 'src/lib/index.ts'),
