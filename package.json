@@ -28,7 +28,6 @@
   "dependencies": {
     "@metamask/eth-sig-util": "^6.0.0",
     "@toruslabs/torus-embed": "^2.2.6",
-    "@types/color": "^3.0.3",
     "abc-copy": "^0.0.11",
     "axios": "^1.4.0",
     "bn.js": "^5.2.1",
@@ -53,6 +52,7 @@
     "ts-custom-error": "^3.2.1"
   },
   "devDependencies": {
+    "@types/color": "^3.0.3",
     "@babel/core": "^7.20.12",
     "@storybook/addon-actions": "^6.5.15",
     "@storybook/addon-essentials": "^6.5.15",

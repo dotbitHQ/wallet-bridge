@@ -41,6 +41,7 @@ const app = async (): Promise<UserConfigExport> => {
           ...Object.keys(peerDependencies || {}),
           'react/jsx-runtime',
           'react-is',
+          'react-transition-group/Transition',
         ],
       },
     },
