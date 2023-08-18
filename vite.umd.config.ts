@@ -1,19 +1,14 @@
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
 import { defineConfig } from 'vitest/config'
-import dts from 'vite-plugin-dts'
-import tailwindcss from 'tailwindcss'
 import { UserConfigExport } from 'vite'
 import { visualizer } from 'rollup-plugin-visualizer'
-import { name, dependencies, peerDependencies } from './package.json'
+import { name } from './package.json'
 
 const app = async (): Promise<UserConfigExport> => {
   return defineConfig({
     plugins: [
       react(),
-      dts({
-        insertTypesEntry: true,
-      }),
       // visualizer({
       //   template: "treemap", // or sunburst
       //   open: true,
@@ -22,26 +17,25 @@ const app = async (): Promise<UserConfigExport> => {
       //   filename: "analyse.html", // will be saved in project's root
       // })
     ],
-    css: {
-      postcss: {
-        plugins: [tailwindcss],
-      },
-    },
     build: {
-      minify: false,
+      emptyOutDir: false,
+      minify: true,
       lib: {
         entry: path.resolve(__dirname, 'src/lib/index.ts'),
         name,
-        formats: ['es'],
+        formats: ['umd'],
         fileName: (format) => `${name}.${format}.js`,
       },
       rollupOptions: {
-        external: [
-          ...Object.keys(dependencies || {}),
-          ...Object.keys(peerDependencies || {}),
-          'react/jsx-runtime',
-          'react-is',
-        ],
+        treeshake: 'smallest',
+        external: ['react', 'react-dom', 'tailwindcss'],
+        output: {
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+            tailwindcss: 'tailwindcss',
+          },
+        },
       },
     },
     test: {
