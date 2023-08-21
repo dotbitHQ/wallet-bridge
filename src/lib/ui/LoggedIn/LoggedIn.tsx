@@ -1,14 +1,9 @@
 import {
-  BscIcon,
   DeviceIcon,
   DisconnectIcon,
-  DogecoinIcon,
-  EthIcon,
   Header,
-  PolygonIcon,
   SwitchIcon,
   SwapChildProps,
-  TronIcon,
   Button,
   ButtonSize,
   ButtonVariant,
@@ -22,6 +17,11 @@ import { useSimpleRouter } from '../../components/SimpleRouter'
 import { createToast } from '../../components/Toast'
 import { BackupTips } from './BackupTips'
 import { DeviceList } from './DeviceList'
+import EthIcon from '../Login/icon/eth-icon.svg'
+import BscIcon from '../Login/icon/bsc-icon.svg'
+import PolygonIcon from '../Login/icon/polygon-icon.svg'
+import TronIcon from '../Login/icon/tron-icon.svg'
+import DogecoinIcon from '../Login/icon/dogecoin-icon.svg'
 
 export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const { walletSnap } = useWalletState()
@@ -38,13 +38,13 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   }
 
   const icons: Record<CoinType, ReactNode> = {
-    [CoinType.btc]: <DeviceIcon className="h-[68px] w-[68px]"></DeviceIcon>,
-    [CoinType.ckb]: <DeviceIcon className="h-[68px] w-[68px]"></DeviceIcon>,
-    [CoinType.eth]: <EthIcon className="h-[68px] w-[68px]"></EthIcon>,
-    [CoinType.bsc]: <BscIcon className="h-[68px] w-[68px]"></BscIcon>,
-    [CoinType.matic]: <PolygonIcon className="h-[68px] w-[68px]"></PolygonIcon>,
-    [CoinType.trx]: <TronIcon className="h-[68px] w-[68px]"></TronIcon>,
-    [CoinType.doge]: <DogecoinIcon className="h-[68px] w-[68px]"></DogecoinIcon>,
+    [CoinType.btc]: <DeviceIcon className="inline-flex h-[68px] w-[68px]"></DeviceIcon>,
+    [CoinType.ckb]: <DeviceIcon className="inline-flex h-[68px] w-[68px]"></DeviceIcon>,
+    [CoinType.eth]: <img className="inline-flex h-[68px] w-[68px]" src={EthIcon} alt="ETH" />,
+    [CoinType.bsc]: <img className="inline-flex h-[68px] w-[68px]" src={BscIcon} alt="BSC" />,
+    [CoinType.matic]: <img className="inline-flex h-[68px] w-[68px]" src={PolygonIcon} alt="Polygon" />,
+    [CoinType.trx]: <img className="inline-flex h-[68px] w-[68px]" src={TronIcon} alt="Tron" />,
+    [CoinType.doge]: <img className="inline-flex h-[68px] w-[68px]" src={DogecoinIcon} alt="Dogecoin" />,
   }
 
   const close = () => {

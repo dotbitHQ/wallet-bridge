@@ -1,15 +1,4 @@
-import {
-  createTips,
-  Header,
-  ImTokenIcon,
-  ITokenIcon,
-  MetaMaskIcon,
-  OneKeyIcon,
-  SwapChildProps,
-  TokenPocketIcon,
-  TronLinkIcon,
-  TrustWalletIcon,
-} from '../../components'
+import { createTips, Header, SwapChildProps } from '../../components'
 import { CustomWallet, WalletProtocol } from '../../constant'
 import { ReactNode, useContext, useMemo, useState } from 'react'
 import { WalletItem } from '../../components/WalletItem'
@@ -19,6 +8,13 @@ import { loginCacheState, useLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
+import MetaMaskIcon from './icon/metamask-icon.svg'
+import TrustWalletIcon from './icon/trustwallet-icon.svg'
+import ImTokenIcon from './icon/imtoken-icon.svg'
+import TokenPocketIcon from './icon/tokenpocket-icon.svg'
+import OneKeyIcon from './icon/onekey-icon.svg'
+import ITokenIcon from './icon/itoken-icon.svg'
+import TronLinkIcon from './icon/tronlink-icon.svg'
 
 interface IWallet {
   icon: ReactNode
@@ -38,37 +34,37 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
   const wallets = useMemo<IWallet[]>(() => {
     return [
       {
-        icon: <MetaMaskIcon className="h-10 w-10"></MetaMaskIcon>,
+        icon: <img className="h-10 w-10" src={MetaMaskIcon} alt="MetaMask" />,
         name: CustomWallet.metaMask,
         protocol: [WalletProtocol.metaMask],
       },
       {
-        icon: <TrustWalletIcon className="h-10 w-10"></TrustWalletIcon>,
+        icon: <img className="h-10 w-10" src={TrustWalletIcon} alt="TrustWallet" />,
         name: CustomWallet.trustWallet,
         protocol: [WalletProtocol.metaMask],
       },
       {
-        icon: <ImTokenIcon className="h-10 w-10"></ImTokenIcon>,
+        icon: <img className="h-10 w-10" src={ImTokenIcon} alt="imToken" />,
         name: CustomWallet.imToken,
         protocol: [WalletProtocol.metaMask, WalletProtocol.tronLink],
       },
       {
-        icon: <TokenPocketIcon className="h-10 w-10"></TokenPocketIcon>,
+        icon: <img className="h-10 w-10" src={TokenPocketIcon} alt="TokenPocket" />,
         name: CustomWallet.tokenPocket,
         protocol: [WalletProtocol.metaMask, WalletProtocol.tokenPocketUTXO, WalletProtocol.tronLink],
       },
       {
-        icon: <OneKeyIcon className="h-10 w-10"></OneKeyIcon>,
+        icon: <img className="h-10 w-10" src={OneKeyIcon} alt="OneKey" />,
         name: CustomWallet.oneKey,
         protocol: [WalletProtocol.metaMask],
       },
       {
-        icon: <ITokenIcon className="h-10 w-10"></ITokenIcon>,
+        icon: <img className="h-10 w-10" src={ITokenIcon} alt="iToken" />,
         name: CustomWallet.iToken,
         protocol: [WalletProtocol.metaMask],
       },
       {
-        icon: <TronLinkIcon className="h-10 w-10"></TronLinkIcon>,
+        icon: <img className="h-10 w-10" src={TronLinkIcon} alt="TronLink" />,
         name: CustomWallet.tronLink,
         protocol: [WalletProtocol.tronLink],
       },

@@ -1,13 +1,7 @@
 import {
-  BscIcon,
   createTips,
-  DogecoinIcon,
-  EthIcon,
   Header,
-  PolygonIcon,
-  TorusIcon,
   SwapChildProps,
-  TronIcon,
   Button,
   ButtonSize,
   ButtonShape,
@@ -26,6 +20,12 @@ import { setLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { checkWebAuthnSupport } from '../../utils'
+import EthIcon from './icon/eth-icon.svg'
+import BscIcon from './icon/bsc-icon.svg'
+import PolygonIcon from './icon/polygon-icon.svg'
+import TronIcon from './icon/tron-icon.svg'
+import DogecoinIcon from './icon/dogecoin-icon.svg'
+import TorusIcon from './icon/torus-icon.svg'
 
 interface IChain {
   icon: ReactNode
@@ -48,42 +48,42 @@ const passkey: IChain = {
 }
 
 const eth: IChain = {
-  icon: <EthIcon className="h-10 w-10"></EthIcon>,
+  icon: <img className="h-10 w-10" src={EthIcon} alt="ETH" />,
   name: CustomChain.eth,
   coinType: CoinType.eth,
   protocol: WalletProtocol.metaMask,
 }
 
 const bsc: IChain = {
-  icon: <BscIcon className="h-10 w-10"></BscIcon>,
+  icon: <img className="h-10 w-10" src={BscIcon} alt="BSC" />,
   name: CustomChain.bsc,
   coinType: CoinType.bsc,
   protocol: WalletProtocol.metaMask,
 }
 
 const polygon: IChain = {
-  icon: <PolygonIcon className="h-10 w-10"></PolygonIcon>,
+  icon: <img className="h-10 w-10" src={PolygonIcon} alt="Polygon" />,
   name: CustomChain.polygon,
   coinType: CoinType.matic,
   protocol: WalletProtocol.metaMask,
 }
 
 const tron: IChain = {
-  icon: <TronIcon className="h-10 w-10"></TronIcon>,
+  icon: <img className="h-10 w-10" src={TronIcon} alt="Tron" />,
   name: CustomChain.tron,
   coinType: CoinType.trx,
   protocol: WalletProtocol.tronLink,
 }
 
 const doge: IChain = {
-  icon: <DogecoinIcon className="h-10 w-10"></DogecoinIcon>,
+  icon: <img className="h-10 w-10" src={DogecoinIcon} alt="Dogecoin" />,
   name: CustomChain.doge,
   coinType: CoinType.doge,
   protocol: WalletProtocol.tokenPocketUTXO,
 }
 
 const torus: IChain = {
-  icon: <TorusIcon className="h-10 w-10"></TorusIcon>,
+  icon: <img className="h-10 w-10" src={TorusIcon} alt="Torus" />,
   name: CustomChain.torus,
   coinType: CoinType.eth,
   protocol: WalletProtocol.torus,
@@ -301,7 +301,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
                 type={AlertType.warning}
                 icon={<NoticeIcon className="h-[18px] w-[18px] text-[#FFB02E]"></NoticeIcon>}
               >
-                This device or browser unsupported. Try connect by social or chain.
+                This device or browser unsupported. Try connect by social or wallet.
               </Alert>
             )}
           </div>
