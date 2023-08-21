@@ -12,6 +12,9 @@ import { isMobileOnly } from 'react-device-detect'
 // @ts-expect-error
 import abcCopy from 'abc-copy'
 import UAParser from 'ua-parser-js'
+import shadowDomRootStyle from '../../lib/tailwind/theme.css?inline'
+
+let shadowDomRoot: ShadowRoot | null = null
 
 export async function sleep(ms: number): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, ms))
@@ -283,4 +286,23 @@ export function checkPasskeysSupport() {
     return true
   }
   return false
+}
+
+/**
+ * get the shadow root of the wallet-bridge element
+ */
+export function getShadowDomRoot(): ShadowRoot {
+  let _shadowDomRoot
+  if (shadowDomRoot) {
+    _shadowDomRoot = shadowDomRoot
+  } else {
+    const el = document.createElement('wallet-bridge')
+    document.body.appendChild(el)
+    shadowDomRoot = el.attachShadow({ mode: 'open' })
+    const styleEl = document.createElement('style')
+    styleEl.innerHTML = shadowDomRootStyle
+    shadowDomRoot.appendChild(styleEl)
+    _shadowDomRoot = shadowDomRoot
+  }
+  return _shadowDomRoot
 }

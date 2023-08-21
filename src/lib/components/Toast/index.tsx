@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { Portal } from '../Portal'
 import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
+import { getShadowDomRoot } from '../../utils'
 
 export interface ToastProps {
   visible: boolean
@@ -46,8 +47,7 @@ export const createToast = (props: Omit<ToastProps, 'visible'>) => {
     visible: true,
   }
 
-  const container = document.createElement('div')
-  document.body.appendChild(container)
+  const shadowDomRoot = getShadowDomRoot()
   const instance = React.createElement(Toast, toastProps)
-  createRoot(container).render(instance)
+  createRoot(shadowDomRoot).render(instance)
 }

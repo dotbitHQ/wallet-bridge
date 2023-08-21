@@ -2,6 +2,7 @@ import { Dialog } from '../Dialog'
 import React, { ReactNode, useState } from 'react'
 import { Button, ButtonShape } from '../Button'
 import { createRoot } from 'react-dom/client'
+import { getShadowDomRoot } from '../../utils'
 
 interface TipsProps {
   visible: boolean
@@ -44,8 +45,7 @@ export const createTips = (props: Omit<TipsProps, 'visible'>) => {
     visible: true,
   }
 
-  const container = document.createElement('div')
-  document.body.appendChild(container)
+  const shadowDomRoot = getShadowDomRoot()
   const instance = React.createElement(Tips, tipsProps)
-  createRoot(container).render(instance)
+  createRoot(shadowDomRoot).render(instance)
 }

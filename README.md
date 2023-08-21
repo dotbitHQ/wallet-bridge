@@ -29,13 +29,7 @@
 yarn add wallet-bridge
 ```
 
-### 2. Import Required Styles:
-
-```js
-import 'wallet-bridge/dist/style.css'
-```
-
-### 3. Import Wallet:
+### 2. Import Wallet:
 
 ```js
 import { Wallet } from 'wallet-bridge'
@@ -49,7 +43,7 @@ To import the `Wallet` on demand, you can use the `import()` method:
 const { Wallet } = await import('wallet-bridge')
 ```
 
-### 4. Initialization
+### 3. Initialization
 
 To create a new `Wallet` object, you can use its constructor and provide the following parameters:
 
@@ -69,11 +63,11 @@ const wallet = new Wallet({
 })
 ```
 
-### 5. Wallet Instance Methods
+### 4. Wallet Instance Methods
 
 Here are some primary instance methods:
 
-#### 5.1 `initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean>`
+#### 4.1 `initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean>`
 
 Initialize the wallet login status. It can be initialized globally or before every wallet use, and you can decide whether to continue executing the related business code based on the return value. The `initWallet` method checks whether the wallet is already logged in. If logged in, it won't prompt the user to log in again. If not logged in, the `involution` parameter can control whether to prompt the user to re-login.
 
@@ -93,7 +87,7 @@ wallet.initWallet().then((success) => {
 })
 ```
 
-#### 5.2 `connectWallet(params: { onlyEth?: boolean } = {})`
+#### 4.2 `connectWallet(params: { onlyEth?: boolean } = {})`
 
 Display the wallet connection popup.
 
@@ -107,7 +101,7 @@ Display the wallet connection popup.
 wallet.connectWallet({ onlyEth: true })
 ```
 
-#### 5.3 `loggedInfo()`
+#### 4.3 `loggedInfo()`
 
 Display the logged-in popup. If the user is already logged in, the popup will show the login information.
 
@@ -117,7 +111,7 @@ Display the logged-in popup. If the user is already logged in, the popup will sh
 wallet.loggedInfo()
 ```
 
-#### 5.4 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
+#### 4.4 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
 
 Used for sending transactions.
 
@@ -145,7 +139,7 @@ wallet.sendTransaction(transactionData).then((txHash) => {
 })
 ```
 
-#### 5.5 `initSignContext(): Promise<InitSignContextRes>`
+#### 4.5 `initSignContext(): Promise<InitSignContextRes>`
 
 Initialize the signing context and return the signing method. To prevent the browser from blocking the signing popup, ensure that you call `initSignContext` before any asynchronous operations in the click event.
 
@@ -166,7 +160,7 @@ const res = await signData({}, { isEIP712: true })
 await onFailed()
 ```
 
-#### 5.6 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.6 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 `useWalletState` is a React hook for retrieving and listening to the wallet's state.
 
@@ -197,7 +191,7 @@ function Component() {
 }
 ```
 
-#### 5.7 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.7 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 Used to immediately get the current snapshot of the wallet's state.
 

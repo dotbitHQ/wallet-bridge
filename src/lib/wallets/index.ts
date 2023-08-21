@@ -10,7 +10,7 @@ import { WalletHandlerFactory } from './WalletHandlerFactory'
 import { CoinType, WalletProtocol, SIGN_TYPE } from '../constant'
 import { InitSignContextRes, SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
 import { cloneDeep } from 'lodash-es'
-import { convertTpUTXOSignature, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
+import { convertTpUTXOSignature, getShadowDomRoot, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
 import { getAuthorizeInfo, getMastersAddress, setWalletState, walletState } from '../store'
 import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
@@ -57,15 +57,14 @@ class WalletSDK {
   }
 
   connectWallet(params: { initComponent?: string; onlyEth?: boolean } = {}): void {
-    const container = document.createElement('div')
-    document.body.appendChild(container)
+    const shadowDomRoot = getShadowDomRoot()
     this.onlyEth = params.onlyEth ?? false
     const connectWalletInstance = React.createElement(ConnectWallet, {
       visible: true,
       walletSDK: this,
       ...params,
     })
-    createRoot(container).render(connectWalletInstance)
+    createRoot(shadowDomRoot).render(connectWalletInstance)
   }
 
   onInvolution(involution: boolean): void {

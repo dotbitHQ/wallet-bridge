@@ -1,5 +1,6 @@
 import { ReactNode, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { getShadowDomRoot } from '../utils'
 
 interface PortalProps {
   children: ReactNode
@@ -19,7 +20,8 @@ export function Portal({ children, customRootId, className }: PortalProps) {
   } else {
     const divDOM = document.createElement('div')
     divDOM.id = rootId
-    document.body.appendChild(divDOM)
+    const shadowDomRoot = getShadowDomRoot()
+    shadowDomRoot.appendChild(divDOM)
     portalRoot = divDOM
     if (className) {
       portalRoot.className = className

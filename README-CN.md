@@ -29,13 +29,7 @@
 yarn add wallet-bridge
 ```
 
-### 2. 导入所需样式：
-
-```js
-import 'wallet-bridge/dist/style.css'
-```
-
-### 3. 导入 Wallet：
+### 2. 导入 Wallet：
 
 ```js
 import { Wallet } from 'wallet-bridge'
@@ -49,7 +43,7 @@ import { Wallet } from 'wallet-bridge'
 const { Wallet } = await import('wallet-bridge')
 ```
 
-### 4. 初始化
+### 3. 初始化
 
 要创建一个新的 `Wallet` 对象，你可以使用其构造函数，并提供以下参数：
 
@@ -69,11 +63,11 @@ const wallet = new Wallet({
 })
 ```
 
-### 5. Wallet 的实例方法
+### 4. Wallet 的实例方法
 
 以下是一些主要的实例方法：
 
-#### 5.1 `initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean>`
+#### 4.1 `initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean>`
 
 初始化钱包登录状态。可以在全局初始化，也可以在每次使用钱包前初始化，通过返回值来判断是否继续执行相关业务代码。`initWallet` 方法会检测钱包是否已经登录，如果已经登录，则不会再次弹窗要用户登录，如果未登录，可以通过 `involution` 参数来控制是否弹窗让用户重新登录。
 
@@ -93,7 +87,7 @@ wallet.initWallet().then((success) => {
 })
 ```
 
-#### 5.2 `connectWallet(params: { onlyEth?: boolean } = {})`
+#### 4.2 `connectWallet(params: { onlyEth?: boolean } = {})`
 
 显示钱包连接弹窗。
 
@@ -107,7 +101,7 @@ wallet.initWallet().then((success) => {
 wallet.connectWallet({ onlyEth: true })
 ```
 
-#### 5.3 `loggedInfo()`
+#### 4.3 `loggedInfo()`
 
 显示已登录弹窗。如果用户已经登录，弹窗将会展示出登录信息。
 
@@ -117,7 +111,7 @@ wallet.connectWallet({ onlyEth: true })
 wallet.loggedInfo()
 ```
 
-#### 5.4 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
+#### 4.4 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
 
 用于发送交易。
 
@@ -145,7 +139,7 @@ wallet.sendTransaction(transactionData).then((txHash) => {
 })
 ```
 
-#### 5.5 `initSignContext(): Promise<InitSignContextRes>`
+#### 4.5 `initSignContext(): Promise<InitSignContextRes>`
 
 初始化签名上下文并返回签名方法。为了避免签名时弹窗被浏览器拦截，`initSignContext` 务必在点击事件所有异步操作之前调用。
 
@@ -166,7 +160,7 @@ const res = await signData({}, { isEIP712: true })
 await onFailed()
 ```
 
-#### 5.6 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.6 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 `useWalletState` 是一个 React hook，用于获取和监听钱包状态。
 
@@ -197,7 +191,7 @@ function Component() {
 }
 ```
 
-#### 5.7 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.7 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 用于立即获取当前的钱包状态的快照。
 
