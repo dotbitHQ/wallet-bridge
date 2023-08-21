@@ -1,6 +1,7 @@
 vite-env.d.ts
 .eslintrc.js
 vite.config.ts
+vite.umd.config.ts
 tailwind.config.js
 prettier.config.js
 postcss.config.js
