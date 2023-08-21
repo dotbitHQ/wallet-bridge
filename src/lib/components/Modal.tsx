@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { Mask } from './Mask'
-import { Portal } from './Portal'
 import clsx from 'clsx'
 
 interface ModalProps {
@@ -31,11 +30,11 @@ export function Modal({ isOpen, children, customRootId, className, zIndex = 'z-[
   }, [isOpen])
 
   return removeDOM ? null : (
-    <Portal customRootId={customRootId} className={className}>
+    <>
       <Mask zIndex={zIndex} isOpen={isOpen} />
-      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-center justify-center', zIndex)}>
+      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-center justify-center max-md:hidden', zIndex)}>
         {children}
       </div>
-    </Portal>
+    </>
   )
 }

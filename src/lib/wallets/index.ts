@@ -16,6 +16,7 @@ import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
 import { DeviceAuthError } from 'connect-did-sdk'
+import styleString from '../../lib/tailwind/theme.css?inline'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -24,9 +25,20 @@ class WalletSDK {
   eventListener?: WalletEventListener
   context: WalletContext
   onlyEth = false
+  // TODO: 所有往document.body上append的操作需要改到shadowRoot上
+  shadowRoot: ShadowRoot
+  reactContainer: HTMLElement
 
   constructor({ isTestNet }: { isTestNet: boolean }) {
     this.context = new WalletContext({ isTestNet })
+    const el = document.createElement('wallet-bridge')
+    document.body.appendChild(el)
+    this.shadowRoot = el.attachShadow({ mode: 'closed' })
+    const styleEl = document.createElement('style')
+    styleEl.innerHTML = styleString
+    this.shadowRoot.appendChild(styleEl)
+    this.reactContainer = document.createElement('div')
+    this.shadowRoot.appendChild(this.reactContainer)
   }
 
   async init({ protocol, coinType }: { protocol: WalletProtocol; coinType: CoinType }) {
@@ -57,15 +69,14 @@ class WalletSDK {
   }
 
   connectWallet(params: { initComponent?: string; onlyEth?: boolean } = {}): void {
-    const container = document.createElement('div')
-    document.body.appendChild(container)
     this.onlyEth = params.onlyEth ?? false
     const connectWalletInstance = React.createElement(ConnectWallet, {
       visible: true,
       walletSDK: this,
       ...params,
     })
-    createRoot(container).render(connectWalletInstance)
+
+    createRoot(this.reactContainer).render(connectWalletInstance)
   }
 
   onInvolution(involution: boolean): void {

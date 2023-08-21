@@ -90,7 +90,7 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' 
   return (
     <WalletSDKContext.Provider value={walletSDK}>
       <QueryClientProvider client={queryClient}>
-        <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet" className="md:hidden">
+        <Sheet isOpen={isOpen}>
           <div
             className={clsx(
               'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',
@@ -100,7 +100,7 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' 
             {el}
           </div>
         </Sheet>
-        <Modal isOpen={isOpen} customRootId="ConnectWalletModal" className="max-md:hidden">
+        <Modal isOpen={isOpen}>
           <div
             className={clsx(
               'box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',

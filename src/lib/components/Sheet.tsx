@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { Mask } from './Mask'
-import { Portal } from './Portal'
 import clsx from 'clsx'
 
 interface SheetProps {
@@ -31,9 +30,11 @@ export function Sheet({ isOpen, children, customRootId, zIndex = 'z-[3]', classN
   }, [isOpen])
 
   return removeDOM ? null : (
-    <Portal customRootId={customRootId} className={className}>
+    <>
       <Mask zIndex={zIndex} isOpen={isOpen} />
-      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-end justify-center', zIndex)}>{children}</div>
-    </Portal>
+      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-end justify-center md:hidden', zIndex)}>
+        {children}
+      </div>
+    </>
   )
 }
