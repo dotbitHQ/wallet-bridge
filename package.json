@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.1.35",
+  "version": "0.1.36",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -38,7 +38,9 @@
     "grapheme-splitter": "^1.0.4",
     "lodash-es": "^4.17.21",
     "number-to-bn": "^1.7.0",
+    "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
+    "react-dom": "^18.2.0",
     "sha3": "^2.1.4",
     "ua-parser-js": "^1.0.35",
     "utf8": "^3.0.0",
