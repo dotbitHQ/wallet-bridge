@@ -17,7 +17,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   [ButtonVariant.danger]:
     'text-white bg-danger hover:bg-danger-hover disabled:cursor-no-drop disabled:opacity-50 disabled:bg-danger',
   [ButtonVariant.passkey]:
-    'text-white bg-passkey shadow-passkey hover:bg-passkey-hover hover:shadow-none active:bg-passkey-active active:shadow-none disabled:shadow-none disabled:cursor-no-drop disabled:opacity-50 disabled:bg-passkey',
+    'text-white transition-all duration-400 bg-passkey shadow-passkey hover:bg-passkey-hover hover:shadow-none active:bg-passkey-active active:shadow-none disabled:shadow-none disabled:cursor-no-drop disabled:opacity-50 disabled:bg-passkey',
 }
 
 export enum ButtonSize {

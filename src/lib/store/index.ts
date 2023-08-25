@@ -18,6 +18,7 @@ export interface WalletState {
   isTestNet?: boolean
   loggedInSelectAddress?: boolean
   canAddDevice?: boolean
+  isSwitchAddress?: boolean
   iCloudPasskeySupport?: boolean
   customChains?: CustomChain[]
   customWallets?: CustomWallet[]
@@ -25,7 +26,7 @@ export interface WalletState {
 
 const WalletStateKey = 'WalletState'
 
-const walletStateLocalStorage = globalThis.localStorage ? localStorage.getItem(WalletStateKey) : null
+const walletStateLocalStorage = globalThis.localStorage ? globalThis.localStorage.getItem(WalletStateKey) : null
 
 const localWalletState = walletStateLocalStorage
   ? JSON.parse(walletStateLocalStorage)
@@ -40,6 +41,7 @@ const localWalletState = walletStateLocalStorage
       isTestNet: false,
       loggedInSelectAddress: true,
       canAddDevice: false,
+      isSwitchAddress: false,
       iCloudPasskeySupport: false,
       customChains: [],
       customWallets: [],
@@ -47,21 +49,69 @@ const localWalletState = walletStateLocalStorage
 
 export const walletState = proxy<WalletState>(localWalletState)
 
-export async function getAuthorizeInfo() {
-  const { protocol, isTestNet, address } = snapshot(walletState)
-  if (protocol === WalletProtocol.webAuthn && address) {
-    const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
-    const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
-      ckb_address: address,
+async function fetchAuthorizeInfo(api: string, address: string) {
+  const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
+    ckb_address: address,
+  })
+
+  if (res.data?.err_no !== errno.success) {
+    throw new CustomError(res.data?.err_no, res.data?.err_msg)
+  }
+
+  return res.data.data
+}
+
+function setAuthorizeState(data: any, address: any = null) {
+  if (address) {
+    setWalletState({
+      address,
+      canAddDevice: data.can_authorize !== 0,
+      deviceList: data.ckb_address,
     })
-    if (res.data?.err_no === errno.success) {
-      setWalletState({
-        canAddDevice: res.data.data.can_authorize !== 0,
-        deviceList: res.data.data.ckb_address,
-      })
-    } else {
-      throw new CustomError(res.data?.err_no, res.data?.err_msg)
+  } else {
+    setWalletState({
+      canAddDevice: data.can_authorize !== 0,
+      deviceList: data.ckb_address,
+    })
+  }
+}
+
+export async function getAuthorizeInfo() {
+  const { protocol, isTestNet, address, isSwitchAddress, ckbAddresses } = snapshot(walletState)
+
+  if (protocol !== WalletProtocol.webAuthn || !address) return
+
+  const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
+
+  const data = await fetchAuthorizeInfo(api, address)
+  if (data.can_authorize !== 0) {
+    setAuthorizeState(data)
+    return
+  }
+  // eslint-disable-next-line
+  else if (isSwitchAddress || (ckbAddresses && ckbAddresses.length === 0)) {
+    setAuthorizeState(data)
+    return
+  }
+
+  if (ckbAddresses && ckbAddresses.length > 0) {
+    const addressList = ckbAddresses.filter((item) => item !== address)
+    let isSetAddress = false
+
+    for (const item of addressList) {
+      const res = await fetchAuthorizeInfo(api, item)
+      if (res.can_authorize !== 0) {
+        isSetAddress = true
+        setAuthorizeState(res, item)
+        break
+      }
     }
+
+    if (!isSetAddress) {
+      setAuthorizeState(data)
+    }
+  } else {
+    setAuthorizeState(data)
   }
 }
 
@@ -95,6 +145,7 @@ export const setWalletState = ({
   isTestNet,
   loggedInSelectAddress,
   canAddDevice,
+  isSwitchAddress,
   customChains,
   customWallets,
 }: WalletState) => {
@@ -128,6 +179,9 @@ export const setWalletState = ({
   if (canAddDevice !== undefined) {
     walletState.canAddDevice = canAddDevice
   }
+  if (isSwitchAddress !== undefined) {
+    walletState.isSwitchAddress = isSwitchAddress
+  }
   if (customChains !== undefined) {
     walletState.customChains = customChains
   }
@@ -147,6 +201,7 @@ export const resetWalletState = () => {
   walletState.ckbAddresses = []
   walletState.deviceList = []
   walletState.canAddDevice = false
+  walletState.isSwitchAddress = false
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 

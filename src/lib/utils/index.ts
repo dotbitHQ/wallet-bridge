@@ -253,6 +253,10 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
     return false
   }
 
+  if (uaParser.getDevice().vendor === 'Huawei' || uaParser.getBrowser().name === 'Huawei Browser') {
+    return false
+  }
+
   if ('credentials' in navigator && 'PublicKeyCredential' in window) {
     try {
       const isAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
