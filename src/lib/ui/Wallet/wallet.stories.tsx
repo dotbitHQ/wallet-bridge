@@ -25,7 +25,10 @@ const TemplateConnectWallet = () => {
   }
 
   const onSignData = async () => {
-    const res = await wallet.walletSDK.signData('0x123abc')
+    const message = '0x123abc'
+    const signature = await wallet.walletSDK.signData(message)
+    console.log(signature)
+    const res = await wallet.walletSDK._verifyPasskeySignature({ message, signature: signature as string })
     console.log(res)
   }
 

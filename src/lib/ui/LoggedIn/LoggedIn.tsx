@@ -69,8 +69,8 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   }
 
   useEffect(() => {
-    void getAuthorizeInfo()
     void getMastersAddress()
+    void getAuthorizeInfo()
   }, [])
 
   return (

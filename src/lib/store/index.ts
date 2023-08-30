@@ -61,7 +61,7 @@ async function fetchAuthorizeInfo(api: string, address: string) {
   return res.data.data
 }
 
-function setAuthorizeState(data: any, address: any = null) {
+function setAuthorizeState(data: { can_authorize: number; ckb_address: string[] }, address: string = '') {
   if (address) {
     setWalletState({
       address,
@@ -76,7 +76,7 @@ function setAuthorizeState(data: any, address: any = null) {
   }
 }
 
-export async function getAuthorizeInfo() {
+export async function getAuthorizeInfo({ detectAssets = false } = {}) {
   const { protocol, isTestNet, address, isSwitchAddress, ckbAddresses } = snapshot(walletState)
 
   if (protocol !== WalletProtocol.webAuthn || !address) return
@@ -84,33 +84,24 @@ export async function getAuthorizeInfo() {
   const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
 
   const data = await fetchAuthorizeInfo(api, address)
-  if (data.can_authorize !== 0) {
-    setAuthorizeState(data)
-    return
-  }
   // eslint-disable-next-line
-  else if (isSwitchAddress || (ckbAddresses && ckbAddresses.length === 0)) {
+  if (data.can_authorize !== 0 || !detectAssets || isSwitchAddress || !(ckbAddresses && ckbAddresses.length > 0)) {
     setAuthorizeState(data)
     return
   }
 
-  if (ckbAddresses && ckbAddresses.length > 0) {
-    const addressList = ckbAddresses.filter((item) => item !== address)
-    let isSetAddress = false
+  let isSetAddress = false
 
-    for (const item of addressList) {
-      const res = await fetchAuthorizeInfo(api, item)
-      if (res.can_authorize !== 0) {
-        isSetAddress = true
-        setAuthorizeState(res, item)
-        break
-      }
+  for (const item of ckbAddresses) {
+    const res = await fetchAuthorizeInfo(api, item)
+    if (res.can_authorize !== 0) {
+      isSetAddress = true
+      setAuthorizeState(res, item)
+      break
     }
+  }
 
-    if (!isSetAddress) {
-      setAuthorizeState(data)
-    }
-  } else {
+  if (!isSetAddress) {
     setAuthorizeState(data)
   }
 }

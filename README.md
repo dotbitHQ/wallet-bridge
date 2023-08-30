@@ -206,6 +206,28 @@ const { walletSnap } = wallet.getWalletState()
 console.log(walletSnap.address)
 ```
 
+#### 4.8 `_verifyPasskeySignature(params: { message: string, signature: string }): Promise<boolean> `
+
+Verify if the passkey signature is correct.
+
+**Parameters**:
+
+- `params`: Transaction parameters.
+  - `message`: Original message, of type `string`.
+  - `signature`: Result of message signature, of type `string`.
+
+**Return value**:
+
+- `Promise<boolean>`: If the signature is correct, it returns `true`. Any errors or issues may result in an exception being thrown.
+
+**Example**:
+
+```js
+wallet._verifyPasskeySignature({ message: '0x123', signature: '0x40b4a569e0cb53163f...' }).then((result) => {
+  console.log('result: ', result)
+})
+```
+
 ## License
 
 [MIT](LICENSE)

@@ -7,7 +7,7 @@ import { ISendTrxParams, WalletTransaction } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
 import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
 import { WalletHandlerFactory } from './WalletHandlerFactory'
-import { CoinType, WalletProtocol, SIGN_TYPE } from '../constant'
+import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi } from '../constant'
 import { InitSignContextRes, SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, getShadowDomRoot, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
@@ -16,6 +16,7 @@ import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
 import { DeviceAuthError } from 'connect-did-sdk'
+import Axios from 'axios'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -49,8 +50,8 @@ class WalletSDK {
       address: this.context.address,
       coinType: this.context.coinType,
     })
-    await getAuthorizeInfo()
     await getMastersAddress()
+    await getAuthorizeInfo({ detectAssets: true })
     if (!ignoreEvent) {
       this.context.emitEvent(EventEnum.Connect)
     }
@@ -242,6 +243,27 @@ class WalletSDK {
       },
       onFailed: provider?.onFailed,
     }
+  }
+
+  async _verifyPasskeySignature({ message, signature }: { message: string; signature: string }): Promise<boolean> {
+    const isInit = await this.initWallet()
+    if (!isInit) {
+      throw new CustomError(errno.failedToInitializeWallet, '_verifyPasskeySignature: Please initialize wallet first')
+    }
+    const { isTestNet, address, deviceData } = snapshot(walletState)
+    const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
+    const res = await Axios.post(`${api}/v1/webauthn/verify`, {
+      master_addr: address,
+      backup_addr: deviceData?.ckbAddr,
+      msg: message,
+      signature,
+    })
+
+    if (res.data?.err_no !== errno.success) {
+      throw new CustomError(res.data?.err_no, res.data?.err_msg)
+    }
+
+    return res.data?.data?.is_valid
   }
 }
 export default WalletSDK

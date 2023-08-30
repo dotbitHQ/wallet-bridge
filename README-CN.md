@@ -206,6 +206,28 @@ const { walletSnap } = wallet.getWalletState()
 console.log(walletSnap.address)
 ```
 
+#### 4.8 `_verifyPasskeySignature(params: { message: string, signature: string }): Promise<boolean> `
+
+验证 passkey 签名结果是否正确。
+
+**参数**:
+
+- `params`: 交易参数。
+  - `message`: 原信息，类型为`string`。
+  - `signature`: 信息签名结果，类型为`string`。
+
+**返回值**:
+
+- `Promise<boolean>`: 签名结果正确，则返回 `true`。如果有任何错误或问题，可能会抛出错误。
+
+**示例**:
+
+```js
+wallet._verifyPasskeySignature({ message: '0x123', signature: '0x40b4a569e0cb53163f...' }).then((result) => {
+  console.log('result: ', result)
+})
+```
+
 ## License
 
 [MIT](LICENSE)

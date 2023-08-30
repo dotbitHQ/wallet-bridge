@@ -43,4 +43,8 @@ export class Wallet {
   async initSignContext(): Promise<InitSignContextRes> {
     return await this.walletSDK.initSignContext()
   }
+
+  async _verifyPasskeySignature(params: { message: string; signature: string }): Promise<boolean> {
+    return await this.walletSDK._verifyPasskeySignature(params)
+  }
 }
