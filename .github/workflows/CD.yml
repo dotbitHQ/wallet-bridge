@@ -29,5 +29,5 @@ jobs:
 
       - name: Deploy storybook.d.id
         run: |
-          rsync -a ./dist/ root@frontendtest:/root/release_test/code/${{ vars.TEST_DIR_NAME }}
-          ssh root@frontendtest 'source ~/.zshrc && cd /root/release_test/code/${{ vars.TEST_DIR_NAME }} && npm install && pm2 delete storybook.d.id && pm2 start npm --name "storybook.d.id" -- run dev'
+          rsync -a ./dist/ root@frontendtest:/root/release_test/code/storybook.d.id
+          ssh root@frontendtest 'source ~/.zshrc && cd /root/release_test/code/storybook.d.id && npm install && pm2 delete storybook.d.id && pm2 start npm --name "storybook.d.id" -- run dev'
