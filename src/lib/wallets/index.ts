@@ -88,7 +88,9 @@ class WalletSDK {
           void getMastersAddress()
           return true
         } else {
-          await this.connect({ ignoreEvent: true })
+          if (involution) {
+            await this.connect({ ignoreEvent: true })
+          }
           return true
         }
       }
