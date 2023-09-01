@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3.5.3
+      
+      - name: Compress file
+        uses: TheDoctor0/zip-release@0.7.1
+        with:
+          filename: wallet-bridge-artifact-${{ github.sha }}.zip
+          custom: -q
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: wallet-bridge-artifact-${{ github.sha }}.zip
+          path: ./wallet-bridge-artifact-${{ github.sha }}.zip

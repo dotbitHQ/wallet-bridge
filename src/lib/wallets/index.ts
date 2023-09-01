@@ -243,7 +243,12 @@ class WalletSDK {
       signData: async (data: SignDataType, options?: Record<string, any>): Promise<string | undefined> => {
         return await this.signData(data, { ...options, provider })
       },
-      onFailed: provider?.onFailed,
+      onFailed:
+        provider?.onFailed ||
+        (async (k: any): Promise<any> => {
+          console.log(k)
+          return undefined
+        }),
     }
   }
 
