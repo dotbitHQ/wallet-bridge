@@ -7,6 +7,7 @@ import {
   Button,
   ButtonSize,
   ButtonVariant,
+  CopyIcon,
 } from '../../components'
 import { WalletProtocol, CoinType } from '../../constant'
 import { getAuthorizeInfo, getMastersAddress, useWalletState } from '../../store'
@@ -95,6 +96,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 }}
               >
                 {collapseString(walletSnap.address, 8, 4)}
+                <CopyIcon className="ml-3 h-4 w-4 cursor-pointer text-font-secondary hover:text-[#5F6570]"></CopyIcon>
               </span>
               {walletSnap.ckbAddresses && walletSnap.ckbAddresses?.length > 0 ? (
                 <SwitchIcon
