@@ -29,7 +29,12 @@ export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildP
     if (query.data?.hash === webAuthnState.pendingTxHash) {
       if (query.data?.status === 1) {
         setWalletState({
-          deviceList: walletSnap.deviceList!.concat([webAuthnState.backupDeviceData!.ckbAddr]),
+          deviceList: walletSnap.deviceList!.concat([
+            {
+              address: webAuthnState.backupDeviceData!.ckbAddr,
+              notes: webAuthnState.backupDeviceData!.name,
+            },
+          ]),
         })
         goNext?.()
       } else if (query.data?.status === -1) {

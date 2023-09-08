@@ -14,7 +14,8 @@ export interface WalletState {
   hardwareWalletTipsShow?: boolean
   deviceData?: IDeviceData
   ckbAddresses?: string[]
-  deviceList?: string[]
+  masterNotes?: string
+  deviceList?: ICKBAddressItem[]
   isTestNet?: boolean
   loggedInSelectAddress?: boolean
   canAddDevice?: boolean
@@ -22,6 +23,12 @@ export interface WalletState {
   iCloudPasskeySupport?: boolean
   customChains?: CustomChain[]
   customWallets?: CustomWallet[]
+}
+
+export interface ICKBAddressItem {
+  address: string
+  avatar?: number
+  notes?: string
 }
 
 const WalletStateKey = 'WalletState'
@@ -37,6 +44,7 @@ const localWalletState = walletStateLocalStorage
       hardwareWalletTipsShow: true,
       deviceData: undefined,
       ckbAddresses: [],
+      masterNotes: undefined,
       deviceList: [],
       isTestNet: false,
       loggedInSelectAddress: true,
@@ -47,7 +55,12 @@ const localWalletState = walletStateLocalStorage
       customWallets: [],
     }
 
-export const walletState = proxy<WalletState>(localWalletState)
+export const walletState = proxy<WalletState>({
+  ...localWalletState,
+  deviceList: localWalletState.deviceList.map((i: ICKBAddressItem | string) =>
+    typeof i === 'string' ? { address: i } : i,
+  ),
+})
 
 async function fetchAuthorizeInfo(api: string, address: string) {
   const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
@@ -61,15 +74,20 @@ async function fetchAuthorizeInfo(api: string, address: string) {
   return res.data.data
 }
 
-function setAuthorizeState(data: { can_authorize: number; ckb_address: string[] }, address: string = '') {
+function setAuthorizeState(
+  data: { can_authorize: number; ckb_address: ICKBAddressItem[]; master_notes?: string | undefined },
+  address: string = '',
+) {
   if (address) {
     setWalletState({
       address,
+      masterNotes: data.master_notes,
       canAddDevice: data.can_authorize !== 0,
       deviceList: data.ckb_address,
     })
   } else {
     setWalletState({
+      masterNotes: data.master_notes,
       canAddDevice: data.can_authorize !== 0,
       deviceList: data.ckb_address,
     })
@@ -131,6 +149,7 @@ export const setWalletState = ({
   coinType,
   hardwareWalletTipsShow,
   deviceData,
+  masterNotes,
   ckbAddresses,
   deviceList,
   isTestNet,
@@ -157,6 +176,9 @@ export const setWalletState = ({
   }
   if (ckbAddresses) {
     walletState.ckbAddresses = ckbAddresses
+  }
+  if (masterNotes) {
+    walletState.masterNotes = masterNotes
   }
   if (deviceList) {
     walletState.deviceList = deviceList
@@ -190,6 +212,7 @@ export const resetWalletState = () => {
   walletState.address = undefined
   walletState.deviceData = undefined
   walletState.ckbAddresses = []
+  walletState.masterNotes = undefined
   walletState.deviceList = []
   walletState.canAddDevice = false
   walletState.isSwitchAddress = false

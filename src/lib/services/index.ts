@@ -5,6 +5,9 @@ export function useWebAuthnService(isTestNet?: boolean) {
 
   async function buildTransaction(data: {
     operation: 'add' | 'delete'
+    notes?: string
+    avatar?: number
+    master_notes?: string
     master_ckb_address: string
     slave_ckb_address: string
   }) {

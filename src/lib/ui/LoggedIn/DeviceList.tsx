@@ -1,8 +1,8 @@
-import { MoreIcon, NervosIcon, PlusIcon, RevokeIcon, createTips } from '../../components'
+import { MoreIcon, NervosIcon, PlusIcon, RevokeIcon, createTips, DeviceIcon } from '../../components'
 import { Menu, Transition } from '@headlessui/react'
 import { emojis } from '../ChooseEmoji/png'
-import React, { Fragment, useContext, useEffect, useState } from 'react'
-import { setWalletState, useWalletState } from '../../store'
+import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react'
+import { ICKBAddressItem, setWalletState, useWalletState, walletState } from '../../store'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LetterAvatar } from '../../components/LetterAvatar'
 import { collapseString } from '../../utils'
@@ -51,24 +51,24 @@ function More({ address, onRevoke }: MoreProps) {
 }
 
 interface DeviceProps {
-  address: string
+  item: ICKBAddressItem
   managingAddress: string
   onDisconnect?: () => void
 }
 
-function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
+function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)
   const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
   const signDataQuery = useQuery({
-    queryKey: ['FetchSignDataDelete', { master: walletSnap.address, slave: address }],
+    queryKey: ['FetchSignDataDelete', { master: walletSnap.address, slave: item.address }],
     retry: false,
     enabled: false,
     queryFn: async () => {
       if (walletSnap.address === undefined) throw new Error('unreachable')
       const res = await webAuthnService.buildTransaction({
         master_ckb_address: walletSnap.address,
-        slave_ckb_address: address,
+        slave_ckb_address: item.address,
         operation: 'delete',
       })
       if (res.err_no !== 0) throw new Error(res.err_msg)
@@ -100,8 +100,8 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
     },
   })
 
-  const isMasterDevice = walletSnap.address === address
-  const isCurrentDevice = walletSnap.deviceData?.ckbAddr === address
+  const isMasterDevice = walletSnap.address === item.address
+  const isCurrentDevice = walletSnap.deviceData?.ckbAddr === item.address
 
   const onRevoke = async () => {
     if (isMasterDevice) {
@@ -159,11 +159,11 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
     if (revoking) return
     if (transactionStatusQuery.data?.status === 1) {
       setWalletState({
-        deviceList: walletSnap.deviceList?.filter((a) => a !== address),
+        deviceList: walletSnap.deviceList?.filter((a) => a.address !== item.address),
       })
-      removeNameAndEmojiFromLocalStorage(address)
+      // removeNameAndEmojiFromLocalStorage(item.address)
       setStatusConverged(true)
-      if (address === walletSnap.deviceData?.ckbAddr) {
+      if (item.address === walletSnap.deviceData?.ckbAddr) {
         onDisconnect?.()
       }
     } else if (transactionStatusQuery.data?.status === -1) {
@@ -174,7 +174,7 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
     transactionStatusQuery.data?.status,
     revoking,
     setRevokeError,
-    address,
+    item,
     onDisconnect,
     walletSnap.deviceData?.ckbAddr,
     sendTransactionMutation.data?.hash,
@@ -183,12 +183,14 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
 
   return (
     <li className="flex h-[48px] items-center gap-4 pl-3 pr-4">
-      <LeadingIcon {...getNameAndEmojiFromLocalStorage(address)} address={address} />
+      <LeadingIcon name={item.notes ?? ''} emoji={item.avatar ? `${item.avatar}` : ''} address={item.address} />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
         <div>
           {isCurrentDevice
             ? walletSnap.deviceData.name
-            : getNameAndEmojiFromLocalStorage(address)?.name ?? collapseString(address, 8, 4)}
+            : isMasterDevice
+            ? walletSnap.masterNotes
+            : item.notes ?? collapseString(item.address, 8, 4)}
         </div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
@@ -196,9 +198,11 @@ function Device({ address, managingAddress, onDisconnect }: DeviceProps) {
           <span className="text-[12px] font-medium text-red-500">Revoke Failed</span>
         ) : isCurrentDevice ? (
           <span className="rounded bg-green-100 px-1 py-0.5 text-xs font-medium text-emerald-600">Current Device</span>
+        ) : isMasterDevice ? (
+          <span className="rounded bg-blue-100 px-1 py-0.5 text-xs font-medium text-indigo-400">Main Device</span>
         ) : null}
       </div>
-      <More address={address} onRevoke={onRevoke} />
+      <More address={item.address} onRevoke={onRevoke} />
     </li>
   )
 }
@@ -211,8 +215,12 @@ interface LeadingIconProps {
 
 function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
   const selectedEmoji = (emojis as Record<string, string>)[emoji as any]
+  const { walletSnap } = useWalletState()
+  const isMasterDevice = useMemo(() => walletSnap.address === address, [address, walletSnap.address])
   if (selectedEmoji) {
     return <img className="h-6 w-6" src={selectedEmoji} />
+  } else if (isMasterDevice) {
+    return <DeviceIcon className="h-6 w-6" />
   } else if (name) {
     return <LetterAvatar data={name} className="h-[28px] w-[28px] flex-none" />
   } else {
@@ -220,16 +228,16 @@ function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
   }
 }
 
-function getNameAndEmojiFromLocalStorage(address: string) {
-  return JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')[address]
-}
-
-function removeNameAndEmojiFromLocalStorage(address: string) {
-  const data = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
-  // eslint-disable-next-line
-  delete data[address]
-  globalThis.localStorage.setItem('.bit-memos', JSON.stringify(data))
-}
+// function getNameAndEmojiFromLocalStorage(address: string) {
+//   return JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')[address]
+// }
+//
+// function removeNameAndEmojiFromLocalStorage(address: string) {
+//   const data = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
+//   // eslint-disable-next-line
+//   delete data[address]
+//   globalThis.localStorage.setItem('.bit-memos', JSON.stringify(data))
+// }
 
 interface DeviceListProps {
   onShowQRCode: () => void
@@ -241,15 +249,21 @@ export function DeviceList({ onShowQRCode, className, onDisconnect }: DeviceList
   const { walletSnap } = useWalletState()
 
   const mergedList = [...walletSnap.deviceList!]
-  if (!mergedList.find((addr) => addr === walletSnap.address!)) mergedList.unshift(walletSnap.address!)
+  if (!mergedList.find((addr) => addr.address === walletSnap.address!)) {
+    mergedList.unshift({
+      address: walletSnap.address!,
+      avatar: undefined,
+      notes: walletState.deviceData?.name,
+    })
+  }
 
   return (
     <div className={clsx('select-none', className)}>
       <div className="mb-3 text-base font-medium leading-[normal] text-[#5F6570]">Trusted Devices of CKB Address</div>
       <ul className="overflow-hidden rounded-2xl border border-[#B6C4D966]">
-        {mergedList.map((address) => (
-          <div key={address}>
-            <Device key={address} address={address} managingAddress={walletSnap.address!} onDisconnect={onDisconnect} />
+        {mergedList.map((item) => (
+          <div key={item.address}>
+            <Device key={item.address} item={item} managingAddress={walletSnap.address!} onDisconnect={onDisconnect} />
             <hr className="mx-3 border-[#B6C4D966]" />
           </div>
         ))}
