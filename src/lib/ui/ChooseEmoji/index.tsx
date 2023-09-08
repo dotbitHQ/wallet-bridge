@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Button, ButtonShape, ButtonSize, Header, SwapChildProps, createTips } from '../../components'
+import { Button, ButtonShape, ButtonSize, Header, SwapChildProps, createTips, DeviceIcon } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import clsx from 'clsx'
 import { emojis } from './png'
@@ -31,16 +31,32 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
   const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
 
   const signDataQuery = useQuery({
-    queryKey: ['FetchSignData', { master: walletSnap.address, slave: webAuthnState.backupDeviceData?.ckbAddr }],
+    queryKey: [
+      'FetchSignData',
+      {
+        master: walletSnap.address,
+        slave: webAuthnState.backupDeviceData?.ckbAddr,
+        notes: webAuthnState.backupDeviceData?.name,
+      },
+    ],
     enabled: false,
     retry: false,
     queryFn: async () => {
-      if (walletSnap.address === undefined || webAuthnState.backupDeviceData?.ckbAddr === undefined)
+      if (
+        walletSnap.address === undefined ||
+        webAuthnState.backupDeviceData?.ckbAddr === undefined ||
+        selected === undefined ||
+        webAuthnState.backupDeviceData?.name === undefined
+      )
         throw new Error('unreachable')
       const res = await webAuthnService.buildTransaction({
         master_ckb_address: walletSnap.address,
         slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
         operation: 'add',
+        avatar: parseInt(selected),
+        notes: webAuthnState.backupDeviceData?.name,
+        master_notes:
+          walletSnap.address === walletSnap.deviceData?.ckbAddr ? walletSnap.deviceData.name : walletSnap.masterNotes,
       })
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
@@ -86,7 +102,14 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
                 selected === k ? 'border-2 border-emerald-400 bg-white' : 'hover:bg-slate-600/10',
               )}
             >
-              <Emoji className="absolute left-1/2 top-1/2 w-8 max-w-none -translate-x-1/2 -translate-y-1/2" name={k} />
+              {k === '0' ? (
+                <DeviceIcon className="absolute left-1/2 top-1/2 w-8 max-w-none -translate-x-1/2 -translate-y-1/2" />
+              ) : (
+                <Emoji
+                  className="absolute left-1/2 top-1/2 w-8 max-w-none -translate-x-1/2 -translate-y-1/2"
+                  name={k}
+                />
+              )}
             </div>
           ))}
         </div>

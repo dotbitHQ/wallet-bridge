@@ -10,11 +10,11 @@ import { TxsWithMMJsonSignedOrUnSigned } from '../../types'
 import handleError from '../../utils/handleError'
 import { useWebAuthnService } from '../../services'
 
-function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: string) {
-  const memos = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
-  memos[address] = { name, emoji }
-  globalThis.localStorage.setItem('.bit-memos', JSON.stringify(memos))
-}
+// function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: string) {
+//   const memos = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
+//   memos[address] = { name, emoji }
+//   globalThis.localStorage.setItem('.bit-memos', JSON.stringify(memos))
+// }
 
 export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps) {
   const { goNext, goBack, onClose } = useSimpleRouter()!
@@ -53,11 +53,11 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
   useEffect(() => {
     if (sendTransactionMutation.data?.hash) {
       setPendingTx(sendTransactionMutation.data.hash)
-      setNameAndEmojiToLocalStorage(
-        webAuthnState.backupDeviceData!.ckbAddr,
-        webAuthnState.backupDeviceData?.name,
-        webAuthnState.selectedEmoji,
-      )
+      // setNameAndEmojiToLocalStorage(
+      //   webAuthnState.backupDeviceData!.ckbAddr,
+      //   webAuthnState.backupDeviceData?.name,
+      //   webAuthnState.selectedEmoji,
+      // )
       goNext?.()
     }
     // eslint-disable-next-line
