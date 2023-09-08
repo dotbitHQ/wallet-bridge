@@ -1,21 +1,23 @@
 import { WalletConnector } from './WalletConnector'
 import { chainIdHexToNumber, toChecksumAddress } from '../../utils'
-import { ChainIdToCoinTypeMap } from '../../constant'
+import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap } from '../../constant'
 import { resetWalletState } from '../../store'
 
 export class TorusConnector extends WalletConnector {
   async connect(): Promise<void> {
-    const { provider } = this.context
+    const { provider, isTestNet } = this.context
     const netVersion = provider.networkVersion
     const ethChainId = provider.chainId
     const res = await provider.request({ method: 'eth_requestAccounts' })
     this.context.address = toChecksumAddress(res[0])
     this.context.chainId = chainIdHexToNumber(netVersion || ethChainId)
-    this.context.coinType = ChainIdToCoinTypeMap[this.context.chainId]
+    this.context.coinType = isTestNet
+      ? ChainIdToCoinTypeTestNetMap[this.context.chainId]
+      : ChainIdToCoinTypeMap[this.context.chainId]
   }
 
-  disconnect() {
-    if (this.context.torusWallet?.hideTorusButton != null) {
+  async disconnect(): Promise<void> {
+    if (this.context.torusWallet?.hideTorusButton) {
       this.context.torusWallet?.hideTorusButton()
     }
     this.context.address = undefined

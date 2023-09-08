@@ -14,14 +14,16 @@ export class Wallet {
     loggedInSelectAddress = true,
     customChains = [],
     customWallets = [],
+    wagmiConfig,
   }: {
     isTestNet?: boolean
     loggedInSelectAddress?: boolean
     customChains?: CustomChain[]
     customWallets?: CustomWallet[]
+    wagmiConfig?: any
   }) {
     setWalletState({ isTestNet, loggedInSelectAddress, customChains, customWallets })
-    this.walletSDK = new WalletSDK({ isTestNet })
+    this.walletSDK = new WalletSDK({ isTestNet, wagmiConfig })
   }
 
   connectWallet(params: { onlyEth?: boolean } = {}) {

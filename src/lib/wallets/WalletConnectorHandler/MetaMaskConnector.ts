@@ -22,14 +22,14 @@ export class MetaMaskConnector extends WalletConnector {
     }
   }
 
-  disconnect() {
+  async disconnect(): Promise<void> {
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined
     resetWalletState()
   }
 
-  async switchNetwork(chainId: ChainId) {
+  async switchNetwork(chainId: ChainId): Promise<void> {
     const chainIdHex = numberToHex(chainId)
     const info = ChainIdToChainInfoMap[chainId]
     info.chainId = chainIdHex

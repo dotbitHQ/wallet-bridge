@@ -26,8 +26,8 @@ class WalletSDK {
   context: WalletContext
   onlyEth = false
 
-  constructor({ isTestNet }: { isTestNet: boolean }) {
-    this.context = new WalletContext({ isTestNet })
+  constructor({ isTestNet, wagmiConfig }: { isTestNet: boolean; wagmiConfig?: any }) {
+    this.context = new WalletContext({ isTestNet, wagmiConfig })
   }
 
   async init({ protocol, coinType }: { protocol: WalletProtocol; coinType: CoinType }) {
@@ -42,9 +42,9 @@ class WalletSDK {
   }
 
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }): Promise<void> {
-    await this.walletConnector?.connect()
     this.eventListener?.removeEvents()
     this.eventListener?.listenEvents()
+    await this.walletConnector?.connect()
     setWalletState({
       protocol: this.context.protocol,
       address: this.context.address,
@@ -103,19 +103,6 @@ class WalletSDK {
     }
   }
 
-  async switchNetwork(chainId: number) {
-    if (!chainId) throw new Error('connect: Please provide a valid chainId')
-    const isInit = await this.initWallet()
-    if (!isInit && !this.walletConnector) {
-      throw new CustomError(errno.failedToInitializeWallet, 'switchNetwork: Please initialize wallet first')
-    }
-    this.eventListener?.removeEvents()
-    this.walletConnector?.disconnect()
-    this.walletConnector?.switchNetwork(chainId)
-    await this.connect()
-    this.context.emitEvent(EventEnum.Connect)
-  }
-
   async signData(data: SignDataType, options?: Record<string, any>): Promise<string | undefined> {
     const isInit = await this.initWallet()
     if (!isInit && !this.walletSigner) {
@@ -137,9 +124,11 @@ class WalletSDK {
     if (!isInit) {
       throw new CustomError(errno.failedToInitializeWallet, 'disconnect: Please initialize wallet first')
     }
+    await this.walletConnector?.disconnect()
     this.eventListener?.removeEvents()
-    this.walletConnector?.disconnect()
-    this.context.emitEvent(EventEnum.Disconnect)
+    if (this.context.protocol !== WalletProtocol.walletConnect) {
+      this.context.emitEvent(EventEnum.Disconnect)
+    }
   }
 
   private async signTx(signInfo: SignInfo, options?: Record<string, any>): Promise<SignInfo> {

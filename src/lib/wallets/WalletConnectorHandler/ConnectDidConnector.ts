@@ -16,12 +16,12 @@ export class ConnectDidConnector extends WalletConnector {
     }
   }
 
-  disconnect() {
+  async disconnect(): Promise<void> {
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined
     resetWalletState()
   }
 
-  switchNetwork(chainId: number): void {}
+  async switchNetwork(chainId: number): Promise<void> {}
 }

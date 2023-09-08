@@ -9,7 +9,7 @@ export abstract class WalletConnector {
 
   abstract connect(): Promise<void>
 
-  abstract disconnect(): void
+  abstract disconnect(): Promise<void>
 
-  abstract switchNetwork(chainId: number): void
+  abstract switchNetwork(chainId: number): Promise<void>
 }

@@ -52,9 +52,9 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
     onClose()
   }
 
-  const disconnect = () => {
+  const disconnect = async () => {
     onDisconnect()
-    void walletSDK.disconnect()
+    await walletSDK.disconnect()
   }
 
   const onSwitch = () => {

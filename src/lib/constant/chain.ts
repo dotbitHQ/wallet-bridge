@@ -32,10 +32,6 @@ export enum CoinType {
   matic = '966',
 }
 
-export const EvmCoinTypes = [CoinType.eth, CoinType.bsc, CoinType.matic]
-
-export const UtxoCoinTypes = [CoinType.doge]
-
 export const CoinTypeToChainIdMap: Record<string, number> = {
   [CoinType.eth]: ChainId.eth,
   [CoinType.bsc]: ChainId.bsc,
@@ -78,16 +74,6 @@ export const ChainIdToCoinTypeTestNetMap: Record<string, CoinType> = {
   97: CoinType.bsc,
   80001: CoinType.matic,
   3448148188: CoinType.trx,
-}
-
-export enum LOCK_SCRIPT_TYPE {
-  ckb,
-  none,
-  eth = 3,
-  tron,
-  eip712,
-  btc,
-  doge,
 }
 
 export enum SIGN_TYPE {
@@ -260,4 +246,5 @@ export enum CustomWallet {
   oneKey = 'OneKey',
   iToken = 'iToken',
   tronLink = 'TronLink',
+  walletConnect = 'WalletConnect',
 }

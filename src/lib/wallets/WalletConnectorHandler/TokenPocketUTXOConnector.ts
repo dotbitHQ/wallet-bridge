@@ -10,7 +10,7 @@ export class TokenPocketUTXOConnector extends WalletConnector {
     this.context.address = res[0]
   }
 
-  disconnect() {
+  async disconnect(): Promise<void> {
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined

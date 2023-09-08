@@ -1,31 +1,42 @@
 import { EventEnum, WalletEventListener } from './WalletEventListener'
+import { watchAccount, watchNetwork } from '@wagmi/core'
+import { resetWalletState, setWalletState } from '../../store'
 import { chainIdHexToNumber, toChecksumAddress } from '../../utils'
-import { ChainIdToCoinTypeMap, CoinType, ChainIdToCoinTypeTestNetMap } from '../../constant'
-import { setWalletState } from '../../store'
+import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap, CoinType } from '../../constant'
 import { createTips } from '../../components'
 
-export class MetaMaskEventListener extends WalletEventListener {
+export class WalletConnectEventListener extends WalletEventListener {
+  unwatchAccount: (() => void) | undefined
+  unwatchNetwork: (() => void) | undefined
+
   listenEvents(): void {
-    const { provider } = this.context
-
-    provider.on('accountsChanged', async (accounts: string[]) => {
-      const { address } = this.context
-      const account = accounts?.[0]
-
-      if (account && address && account.toLowerCase() === address.toLowerCase()) {
-        return
-      }
-
-      if (account) {
-        this.context.address = toChecksumAddress(account)
+    this.unwatchAccount = watchAccount((account) => {
+      const { address: oldAddress } = this.context
+      const { address, isConnected, isDisconnected } = account
+      if (address && oldAddress?.toLowerCase() !== address.toLowerCase() && isConnected) {
+        this.context.address = toChecksumAddress(address)
         setWalletState({
-          address: toChecksumAddress(account),
+          address: toChecksumAddress(address),
         })
-        this.context.emitEvent(EventEnum.Change)
+        if (oldAddress) {
+          this.context.emitEvent(EventEnum.Change)
+        }
+      } else if (isDisconnected) {
+        this.removeEvents()
+        this.context.address = undefined
+        this.context.chainId = undefined
+        this.context.coinType = undefined
+        resetWalletState()
+        this.context.emitEvent(EventEnum.Disconnect)
       }
     })
 
-    provider.on('chainChanged', (chainId: string) => {
+    this.unwatchNetwork = watchNetwork((network) => {
+      const { chain } = network
+      if (!chain) {
+        return
+      }
+      const chainId = chain?.id
       const { isTestNet, coinType } = this.context
       const _chainId = chainIdHexToNumber(chainId)
       const _coinType = isTestNet ? ChainIdToCoinTypeTestNetMap[_chainId] : ChainIdToCoinTypeMap[_chainId]
@@ -73,8 +84,7 @@ export class MetaMaskEventListener extends WalletEventListener {
   }
 
   removeEvents(): void {
-    const { provider } = this.context
-    provider.removeAllListeners('accountsChanged')
-    provider.removeAllListeners('chainChanged')
+    this.unwatchAccount?.()
+    this.unwatchNetwork?.()
   }
 }
