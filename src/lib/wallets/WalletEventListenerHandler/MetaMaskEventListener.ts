@@ -16,13 +16,11 @@ export class MetaMaskEventListener extends WalletEventListener {
         return
       }
 
-      if (account) {
-        this.context.address = toChecksumAddress(account)
-        setWalletState({
-          address: toChecksumAddress(account),
-        })
-        this.context.emitEvent(EventEnum.Change)
-      }
+      this.context.address = toChecksumAddress(account)
+      setWalletState({
+        address: toChecksumAddress(account),
+      })
+      this.context.emitEvent(EventEnum.Change)
     })
 
     provider.on('chainChanged', (chainId: string) => {
@@ -74,7 +72,7 @@ export class MetaMaskEventListener extends WalletEventListener {
 
   removeEvents(): void {
     const { provider } = this.context
-    provider.removeAllListeners('accountsChanged')
-    provider.removeAllListeners('chainChanged')
+    provider.removeAllListeners?.('accountsChanged')
+    provider.removeAllListeners?.('chainChanged')
   }
 }

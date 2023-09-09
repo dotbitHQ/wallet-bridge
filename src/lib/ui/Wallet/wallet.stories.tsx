@@ -1,30 +1,48 @@
 import { Button } from '../../components'
 import { Wallet } from '../index'
-import { bsc, bscTestnet, goerli, mainnet, polygon, polygonMumbai } from '@wagmi/core/chains'
-import { publicProvider } from '@wagmi/core/providers/public'
+import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
 import { configureChains, createConfig } from '@wagmi/core'
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
+import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
 
 export default {
   title: 'UI/Wallets',
 }
 
-const projectId = '13c75e7d20888adc7e57cad417ad9ed8'
+const chainIdToRpc: { [chainId: number]: string | undefined } = {
+  [ethereum.id]: 'https://eth.public-rpc.com',
+  [goerli.id]: 'https://rpc.ankr.com/eth_goerli',
+  [bsc.id]: 'https://bscrpc.com',
+  [bscTestnet.id]: 'https://rpc.ankr.com/bsc_testnet_chapel',
+  [polygon.id]: 'https://polygon-rpc.com',
+  [polygonMumbai.id]: 'https://rpc.ankr.com/polygon_mumbai',
+}
 
 const { publicClient, chains } = configureChains(
-  [mainnet, goerli, bsc, bscTestnet, polygon, polygonMumbai],
-  [publicProvider()],
+  [ethereum, goerli, bsc, bscTestnet, polygon, polygonMumbai],
+  [
+    jsonRpcProvider({
+      rpc(chain) {
+        return { http: chainIdToRpc[chain.id] || '' }
+      },
+    }),
+  ],
 )
 
-const connector = new WalletConnectConnector({
+const metaMaskConnector = new MetaMaskConnector({
+  chains,
+})
+
+const walletConnectConnector = new WalletConnectConnector({
   chains,
   options: {
-    projectId,
+    projectId: '13c75e7d20888adc7e57cad417ad9ed8',
     metadata: {
       name: '.bit',
       description: 'Barrier-free DID for Every Community and Everyone',
-      url: 'https://d.id/bit/reg',
-      icons: ['https://test.d.id/bit/images/reg/das-logo.svg'],
+      url: 'https://d.id',
+      icons: ['https://d.id/favicon.png'],
     },
     showQrModal: true,
   },
@@ -32,7 +50,7 @@ const connector = new WalletConnectConnector({
 
 const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors: [connector],
+  connectors: [walletConnectConnector, metaMaskConnector],
   publicClient,
 })
 
@@ -40,6 +58,8 @@ const wallet = new Wallet({
   isTestNet: true,
   wagmiConfig,
 })
+
+wallet.initWallet({ involution: false })
 
 const TemplateConnectWallet = () => {
   const { walletSnap } = wallet.useWalletState()

@@ -16,6 +16,8 @@ import { isAndroid, isMobile } from 'react-device-detect'
 import { ConnectDID } from 'connect-did-sdk'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
+import { snapshot } from 'valtio'
+import { walletState } from '../store'
 
 export class WalletContext {
   // sendTrx method
@@ -39,6 +41,11 @@ export class WalletContext {
     this.chainId = this.isTestNet ? CoinTypeToTestNetChainIdMap[coinType] : CoinTypeToChainIdMap[coinType]
     this.protocol = protocol
     this.coinType = coinType
+
+    const walletSnap = snapshot(walletState)
+    if (walletSnap?.address) {
+      this.address = walletSnap?.address
+    }
 
     switch (this.protocol) {
       case WalletProtocol.metaMask:

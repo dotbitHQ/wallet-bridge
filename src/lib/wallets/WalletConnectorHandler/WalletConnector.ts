@@ -7,7 +7,7 @@ export abstract class WalletConnector {
     this.context = context
   }
 
-  abstract connect(): Promise<void>
+  abstract connect({ ignoreEvent }: { ignoreEvent: boolean }): Promise<void>
 
   abstract disconnect(): Promise<void>
 

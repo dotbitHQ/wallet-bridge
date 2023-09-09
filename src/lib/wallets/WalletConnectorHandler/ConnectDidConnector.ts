@@ -1,10 +1,11 @@
 import { WalletConnector } from './WalletConnector'
-import { resetWalletState, setWalletState } from '../../store'
+import { getAuthorizeInfo, getMastersAddress, resetWalletState, setWalletState } from '../../store'
 import CustomError from '../../utils/CustomError'
 import errno from '../../constant/errno'
+import { EventEnum } from '../WalletEventListenerHandler'
 
 export class ConnectDidConnector extends WalletConnector {
-  async connect() {
+  async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
     const { provider } = this.context
     const res = await provider.requestDeviceData()
     if (res.code !== errno.connectDidSdkSuccess) {
@@ -12,7 +13,17 @@ export class ConnectDidConnector extends WalletConnector {
     }
     if (res.data) {
       this.context.address = res.data.ckbAddr
-      setWalletState({ deviceData: res.data })
+      setWalletState({
+        protocol: this.context.protocol,
+        address: this.context.address,
+        coinType: this.context.coinType,
+        deviceData: res.data,
+      })
+      await getMastersAddress()
+      await getAuthorizeInfo({ detectAssets: true })
+      if (!ignoreEvent) {
+        this.context.emitEvent(EventEnum.Connect)
+      }
     }
   }
 
@@ -21,6 +32,7 @@ export class ConnectDidConnector extends WalletConnector {
     this.context.chainId = undefined
     this.context.coinType = undefined
     resetWalletState()
+    this.context.emitEvent(EventEnum.Disconnect)
   }
 
   async switchNetwork(chainId: number): Promise<void> {}

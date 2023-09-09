@@ -2,23 +2,29 @@ import { WalletConnector } from './WalletConnector'
 import { chainIdHexToNumber, numberToHex, toChecksumAddress } from '../../utils'
 import { ChainId, ChainIdToChainInfoMap } from '../../constant'
 import errno from '../../constant/errno'
-import { resetWalletState } from '../../store'
+import { resetWalletState, setWalletState } from '../../store'
+import { EventEnum } from '../WalletEventListenerHandler'
 
 export class MetaMaskConnector extends WalletConnector {
-  async connect() {
-    try {
-      const { provider, chainId } = this.context
-      const netVersion = provider.networkVersion
-      const ethChainId = provider.chainId
-      const _chainId = chainIdHexToNumber(netVersion || ethChainId)
-      if (chainId && chainId !== _chainId) {
-        await this.switchNetwork(chainId)
-      }
-      const res = await provider.request({ method: 'eth_requestAccounts' })
+  async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
+    const { provider, chainId } = this.context
+    const netVersion = provider.networkVersion
+    const ethChainId = provider.chainId
+    const _chainId = chainIdHexToNumber(netVersion || ethChainId)
+    if (chainId && chainId !== _chainId) {
+      await this.switchNetwork(chainId)
+    }
+    const res = await provider.request({ method: 'eth_requestAccounts' })
+    if (res?.[0]) {
       this.context.address = toChecksumAddress(res[0])
-    } catch (error) {
-      console.error(error)
-      throw error
+      setWalletState({
+        protocol: this.context.protocol,
+        address: this.context.address,
+        coinType: this.context.coinType,
+      })
+      if (!ignoreEvent) {
+        this.context.emitEvent(EventEnum.Connect)
+      }
     }
   }
 
@@ -27,6 +33,7 @@ export class MetaMaskConnector extends WalletConnector {
     this.context.chainId = undefined
     this.context.coinType = undefined
     resetWalletState()
+    this.context.emitEvent(EventEnum.Disconnect)
   }
 
   async switchNetwork(chainId: ChainId): Promise<void> {

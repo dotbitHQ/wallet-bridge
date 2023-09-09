@@ -1,31 +1,43 @@
 import { WalletConnector } from './WalletConnector'
 import { toChecksumAddress } from '../../utils'
-import { connect, Connector, disconnect, switchNetwork, getAccount, getNetwork } from '@wagmi/core'
-import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap } from '../../constant'
+import { connect, Connector, disconnect, switchNetwork } from '@wagmi/core'
+import { EventEnum } from '../WalletEventListenerHandler'
+import { resetWalletState, setWalletState } from '../../store'
 
 export class WalletConnectConnector extends WalletConnector {
-  async connect(): Promise<void> {
-    const { provider, chainId, isTestNet } = this.context
-    const connector = provider.connectors.find((item: Connector) => {
+  async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
+    console.log('WalletConnect connect')
+    const { provider, chainId } = this.context
+    const walletConnectConnector = provider.connectors.find((item: Connector) => {
       return item.id === 'walletConnect'
     })
-    if (provider && provider.status === 'disconnected' && connector) {
-      const { chain } = await connect({
-        connector,
+    if (provider && provider.status === 'disconnected' && walletConnectConnector) {
+      const { chain, account } = await connect({
+        connector: walletConnectConnector,
         chainId,
       })
-      const { address } = getAccount()
-      const network = getNetwork()
-      if (address && network && network.chain) {
-        this.context.address = toChecksumAddress(String(address))
-        this.context.chainId = network.chain.id
-        this.context.coinType = isTestNet ? ChainIdToCoinTypeTestNetMap[chain.id] : ChainIdToCoinTypeMap[chain.id]
+
+      if (account && chain && chain.id === chainId) {
+        this.context.address = toChecksumAddress(account)
+        setWalletState({
+          protocol: this.context.protocol,
+          address: this.context.address,
+          coinType: this.context.coinType,
+        })
+        if (!ignoreEvent) {
+          this.context.emitEvent(EventEnum.Connect)
+        }
       }
     }
   }
 
   async disconnect(): Promise<void> {
     await disconnect()
+    this.context.address = undefined
+    this.context.chainId = undefined
+    this.context.coinType = undefined
+    resetWalletState()
+    this.context.emitEvent(EventEnum.Disconnect)
   }
 
   async switchNetwork(chainId: number): Promise<void> {

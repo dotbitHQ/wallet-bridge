@@ -10,17 +10,26 @@ export class WalletConnectEventListener extends WalletEventListener {
   unwatchNetwork: (() => void) | undefined
 
   listenEvents(): void {
-    this.unwatchAccount = watchAccount((account) => {
+    console.log('listenEvents')
+    this.unwatchAccount = watchAccount(async (account) => {
+      console.log('watchAccount: ', account)
       const { address: oldAddress } = this.context
       const { address, isConnected, isDisconnected } = account
-      if (address && oldAddress?.toLowerCase() !== address.toLowerCase() && isConnected) {
-        this.context.address = toChecksumAddress(address)
-        setWalletState({
-          address: toChecksumAddress(address),
-        })
-        if (oldAddress) {
-          this.context.emitEvent(EventEnum.Change)
+
+      if (isConnected) {
+        if (!oldAddress) {
+          return
         }
+
+        if (address && oldAddress && oldAddress.toLowerCase() === address.toLowerCase()) {
+          return
+        }
+
+        this.context.address = toChecksumAddress(String(address))
+        setWalletState({
+          address: this.context.address,
+        })
+        this.context.emitEvent(EventEnum.Change)
       } else if (isDisconnected) {
         this.removeEvents()
         this.context.address = undefined
@@ -32,6 +41,7 @@ export class WalletConnectEventListener extends WalletEventListener {
     })
 
     this.unwatchNetwork = watchNetwork((network) => {
+      console.log('watchNetwork: ', network)
       const { chain } = network
       if (!chain) {
         return
@@ -84,6 +94,7 @@ export class WalletConnectEventListener extends WalletEventListener {
   }
 
   removeEvents(): void {
+    console.log('removeEvents: ', this.unwatchAccount, this.unwatchNetwork)
     this.unwatchAccount?.()
     this.unwatchNetwork?.()
   }
