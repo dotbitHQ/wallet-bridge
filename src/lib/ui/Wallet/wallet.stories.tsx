@@ -59,6 +59,14 @@ const wallet = new Wallet({
   wagmiConfig,
 })
 
+// wallet.walletSDK?.context?.addEventListener('walletConnect', () => {
+//   window.location.reload()
+// })
+//
+// wallet.walletSDK?.context?.addEventListener('walletChange', () => {
+//   window.location.reload()
+// })
+
 wallet.initWallet({ involution: false })
 
 const TemplateConnectWallet = () => {

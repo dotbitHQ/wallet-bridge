@@ -41,7 +41,7 @@ export class WalletConnectEventListener extends WalletEventListener {
     })
 
     this.unwatchNetwork = watchNetwork((network) => {
-      console.log('watchNetwork: ', network)
+      console.log('watchNetwork: ', network.chain)
       const { chain } = network
       if (!chain) {
         return

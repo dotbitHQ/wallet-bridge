@@ -11,7 +11,7 @@ import {
 } from '../../components'
 import { WalletProtocol, CoinType } from '../../constant'
 import { getAuthorizeInfo, getMastersAddress, useWalletState } from '../../store'
-import { ReactNode, useContext, useEffect } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import { collapseString, copyText } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
@@ -28,9 +28,8 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   const { walletSnap } = useWalletState()
   const walletSDK = useContext(WalletSDKContext)!
   const { goTo, onClose } = useSimpleRouter()!
-  const onDisconnect = () => {
-    goTo('ChainList')
-  }
+  const [disconnectLoading, setDisconnectLoading] = useState(false)
+
   const onSwitchAddress = () => {
     goTo('AddressList')
   }
@@ -53,8 +52,10 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   }
 
   const disconnect = async () => {
-    onDisconnect()
+    setDisconnectLoading(true)
     await walletSDK.disconnect()
+    goTo('ChainList')
+    setDisconnectLoading(false)
   }
 
   const onSwitch = () => {
@@ -114,8 +115,15 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
             <BackupTips onShowQRCode={onShowQRCode}></BackupTips>
           )
         ) : null}
-        <Button className="mt-6 w-full" size={ButtonSize.large} variant={ButtonVariant.secondary} onClick={disconnect}>
-          <DisconnectIcon className="mr-2 h-4 w-4 text-font-secondary"></DisconnectIcon>Disconnect
+        <Button
+          className="mt-6 w-full"
+          loading={disconnectLoading}
+          size={ButtonSize.large}
+          variant={ButtonVariant.secondary}
+          onClick={disconnect}
+        >
+          {disconnectLoading ? null : <DisconnectIcon className="mr-2 h-4 w-4 text-font-secondary"></DisconnectIcon>}
+          Disconnect
         </Button>
       </div>
     </>
