@@ -32,6 +32,10 @@ import {
   WalletTransaction,
 } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
+import { WalletConnectConnector } from './WalletConnectorHandler/WalletConnectConnector'
+import { WalletConnectEventListener } from './WalletEventListenerHandler/WalletConnectEventListener'
+import { WalletConnectSigner } from './WalletSignerHandler/WalletConnectSigner'
+import { WalletConnectTransaction } from './WalletTransactionHandler/WalletConnectTransaction'
 
 type WalletHandlerMap = {
   [P in WalletProtocol]: {
@@ -74,6 +78,12 @@ export class WalletHandlerFactory {
       EventListener: ConnectDidEventListener,
       Signer: ConnectDidSigner,
       Transaction: ConnectDidTransaction,
+    },
+    [WalletProtocol.walletConnect]: {
+      Connector: WalletConnectConnector,
+      EventListener: WalletConnectEventListener,
+      Signer: WalletConnectSigner,
+      Transaction: WalletConnectTransaction,
     },
   }
 

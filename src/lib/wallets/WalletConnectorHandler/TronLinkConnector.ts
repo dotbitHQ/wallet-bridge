@@ -1,7 +1,8 @@
 import { WalletConnector } from './WalletConnector'
 import { TronLinkRequestAccountsResponseCode } from '../../constant'
-import { resetWalletState } from '../../store'
+import { resetWalletState, setWalletState } from '../../store'
 import CustomError from '../../utils/CustomError'
+import { EventEnum } from '../WalletEventListenerHandler'
 
 // source: https://developers.tron.network/docs/introduction
 export interface ITronLinkRequestAccountsResponse {
@@ -10,33 +11,45 @@ export interface ITronLinkRequestAccountsResponse {
 }
 
 export class TronLinkConnector extends WalletConnector {
-  async connect(): Promise<void> {
-    try {
-      const { provider } = this.context
-      if (provider.request) {
-        const res: ITronLinkRequestAccountsResponse = await provider.request({
-          method: 'tron_requestAccounts',
-        })
+  async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
+    const { provider } = this.context
+    if (provider.request) {
+      const res: ITronLinkRequestAccountsResponse = await provider.request({
+        method: 'tron_requestAccounts',
+      })
 
-        if (res.code === TronLinkRequestAccountsResponseCode.ok) {
-          this.context.address = provider.defaultAddress.base58
-        } else {
-          throw new CustomError(res.code, res.message)
+      if (res.code === TronLinkRequestAccountsResponseCode.ok) {
+        this.context.address = provider.defaultAddress.base58
+        setWalletState({
+          protocol: this.context.protocol,
+          address: this.context.address,
+          coinType: this.context.coinType,
+        })
+        if (!ignoreEvent) {
+          this.context.emitEvent(EventEnum.Connect)
         }
       } else {
-        this.context.address = provider.defaultAddress.base58
+        throw new CustomError(res.code, res.message)
       }
-    } catch (error) {
-      console.error(error)
-      throw error
+    } else {
+      this.context.address = provider.defaultAddress.base58
+      setWalletState({
+        protocol: this.context.protocol,
+        address: this.context.address,
+        coinType: this.context.coinType,
+      })
+      if (!ignoreEvent) {
+        this.context.emitEvent(EventEnum.Connect)
+      }
     }
   }
 
-  disconnect() {
+  async disconnect(): Promise<void> {
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined
     resetWalletState()
+    this.context.emitEvent(EventEnum.Disconnect)
   }
 
   async switchNetwork(chainId: number): Promise<void> {}

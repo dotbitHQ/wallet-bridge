@@ -14,6 +14,10 @@ import Emittery from 'emittery'
 import { EventKey } from './WalletEventListenerHandler'
 import { isAndroid, isMobile } from 'react-device-detect'
 import { ConnectDID } from 'connect-did-sdk'
+import CustomError from '../utils/CustomError'
+import errno from '../constant/errno'
+import { snapshot } from 'valtio'
+import { walletState } from '../store'
 
 export class WalletContext {
   // sendTrx method
@@ -24,17 +28,24 @@ export class WalletContext {
   coinType?: CoinType
   isTestNet = false
   torusWallet?: Torus
+  wagmiConfig: any
   // event emitter
   #emitter = new Emittery()
 
-  constructor({ isTestNet }: { isTestNet: boolean }) {
+  constructor({ isTestNet, wagmiConfig }: { isTestNet: boolean; wagmiConfig?: any }) {
     this.isTestNet = isTestNet
+    this.wagmiConfig = wagmiConfig
   }
 
   async retrieveProvider({ protocol, coinType }: { protocol: WalletProtocol; coinType: CoinType }) {
     this.chainId = this.isTestNet ? CoinTypeToTestNetChainIdMap[coinType] : CoinTypeToChainIdMap[coinType]
     this.protocol = protocol
     this.coinType = coinType
+
+    const walletSnap = snapshot(walletState)
+    if (walletSnap?.address) {
+      this.address = walletSnap?.address
+    }
 
     switch (this.protocol) {
       case WalletProtocol.metaMask:
@@ -51,6 +62,9 @@ export class WalletContext {
         break
       case WalletProtocol.webAuthn:
         this.getConnectDIDProvider()
+        break
+      case WalletProtocol.walletConnect:
+        await this.getWalletConnectProvider()
         break
     }
   }
@@ -72,7 +86,7 @@ export class WalletContext {
   }
 
   private async getMetaMaskProvider() {
-    if (this.torusWallet?.hideTorusButton != null) {
+    if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
     }
 
@@ -93,7 +107,7 @@ export class WalletContext {
   }
 
   private async getTokenPocketUTXOProvider() {
-    if (this.torusWallet?.hideTorusButton != null) {
+    if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
     }
 
@@ -125,7 +139,7 @@ export class WalletContext {
     try {
       let host: string
       if (this.coinType) {
-        host = CoinTypeToTorusHostMap[this.coinType]
+        host = this.isTestNet ? CoinTypeToTorusHostTestNetMap[this.coinType] : CoinTypeToTorusHostMap[this.coinType]
       } else {
         host = this.isTestNet ? CoinTypeToTorusHostTestNetMap[CoinType.eth] : CoinTypeToTorusHostMap[CoinType.eth]
       }
@@ -146,8 +160,20 @@ export class WalletContext {
     }
   }
 
+  private async getWalletConnectProvider() {
+    if (this.torusWallet?.hideTorusButton) {
+      this.torusWallet.hideTorusButton()
+    }
+
+    if (this.wagmiConfig) {
+      this.provider = this.wagmiConfig
+    } else {
+      throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
+    }
+  }
+
   private async getTronLinkProvider() {
-    if (this.torusWallet?.hideTorusButton != null) {
+    if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
     }
 
@@ -172,7 +198,7 @@ export class WalletContext {
   }
 
   private getConnectDIDProvider() {
-    if (this.torusWallet?.hideTorusButton != null) {
+    if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
     }
     this.provider = new ConnectDID(this.isTestNet)

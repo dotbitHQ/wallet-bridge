@@ -1,14 +1,12 @@
 import { SignDataType, WalletSigner } from './WalletSigner'
 import { isHexStrict } from '../../utils'
+import { signMessage, signTypedData } from '@wagmi/core'
 
-export class MetaMaskSigner extends WalletSigner {
+export class WalletConnectSigner extends WalletSigner {
   async signData(data: SignDataType, options?: Record<string, any>): Promise<string> {
     let res
     if (options?.isEIP712) {
-      res = await this.context.provider.request({
-        method: 'eth_signTypedData_v4',
-        params: [this.context.address, JSON.stringify(data)],
-      })
+      res = await signTypedData(data as any)
     } else {
       let _data = data
       // eslint-disable-next-line @typescript-eslint/no-base-to-string,@typescript-eslint/restrict-plus-operands
@@ -17,10 +15,9 @@ export class MetaMaskSigner extends WalletSigner {
         _data = '0x' + data
       }
 
-      console.log('personal_sign', _data)
-      res = await this.context.provider.request({
-        method: 'personal_sign',
-        params: [_data, this.context.address],
+      console.log('signMessage', String(_data))
+      res = await signMessage({
+        message: String(_data),
       })
     }
     return res

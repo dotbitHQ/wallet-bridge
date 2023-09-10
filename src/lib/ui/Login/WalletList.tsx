@@ -15,6 +15,7 @@ import TokenPocketIcon from './icon/tokenpocket-icon.svg'
 import OneKeyIcon from './icon/onekey-icon.svg'
 import ITokenIcon from './icon/itoken-icon.svg'
 import TronLinkIcon from './icon/tronlink-icon.svg'
+import WalletConnectIcon from './icon/walletconnect-icon.svg'
 
 interface IWallet {
   icon: ReactNode
@@ -33,6 +34,11 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
 
   const wallets = useMemo<IWallet[]>(() => {
     return [
+      {
+        icon: <img className="h-10 w-10" src={WalletConnectIcon} alt="WalletConnect" />,
+        name: CustomWallet.walletConnect,
+        protocol: [WalletProtocol.walletConnect, WalletProtocol.metaMask],
+      },
       {
         icon: <img className="h-10 w-10" src={MetaMaskIcon} alt="MetaMask" />,
         name: CustomWallet.metaMask,
@@ -94,10 +100,11 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
 
     try {
       setCurrentLogin(name)
+      const isWalletConnect = name === CustomWallet.walletConnect
       const { protocol, coinType } = snapshot(loginCacheState)
       if (protocol && coinType) {
         await walletSDK.init({
-          protocol,
+          protocol: isWalletConnect ? WalletProtocol.walletConnect : protocol,
           coinType,
         })
         await walletSDK.connect()

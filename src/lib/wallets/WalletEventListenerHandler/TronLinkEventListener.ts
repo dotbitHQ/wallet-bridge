@@ -2,7 +2,7 @@ import { EventEnum, WalletEventListener } from './WalletEventListener'
 import { WalletContext } from '../WalletContext'
 import { chainIdHexToNumber } from '../../utils'
 import { setWalletState } from '../../store'
-import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap, CoinType } from '../../constant'
+import { ChainIdToCoinTypeMap, CoinType, ChainIdToCoinTypeTestNetMap } from '../../constant'
 import { debounce } from 'lodash-es'
 import { createTips } from '../../components'
 
@@ -35,8 +35,11 @@ export class TronLinkEventListener extends WalletEventListener {
       if (_chainId) {
         _chainId = chainIdHexToNumber(_chainId)
       }
-      console.log(_chainId)
       const _coinType = isTestNet ? ChainIdToCoinTypeTestNetMap[_chainId] : ChainIdToCoinTypeMap[_chainId]
+
+      if (coinType === _coinType && this.context.chainId === _chainId) {
+        return
+      }
 
       if (_coinType) {
         context.chainId = _chainId

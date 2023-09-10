@@ -1,6 +1,6 @@
 import { MoreIcon, NervosIcon, PlusIcon, RevokeIcon, createTips, DeviceIcon } from '../../components'
 import { Menu, Transition } from '@headlessui/react'
-import { emojis } from '../ChooseEmoji/png'
+import { emojis, emojisTemp } from '../ChooseEmoji/png'
 import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react'
 import { ICKBAddressItem, setWalletState, useWalletState, walletState } from '../../store'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -180,17 +180,27 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
     sendTransactionMutation.data?.hash,
     walletSnap.deviceList,
   ])
+  const nameAndEmoji = getNameAndEmojiFromLocalStorage(item.address)
 
   return (
     <li className="flex h-[48px] items-center gap-4 pl-3 pr-4">
-      <LeadingIcon name={item.notes ?? ''} emoji={item.avatar ? `${item.avatar}` : ''} address={item.address} />
+      <LeadingIcon
+        name={item.notes ? item.notes : nameAndEmoji?.name}
+        emoji={item.notes ? item.avatar! : nameAndEmoji?.emoji}
+        isOld={!item.notes}
+        address={item.address}
+      />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
         <div>
           {isCurrentDevice
             ? walletSnap.deviceData.name
             : isMasterDevice
             ? walletSnap.masterNotes
-            : item.notes ?? collapseString(item.address, 8, 4)}
+            : item.notes
+            ? item.notes
+            : nameAndEmoji?.name
+            ? nameAndEmoji?.name
+            : collapseString(item.address, 8, 4)}
         </div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
@@ -211,10 +221,11 @@ interface LeadingIconProps {
   name?: string
   emoji?: string
   address: string
+  isOld?: boolean
 }
 
-function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
-  const selectedEmoji = (emojis as Record<string, string>)[emoji as any]
+function LeadingIcon({ name, emoji, address, isOld = false }: LeadingIconProps) {
+  const selectedEmoji = ((isOld ? emojisTemp : emojis) as Record<string, string>)[emoji as any]
   const { walletSnap } = useWalletState()
   const isMasterDevice = useMemo(() => walletSnap.address === address, [address, walletSnap.address])
   if (selectedEmoji) {
@@ -228,10 +239,10 @@ function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
   }
 }
 
-// function getNameAndEmojiFromLocalStorage(address: string) {
-//   return JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')[address]
-// }
-//
+function getNameAndEmojiFromLocalStorage(address: string) {
+  return JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')[address]
+}
+
 // function removeNameAndEmojiFromLocalStorage(address: string) {
 //   const data = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
 //   // eslint-disable-next-line
