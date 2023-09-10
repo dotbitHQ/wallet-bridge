@@ -100,7 +100,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
     },
   })
 
-  const isMasterDevice = walletSnap.address === item.address
+  const isMasterDevice = !walletSnap.deviceList?.find((v) => v.address === item.address)
   const isCurrentDevice = walletSnap.deviceData?.ckbAddr === item.address
 
   const onRevoke = async () => {
@@ -195,7 +195,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
           {isCurrentDevice
             ? walletSnap.deviceData.name
             : isMasterDevice
-            ? walletSnap.masterNotes
+            ? walletSnap.masterNotes || collapseString(walletSnap.address, 8, 4)
             : item.notes
             ? item.notes
             : nameAndEmoji?.name
