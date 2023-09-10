@@ -31,6 +31,7 @@ module.exports = {
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/prefer-nullish-coalescing': 'warn',
     'react-hooks/exhaustive-deps': 'error',
   },
   ignorePatterns: ['*.stories.tsx'],
