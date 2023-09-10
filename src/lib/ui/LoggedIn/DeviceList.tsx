@@ -180,7 +180,6 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
     sendTransactionMutation.data?.hash,
     walletSnap.deviceList,
   ])
-
   const nameAndEmoji = getNameAndEmojiFromLocalStorage(item.address)
 
   return (
@@ -197,7 +196,11 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
             ? walletSnap.deviceData.name
             : isMasterDevice
             ? walletSnap.masterNotes
-            : item.notes ?? collapseString(item.address, 8, 4)}
+            : item.notes
+            ? item.notes
+            : nameAndEmoji?.name
+            ? nameAndEmoji?.name
+            : collapseString(item.address, 8, 4)}
         </div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
