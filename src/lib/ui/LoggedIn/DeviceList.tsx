@@ -187,7 +187,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
     <li className="flex h-[48px] items-center gap-4 pl-3 pr-4">
       <LeadingIcon
         name={item.notes ? item.notes : nameAndEmoji?.name}
-        emoji={item.notes ? item.avatar! : nameAndEmoji.emoji}
+        emoji={item.notes ? item.avatar! : nameAndEmoji?.emoji}
         isOld={!item.notes}
         address={item.address}
       />
