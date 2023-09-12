@@ -5,6 +5,7 @@ import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
 import { configureChains, createConfig } from '@wagmi/core'
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
+import { isMobile } from 'react-device-detect'
 
 export default {
   title: 'UI/Wallets',
@@ -44,7 +45,7 @@ const walletConnectConnector = new WalletConnectConnector({
       url: 'https://d.id',
       icons: ['https://d.id/favicon.png'],
     },
-    showQrModal: true,
+    showQrModal: isMobile,
   },
 })
 
@@ -97,7 +98,8 @@ const TemplateConnectWallet = () => {
       <div>
         <div>protocol: {walletSnap.protocol}</div>
         <div>coinType: {walletSnap.coinType}</div>
-        <div>address: {walletSnap.address}</div>
+        <div className="break-words">address: {walletSnap.address}</div>
+        <div>walletName: {walletSnap.walletName}</div>
       </div>
       <Button onClick={onConnect}>Connect Wallet</Button>
       <br />

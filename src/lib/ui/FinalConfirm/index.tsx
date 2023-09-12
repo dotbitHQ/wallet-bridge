@@ -30,7 +30,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
       const signList = await walletSDK?.signTxList({
         ...signData,
         // eslint-disable-next-line
-        sign_list: signData.sign_list.map(({ sign_type, sign_msg }) => ({
+        sign_list: signData.sign_list?.map(({ sign_type, sign_msg }) => ({
           sign_type,
           sign_msg: sign_msg.replace('0x', ''),
         })),

@@ -11,6 +11,7 @@ export interface WalletState {
   protocol?: WalletProtocol
   address?: string
   coinType?: CoinType
+  walletName?: string
   hardwareWalletTipsShow?: boolean
   deviceData?: IDeviceData
   ckbAddresses?: string[]
@@ -31,7 +32,7 @@ export interface ICKBAddressItem {
   notes?: string
 }
 
-const WalletStateKey = 'WalletState'
+const WalletStateKey = 'WalletStateV1'
 
 const walletStateLocalStorage = globalThis.localStorage ? globalThis.localStorage.getItem(WalletStateKey) : null
 
@@ -41,6 +42,7 @@ const localWalletState = walletStateLocalStorage
       protocol: undefined,
       address: undefined,
       coinType: undefined,
+      walletName: undefined,
       hardwareWalletTipsShow: true,
       deviceData: undefined,
       ckbAddresses: [],
@@ -57,7 +59,7 @@ const localWalletState = walletStateLocalStorage
 
 export const walletState = proxy<WalletState>({
   ...localWalletState,
-  deviceList: localWalletState.deviceList.map((i: ICKBAddressItem | string) =>
+  deviceList: localWalletState.deviceList?.map((i: ICKBAddressItem | string) =>
     typeof i === 'string' ? { address: i } : i,
   ),
 })
@@ -147,6 +149,7 @@ export const setWalletState = ({
   protocol,
   address,
   coinType,
+  walletName,
   hardwareWalletTipsShow,
   deviceData,
   masterNotes,
@@ -164,6 +167,9 @@ export const setWalletState = ({
   }
   if (coinType) {
     walletState.coinType = coinType
+  }
+  if (walletName) {
+    walletState.walletName = walletName
   }
   if (address) {
     walletState.address = address
@@ -209,6 +215,7 @@ export const setWalletState = ({
 export const resetWalletState = () => {
   walletState.protocol = undefined
   walletState.coinType = undefined
+  walletState.walletName = undefined
   walletState.address = undefined
   walletState.deviceData = undefined
   walletState.ckbAddresses = []

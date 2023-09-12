@@ -4,6 +4,7 @@ import { Modal } from '../components/Modal'
 import clsx from 'clsx'
 import { ChainList } from './Login/ChainList'
 import { WalletList } from './Login/WalletList'
+import { WalletConnectQrCode } from './Login/WalletConnectQrCode'
 import { LoggedIn } from './LoggedIn/LoggedIn'
 import { AddressList } from './LoggedIn/AddressList'
 import { SimpleRouter } from '../components/SimpleRouter'
@@ -31,6 +32,11 @@ const routes = {
   WalletList: {
     el: <WalletList key="WalletList" />,
     prev: 'ChainList',
+    next: 'WalletConnectQrCode',
+  },
+  WalletConnectQrCode: {
+    el: <WalletConnectQrCode key="WalletConnectQrCode" />,
+    prev: 'WalletList',
   },
   AddressList: {
     el: <AddressList key="AddressList" />,

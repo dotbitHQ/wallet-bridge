@@ -17,6 +17,7 @@ export class ConnectDidConnector extends WalletConnector {
         protocol: this.context.protocol,
         address: this.context.address,
         coinType: this.context.coinType,
+        walletName: this.context.walletName,
         deviceData: res.data,
       })
       await getMastersAddress()

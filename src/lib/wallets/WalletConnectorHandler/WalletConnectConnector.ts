@@ -3,6 +3,7 @@ import { toChecksumAddress } from '../../utils'
 import { connect, Connector, disconnect, switchNetwork } from '@wagmi/core'
 import { EventEnum } from '../WalletEventListenerHandler'
 import { resetWalletState, setWalletState } from '../../store'
+import { setLoginCacheState } from '../../store/loginCache'
 
 export class WalletConnectConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
@@ -11,7 +12,15 @@ export class WalletConnectConnector extends WalletConnector {
     const walletConnectConnector = provider.connectors.find((item: Connector) => {
       return item.id === 'walletConnect'
     })
-    if (provider && provider.status === 'disconnected' && walletConnectConnector) {
+
+    if (provider && provider.status !== 'connected' && walletConnectConnector) {
+      if (!walletConnectConnector.options.showQrModal) {
+        const walletConnectProvider = await walletConnectConnector.getProvider()
+        walletConnectProvider.once('display_uri', async (uri: string) => {
+          console.log('WalletConnect display_uri', uri)
+          setLoginCacheState({ walletConnectDisplayUri: uri })
+        })
+      }
       const { chain, account } = await connect({
         connector: walletConnectConnector,
         chainId,
@@ -23,7 +32,9 @@ export class WalletConnectConnector extends WalletConnector {
           protocol: this.context.protocol,
           address: this.context.address,
           coinType: this.context.coinType,
+          walletName: this.context.walletName,
         })
+        setLoginCacheState({ walletConnectDisplayUri: '', walletName: '' })
         if (!ignoreEvent) {
           this.context.emitEvent(EventEnum.Connect)
         }

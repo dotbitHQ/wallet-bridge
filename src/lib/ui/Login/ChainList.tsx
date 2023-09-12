@@ -10,12 +10,11 @@ import {
   NoticeIcon,
   ButtonVariant,
 } from '../../components'
-import { CoinType, CustomChain, WalletProtocol } from '../../constant'
-import { useWalletState, walletState } from '../../store'
+import { CoinType, CustomChain } from '../../constant'
+import { useWalletState } from '../../store'
 import { ChainItem } from '../../components/ChainItem'
 import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import handleError from '../../utils/handleError'
-import { snapshot } from 'valtio'
 import { setLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
@@ -32,7 +31,6 @@ interface IChain {
   name: CustomChain
   tag?: ReactNode
   coinType: CoinType
-  protocol: WalletProtocol
 }
 
 interface IChainList {
@@ -44,49 +42,42 @@ const passkey: IChain = {
   icon: undefined,
   name: CustomChain.passkey,
   coinType: CoinType.ckb,
-  protocol: WalletProtocol.webAuthn,
 }
 
 const eth: IChain = {
   icon: <img className="h-10 w-10" src={EthIcon} alt="ETH" />,
   name: CustomChain.eth,
   coinType: CoinType.eth,
-  protocol: WalletProtocol.metaMask,
 }
 
 const bsc: IChain = {
   icon: <img className="h-10 w-10" src={BscIcon} alt="BSC" />,
   name: CustomChain.bsc,
   coinType: CoinType.bsc,
-  protocol: WalletProtocol.metaMask,
 }
 
 const polygon: IChain = {
   icon: <img className="h-10 w-10" src={PolygonIcon} alt="Polygon" />,
   name: CustomChain.polygon,
   coinType: CoinType.matic,
-  protocol: WalletProtocol.metaMask,
 }
 
 const tron: IChain = {
   icon: <img className="h-10 w-10" src={TronIcon} alt="Tron" />,
   name: CustomChain.tron,
   coinType: CoinType.trx,
-  protocol: WalletProtocol.tronLink,
 }
 
 const doge: IChain = {
   icon: <img className="h-10 w-10" src={DogecoinIcon} alt="Dogecoin" />,
   name: CustomChain.doge,
   coinType: CoinType.doge,
-  protocol: WalletProtocol.tokenPocketUTXO,
 }
 
 const torus: IChain = {
   icon: <img className="h-10 w-10" src={TorusIcon} alt="Torus" />,
   name: CustomChain.torus,
   coinType: CoinType.eth,
-  protocol: WalletProtocol.torus,
 }
 
 export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) => {
@@ -176,56 +167,21 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
       })
   }, [])
 
-  // const createHardwareWalletTips = (chain: IChain) => {
-  //   createTips({
-  //     title: 'Tips',
-  //     content: (
-  //       <div className="text-center">
-  //         <div className="mb-3 font-medium text-danger-hover">
-  //           DO NOT use .bit with ANY hardware wallet except Ledger and the latest version of OneKey!
-  //         </div>
-  //         <div>Since most hardware wallets have incompatibility problems.</div>
-  //       </div>
-  //     ),
-  //     confirmBtnText: 'Understand, Continue',
-  //     onConfirm: () => {
-  //       closeHardwareWalletTips(chain)
-  //     },
-  //     onClose: () => {
-  //       closeHardwareWalletTips(chain)
-  //     },
-  //   })
-  // }
-
-  // const closeHardwareWalletTips = (chain: IChain) => {
-  //   setWalletState({
-  //     hardwareWalletTipsShow: false,
-  //   })
-  //   void onLogin(chain)
-  // }
-
   const selectChain = (chain: IChain) => {
-    const { protocol, coinType } = chain
+    const { coinType } = chain
     setLoginCacheState({
-      protocol,
       coinType,
     })
     showWalletList()
   }
 
   const onLogin = async (chain: IChain) => {
-    const { name, protocol, coinType } = chain
+    const { name, coinType } = chain
     if (currentLogin) {
       return
     }
 
-    // const { hardwareWalletTipsShow } = snapshot(walletState)
-    // if (hardwareWalletTipsShow && ![WalletProtocol.torus, WalletProtocol.webAuthn].includes(protocol)) {
-    //   createHardwareWalletTips(chain)
-    //   return
-    // }
-
-    if (![WalletProtocol.torus, WalletProtocol.webAuthn].includes(protocol)) {
+    if (![CustomChain.torus, CustomChain.passkey].includes(name)) {
       selectChain(chain)
       return
     }
@@ -233,12 +189,12 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
     try {
       setCurrentLogin(name)
       await walletSDK.init({
-        protocol,
         coinType,
+        walletName: name,
       })
       await walletSDK.connect()
-      const { ckbAddresses, loggedInSelectAddress } = snapshot(walletState)
-      if (protocol === WalletProtocol.webAuthn && ckbAddresses && ckbAddresses.length > 0 && loggedInSelectAddress) {
+      const { ckbAddresses, loggedInSelectAddress } = walletSnap
+      if (name === CustomChain.passkey && ckbAddresses && ckbAddresses.length > 0 && loggedInSelectAddress) {
         showAddressList()
       } else {
         onClose()
@@ -307,14 +263,14 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
           </div>
         ) : null}
         <ul className="flex flex-col gap-6">
-          {chains.map((item, index) => {
+          {chains?.map((item, index) => {
             return (
               <div key={`container-${index}`}>
                 <li key={`label-${index}`} className="mx-2 font-bold text-font-secondary">
                   {item.label}
                 </li>
                 <div className="mt-2 overflow-hidden rounded-2xl border border-[#B6C4D966]">
-                  {item.list.map((chain, i) => {
+                  {item.list?.map((chain, i) => {
                     return (
                       <div key={chain.name}>
                         <ChainItem

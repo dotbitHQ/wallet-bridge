@@ -121,7 +121,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
         const res = await signTxList({
           ...data,
           // eslint-disable-next-line
-          sign_list: data.sign_list.map(({ sign_type, sign_msg }: SignInfo) => ({
+          sign_list: data.sign_list?.map(({ sign_type, sign_msg }: SignInfo) => ({
             sign_type,
             sign_msg: sign_msg.replace('0x', ''),
           })),
@@ -272,7 +272,7 @@ export function DeviceList({ onShowQRCode, className, onDisconnect }: DeviceList
     <div className={clsx('select-none', className)}>
       <div className="mb-3 text-base font-medium leading-[normal] text-[#5F6570]">Trusted Devices of CKB Address</div>
       <ul className="overflow-hidden rounded-2xl border border-[#B6C4D966]">
-        {mergedList.map((item) => (
+        {mergedList?.map((item) => (
           <div key={item.address}>
             <Device key={item.address} item={item} managingAddress={walletSnap.address!} onDisconnect={onDisconnect} />
             <hr className="mx-3 border-[#B6C4D966]" />

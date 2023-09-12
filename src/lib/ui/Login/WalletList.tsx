@@ -1,10 +1,9 @@
 import { createTips, Header, SwapChildProps } from '../../components'
-import { CustomWallet, WalletProtocol } from '../../constant'
-import { ReactNode, useContext, useMemo, useState } from 'react'
+import { CoinType, CustomWallet } from '../../constant'
+import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { WalletItem } from '../../components/WalletItem'
-import { snapshot } from 'valtio'
 import handleError from '../../utils/handleError'
-import { loginCacheState, useLoginCacheState } from '../../store/loginCache'
+import { setLoginCacheState, useLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
@@ -20,14 +19,12 @@ import WalletConnectIcon from './icon/walletconnect-icon.svg'
 interface IWallet {
   icon: ReactNode
   name: CustomWallet
-  protocol: WalletProtocol[]
+  supportList: CoinType[]
 }
 
 export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const walletSDK = useContext(WalletSDKContext)!
-  const router = useSimpleRouter()!
-  const goBack = router.goBack
-  const onClose = router.onClose
+  const { goBack, onClose, goNext } = useSimpleRouter()!
   const [currentLogin, setCurrentLogin] = useState('')
   const { loginCacheSnap } = useLoginCacheState()
   const { walletSnap } = useWalletState()
@@ -37,52 +34,52 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
       {
         icon: <img className="h-10 w-10" src={WalletConnectIcon} alt="WalletConnect" />,
         name: CustomWallet.walletConnect,
-        protocol: [WalletProtocol.walletConnect, WalletProtocol.metaMask],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
         icon: <img className="h-10 w-10" src={MetaMaskIcon} alt="MetaMask" />,
         name: CustomWallet.metaMask,
-        protocol: [WalletProtocol.metaMask],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
         icon: <img className="h-10 w-10" src={TrustWalletIcon} alt="TrustWallet" />,
         name: CustomWallet.trustWallet,
-        protocol: [WalletProtocol.metaMask],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
         icon: <img className="h-10 w-10" src={ImTokenIcon} alt="imToken" />,
         name: CustomWallet.imToken,
-        protocol: [WalletProtocol.metaMask, WalletProtocol.tronLink],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx],
       },
       {
         icon: <img className="h-10 w-10" src={TokenPocketIcon} alt="TokenPocket" />,
         name: CustomWallet.tokenPocket,
-        protocol: [WalletProtocol.metaMask, WalletProtocol.tokenPocketUTXO, WalletProtocol.tronLink],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx, CoinType.doge],
       },
       {
         icon: <img className="h-10 w-10" src={OneKeyIcon} alt="OneKey" />,
         name: CustomWallet.oneKey,
-        protocol: [WalletProtocol.metaMask],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
         icon: <img className="h-10 w-10" src={ITokenIcon} alt="iToken" />,
         name: CustomWallet.iToken,
-        protocol: [WalletProtocol.metaMask],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
         icon: <img className="h-10 w-10" src={TronLinkIcon} alt="TronLink" />,
         name: CustomWallet.tronLink,
-        protocol: [WalletProtocol.tronLink],
+        supportList: [CoinType.trx],
       },
     ]
   }, [])
 
   const showWallets = useMemo(() => {
-    const { protocol } = loginCacheSnap
-    if (protocol) {
+    const { coinType } = loginCacheSnap
+    if (coinType) {
       return wallets.filter((wallet) => {
         return (
-          wallet.protocol.includes(protocol) &&
+          wallet.supportList.includes(coinType) &&
           (walletSnap.customWallets && walletSnap.customWallets?.length > 0
             ? walletSnap.customWallets.includes(wallet.name)
             : true)
@@ -100,16 +97,17 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
 
     try {
       setCurrentLogin(name)
-      const isWalletConnect = name === CustomWallet.walletConnect
-      const { protocol, coinType } = snapshot(loginCacheState)
-      if (protocol && coinType) {
+      const { coinType } = loginCacheSnap
+      if (coinType) {
+        setLoginCacheState({ walletName: name })
         await walletSDK.init({
-          protocol: isWalletConnect ? WalletProtocol.walletConnect : protocol,
           coinType,
+          walletName: name,
         })
         await walletSDK.connect()
       }
       onClose?.()
+      setLoginCacheState({ walletConnectDisplayUri: '', walletName: '' })
     } catch (error: any) {
       console.error(error)
       const handleErrorRes = handleError(error)
@@ -136,10 +134,17 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
     onClose?.()
     setCurrentLogin('')
   }
+
   const back = () => {
     goBack?.()
     setCurrentLogin('')
   }
+
+  useEffect(() => {
+    if (loginCacheSnap.walletName === CustomWallet.walletConnect && loginCacheSnap.walletConnectDisplayUri) {
+      goNext?.()
+    }
+  }, [goNext, loginCacheSnap.walletConnectDisplayUri, loginCacheSnap.walletName])
 
   return (
     <>
@@ -152,7 +157,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
       />
       <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
         <ul className="flex flex-col gap-2">
-          {showWallets.map((wallet, index) => {
+          {showWallets?.map((wallet, index) => {
             return (
               <WalletItem
                 key={index}

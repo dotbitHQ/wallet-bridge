@@ -85,11 +85,8 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
       <div className="w-full px-6 pb-6 pt-[76px]" ref={transitionRef} style={transitionStyle}>
         <div className="mb-10 text-center">
           {walletSnap.coinType && icons[walletSnap.coinType]}
-          <h2 className="mb-1.5 mt-2 text-2xl font-extrabold leading-7">
-            {walletSnap.protocol === WalletProtocol.webAuthn ? null : collapseString(walletSnap.address)}
-          </h2>
           {walletSnap.protocol === WalletProtocol.webAuthn ? (
-            <div className="flex items-center justify-center">
+            <div className="mt-2 flex items-center justify-center">
               <span
                 className="cursor-pointer text-base font-medium leading-[normal] text-font-secondary"
                 onClick={() => {
@@ -106,7 +103,19 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 ></SwitchIcon>
               ) : null}
             </div>
-          ) : null}
+          ) : (
+            <h2 className="mb-2 mt-4">
+              <span
+                className="inline-flex cursor-pointer items-center justify-center text-2xl font-extrabold leading-7"
+                onClick={() => {
+                  walletSnap.address && onCopy(walletSnap.address)
+                }}
+              >
+                {collapseString(walletSnap.address)}
+                <CopyIcon className="ml-3 h-4 w-4 cursor-pointer text-font-secondary hover:text-[#5F6570]"></CopyIcon>
+              </span>
+            </h2>
+          )}
         </div>
         {walletSnap.protocol === WalletProtocol.webAuthn && walletSnap.canAddDevice ? (
           walletSnap.deviceList && walletSnap.deviceList.length > 0 ? (

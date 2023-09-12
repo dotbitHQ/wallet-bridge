@@ -30,10 +30,16 @@ class WalletSDK {
     this.context = new WalletContext({ isTestNet, wagmiConfig })
   }
 
-  async init({ protocol, coinType }: { protocol: WalletProtocol; coinType: CoinType }) {
+  async init({
+    coinType,
+    walletName,
+  }: {
+    coinType?: CoinType
+    walletName?: string
+  } = {}) {
     await this.context.retrieveProvider({
-      protocol,
       coinType,
+      walletName,
     })
     this.eventListener?.removeEvents()
     this.walletConnector = WalletHandlerFactory.createConnector(this.context)
@@ -75,13 +81,10 @@ class WalletSDK {
 
   async initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean> {
     try {
-      const { protocol, coinType, deviceData } = snapshot(walletState)
+      const { protocol, coinType, deviceData, walletName } = snapshot(walletState)
 
-      if (protocol && coinType) {
-        await this.init({
-          protocol,
-          coinType,
-        })
+      if (walletName && protocol && coinType) {
+        await this.init()
         if (protocol === WalletProtocol.webAuthn && deviceData) {
           void getAuthorizeInfo()
           void getMastersAddress()

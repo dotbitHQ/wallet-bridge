@@ -24,6 +24,7 @@ export class TronLinkConnector extends WalletConnector {
           protocol: this.context.protocol,
           address: this.context.address,
           coinType: this.context.coinType,
+          walletName: this.context.walletName,
         })
         if (!ignoreEvent) {
           this.context.emitEvent(EventEnum.Connect)
@@ -37,6 +38,7 @@ export class TronLinkConnector extends WalletConnector {
         protocol: this.context.protocol,
         address: this.context.address,
         coinType: this.context.coinType,
+        walletName: this.context.walletName,
       })
       if (!ignoreEvent) {
         this.context.emitEvent(EventEnum.Connect)

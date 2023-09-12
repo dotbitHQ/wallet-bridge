@@ -1,22 +1,27 @@
 import { proxy, useSnapshot } from 'valtio'
-import { CoinType, WalletProtocol } from '../constant'
+import { CoinType } from '../constant'
 
 interface LoginCacheState {
-  protocol?: WalletProtocol
   coinType?: CoinType
+  walletConnectDisplayUri?: string
+  walletName?: string
 }
 
 export const loginCacheState = proxy<LoginCacheState>({
-  protocol: undefined,
   coinType: undefined,
+  walletConnectDisplayUri: '',
+  walletName: undefined,
 })
 
-export const setLoginCacheState = ({ protocol, coinType }: LoginCacheState) => {
-  if (protocol) {
-    loginCacheState.protocol = protocol
-  }
-  if (coinType) {
+export const setLoginCacheState = ({ coinType, walletName, walletConnectDisplayUri }: LoginCacheState) => {
+  if (coinType !== undefined) {
     loginCacheState.coinType = coinType
+  }
+  if (walletName !== undefined) {
+    loginCacheState.walletName = walletName
+  }
+  if (walletConnectDisplayUri !== undefined) {
+    loginCacheState.walletConnectDisplayUri = walletConnectDisplayUri
   }
 }
 
