@@ -51,15 +51,69 @@ const { Wallet } = await import('wallet-bridge')
 - `loggedInSelectAddress` (可选): 在使用 Passkey 登录时，如果有多个地址，是否允许用户选择。默认为 `true`。
 - `customChains` (可选): 自定义链，来源于 `CustomChain` 枚举。默认为空数组。
 - `customWallets` (可选): 自定义钱包，来源于 `CustomWallet` 枚举。默认为空数组。
+- `wagmiConfig` (可选): 用于配置 [wagmi](https://wagmi.sh/core/getting-started) 的相关信息，类型为 `WagmiConfig`。默认为`undefined`。如果需要使用 [WalletConnect](https://docs.walletconnect.com)，必须提供此参数。
 
 **示例**：
 
 ```js
+import { Wallet } from 'wallet-bridge'
+import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
+import { configureChains, createConfig } from '@wagmi/core'
+import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
+import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
+import { isMobile } from 'react-device-detect'
+
+const chainIdToRpc: { [chainId: number]: string | undefined } = {
+  [ethereum.id]: 'https://eth.public-rpc.com',
+  [goerli.id]: 'https://rpc.ankr.com/eth_goerli',
+  [bsc.id]: 'https://bscrpc.com',
+  [bscTestnet.id]: 'https://rpc.ankr.com/bsc_testnet_chapel',
+  [polygon.id]: 'https://polygon-rpc.com',
+  [polygonMumbai.id]: 'https://rpc.ankr.com/polygon_mumbai',
+}
+
+const { publicClient, chains } = configureChains(
+  [ethereum, goerli, bsc, bscTestnet, polygon, polygonMumbai],
+  [
+    jsonRpcProvider({
+      rpc(chain) {
+        return { http: chainIdToRpc[chain.id] || '' }
+      },
+    }),
+  ],
+)
+
+const metaMaskConnector = new MetaMaskConnector({
+  chains,
+})
+
+const walletConnectConnector = new WalletConnectConnector({
+  chains,
+  options: {
+    projectId: 'your projectId',
+    metadata: {
+      name: '.bit',
+      description: 'Barrier-free DID for Every Community and Everyone',
+      url: 'https://d.id',
+      icons: ['https://d.id/favicon.png'],
+    },
+    showQrModal: isMobile,
+  },
+})
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: [walletConnectConnector, metaMaskConnector],
+  publicClient,
+})
+
 const wallet = new Wallet({
   isTestNet: false,
   loggedInSelectAddress: true,
   customChains: [CustomChain.eth],
   customWallets: [CustomWallet.metaMask],
+  wagmiConfig: wagmiConfig,
 })
 ```
 
@@ -171,6 +225,7 @@ await onFailed()
   - `protocol`: 钱包的协议类型，类型为`WalletProtocol`。
   - `address`: 当前登录的钱包地址，类型为`string`。
   - `coinType`: 代币类型，类型为`CoinType`。
+  - `walletName`: 钱包名称，类型为`string`。
   - `hardwareWalletTipsShow`: 硬件钱包提示是否显示，类型为`boolean`。
   - `deviceData`: Passkey 登录时设备数据，类型为`IDeviceData`。
   - `ckbAddresses`: Passkey 登录时设备能够管理的 CKB 地址列表，类型为`string[]`。

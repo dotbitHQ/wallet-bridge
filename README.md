@@ -51,15 +51,69 @@ To create a new `Wallet` object, you can use its constructor and provide the fol
 - `loggedInSelectAddress` (optional): Whether to allow users to choose when logging in with Passkey if there are multiple addresses. Defaults to `true`.
 - `customChains` (optional): Custom chains sourced from the `CustomChain` enum. Defaults to an empty array.
 - `customWallets` (optional): Custom wallets sourced from the `CustomWallet` enum. Defaults to an empty array.
+- `wagmiConfig` (Optional): Used for configuring information related to [wagmi](https://wagmi.sh/core/getting-started), of type `WagmiConfig`. Defaults to `undefined`. If you need to use [WalletConnect](https://docs.walletconnect.com), this parameter must be provided.
 
 **Example**:
 
 ```js
+import { Wallet } from 'wallet-bridge'
+import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
+import { configureChains, createConfig } from '@wagmi/core'
+import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
+import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
+import { isMobile } from 'react-device-detect'
+
+const chainIdToRpc: { [chainId: number]: string | undefined } = {
+  [ethereum.id]: 'https://eth.public-rpc.com',
+  [goerli.id]: 'https://rpc.ankr.com/eth_goerli',
+  [bsc.id]: 'https://bscrpc.com',
+  [bscTestnet.id]: 'https://rpc.ankr.com/bsc_testnet_chapel',
+  [polygon.id]: 'https://polygon-rpc.com',
+  [polygonMumbai.id]: 'https://rpc.ankr.com/polygon_mumbai',
+}
+
+const { publicClient, chains } = configureChains(
+  [ethereum, goerli, bsc, bscTestnet, polygon, polygonMumbai],
+  [
+    jsonRpcProvider({
+      rpc(chain) {
+        return { http: chainIdToRpc[chain.id] || '' }
+      },
+    }),
+  ],
+)
+
+const metaMaskConnector = new MetaMaskConnector({
+  chains,
+})
+
+const walletConnectConnector = new WalletConnectConnector({
+  chains,
+  options: {
+    projectId: 'your projectId',
+    metadata: {
+      name: '.bit',
+      description: 'Barrier-free DID for Every Community and Everyone',
+      url: 'https://d.id',
+      icons: ['https://d.id/favicon.png'],
+    },
+    showQrModal: isMobile,
+  },
+})
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: [walletConnectConnector, metaMaskConnector],
+  publicClient,
+})
+
 const wallet = new Wallet({
   isTestNet: false,
   loggedInSelectAddress: true,
   customChains: [CustomChain.eth],
   customWallets: [CustomWallet.metaMask],
+  wagmiConfig: wagmiConfig,
 })
 ```
 
@@ -171,6 +225,7 @@ await onFailed()
   - `protocol`: The protocol type of the wallet, of type `WalletProtocol`.
   - `address`: The currently logged-in wallet address, of type `string`.
   - `coinType`: The type of token, of type `CoinType`.
+  - `walletName`: The wallet name, of type `string`.
   - `hardwareWalletTipsShow`: Whether the hardware wallet tips are shown or not, of type `boolean`.
   - `deviceData`: Device data during Passkey login, of type `IDeviceData`.
   - `ckbAddresses`: List of CKB addresses that the device can manage during Passkey login, of type `string[]`.

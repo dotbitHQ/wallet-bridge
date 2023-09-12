@@ -78,6 +78,10 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
     const { coinType } = loginCacheSnap
     if (coinType) {
       return wallets.filter((wallet) => {
+        if (wallet.name === CustomWallet.walletConnect && !walletSDK.context.wagmiConfig) {
+          return false
+        }
+
         return (
           wallet.supportList.includes(coinType) &&
           (walletSnap.customWallets && walletSnap.customWallets?.length > 0
@@ -87,7 +91,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
       })
     }
     return wallets
-  }, [loginCacheSnap, walletSnap.customWallets, wallets])
+  }, [loginCacheSnap, walletSDK.context.wagmiConfig, walletSnap.customWallets, wallets])
 
   const onLogin = async (wallet: IWallet) => {
     const { name } = wallet
