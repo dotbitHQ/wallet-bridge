@@ -93,7 +93,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
           Choose a emoji to label the device.
         </div>
         <div className="mt-6 grid w-full grid-cols-6 rounded-2xl border border-stone-300/20 bg-gray-50 p-2">
-          {Object.keys(emojis).map((k) => (
+          {Object.keys(emojis)?.map((k) => (
             <div
               onClick={onClick(k)}
               key={k}

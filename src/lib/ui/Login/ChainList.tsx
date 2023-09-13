@@ -307,14 +307,14 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
           </div>
         ) : null}
         <ul className="flex flex-col gap-6">
-          {chains.map((item, index) => {
+          {chains?.map((item, index) => {
             return (
               <div key={`container-${index}`}>
                 <li key={`label-${index}`} className="mx-2 font-bold text-font-secondary">
                   {item.label}
                 </li>
                 <div className="mt-2 overflow-hidden rounded-2xl border border-[#B6C4D966]">
-                  {item.list.map((chain, i) => {
+                  {item.list?.map((chain, i) => {
                     return (
                       <div key={chain.name}>
                         <ChainItem

@@ -152,7 +152,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
       />
       <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
         <ul className="flex flex-col gap-2">
-          {showWallets.map((wallet, index) => {
+          {showWallets?.map((wallet, index) => {
             return (
               <WalletItem
                 key={index}

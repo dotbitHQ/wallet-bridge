@@ -18,7 +18,6 @@ export class MetaMaskTransaction extends WalletTransaction {
           to: data.to,
           value: _value,
           data: _data,
-          gas: numberToHex('25000'),
         },
       ],
     })

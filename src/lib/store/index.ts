@@ -57,7 +57,7 @@ const localWalletState = walletStateLocalStorage
 
 export const walletState = proxy<WalletState>({
   ...localWalletState,
-  deviceList: localWalletState.deviceList.map((i: ICKBAddressItem | string) =>
+  deviceList: localWalletState.deviceList?.map((i: ICKBAddressItem | string) =>
     typeof i === 'string' ? { address: i } : i,
   ),
 })
