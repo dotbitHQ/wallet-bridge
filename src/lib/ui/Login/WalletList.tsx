@@ -16,6 +16,7 @@ import OneKeyIcon from './icon/onekey-icon.svg'
 import ITokenIcon from './icon/itoken-icon.svg'
 import TronLinkIcon from './icon/tronlink-icon.svg'
 import WalletConnectIcon from './icon/walletconnect-icon.svg'
+import { isMobile } from 'react-device-detect'
 
 interface IWallet {
   icon: ReactNode
@@ -81,12 +82,29 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
     const { protocol } = loginCacheSnap
     if (protocol) {
       return wallets.filter((wallet) => {
-        return (
-          wallet.protocol.includes(protocol) &&
-          (walletSnap.customWallets && walletSnap.customWallets?.length > 0
-            ? walletSnap.customWallets.includes(wallet.name)
-            : true)
-        )
+        if (isMobile) {
+          if (
+            (protocol === WalletProtocol.walletConnect || protocol === WalletProtocol.metaMask) &&
+            wallet.name === CustomWallet.walletConnect
+          ) {
+            return true
+          } else if (!(protocol === WalletProtocol.walletConnect || protocol === WalletProtocol.metaMask)) {
+            return (
+              wallet.protocol.includes(protocol) &&
+              (walletSnap.customWallets && walletSnap.customWallets?.length > 0
+                ? walletSnap.customWallets.includes(wallet.name)
+                : true)
+            )
+          }
+          return false
+        } else {
+          return (
+            wallet.protocol.includes(protocol) &&
+            (walletSnap.customWallets && walletSnap.customWallets?.length > 0
+              ? walletSnap.customWallets.includes(wallet.name)
+              : true)
+          )
+        }
       })
     }
     return wallets

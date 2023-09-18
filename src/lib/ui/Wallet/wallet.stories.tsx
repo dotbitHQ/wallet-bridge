@@ -97,7 +97,7 @@ const TemplateConnectWallet = () => {
       <div>
         <div>protocol: {walletSnap.protocol}</div>
         <div>coinType: {walletSnap.coinType}</div>
-        <div>address: {walletSnap.address}</div>
+        <div className="break-words">address: {walletSnap.address}</div>
       </div>
       <Button onClick={onConnect}>Connect Wallet</Button>
       <br />
