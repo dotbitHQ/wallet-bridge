@@ -12,7 +12,7 @@ export function TransactionFailed({ transitionRef, transitionStyle }: SwapChildP
     <>
       <Header
         onClose={onClose}
-        className="z-10 w-full bg-white p-6"
+        className="z-[1100] w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div

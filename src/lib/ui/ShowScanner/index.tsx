@@ -23,7 +23,7 @@ export function ShowScanner({ transitionRef, transitionStyle }: SwapChildProps) 
         goBack={goBack}
         onClose={onClose}
         title="Scan QR Code"
-        className="z-10 w-full bg-white p-6"
+        className="z-[1100] w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div className="w-full px-6 pb-6 pt-[76px]" ref={transitionRef} style={transitionStyle}>

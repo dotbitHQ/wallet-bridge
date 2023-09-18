@@ -89,7 +89,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
         title="Add Trusted Device"
         onClose={onClose}
         goBack={goBack}
-        className="bg-blur z-10 w-full bg-white p-6"
+        className="bg-blur z-[1100] w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div

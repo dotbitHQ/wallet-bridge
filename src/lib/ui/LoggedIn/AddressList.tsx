@@ -36,7 +36,7 @@ export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) 
         title="Switch Address"
         goBack={back}
         onClose={onClose}
-        className="z-10 w-full bg-white p-6"
+        className="z-[1100] w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div className="w-full px-6 pb-6 pt-[76px]" ref={transitionRef} style={transitionStyle}>

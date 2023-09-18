@@ -17,6 +17,11 @@ export class MetaMaskConnector extends WalletConnector {
         return item.id === 'metaMask'
       })
 
+      const walletStateLocalStorage = localStorage.getItem('WalletState')
+      if (walletStateLocalStorage || provider.status === 'connected') {
+        await disconnect()
+      }
+
       if (provider && provider.status !== 'connected' && metaMaskConnector) {
         const { chain, account } = await connect({
           connector: metaMaskConnector,

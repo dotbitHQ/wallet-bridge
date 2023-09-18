@@ -23,7 +23,7 @@ export function WalletConnectQrCode({ transitionRef, transitionStyle }: SwapChil
         title="WalletConnect"
         onClose={close}
         goBack={back}
-        className="bg-blur z-10 w-full bg-white p-6"
+        className="bg-blur z-[1100] w-full bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div

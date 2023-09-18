@@ -22,7 +22,7 @@ export function Dialog({
   customRootId,
   containerXMargin = 'mx-6',
   containerYMargin = 'my-0',
-  zIndex = 'z-[3]',
+  zIndex = 'z-[1000]',
   onClose,
   goBack,
 }: DialogProps) {

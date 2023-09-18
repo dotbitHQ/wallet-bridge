@@ -16,6 +16,11 @@ export class WalletConnectConnector extends WalletConnector {
       return item.id === 'walletConnect'
     })
 
+    const walletStateLocalStorage = localStorage.getItem('WalletState')
+    if (walletStateLocalStorage || provider.status === 'connected') {
+      await disconnect()
+    }
+
     if (provider && provider.status !== 'connected' && walletConnectConnector) {
       if (!walletConnectConnector.options.showQrModal) {
         const walletConnectProvider = await walletConnectConnector.getProvider()

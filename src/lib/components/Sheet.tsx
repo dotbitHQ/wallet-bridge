@@ -11,7 +11,7 @@ interface SheetProps {
   zIndex?: string
 }
 
-export function Sheet({ isOpen, children, customRootId, zIndex = 'z-[3]', className }: SheetProps) {
+export function Sheet({ isOpen, children, customRootId, zIndex = 'z-[1000]', className }: SheetProps) {
   const [removeDOM, setRemoveDOM] = useState(!isOpen)
 
   useEffect(() => {

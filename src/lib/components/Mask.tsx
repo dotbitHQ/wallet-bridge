@@ -5,7 +5,7 @@ interface MaskProps {
   zIndex?: string
 }
 
-export function Mask({ isOpen, zIndex = 'z-[3]' }: MaskProps) {
+export function Mask({ isOpen, zIndex = 'z-[1000]' }: MaskProps) {
   return (
     <div
       className={clsx(

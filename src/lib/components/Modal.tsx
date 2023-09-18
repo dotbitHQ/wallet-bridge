@@ -11,7 +11,7 @@ interface ModalProps {
   zIndex?: string
 }
 
-export function Modal({ isOpen, children, customRootId, className, zIndex = 'z-[3]' }: ModalProps) {
+export function Modal({ isOpen, children, customRootId, className, zIndex = 'z-[1000]' }: ModalProps) {
   const [removeDOM, setRemoveDOM] = useState(!isOpen)
 
   useEffect(() => {
