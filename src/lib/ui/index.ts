@@ -3,6 +3,7 @@ import { useWalletState, getWalletState, setWalletState } from '../store'
 import { InitSignContextRes } from '../types'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
 import { CustomChain, CustomWallet } from '../constant'
+import { SignDataParams } from '../wallets/WalletSignerHandler'
 
 export class Wallet {
   walletSDK: WalletSDK
@@ -28,6 +29,10 @@ export class Wallet {
 
   connectWallet(params: { onlyEth?: boolean } = {}) {
     this.walletSDK.connectWallet(params)
+  }
+
+  async connectWalletAndSignData(params: { signData: SignDataParams }): Promise<{ signature: string } | undefined> {
+    return await this.walletSDK.connectWalletAndSignData(params)
   }
 
   loggedInfo() {

@@ -242,6 +242,14 @@ export async function copyText(text: string, el?: Element): Promise<void> {
  * @returns {boolean} Returns true if the basic WebAuthn API is supported, false otherwise.
  */
 export async function checkWebAuthnSupport(): Promise<boolean> {
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search)
+    const isDebug = urlParams.get('debug') === 'true'
+    if (isDebug) {
+      return true
+    }
+  }
+
   const uaParser = new UAParser(globalThis.navigator?.userAgent)
 
   if (

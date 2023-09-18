@@ -2,10 +2,10 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { snapshot } from 'valtio'
 import { WalletConnector } from './WalletConnectorHandler'
-import { SignDataType, WalletSigner } from './WalletSignerHandler'
+import { SignDataOptions, SignDataParams, SignDataType, WalletSigner } from './WalletSignerHandler'
 import { ISendTrxParams, WalletTransaction } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
-import { WalletEventListener } from './WalletEventListenerHandler'
+import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
 import { WalletHandlerFactory } from './WalletHandlerFactory'
 import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi } from '../constant'
 import { InitSignContextRes, SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
@@ -17,6 +17,7 @@ import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
 import { DeviceAuthError } from 'connect-did-sdk'
 import Axios from 'axios'
+import { setLoginCacheState } from '../store/loginCache'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -73,6 +74,22 @@ class WalletSDK {
     createRoot(shadowDomRoot).render(connectWalletInstance)
   }
 
+  async connectWalletAndSignData(params: { signData: SignDataParams }): Promise<{ signature: string } | undefined> {
+    return await new Promise((resolve) => {
+      if (params.signData) {
+        setLoginCacheState({ signDataParams: params.signData })
+        this.connectWallet()
+        void this.context.once(EventEnum.Signature).then((res) => {
+          if (res !== undefined) {
+            setLoginCacheState({ signDataParams: null })
+          }
+          resolve({ signature: res })
+          this.context.emitEvent(EventEnum.Connect)
+        })
+      }
+    })
+  }
+
   onInvolution(involution: boolean): void {
     if (involution) {
       this.connectWallet()
@@ -105,7 +122,7 @@ class WalletSDK {
     }
   }
 
-  async signData(data: SignDataType, options?: Record<string, any>): Promise<string | undefined> {
+  async signData(data: SignDataType, options?: SignDataOptions): Promise<string | undefined> {
     const isInit = await this.initWallet()
     if (!isInit && !this.walletSigner) {
       throw new CustomError(errno.failedToInitializeWallet, 'signData: Please initialize wallet first')
@@ -121,7 +138,7 @@ class WalletSDK {
     return await this.walletTransaction?.sendTrx(data)
   }
 
-  private async signTx(signInfo: SignInfo, options?: Record<string, any>): Promise<SignInfo> {
+  private async signTx(signInfo: SignInfo, options?: SignDataOptions): Promise<SignInfo> {
     let signDataRes = await this.signData(signInfo.sign_msg, options)
     if (signDataRes && this.context.coinType && isDogecoinChain(this.context.coinType)) {
       signDataRes = convertTpUTXOSignature(signDataRes)
@@ -134,14 +151,14 @@ class WalletSDK {
   }
 
   // todo-open: TxsSignedOrUnSigned and TxsWithMMJsonSignedOrUnSigned is pretty much the same, while they are from different api. We need to unify them in backend.
-  async signTxList(txs: TxsSignedOrUnSigned, options?: Record<string, any>): Promise<TxsSignedOrUnSigned>
+  async signTxList(txs: TxsSignedOrUnSigned, options?: SignDataOptions): Promise<TxsSignedOrUnSigned>
   async signTxList(
     txs: TxsWithMMJsonSignedOrUnSigned,
-    options?: Record<string, any>,
+    options?: SignDataOptions,
   ): Promise<TxsWithMMJsonSignedOrUnSigned>
   async signTxList(
     txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
-    options?: Record<string, any>,
+    options?: SignDataOptions,
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
     const isInit = await this.initWallet()
     if (!isInit) {
@@ -219,13 +236,18 @@ class WalletSDK {
       ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> => {
         return await this.signTxList(txs as any, { provider })
       },
-      signData: async (data: SignDataType, options?: Record<string, any>): Promise<string | undefined> => {
+      signData: async (data: SignDataType, options?: SignDataOptions): Promise<string | undefined> => {
         return await this.signData(data, { ...options, provider })
       },
       onFailed:
         provider?.onFailed ||
         (async (k: any): Promise<any> => {
           console.log(k)
+          return undefined
+        }),
+      onClose:
+        provider?.onClose ||
+        (async (): Promise<any> => {
           return undefined
         }),
     }

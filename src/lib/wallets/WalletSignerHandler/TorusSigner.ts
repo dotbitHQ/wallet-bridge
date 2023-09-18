@@ -1,8 +1,8 @@
-import { SignDataType, WalletSigner } from './WalletSigner'
+import { SignDataOptions, SignDataType, WalletSigner } from './WalletSigner'
 import { isHexStrict } from '../../utils'
 
 export class TorusSigner extends WalletSigner {
-  async signData(data: SignDataType, options?: Record<string, any>): Promise<string> {
+  async signData(data: SignDataType, options?: SignDataOptions): Promise<string> {
     let res
     if (options?.isEIP712) {
       res = await this.context.provider.request({

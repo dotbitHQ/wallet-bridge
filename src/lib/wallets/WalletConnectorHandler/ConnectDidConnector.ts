@@ -3,11 +3,23 @@ import { getAuthorizeInfo, getMastersAddress, resetWalletState, setWalletState }
 import CustomError from '../../utils/CustomError'
 import errno from '../../constant/errno'
 import { EventEnum } from '../WalletEventListenerHandler'
+import { loginCacheState } from '../../store/loginCache'
+import { snapshot } from 'valtio'
 
 export class ConnectDidConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
     const { provider } = this.context
-    const res = await provider.requestDeviceData()
+    const { signDataParams } = snapshot(loginCacheState)
+    let res
+    let signature
+    if (signDataParams) {
+      res = await provider.requestDeviceSignData({ msg: signDataParams.data })
+      signature = res.data.signature
+      res.data = res.data.deviceData
+    } else {
+      res = await provider.requestDeviceData()
+    }
+
     if (res.code !== errno.connectDidSdkSuccess) {
       throw new CustomError(res.code, res.message)
     }
@@ -22,7 +34,9 @@ export class ConnectDidConnector extends WalletConnector {
       })
       await getMastersAddress()
       await getAuthorizeInfo({ detectAssets: true })
-      if (!ignoreEvent) {
+      if (signature) {
+        this.context.emitEvent(EventEnum.Signature, signature)
+      } else if (!ignoreEvent) {
         this.context.emitEvent(EventEnum.Connect)
       }
     }

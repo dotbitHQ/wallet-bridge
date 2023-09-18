@@ -3,6 +3,9 @@ import { TronLinkRequestAccountsResponseCode } from '../../constant'
 import { resetWalletState, setWalletState } from '../../store'
 import CustomError from '../../utils/CustomError'
 import { EventEnum } from '../WalletEventListenerHandler'
+import { snapshot } from 'valtio'
+import { loginCacheState } from '../../store/loginCache'
+import { SignDataType, TronLinkSigner } from '../WalletSignerHandler'
 
 // source: https://developers.tron.network/docs/introduction
 export interface ITronLinkRequestAccountsResponse {
@@ -26,7 +29,11 @@ export class TronLinkConnector extends WalletConnector {
           coinType: this.context.coinType,
           walletName: this.context.walletName,
         })
-        if (!ignoreEvent) {
+        const { signDataParams } = snapshot(loginCacheState)
+        if (signDataParams) {
+          const signature = await this.signData(signDataParams.data as SignDataType)
+          this.context.emitEvent(EventEnum.Signature, signature)
+        } else if (!ignoreEvent) {
           this.context.emitEvent(EventEnum.Connect)
         }
       } else {
@@ -40,7 +47,11 @@ export class TronLinkConnector extends WalletConnector {
         coinType: this.context.coinType,
         walletName: this.context.walletName,
       })
-      if (!ignoreEvent) {
+      const { signDataParams } = snapshot(loginCacheState)
+      if (signDataParams) {
+        const signature = await this.signData(signDataParams.data as SignDataType)
+        this.context.emitEvent(EventEnum.Signature, signature)
+      } else if (!ignoreEvent) {
         this.context.emitEvent(EventEnum.Connect)
       }
     }
@@ -55,4 +66,14 @@ export class TronLinkConnector extends WalletConnector {
   }
 
   async switchNetwork(chainId: number): Promise<void> {}
+
+  async signData(data: SignDataType): Promise<string | undefined> {
+    try {
+      const signer = new TronLinkSigner(this.context)
+      return await signer.signData(data)
+    } catch (err) {
+      console.error(err)
+      return undefined
+    }
+  }
 }

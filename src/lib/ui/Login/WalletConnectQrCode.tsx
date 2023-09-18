@@ -32,7 +32,7 @@ export function WalletConnectQrCode({ transitionRef, transitionStyle }: SwapChil
         style={transitionStyle}
       >
         <div className="text-center text-[14px] leading-tight text-neutral-700">Scan with your phone</div>
-        <div className="relative my-3 h-[260px] w-[260px] rounded-2xl border border-stone-300/20 p-2">
+        <div className="relative my-3 mb-9 h-[260px] w-[260px] rounded-2xl border border-stone-300/20 p-2">
           <QRCode data={loginCacheSnap.walletConnectDisplayUri} />
         </div>
       </div>

@@ -3,7 +3,10 @@ import { toChecksumAddress } from '../../utils'
 import { connect, Connector, disconnect, switchNetwork } from '@wagmi/core'
 import { EventEnum } from '../WalletEventListenerHandler'
 import { resetWalletState, setWalletState } from '../../store'
-import { setLoginCacheState } from '../../store/loginCache'
+import { loginCacheState, setLoginCacheState } from '../../store/loginCache'
+import { snapshot } from 'valtio'
+import { WalletConnectSigner } from '../WalletSignerHandler/WalletConnectSigner'
+import { SignDataType } from '../WalletSignerHandler'
 
 export class WalletConnectConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
@@ -35,9 +38,21 @@ export class WalletConnectConnector extends WalletConnector {
           walletName: this.context.walletName,
         })
         setLoginCacheState({ walletConnectDisplayUri: '', walletName: '' })
-        if (!ignoreEvent) {
+        const { signDataParams } = snapshot(loginCacheState)
+        if (signDataParams) {
+          const signature = await this.signData(signDataParams.data as SignDataType, signDataParams.isEIP712)
+          this.context.emitEvent(EventEnum.Signature, signature)
+        } else if (!ignoreEvent) {
           this.context.emitEvent(EventEnum.Connect)
         }
+      }
+    } else if (provider.status === 'connected') {
+      const { signDataParams } = snapshot(loginCacheState)
+      if (signDataParams) {
+        const signature = await this.signData(signDataParams.data as SignDataType, signDataParams.isEIP712)
+        this.context.emitEvent(EventEnum.Signature, signature)
+      } else if (!ignoreEvent) {
+        this.context.emitEvent(EventEnum.Connect)
       }
     }
   }
@@ -55,5 +70,17 @@ export class WalletConnectConnector extends WalletConnector {
     await switchNetwork({
       chainId,
     })
+  }
+
+  async signData(data: SignDataType, isEIP712?: boolean): Promise<string | undefined> {
+    try {
+      const signer = new WalletConnectSigner(this.context)
+      return await signer.signData(data, {
+        isEIP712,
+      })
+    } catch (err) {
+      console.error(err)
+      return undefined
+    }
   }
 }

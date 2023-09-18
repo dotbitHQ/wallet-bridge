@@ -106,6 +106,10 @@ export class WalletContext {
     void this.#emitter.emit(event, data)
   }
 
+  async once(event: EventKey): Promise<any> {
+    return await this.#emitter.once(event)
+  }
+
   addEventListener(event: EventKey, callback: (data?: any) => void): void {
     this.#emitter.on(event, callback)
   }
@@ -157,9 +161,12 @@ export class WalletContext {
   }
 
   private async getTorusProvider() {
-    this.torusWallet = new Torus({
-      buttonPosition: 'bottom-right',
-    })
+    if (!this.torusWallet) {
+      this.torusWallet = new Torus({
+        buttonPosition: 'bottom-right',
+      })
+    }
+
     try {
       let host: string
       if (this.coinType) {
@@ -225,6 +232,14 @@ export class WalletContext {
     if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
     }
-    this.provider = new ConnectDID(this.isTestNet)
+
+    let isDebug = false
+
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search)
+      isDebug = urlParams.get('debug') === 'true'
+    }
+
+    this.provider = new ConnectDID(this.isTestNet, isDebug)
   }
 }

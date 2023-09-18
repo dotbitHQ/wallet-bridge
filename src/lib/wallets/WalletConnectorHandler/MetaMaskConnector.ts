@@ -1,10 +1,13 @@
 import { WalletConnector } from './WalletConnector'
 import { toChecksumAddress } from '../../utils'
-import { connect, Connector, disconnect, switchNetwork, getNetwork } from '@wagmi/core'
+import { connect, Connector, disconnect, getNetwork, switchNetwork } from '@wagmi/core'
 import { EventEnum } from '../WalletEventListenerHandler'
 import { resetWalletState, setWalletState } from '../../store'
 import { isMobile } from 'react-device-detect'
 import { CoinTypeToChainMap } from '../../constant'
+import { snapshot } from 'valtio'
+import { loginCacheState } from '../../store/loginCache'
+import { MetaMaskSigner, SignDataType } from '../WalletSignerHandler'
 
 export class MetaMaskConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
@@ -34,9 +37,21 @@ export class MetaMaskConnector extends WalletConnector {
             coinType: this.context.coinType,
             walletName: this.context.walletName,
           })
-          if (!ignoreEvent) {
+          const { signDataParams } = snapshot(loginCacheState)
+          if (signDataParams) {
+            const signature = await this.signData(signDataParams.data as SignDataType, signDataParams.isEIP712)
+            this.context.emitEvent(EventEnum.Signature, signature)
+          } else if (!ignoreEvent) {
             this.context.emitEvent(EventEnum.Connect)
           }
+        }
+      } else if (provider.status === 'connected') {
+        const { signDataParams } = snapshot(loginCacheState)
+        if (signDataParams) {
+          const signature = await this.signData(signDataParams.data as SignDataType, signDataParams.isEIP712)
+          this.context.emitEvent(EventEnum.Signature, signature)
+        } else if (!ignoreEvent) {
+          this.context.emitEvent(EventEnum.Connect)
         }
       }
     } catch (err) {
@@ -65,5 +80,17 @@ export class MetaMaskConnector extends WalletConnector {
     await switchNetwork({
       chainId,
     })
+  }
+
+  async signData(data: SignDataType, isEIP712?: boolean): Promise<string | undefined> {
+    try {
+      const signer = new MetaMaskSigner(this.context)
+      return await signer.signData(data, {
+        isEIP712,
+      })
+    } catch (err) {
+      console.error(err)
+      return undefined
+    }
   }
 }

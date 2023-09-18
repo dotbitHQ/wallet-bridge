@@ -155,7 +155,33 @@ wallet.initWallet().then((success) => {
 wallet.connectWallet({ onlyEth: true })
 ```
 
-#### 4.3 `loggedInfo()`
+#### 4.3 `connectWalletAndSignData(params: { signData: SignDataParams })`
+
+显示钱包连接弹窗。登录的同时可以进行签名操作。
+
+**示例**：
+
+```js
+const res = await wallet.connectWalletAndSignData({
+  signData: {
+    data: 'hello world',
+  },
+})
+console.log(res)
+
+// or EVM EIP-712
+const jsonStr =
+  '{"types":{"EIP712Domain":[{"name":"chainId","type":"uint256"},{"name":"name","type":"string"},{"name":"verifyingContract","type":"address"},{"name":"version","type":"string"}],"Action":[{"name":"action","type":"string"},{"name":"params","type":"string"}],"Cell":[{"name":"capacity","type":"string"},{"name":"lock","type":"string"},{"name":"type","type":"string"},{"name":"data","type":"string"},{"name":"extraData","type":"string"}],"Transaction":[{"name":"DAS_MESSAGE","type":"string"},{"name":"inputsCapacity","type":"string"},{"name":"outputsCapacity","type":"string"},{"name":"fee","type":"string"},{"name":"action","type":"Action"},{"name":"inputs","type":"Cell[]"},{"name":"outputs","type":"Cell[]"},{"name":"digest","type":"bytes32"}]},"primaryType":"Transaction","domain":{"chainId":5,"name":"da.systems","verifyingContract":"0x0000000000000000000000000000000020210722","version":"1"},"message":{"DAS_MESSAGE":"TRANSFER FROM 0x54366bcd1e73baf55449377bd23123274803236e(906.74221046 CKB) TO ckt1qyqvsej8jggu4hmr45g4h8d9pfkpd0fayfksz44t9q(764.13228446 CKB), 0x54366bcd1e73baf55449377bd23123274803236e(142.609826 CKB)","inputsCapacity":"906.74221046 CKB","outputsCapacity":"906.74211046 CKB","fee":"0.0001 CKB","digest":"0x29cd28dbeb470adb17548563ceb4988953fec7b499e716c16381e5ae4b04021f","action":{"action":"transfer","params":"0x00"},"inputs":[],"outputs":[]}}'
+const res = await wallet.connectWalletAndSignData({
+  signData: {
+    data: JSON.parse(jsonStr),
+    isEIP712: true,
+  },
+})
+console.log(res)
+```
+
+#### 4.4 `loggedInfo()`
 
 显示已登录弹窗。如果用户已经登录，弹窗将会展示出登录信息。
 
@@ -165,7 +191,7 @@ wallet.connectWallet({ onlyEth: true })
 wallet.loggedInfo()
 ```
 
-#### 4.4 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
+#### 4.5 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
 
 用于发送交易。
 
@@ -193,7 +219,7 @@ wallet.sendTransaction(transactionData).then((txHash) => {
 })
 ```
 
-#### 4.5 `initSignContext(): Promise<InitSignContextRes>`
+#### 4.6 `initSignContext(): Promise<InitSignContextRes>`
 
 初始化签名上下文并返回签名方法。为了避免签名时弹窗被浏览器拦截，`initSignContext` 务必在点击事件所有异步操作之前调用。
 
@@ -202,19 +228,21 @@ wallet.sendTransaction(transactionData).then((txHash) => {
 - `Promise<InitSignContextRes>`: 返回一个包含以下方法的对象:
   - `signTxList`: 函数，.bit 业务专用，用于签名交易列表。
   - `signData`: 函数，返回值是签名后的数据。
-  - `onFailed`: 函数，其返回值是一个`DeviceAuthError`，有任何错误都需要调用 `onFailed` 通知弹窗显示错误。
+  - `onFailed`: 函数，其返回值是一个`Promise<IData<any>>`，有任何错误都需要调用 `onFailed` 通知弹窗显示错误。
+  - `onClose`: 函数，其返回值是一个`Promise<void>`，有些情况下如果你想自己处理错误，而不是让弹窗显示错误，想关闭弹窗就用 `onClose`。
 
 示例：
 
 ```js
-const { signTxList, signData, onFailed } = await wallet.initSignContext()
+const { signTxList, signData, onFailed, onClose } = await wallet.initSignContext()
 const res = await signTxList({})
 const res = await signData('0x123')
 const res = await signData({}, { isEIP712: true })
 await onFailed()
+await onClose()
 ```
 
-#### 4.6 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.7 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 `useWalletState` 是一个 React hook，用于获取和监听钱包状态。
 
@@ -246,7 +274,7 @@ function Component() {
 }
 ```
 
-#### 4.7 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.8 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 用于立即获取当前的钱包状态的快照。
 
@@ -261,7 +289,7 @@ const { walletSnap } = wallet.getWalletState()
 console.log(walletSnap.address)
 ```
 
-#### 4.8 `_verifyPasskeySignature(params: { message: string, signature: string }): Promise<boolean> `
+#### 4.9 `_verifyPasskeySignature(params: { message: string, signature: string }): Promise<boolean> `
 
 验证 passkey 签名结果是否正确。
 
