@@ -17,8 +17,9 @@ export class WalletConnectConnector extends WalletConnector {
     })
 
     const walletStateLocalStorage = localStorage.getItem('WalletState')
-    if (walletStateLocalStorage || provider.status === 'connected') {
+    if (walletStateLocalStorage && provider.status === 'connected') {
       await disconnect()
+      localStorage.removeItem('WalletState')
     }
 
     if (provider && provider.status !== 'connected' && walletConnectConnector) {
