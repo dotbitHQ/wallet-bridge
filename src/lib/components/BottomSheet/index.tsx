@@ -22,7 +22,7 @@ export function BottomSheet({
   customRootId,
   containerXMargin = 'mx-6',
   containerYMargin = 'my-0',
-  zIndex = 'z-[1000]',
+  zIndex = 'z-[10]',
   onClose,
   goBack,
 }: BottomSheetProps) {

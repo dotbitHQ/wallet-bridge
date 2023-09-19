@@ -30,7 +30,7 @@ export function Tips({ visible, title, content, confirmBtnText, onClose, onConfi
   }
 
   return (
-    <Dialog customRootId={`tips-${tipsCustomRootId}`} isOpen={isOpen} title={title} onClose={close} zIndex="z-[1110]">
+    <Dialog customRootId={`tips-${tipsCustomRootId}`} isOpen={isOpen} title={title} onClose={close} zIndex="z-[11]">
       <div className="mb-8 mt-2">{content}</div>
       <Button className="mb-6 w-full" shape={ButtonShape.round} onClick={confirm}>
         {confirmBtnText ?? 'OK'}
