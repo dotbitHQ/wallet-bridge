@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { createRoot } from 'react-dom/client'
 import { snapshot } from 'valtio'
 import { WalletConnector } from './WalletConnectorHandler'
@@ -17,6 +17,7 @@ import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
 import { DeviceAuthError } from 'connect-did-sdk'
 import Axios from 'axios'
+import shadowDomRootStyle from '../../lib/tailwind/theme.css?inline'
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -25,6 +26,7 @@ class WalletSDK {
   eventListener?: WalletEventListener
   context: WalletContext
   onlyEth = false
+  reactRoot: ReturnType<typeof createRoot> | null = null
 
   constructor({ isTestNet, wagmiConfig }: { isTestNet: boolean; wagmiConfig?: any }) {
     this.context = new WalletContext({ isTestNet, wagmiConfig })
@@ -63,8 +65,27 @@ class WalletSDK {
       visible: true,
       walletSDK: this,
       ...params,
+      key: 'connectWallet',
     })
-    createRoot(shadowDomRoot).render(connectWalletInstance)
+    const style = React.createElement(
+      'style',
+      {
+        key: 'shadowDomRootStyle',
+      },
+      shadowDomRootStyle,
+    )
+    const app = React.createElement(
+      Fragment,
+      {
+        key: 'app',
+      },
+      [style, connectWalletInstance],
+    )
+    if (this.reactRoot) {
+      this.reactRoot.unmount()
+    }
+    this.reactRoot = createRoot(shadowDomRoot)
+    this.reactRoot.render(app)
   }
 
   onInvolution(involution: boolean): void {
