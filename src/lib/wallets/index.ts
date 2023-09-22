@@ -27,8 +27,18 @@ class WalletSDK {
   context: WalletContext
   onlyEth = false
 
-  constructor({ isTestNet, wagmiConfig }: { isTestNet: boolean; wagmiConfig?: any }) {
-    this.context = new WalletContext({ isTestNet, wagmiConfig })
+  constructor({
+    isTestNet,
+    wagmiConfig,
+    gtag,
+    event,
+  }: {
+    isTestNet: boolean
+    wagmiConfig?: any
+    gtag?: any
+    event?: any
+  }) {
+    this.context = new WalletContext({ isTestNet, wagmiConfig, gtag, event })
   }
 
   async init({
@@ -52,6 +62,14 @@ class WalletSDK {
 
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }): Promise<void> {
     await this.walletConnector?.connect({ ignoreEvent })
+    this.context.reportEvent('click', {
+      category: 'wallet-bridge',
+      label: 'connect wallet',
+      coinType: this.context.coinType,
+      walletName: this.context.walletName,
+      value: 1,
+      nonInteraction: true,
+    })
   }
 
   async disconnect() {

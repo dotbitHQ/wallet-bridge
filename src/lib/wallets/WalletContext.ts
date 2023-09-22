@@ -20,6 +20,7 @@ import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
 import { snapshot } from 'valtio'
 import { walletState } from '../store'
+import { EventOptions } from '../types'
 
 export class WalletContext {
   // sendTrx method
@@ -34,10 +35,55 @@ export class WalletContext {
   walletName?: string
   // event emitter
   #emitter = new Emittery()
+  gtag?: any
+  event?: any
 
-  constructor({ isTestNet, wagmiConfig }: { isTestNet: boolean; wagmiConfig?: any }) {
+  constructor({
+    isTestNet,
+    wagmiConfig,
+    gtag,
+    event,
+  }: {
+    isTestNet: boolean
+    wagmiConfig?: any
+    gtag?: any
+    event?: any
+  }) {
     this.isTestNet = isTestNet
     this.wagmiConfig = wagmiConfig
+    if (gtag) {
+      this.gtag = gtag
+    }
+    if (event) {
+      this.event = event
+    }
+  }
+
+  // @ts-expect-error
+  reportEvent(action: string, { category, label, value, nonInteraction, userId, ...otherOptions }?: EventOptions) {
+    try {
+      if (this.gtag) {
+        this.gtag('event', action, {
+          event_category: category,
+          event_label: label,
+          value,
+          non_interaction: nonInteraction,
+          user_id: userId,
+          ...otherOptions,
+        })
+      } else if (this.event) {
+        this.event(action, {
+          category,
+          label,
+          value,
+          nonInteraction,
+          userId,
+          ...otherOptions,
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async retrieveProvider({ coinType, walletName }: { coinType?: CoinType; walletName?: string }) {

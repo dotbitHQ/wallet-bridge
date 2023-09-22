@@ -52,6 +52,8 @@ const { Wallet } = await import('wallet-bridge')
 - `customChains` (可选): 自定义链，来源于 `CustomChain` 枚举。默认为空数组。
 - `customWallets` (可选): 自定义钱包，来源于 `CustomWallet` 枚举。默认为空数组。
 - `wagmiConfig` (可选): 用于配置 [wagmi](https://wagmi.sh/core/getting-started) 的相关信息，类型为 `WagmiConfig`。默认为`undefined`。如果需要使用 [WalletConnect](https://docs.walletconnect.com)，必须提供此参数。
+- `gtag` (可选): 用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `event`，则不需要提供此参数。
+- `event` (可选): 如果你使用 [nextjs-google-analytics](https://www.npmjs.com/package/nextjs-google-analytics) 来上报数据， 则可以用 `event` 来代替 `gtag`，用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `gtag`，则不需要提供此参数。
 
 **示例**：
 

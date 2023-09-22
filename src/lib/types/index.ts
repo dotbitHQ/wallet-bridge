@@ -34,3 +34,11 @@ export interface InitSignContextRes {
   onFailed: () => Promise<IData<any>>
   onClose: () => Promise<void>
 }
+
+export type EventOptions = Record<string, any> & {
+  category?: string
+  label?: string
+  value?: number
+  nonInteraction?: boolean
+  userId?: string
+}
