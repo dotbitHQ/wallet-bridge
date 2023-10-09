@@ -56,7 +56,7 @@ const wagmiConfig = createConfig({
 })
 
 const wallet = new Wallet({
-  isTestNet: true,
+  isTestNet: false,
   wagmiConfig,
 })
 

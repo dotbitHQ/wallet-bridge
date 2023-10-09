@@ -208,8 +208,6 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
           <span className="text-[12px] font-medium text-red-500">Revoke Failed</span>
         ) : isCurrentDevice ? (
           <span className="rounded bg-green-100 px-1 py-0.5 text-xs font-medium text-emerald-600">Current Device</span>
-        ) : isMasterDevice ? (
-          <span className="rounded bg-blue-100 px-1 py-0.5 text-xs font-medium text-indigo-400">Main Device</span>
         ) : null}
       </div>
       <More address={item.address} onRevoke={onRevoke} />

@@ -21,6 +21,7 @@ import errno from '../constant/errno'
 import { snapshot } from 'valtio'
 import { walletState } from '../store'
 import { EventOptions } from '../types'
+import { Connector } from '@wagmi/core'
 
 export class WalletContext {
   // sendTrx method
@@ -174,7 +175,10 @@ export class WalletContext {
     }
 
     if (this.wagmiConfig) {
-      this.provider = this.wagmiConfig
+      const walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+        return item.id === 'metaMask'
+      })
+      this.provider = await walletConnectConnector.getProvider()
     } else {
       throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
     }
@@ -243,7 +247,10 @@ export class WalletContext {
     }
 
     if (this.wagmiConfig) {
-      this.provider = this.wagmiConfig
+      const walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+        return item.id === 'walletConnect'
+      })
+      this.provider = await walletConnectConnector.getProvider()
     } else {
       throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
     }

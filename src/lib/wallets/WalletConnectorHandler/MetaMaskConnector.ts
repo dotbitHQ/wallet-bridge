@@ -12,18 +12,18 @@ import { MetaMaskSigner, SignDataType } from '../WalletSignerHandler'
 export class MetaMaskConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
     try {
-      const { provider, chainId } = this.context
-      const metaMaskConnector = provider.connectors.find((item: Connector) => {
+      const { wagmiConfig, chainId } = this.context
+      const metaMaskConnector = wagmiConfig.connectors.find((item: Connector) => {
         return item.id === 'metaMask'
       })
 
       const walletStateLocalStorage = localStorage.getItem('WalletState')
-      if (walletStateLocalStorage && provider.status === 'connected') {
+      if (walletStateLocalStorage && wagmiConfig.status === 'connected') {
         await disconnect()
         localStorage.removeItem('WalletState')
       }
 
-      if (provider && provider.status !== 'connected' && metaMaskConnector) {
+      if (wagmiConfig && wagmiConfig.status !== 'connected' && metaMaskConnector) {
         const { chain, account } = await connect({
           connector: metaMaskConnector,
           chainId,
@@ -51,7 +51,7 @@ export class MetaMaskConnector extends WalletConnector {
             this.context.emitEvent(EventEnum.Connect)
           }
         }
-      } else if (provider.status === 'connected') {
+      } else if (wagmiConfig.status === 'connected') {
         const { signDataParams } = snapshot(loginCacheState)
         if (signDataParams) {
           const signature = await this.signData(signDataParams.data as SignDataType, signDataParams.isEIP712)
