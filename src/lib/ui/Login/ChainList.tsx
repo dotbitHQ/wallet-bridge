@@ -1,24 +1,12 @@
-import {
-  createTips,
-  Header,
-  SwapChildProps,
-  Button,
-  ButtonSize,
-  ButtonShape,
-  Alert,
-  AlertType,
-  NoticeIcon,
-  ButtonVariant,
-} from '../../components'
+import { createTips, Header, SwapChildProps } from '../../components'
 import { CoinType, CustomChain } from '../../constant'
 import { useWalletState } from '../../store'
 import { ChainItem } from '../../components/ChainItem'
-import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
+import { ReactNode, useContext, useMemo, useState } from 'react'
 import handleError from '../../utils/handleError'
 import { setLoginCacheState } from '../../store/loginCache'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
-import { checkWebAuthnSupport } from '../../utils'
 import EthIcon from './icon/eth-icon.svg'
 import BscIcon from './icon/bsc-icon.svg'
 import PolygonIcon from './icon/polygon-icon.svg'
@@ -31,17 +19,6 @@ interface IChain {
   name: CustomChain
   tag?: ReactNode
   coinType: CoinType
-}
-
-interface IChainList {
-  label: string
-  list: IChain[]
-}
-
-const passkey: IChain = {
-  icon: undefined,
-  name: CustomChain.passkey,
-  coinType: CoinType.ckb,
 }
 
 const eth: IChain = {
@@ -82,29 +59,18 @@ const torus: IChain = {
 
 export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) => {
   const [currentLogin, setCurrentLogin] = useState('')
-  const [isSupportWebAuthn, setIsSupportWebAuthn] = useState(true)
   const walletSDK = useContext(WalletSDKContext)!
-  const router = useSimpleRouter()!
+  const { goBack, onClose, goTo } = useSimpleRouter()!
   const { walletSnap } = useWalletState()
 
   const showWalletList = () => {
-    router?.goTo('WalletList')
+    goTo('WalletList')
   }
   const showAddressList = () => {
-    router?.goTo('AddressList')
+    goTo('AddressList')
   }
-  const onClose = router?.onClose
 
-  const showPasskey = useMemo(() => {
-    return (
-      !walletSDK.onlyEth &&
-      (walletSnap.customChains && walletSnap.customChains.length > 0
-        ? walletSnap.customChains.includes(CustomChain.passkey)
-        : true)
-    )
-  }, [walletSDK.onlyEth, walletSnap.customChains])
-
-  const chains: IChainList[] = useMemo(() => {
+  const chains: IChain[] = useMemo(() => {
     const customChains = walletSnap.customChains
     let walletList: IChain[] = [eth, bsc, polygon, tron, doge]
     let socialList: IChain[] = [torus]
@@ -119,53 +85,18 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         return customChains.includes(item.name)
       })
       if (walletList.length > 0) {
-        list.push({
-          label: 'by Wallet',
-          list: walletList.filter((item) => {
-            return customChains.includes(item.name)
-          }),
-        })
+        list.push(...walletList)
       }
       if (socialList.length > 0) {
-        list.push({
-          label: 'by Social',
-          list: socialList.filter((item) => {
-            return customChains.includes(item.name)
-          }),
-        })
+        list.push(...socialList)
       }
     } else {
-      list.push(
-        {
-          label: 'by Wallet',
-          list: walletList,
-        },
-        {
-          label: 'by Social',
-          list: socialList,
-        },
-      )
+      list.push(...walletList, ...socialList)
     }
 
-    const onlyEth = [
-      {
-        label: 'by Wallet',
-        list: [eth],
-      },
-    ]
+    const onlyEth = [eth]
     return walletSDK.onlyEth ? onlyEth : list
   }, [walletSDK.onlyEth, walletSnap.customChains])
-
-  useEffect(() => {
-    checkWebAuthnSupport()
-      .then((res) => {
-        setIsSupportWebAuthn(res)
-      })
-      .catch((err) => {
-        console.error(err)
-        setIsSupportWebAuthn(false)
-      })
-  }, [])
 
   const selectChain = (chain: IChain) => {
     const { coinType } = chain
@@ -181,7 +112,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
       return
     }
 
-    if (![CustomChain.torus, CustomChain.passkey].includes(name)) {
+    if (![CustomChain.torus].includes(name)) {
       selectChain(chain)
       return
     }
@@ -226,68 +157,32 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
     setCurrentLogin('')
   }
 
+  const back = () => {
+    goBack?.()
+    setCurrentLogin('')
+  }
+
   return (
     <>
       <Header
         className="z-10 w-full bg-white p-6"
-        title="Connect"
+        title="Other Wallets"
         onClose={close}
+        goBack={back}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
-        {showPasskey ? (
-          <div className="mb-6 flex flex-col items-center py-4">
-            <Button
-              className="w-40"
-              loading={currentLogin === passkey.name}
-              disabled={!isSupportWebAuthn}
-              variant={ButtonVariant.passkey}
-              size={ButtonSize.large}
-              shape={ButtonShape.round}
-              onClick={async () => {
-                await onLogin(passkey)
-              }}
-            >
-              <span className="font-bold">by Passkey</span>
-            </Button>
-            <div className="mt-2 text-font-secondary">Seedless but still decentralized</div>
-            {isSupportWebAuthn ? null : (
-              <Alert
-                className="mt-2"
-                type={AlertType.warning}
-                icon={<NoticeIcon className="h-[18px] w-[18px] text-[#FFB02E]"></NoticeIcon>}
-              >
-                This device or browser unsupported. Try connect by social or wallet.
-              </Alert>
-            )}
-          </div>
-        ) : null}
-        <ul className="flex flex-col gap-6">
-          {chains?.map((item, index) => {
+        <ul className="flex flex-col gap-2">
+          {chains?.map((chain) => {
             return (
-              <div key={`container-${index}`}>
-                <li key={`label-${index}`} className="mx-2 font-bold text-font-secondary">
-                  {item.label}
-                </li>
-                <div className="mt-2 overflow-hidden rounded-2xl border border-[#B6C4D966]">
-                  {item.list?.map((chain, i) => {
-                    return (
-                      <div key={chain.name}>
-                        <ChainItem
-                          {...chain}
-                          currentLogin={currentLogin}
-                          onClick={async () => {
-                            await onLogin(chain)
-                          }}
-                        ></ChainItem>
-                        {item.list.length > 2 && i !== item.list.length - 1 ? (
-                          <hr className="mx-5 border-[#B6C4D966]" />
-                        ) : null}
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
+              <ChainItem
+                key={chain.name}
+                {...chain}
+                currentLogin={currentLogin}
+                onClick={async () => {
+                  await onLogin(chain)
+                }}
+              ></ChainItem>
             )
           })}
         </ul>

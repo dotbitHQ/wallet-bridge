@@ -18,6 +18,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ShowScanner } from './ShowScanner'
 import { TransactionFailed } from './TransactionFailed'
 import { Sheet } from '../components/Sheet'
+import { Connect } from './Login/Connect'
+import { AddressQRCode } from './LoggedIn/AddressQrCode'
 
 interface ConnectWalletProps {
   visible: boolean
@@ -26,8 +28,14 @@ interface ConnectWalletProps {
 }
 
 const routes = {
+  Connect: {
+    el: <Connect key="Connect" />,
+    next: 'ChainList',
+  },
   ChainList: {
     el: <ChainList key="ChainList" />,
+    prev: 'Connect',
+    next: 'WalletList',
   },
   WalletList: {
     el: <WalletList key="WalletList" />,
@@ -44,6 +52,10 @@ const routes = {
   },
   LoggedIn: {
     el: <LoggedIn key="LoggedIn" />,
+  },
+  AddressQRCode: {
+    el: <AddressQRCode key="AddressQRCode" />,
+    prev: 'LoggedIn',
   },
   ShowQRCode: {
     el: <ShowQRCode key="ShowQRCode" />,
@@ -84,7 +96,7 @@ const routes = {
 export const WalletSDKContext = createContext<WalletSDK | null>(null)
 const queryClient = new QueryClient()
 
-export const ConnectWallet = ({ visible, walletSDK, initComponent = 'ChainList' }: ConnectWalletProps) => {
+export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }: ConnectWalletProps) => {
   const [isOpen, setIsOpen] = useState(visible)
 
   const onClose = () => {

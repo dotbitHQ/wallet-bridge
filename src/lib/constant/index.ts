@@ -25,3 +25,7 @@ export const DotbitBalanceTestUrl = 'https://testbalance.did.id'
 export const WebAuthnApi = 'https://webauthn-api.did.id'
 
 export const WebAuthnTestApi = 'https://test-webauthn-api.did.id'
+
+export const DotbitAliasApi = 'https://reverse-api.d.id'
+
+export const DotbitAliasTestApi = 'https://test-reverse-api.d.id'

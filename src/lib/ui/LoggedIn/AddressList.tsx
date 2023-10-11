@@ -14,7 +14,7 @@ export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) 
   const { walletSnap } = useWalletState()
 
   const back = () => {
-    if (prevRouteName === 'ChainList') {
+    if (prevRouteName === 'Connect') {
       onClose()
     } else {
       goBack?.()

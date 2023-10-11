@@ -17,7 +17,7 @@ export function ChainItem(props: {
   return (
     <li
       className={clsx(
-        'box-border flex cursor-pointer items-center justify-between py-3 pl-3 pr-5 hover:bg-secondary-5 active:bg-secondary',
+        'box-border flex cursor-pointer items-center justify-between rounded-2xl border border-[#BEC0C228] py-2 pl-3 pr-5 hover:bg-secondary-5 active:bg-secondary',
         props.className,
       )}
       onClick={click}

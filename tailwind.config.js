@@ -26,12 +26,14 @@ module.exports = {
       },
       boxShadow: {
         toast: '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
-        passkey: '0px 4px 10px 0px rgba(0, 0, 0, 0.10), 0px 40px 24px 0px rgba(0, 0, 0, 0.05);',
+        'loggedin-button': '0px 4px 6px 0px rgba(168, 168, 168, 0.05)',
+        passkey: '0px 4px 10px 0px rgba(83, 171, 255, 0.10), 0px 16px 24px 0px rgba(54, 120, 182, 0.10);',
       },
       backgroundImage: {
         passkey: 'linear-gradient(90deg, #00DF9B 0%, #0E7DFF 100%)',
-        'passkey-hover': 'linear-gradient(90deg, #00DF9B 0%, #0E7DFF 100%)',
-        'passkey-active': 'linear-gradient(90deg, #00C78A 0%, #0071F5 100%)',
+      },
+      flex: {
+        'loggedin-button': '1 1 calc(50% - 6px)',
       },
     },
   },

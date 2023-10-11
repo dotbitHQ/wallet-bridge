@@ -1,5 +1,14 @@
 import { proxy, snapshot, useSnapshot } from 'valtio'
-import { CoinType, CustomChain, CustomWallet, WalletProtocol, WebAuthnApi, WebAuthnTestApi } from '../constant'
+import {
+  CoinType,
+  CustomChain,
+  CustomWallet,
+  DotbitAliasApi,
+  DotbitAliasTestApi,
+  WalletProtocol,
+  WebAuthnApi,
+  WebAuthnTestApi,
+} from '../constant'
 import { IDeviceData } from 'connect-did-sdk'
 import { merge } from 'lodash-es'
 import Axios from 'axios'
@@ -24,6 +33,7 @@ export interface WalletState {
   iCloudPasskeySupport?: boolean
   customChains?: CustomChain[]
   customWallets?: CustomWallet[]
+  alias?: string
 }
 
 export interface ICKBAddressItem {
@@ -55,6 +65,7 @@ const localWalletState = walletStateLocalStorage
       iCloudPasskeySupport: false,
       customChains: [],
       customWallets: [],
+      alias: '',
     }
 
 export const walletState = proxy<WalletState>({
@@ -145,6 +156,30 @@ export async function getMastersAddress() {
   }
 }
 
+export async function getDotbitAlias() {
+  const { coinType, isTestNet, address } = snapshot(walletState)
+  const api = isTestNet ? DotbitAliasTestApi : DotbitAliasApi
+
+  const aliasInfo = await Axios.post(`${api}/v1/reverse/info`, {
+    type: 'blockchain',
+    key_info: { coin_type: coinType, key: address },
+  })
+
+  if (aliasInfo.data?.err_no === errno.success) {
+    if (aliasInfo.data?.data?.is_valid === true) {
+      setWalletState({
+        alias: aliasInfo.data.data.account,
+      })
+    } else {
+      setWalletState({
+        alias: '',
+      })
+    }
+  } else {
+    throw new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg)
+  }
+}
+
 export const setWalletState = ({
   protocol,
   address,
@@ -161,6 +196,7 @@ export const setWalletState = ({
   isSwitchAddress,
   customChains,
   customWallets,
+  alias,
 }: WalletState) => {
   if (protocol) {
     walletState.protocol = protocol
@@ -207,6 +243,9 @@ export const setWalletState = ({
   if (customWallets !== undefined) {
     walletState.customWallets = customWallets
   }
+  if (alias !== undefined) {
+    walletState.alias = alias
+  }
 
   walletState.iCloudPasskeySupport = checkPasskeysSupport()
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
@@ -223,6 +262,7 @@ export const resetWalletState = () => {
   walletState.deviceList = []
   walletState.canAddDevice = false
   walletState.isSwitchAddress = false
+  walletState.alias = ''
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 
