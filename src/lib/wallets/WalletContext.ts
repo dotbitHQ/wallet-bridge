@@ -10,7 +10,7 @@ import {
   CustomChain,
   CustomWallet,
 } from '../constant'
-import { sleep } from '../utils'
+import { shouldUseWalletConnect, sleep } from '../utils'
 import Torus from '@toruslabs/torus-embed'
 import Emittery from 'emittery'
 import { EventKey } from './WalletEventListenerHandler'
@@ -22,6 +22,7 @@ import { snapshot } from 'valtio'
 import { walletState } from '../store'
 import { EventOptions } from '../types'
 import { Connector } from '@wagmi/core'
+import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 
 export class WalletContext {
   // sendTrx method
@@ -175,10 +176,26 @@ export class WalletContext {
     }
 
     if (this.wagmiConfig) {
-      const walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+      const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
         return item.id === 'metaMask'
       })
-      this.provider = await walletConnectConnector.getProvider()
+      let walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+        return item.id === 'walletConnect'
+      })
+      if (shouldUseWalletConnect()) {
+        walletConnectConnector = new WalletConnectConnector({
+          chains: walletConnectConnector.chains,
+          options: {
+            projectId: walletConnectConnector.options.projectId,
+            metadata: walletConnectConnector.options.metadata,
+            showQrModal: false,
+          },
+        })
+        this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
+        this.provider = await walletConnectConnector.getProvider()
+      } else {
+        this.provider = await metaMaskConnector.getProvider()
+      }
     } else {
       throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
     }
@@ -247,9 +264,21 @@ export class WalletContext {
     }
 
     if (this.wagmiConfig) {
-      const walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+      const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+        return item.id === 'metaMask'
+      })
+      let walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
         return item.id === 'walletConnect'
       })
+      walletConnectConnector = new WalletConnectConnector({
+        chains: walletConnectConnector.chains,
+        options: {
+          projectId: walletConnectConnector.options.projectId,
+          metadata: walletConnectConnector.options.metadata,
+          showQrModal: isMobile,
+        },
+      })
+      this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
       this.provider = await walletConnectConnector.getProvider()
     } else {
       throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')

@@ -1,5 +1,5 @@
 import { SignDataOptions, SignDataType, WalletSigner } from './WalletSigner'
-import { isHexStrict } from '../../utils'
+import { isHexStrict, shouldUseWalletConnect } from '../../utils'
 import { signMessage, signTypedData } from '@wagmi/core'
 
 export class WalletConnectSigner extends WalletSigner {
@@ -13,6 +13,10 @@ export class WalletConnectSigner extends WalletSigner {
       if (isHexStrict('0x' + data)) {
         // eslint-disable-next-line @typescript-eslint/no-base-to-string,@typescript-eslint/restrict-plus-operands
         _data = '0x' + data
+      }
+
+      if (shouldUseWalletConnect()) {
+        window.location.href = `metamask://`
       }
 
       console.log('signMessage', String(_data))

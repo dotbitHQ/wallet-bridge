@@ -11,7 +11,7 @@ import { SignDataType } from '../WalletSignerHandler'
 export class WalletConnectConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
     console.log('WalletConnect connect')
-    const { wagmiConfig, chainId } = this.context
+    const { wagmiConfig, chainId, provider } = this.context
     const walletConnectConnector = wagmiConfig.connectors.find((item: Connector) => {
       return item.id === 'walletConnect'
     })
@@ -24,8 +24,7 @@ export class WalletConnectConnector extends WalletConnector {
 
     if (wagmiConfig && wagmiConfig.status !== 'connected' && walletConnectConnector) {
       if (!walletConnectConnector.options.showQrModal) {
-        const walletConnectProvider = await walletConnectConnector.getProvider()
-        walletConnectProvider.once('display_uri', async (uri: string) => {
+        provider.once('display_uri', async (uri: string) => {
           console.log('WalletConnect display_uri', uri)
           setLoginCacheState({ walletConnectDisplayUri: uri })
         })

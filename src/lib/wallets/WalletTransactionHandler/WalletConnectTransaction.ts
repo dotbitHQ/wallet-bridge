@@ -1,5 +1,5 @@
 import { ISendTrxParams, WalletTransaction } from './WalletTransaction'
-import { utf8ToHex } from '../../utils'
+import { shouldUseWalletConnect, utf8ToHex } from '../../utils'
 import { sendTransaction } from '@wagmi/core'
 import { parseUnits } from 'viem'
 
@@ -9,6 +9,9 @@ export class WalletConnectTransaction extends WalletTransaction {
     let _data: string = ''
     if (data.data != null) {
       _data = utf8ToHex(data.data)
+    }
+    if (shouldUseWalletConnect()) {
+      window.location.href = `metamask://`
     }
     console.log('sendTransaction: ', chainId, data.to, data.value, _data)
     const { hash } = await sendTransaction({

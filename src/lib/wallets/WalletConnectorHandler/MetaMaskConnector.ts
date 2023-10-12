@@ -1,9 +1,9 @@
 import { WalletConnector } from './WalletConnector'
-import { toChecksumAddress } from '../../utils'
+import { shouldUseWalletConnect, toChecksumAddress } from '../../utils'
 import { connect, Connector, disconnect, getNetwork, switchNetwork } from '@wagmi/core'
 import { EventEnum } from '../WalletEventListenerHandler'
 import { resetWalletState, setWalletState } from '../../store'
-import { isMobile } from 'react-device-detect'
+import { isAndroid, isIOS, isMobile } from 'react-device-detect'
 import { CoinTypeToChainMap } from '../../constant'
 import { snapshot } from 'valtio'
 import { loginCacheState } from '../../store/loginCache'
@@ -12,10 +12,18 @@ import { MetaMaskSigner, SignDataType } from '../WalletSignerHandler'
 export class MetaMaskConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
     try {
-      const { wagmiConfig, chainId } = this.context
-      const metaMaskConnector = wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'metaMask'
-      })
+      const { wagmiConfig, chainId, provider } = this.context
+
+      let connector
+      if (shouldUseWalletConnect()) {
+        connector = wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'walletConnect'
+        })
+      } else {
+        connector = wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'metaMask'
+        })
+      }
 
       const walletStateLocalStorage = localStorage.getItem('WalletState')
       if (walletStateLocalStorage && wagmiConfig.status === 'connected') {
@@ -23,13 +31,33 @@ export class MetaMaskConnector extends WalletConnector {
         localStorage.removeItem('WalletState')
       }
 
-      if (wagmiConfig && wagmiConfig.status !== 'connected' && metaMaskConnector) {
+      if (wagmiConfig && wagmiConfig.status !== 'connected' && connector) {
+        if (shouldUseWalletConnect()) {
+          provider.once('display_uri', async (uri: string) => {
+            const uriStr = isAndroid
+              ? uri
+              : isIOS
+              ? // currently broken in MetaMask v6.5.0 https://github.com/MetaMask/metamask-mobile/issues/6457
+                `metamask://wc?uri=${encodeURIComponent(uri)}`
+              : `https://metamask.app.link/wc?uri=${encodeURIComponent(uri)}`
+            if (uriStr.startsWith('http')) {
+              const link = document.createElement('a')
+              link.href = uriStr
+              link.target = '_blank'
+              link.rel = 'noreferrer noopener'
+              link.click()
+            } else {
+              window.location.href = uriStr
+            }
+          })
+        }
+
         const { chain, account } = await connect({
-          connector: metaMaskConnector,
+          connector,
           chainId,
         })
 
-        if (chainId && chainId !== chain.id) {
+        if (chainId && chainId !== chain.id && !shouldUseWalletConnect()) {
           await this.switchNetwork(chainId)
         }
 
