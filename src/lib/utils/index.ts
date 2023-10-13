@@ -6,9 +6,9 @@ import { Decimal } from 'decimal.js'
 import utf8 from 'utf8'
 import { MessageTypes, SignTypedDataVersion, TypedDataUtils, TypedMessage } from '@metamask/eth-sig-util'
 import { Buffer } from 'buffer'
-import { CoinType } from '../constant'
+import { CoinType, CustomWallet } from '../constant'
 import GraphemeSplitter from 'grapheme-splitter'
-import { isMobile, isMobileOnly } from 'react-device-detect'
+import { isMobileOnly } from 'react-device-detect'
 // @ts-expect-error
 import abcCopy from 'abc-copy'
 import UAParser from 'ua-parser-js'
@@ -367,5 +367,34 @@ export function shouldUseWalletConnect(): boolean {
     typeof window !== 'undefined' &&
     typeof window.ethereum !== 'undefined' &&
     (window.ethereum.providers?.some(isMetaMask) || window.ethereum.isMetaMask)
-  return !isMetaMaskInjected && isMobile
+  return !isMetaMaskInjected
+}
+
+export function getWalletDeepLink(walletName: string, displayUri: string): string {
+  if (walletName === CustomWallet.metaMask) {
+    return `metamask://wc?uri=${encodeURIComponent(displayUri)}`
+  } else if (walletName === CustomWallet.trustWallet) {
+    return `trust://wc?uri=${encodeURIComponent(displayUri)}`
+  } else if (walletName === CustomWallet.imToken) {
+    return `imtokenv2://wc?uri=${encodeURIComponent(displayUri)}`
+  } else if (walletName === CustomWallet.tokenPocket) {
+    return `tpoutside://wc?uri=${encodeURIComponent(displayUri)}`
+  } else if (walletName === CustomWallet.oneKey) {
+    return `onekey-wallet://wc?uri=${encodeURIComponent(displayUri)}`
+  }
+  return ''
+}
+
+export function openDeepLink(deepLink: string) {
+  if (deepLink.startsWith('http')) {
+    const link = document.createElement('a')
+    link.href = deepLink
+    link.target = '_blank'
+    link.rel = 'noreferrer noopener'
+    link.click()
+    // window.open(deepLink, '_blank', 'noreferrer noopener')
+  } else {
+    // window.open(deepLink, '_self', 'noreferrer noopener')
+    window.location.href = deepLink
+  }
 }

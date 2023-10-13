@@ -183,14 +183,16 @@ export class WalletContext {
         return item.id === 'walletConnect'
       })
       if (shouldUseWalletConnect()) {
-        walletConnectConnector = new WalletConnectConnector({
-          chains: walletConnectConnector.chains,
-          options: {
-            projectId: walletConnectConnector.options.projectId,
-            metadata: walletConnectConnector.options.metadata,
-            showQrModal: false,
-          },
-        })
+        if (walletConnectConnector.options.showQrModal === true) {
+          walletConnectConnector = new WalletConnectConnector({
+            chains: walletConnectConnector.chains,
+            options: {
+              projectId: walletConnectConnector.options.projectId,
+              metadata: walletConnectConnector.options.metadata,
+              showQrModal: false,
+            },
+          })
+        }
         this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
         this.provider = await walletConnectConnector.getProvider()
       } else {
@@ -270,14 +272,17 @@ export class WalletContext {
       let walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
         return item.id === 'walletConnect'
       })
-      walletConnectConnector = new WalletConnectConnector({
-        chains: walletConnectConnector.chains,
-        options: {
-          projectId: walletConnectConnector.options.projectId,
-          metadata: walletConnectConnector.options.metadata,
-          showQrModal: isMobile,
-        },
-      })
+      if (walletConnectConnector.options.showQrModal !== isMobile) {
+        walletConnectConnector = new WalletConnectConnector({
+          chains: walletConnectConnector.chains,
+          options: {
+            projectId: walletConnectConnector.options.projectId,
+            metadata: walletConnectConnector.options.metadata,
+            showQrModal: isMobile,
+          },
+        })
+      }
+
       this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
       this.provider = await walletConnectConnector.getProvider()
     } else {

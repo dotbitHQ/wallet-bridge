@@ -12,7 +12,6 @@ import TrustWalletIcon from './icon/trustwallet-icon.svg'
 import ImTokenIcon from './icon/imtoken-icon.svg'
 import TokenPocketIcon from './icon/tokenpocket-icon.svg'
 import OneKeyIcon from './icon/onekey-icon.svg'
-import ITokenIcon from './icon/itoken-icon.svg'
 import TronLinkIcon from './icon/tronlink-icon.svg'
 import WalletConnectIcon from './icon/walletconnect-icon.svg'
 
@@ -61,11 +60,11 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
         name: CustomWallet.oneKey,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
-      {
-        icon: <img className="h-10 w-10" src={ITokenIcon} alt="iToken" />,
-        name: CustomWallet.iToken,
-        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
-      },
+      // {
+      //   icon: <img className="h-10 w-10" src={ITokenIcon} alt="iToken" />,
+      //   name: CustomWallet.iToken,
+      //   supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+      // },
       {
         icon: <img className="h-10 w-10" src={TronLinkIcon} alt="TronLink" />,
         name: CustomWallet.tronLink,
@@ -145,10 +144,10 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
   }
 
   useEffect(() => {
-    if (loginCacheSnap.walletName === CustomWallet.walletConnect && loginCacheSnap.walletConnectDisplayUri) {
+    if (loginCacheSnap.walletConnectDisplayUri) {
       goNext?.()
     }
-  }, [goNext, loginCacheSnap.walletConnectDisplayUri, loginCacheSnap.walletName])
+  }, [goNext, loginCacheSnap.walletConnectDisplayUri])
 
   return (
     <>

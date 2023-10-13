@@ -5,6 +5,7 @@ import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
 import { configureChains, createConfig } from '@wagmi/core'
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
+import { isMobile } from 'react-device-detect'
 
 export default {
   title: 'UI/Wallets',
@@ -44,6 +45,7 @@ const walletConnectConnector = new WalletConnectConnector({
       url: 'https://d.id',
       icons: ['https://d.id/favicon.png'],
     },
+    showQrModal: isMobile,
   },
 })
 
@@ -54,7 +56,7 @@ const wagmiConfig = createConfig({
 })
 
 const wallet = new Wallet({
-  isTestNet: true,
+  isTestNet: false,
   wagmiConfig,
 })
 

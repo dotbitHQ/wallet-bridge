@@ -1,18 +1,18 @@
 import { WalletConnector } from './WalletConnector'
-import { shouldUseWalletConnect, toChecksumAddress } from '../../utils'
+import { getWalletDeepLink, openDeepLink, shouldUseWalletConnect, sleep, toChecksumAddress } from '../../utils'
 import { connect, Connector, disconnect, getNetwork, switchNetwork } from '@wagmi/core'
 import { EventEnum } from '../WalletEventListenerHandler'
 import { resetWalletState, setWalletState } from '../../store'
-import { isAndroid, isIOS, isMobile } from 'react-device-detect'
+import { isMobile } from 'react-device-detect'
 import { CoinTypeToChainMap } from '../../constant'
 import { snapshot } from 'valtio'
-import { loginCacheState } from '../../store/loginCache'
+import { loginCacheState, setLoginCacheState } from '../../store/loginCache'
 import { MetaMaskSigner, SignDataType } from '../WalletSignerHandler'
 
 export class MetaMaskConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
     try {
-      const { wagmiConfig, chainId, provider } = this.context
+      const { wagmiConfig, chainId, provider, walletName } = this.context
 
       let connector
       if (shouldUseWalletConnect()) {
@@ -34,20 +34,14 @@ export class MetaMaskConnector extends WalletConnector {
       if (wagmiConfig && wagmiConfig.status !== 'connected' && connector) {
         if (shouldUseWalletConnect()) {
           provider.once('display_uri', async (uri: string) => {
-            const uriStr = isAndroid
-              ? uri
-              : isIOS
-              ? // currently broken in MetaMask v6.5.0 https://github.com/MetaMask/metamask-mobile/issues/6457
-                `metamask://wc?uri=${encodeURIComponent(uri)}`
-              : `https://metamask.app.link/wc?uri=${encodeURIComponent(uri)}`
-            if (uriStr.startsWith('http')) {
-              const link = document.createElement('a')
-              link.href = uriStr
-              link.target = '_blank'
-              link.rel = 'noreferrer noopener'
-              link.click()
+            if (isMobile) {
+              if (walletName) {
+                const deepLink = getWalletDeepLink(walletName, uri)
+                openDeepLink(deepLink)
+              }
             } else {
-              window.location.href = uriStr
+              console.log('WalletConnect display_uri', uri)
+              setLoginCacheState({ walletConnectDisplayUri: uri })
             }
           })
         }
@@ -119,6 +113,7 @@ export class MetaMaskConnector extends WalletConnector {
   async signData(data: SignDataType, isEIP712?: boolean): Promise<string | undefined> {
     try {
       const signer = new MetaMaskSigner(this.context)
+      await sleep(1000)
       return await signer.signData(data, {
         isEIP712,
       })

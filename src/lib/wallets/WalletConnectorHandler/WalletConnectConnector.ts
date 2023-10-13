@@ -1,5 +1,5 @@
 import { WalletConnector } from './WalletConnector'
-import { toChecksumAddress } from '../../utils'
+import { sleep, toChecksumAddress } from '../../utils'
 import { connect, Connector, disconnect, switchNetwork } from '@wagmi/core'
 import { EventEnum } from '../WalletEventListenerHandler'
 import { resetWalletState, setWalletState } from '../../store'
@@ -80,6 +80,7 @@ export class WalletConnectConnector extends WalletConnector {
   async signData(data: SignDataType, isEIP712?: boolean): Promise<string | undefined> {
     try {
       const signer = new WalletConnectSigner(this.context)
+      await sleep(1000)
       return await signer.signData(data, {
         isEIP712,
       })
