@@ -16,10 +16,10 @@ export class WalletConnectConnector extends WalletConnector {
       return item.id === 'walletConnect'
     })
 
-    const walletStateLocalStorage = localStorage.getItem('WalletState')
+    const walletStateLocalStorage = globalThis.localStorage.getItem('WalletState')
     if (walletStateLocalStorage && wagmiConfig.status === 'connected') {
       await disconnect()
-      localStorage.removeItem('WalletState')
+      globalThis.localStorage.removeItem('WalletState')
     }
 
     if (wagmiConfig && wagmiConfig.status !== 'connected' && walletConnectConnector) {

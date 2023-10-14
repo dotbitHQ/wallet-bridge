@@ -25,10 +25,10 @@ export class MetaMaskConnector extends WalletConnector {
         })
       }
 
-      const walletStateLocalStorage = localStorage.getItem('WalletState')
+      const walletStateLocalStorage = globalThis.localStorage.getItem('WalletState')
       if (walletStateLocalStorage && wagmiConfig.status === 'connected') {
         await disconnect()
-        localStorage.removeItem('WalletState')
+        globalThis.localStorage.removeItem('WalletState')
       }
 
       if (wagmiConfig && wagmiConfig.status !== 'connected' && connector) {

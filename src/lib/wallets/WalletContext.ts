@@ -192,8 +192,8 @@ export class WalletContext {
               showQrModal: false,
             },
           })
+          this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
         }
-        this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
         this.provider = await walletConnectConnector.getProvider()
       } else {
         this.provider = await metaMaskConnector.getProvider()
@@ -281,9 +281,8 @@ export class WalletContext {
             showQrModal: isMobile,
           },
         })
+        this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
       }
-
-      this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
       this.provider = await walletConnectConnector.getProvider()
     } else {
       throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')

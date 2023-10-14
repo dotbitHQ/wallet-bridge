@@ -66,9 +66,6 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
   const showWalletList = () => {
     goTo('WalletList')
   }
-  const showAddressList = () => {
-    goTo('AddressList')
-  }
 
   const chains: IChain[] = useMemo(() => {
     const customChains = walletSnap.customChains
@@ -124,12 +121,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         walletName: name,
       })
       await walletSDK.connect()
-      const { ckbAddresses, loggedInSelectAddress } = walletSnap
-      if (name === CustomChain.passkey && ckbAddresses && ckbAddresses.length > 0 && loggedInSelectAddress) {
-        showAddressList()
-      } else {
-        onClose()
-      }
+      onClose()
     } catch (error: any) {
       console.error(error)
       const handleErrorRes = handleError(error)

@@ -243,7 +243,7 @@ export async function copyText(text: string, el?: Element): Promise<void> {
  */
 export async function checkWebAuthnSupport(): Promise<boolean> {
   if (typeof window !== 'undefined') {
-    const urlParams = new URLSearchParams(window.location.search)
+    const urlParams = new globalThis.URLSearchParams(window.location.search)
     const isDebug = urlParams.get('debug') === 'true'
     if (isDebug) {
       return true
@@ -372,15 +372,15 @@ export function shouldUseWalletConnect(): boolean {
 
 export function getWalletDeepLink(walletName: string, displayUri: string): string {
   if (walletName === CustomWallet.metaMask) {
-    return `metamask://wc?uri=${encodeURIComponent(displayUri)}`
+    return `metamask://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
   } else if (walletName === CustomWallet.trustWallet) {
-    return `trust://wc?uri=${encodeURIComponent(displayUri)}`
+    return `trust://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
   } else if (walletName === CustomWallet.imToken) {
-    return `imtokenv2://wc?uri=${encodeURIComponent(displayUri)}`
+    return `imtokenv2://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
   } else if (walletName === CustomWallet.tokenPocket) {
-    return `tpoutside://wc?uri=${encodeURIComponent(displayUri)}`
+    return `tpoutside://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
   } else if (walletName === CustomWallet.oneKey) {
-    return `onekey-wallet://wc?uri=${encodeURIComponent(displayUri)}`
+    return `onekey-wallet://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
   }
   return ''
 }
