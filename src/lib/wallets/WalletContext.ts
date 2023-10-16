@@ -203,6 +203,35 @@ export class WalletContext {
     }
   }
 
+  private async getWalletConnectProvider() {
+    if (this.torusWallet?.hideTorusButton) {
+      this.torusWallet.hideTorusButton()
+    }
+
+    if (this.wagmiConfig) {
+      const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+        return item.id === 'metaMask'
+      })
+      let walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+        return item.id === 'walletConnect'
+      })
+      if (walletConnectConnector.options.showQrModal !== isMobile) {
+        walletConnectConnector = new WalletConnectConnector({
+          chains: walletConnectConnector.chains,
+          options: {
+            projectId: walletConnectConnector.options.projectId,
+            metadata: walletConnectConnector.options.metadata,
+            showQrModal: isMobile,
+          },
+        })
+        this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
+      }
+      this.provider = await walletConnectConnector.getProvider()
+    } else {
+      throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
+    }
+  }
+
   private async getTokenPocketUTXOProvider() {
     if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
@@ -260,35 +289,6 @@ export class WalletContext {
     }
   }
 
-  private async getWalletConnectProvider() {
-    if (this.torusWallet?.hideTorusButton) {
-      this.torusWallet.hideTorusButton()
-    }
-
-    if (this.wagmiConfig) {
-      const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'metaMask'
-      })
-      let walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'walletConnect'
-      })
-      if (walletConnectConnector.options.showQrModal !== isMobile) {
-        walletConnectConnector = new WalletConnectConnector({
-          chains: walletConnectConnector.chains,
-          options: {
-            projectId: walletConnectConnector.options.projectId,
-            metadata: walletConnectConnector.options.metadata,
-            showQrModal: isMobile,
-          },
-        })
-        this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
-      }
-      this.provider = await walletConnectConnector.getProvider()
-    } else {
-      throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
-    }
-  }
-
   private async getTronLinkProvider() {
     if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
@@ -322,7 +322,7 @@ export class WalletContext {
     let isDebug = false
 
     if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search)
+      const urlParams = new globalThis.URLSearchParams(window.location.search)
       isDebug = urlParams.get('debug') === 'true'
     }
 

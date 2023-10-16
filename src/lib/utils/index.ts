@@ -265,9 +265,9 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
     return false
   }
 
-  if ('credentials' in navigator && 'PublicKeyCredential' in window) {
+  if ('credentials' in globalThis.navigator && 'PublicKeyCredential' in window) {
     try {
-      const isAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+      const isAvailable = await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
       if (isAvailable) {
         return true
       } else {
