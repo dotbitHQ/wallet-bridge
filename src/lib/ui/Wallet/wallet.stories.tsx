@@ -5,7 +5,6 @@ import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
 import { configureChains, createConfig } from '@wagmi/core'
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
-import { isMobile } from 'react-device-detect'
 
 export default {
   title: 'UI/Wallets',
@@ -45,13 +44,27 @@ const walletConnectConnector = new WalletConnectConnector({
       url: 'https://d.id',
       icons: ['https://d.id/favicon.png'],
     },
-    showQrModal: isMobile,
+    showQrModal: true,
+  },
+})
+
+const walletConnectConnector2 = new WalletConnectConnector({
+  chains,
+  options: {
+    projectId: '13c75e7d20888adc7e57cad417ad9ed8',
+    metadata: {
+      name: '.bit',
+      description: 'Barrier-free DID for Every Community and Everyone',
+      url: 'https://d.id',
+      icons: ['https://d.id/favicon.png'],
+    },
+    showQrModal: false,
   },
 })
 
 const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors: [walletConnectConnector, metaMaskConnector],
+  connectors: [walletConnectConnector, walletConnectConnector2, metaMaskConnector],
   publicClient,
 })
 

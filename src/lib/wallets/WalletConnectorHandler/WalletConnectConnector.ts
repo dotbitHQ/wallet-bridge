@@ -7,14 +7,23 @@ import { loginCacheState, setLoginCacheState } from '../../store/loginCache'
 import { snapshot } from 'valtio'
 import { WalletConnectSigner } from '../WalletSignerHandler/WalletConnectSigner'
 import { SignDataType } from '../WalletSignerHandler'
+import { isMobile } from 'react-device-detect'
 
 export class WalletConnectConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
     console.log('WalletConnect connect')
     const { wagmiConfig, chainId, provider } = this.context
-    const walletConnectConnector = wagmiConfig.connectors.find((item: Connector) => {
-      return item.id === 'walletConnect'
-    })
+
+    let walletConnectConnector
+    if (isMobile) {
+      walletConnectConnector = wagmiConfig.connectors.find((item: Connector) => {
+        return item.id === 'walletConnect' && item.options.showQrModal === true
+      })
+    } else {
+      walletConnectConnector = wagmiConfig.connectors.find((item: Connector) => {
+        return item.id === 'walletConnect' && item.options.showQrModal === false
+      })
+    }
 
     const walletStateLocalStorage = globalThis.localStorage.getItem('WalletState')
     if (walletStateLocalStorage && wagmiConfig.status === 'connected') {

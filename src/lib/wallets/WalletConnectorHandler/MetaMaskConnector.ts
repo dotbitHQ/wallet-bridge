@@ -17,7 +17,7 @@ export class MetaMaskConnector extends WalletConnector {
       let connector
       if (shouldUseWalletConnect()) {
         connector = wagmiConfig.connectors.find((item: Connector) => {
-          return item.id === 'walletConnect'
+          return item.id === 'walletConnect' && item.options.showQrModal === false
         })
       } else {
         connector = wagmiConfig.connectors.find((item: Connector) => {

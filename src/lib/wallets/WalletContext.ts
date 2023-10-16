@@ -22,7 +22,6 @@ import { snapshot } from 'valtio'
 import { walletState } from '../store'
 import { EventOptions } from '../types'
 import { Connector } from '@wagmi/core'
-import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 
 export class WalletContext {
   // sendTrx method
@@ -176,26 +175,15 @@ export class WalletContext {
     }
 
     if (this.wagmiConfig) {
-      const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'metaMask'
-      })
-      let walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'walletConnect'
-      })
       if (shouldUseWalletConnect()) {
-        if (walletConnectConnector.options.showQrModal === true) {
-          walletConnectConnector = new WalletConnectConnector({
-            chains: walletConnectConnector.chains,
-            options: {
-              projectId: walletConnectConnector.options.projectId,
-              metadata: walletConnectConnector.options.metadata,
-              showQrModal: false,
-            },
-          })
-          this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
-        }
+        const walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'walletConnect' && item.options.showQrModal === false
+        })
         this.provider = await walletConnectConnector.getProvider()
       } else {
+        const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'metaMask'
+        })
         this.provider = await metaMaskConnector.getProvider()
       }
     } else {
@@ -209,22 +197,15 @@ export class WalletContext {
     }
 
     if (this.wagmiConfig) {
-      const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'metaMask'
-      })
-      let walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'walletConnect'
-      })
-      if (walletConnectConnector.options.showQrModal !== isMobile) {
-        walletConnectConnector = new WalletConnectConnector({
-          chains: walletConnectConnector.chains,
-          options: {
-            projectId: walletConnectConnector.options.projectId,
-            metadata: walletConnectConnector.options.metadata,
-            showQrModal: isMobile,
-          },
+      let walletConnectConnector
+      if (isMobile) {
+        walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'walletConnect' && item.options.showQrModal === true
         })
-        this.wagmiConfig.setConnectors([metaMaskConnector, walletConnectConnector])
+      } else {
+        walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'walletConnect' && item.options.showQrModal === false
+        })
       }
       this.provider = await walletConnectConnector.getProvider()
     } else {
