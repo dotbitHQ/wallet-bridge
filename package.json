@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.1.50-beta.43",
+  "version": "0.1.50-beta.47",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -37,7 +37,7 @@
     "buffer": "^6.0.3",
     "clsx": "^1.2.1",
     "color": "^4.2.3",
-    "connect-did-sdk": "^0.1.13",
+    "connect-did-sdk": "^0.1.14",
     "decimal.js": "^10.4.3",
     "emittery": "^1.0.1",
     "grapheme-splitter": "^1.0.4",
@@ -53,7 +53,8 @@
     "ua-parser-js": "^1.0.35",
     "utf8": "^3.0.0",
     "valtio": "^1.10.5",
-    "viem": "1.10.4"
+    "viem": "1.10.4",
+    "wallet-bridge": "file:.yalc/wallet-bridge"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

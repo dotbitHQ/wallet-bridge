@@ -14,8 +14,16 @@ import { useSimpleRouter } from '../../components/SimpleRouter'
 import clsx from 'clsx'
 import { getCamera } from '../../components/QrCodeScanner'
 import { ConnectDID } from 'connect-did-sdk'
-import { setBackupDeviceData, setMediaStream, setQrCodeData, useWebAuthnState } from '../../store/webAuthnState'
+import {
+  setBackupDeviceData,
+  setMediaStream,
+  setQrCodeData,
+  setSignData,
+  useWebAuthnState,
+} from '../../store/webAuthnState'
 import { useWalletState } from '../../store'
+import { useQuery } from '@tanstack/react-query'
+import { useWebAuthnService } from '../../services'
 
 function exceptionToMessage(err: DOMException) {
   if (err.name === 'NotAllowedError') {
@@ -70,7 +78,6 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
   const { goNext, goBack, goTo, onClose } = useSimpleRouter()!
   const { walletSnap } = useWalletState()
   const connectDID = useMemo(() => new ConnectDID(walletSnap.isTestNet), [walletSnap.isTestNet])
-  // const [data, setData] = useState('')
   const [permissionError, setPermissionError] = useState<DOMException | undefined>(undefined)
   const [requiringPermission, setRequiringPermission] = useState(false)
   const { qrCodeData: data } = useWebAuthnState()
@@ -81,6 +88,36 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
   const onPaste = useCallback(() => {
     navigator.clipboard.readText().then(setQrCodeData, console.error)
   }, [])
+
+  const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
+  const webAuthnState = useWebAuthnState()
+  const signDataQuery = useQuery({
+    queryKey: [
+      'FetchSignData',
+      {
+        master: walletSnap.address,
+        slave: webAuthnState.backupDeviceData?.ckbAddr,
+        notes: webAuthnState.backupDeviceData?.name,
+      },
+    ],
+    enabled: false,
+    retry: false,
+    queryFn: async () => {
+      if (
+        walletSnap.address === undefined ||
+        webAuthnState.backupDeviceData?.ckbAddr === undefined ||
+        webAuthnState.backupDeviceData?.name === undefined
+      )
+        throw new Error('unreachable')
+      const res = await webAuthnService.buildTransaction({
+        master_ckb_address: walletSnap.address,
+        slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
+        operation: 'add',
+      })
+      if (res.err_no !== 0) throw new Error(res.err_msg)
+      return res.data
+    },
+  })
 
   const onClickScan = useCallback(async () => {
     try {
@@ -151,8 +188,17 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
           shape={ButtonShape.round}
           onClick={() => {
             setBackupDeviceData(connectDID.decodeQRCode(data))
-            goNext?.()
+            signDataQuery
+              .refetch()
+              .then((res) => {
+                if (res.isSuccess) {
+                  setSignData(res.data)
+                  goNext?.()
+                }
+              })
+              .catch(console.error)
           }}
+          loading={signDataQuery.isInitialLoading}
         >
           Next
         </Button>

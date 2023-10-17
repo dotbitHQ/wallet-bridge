@@ -25,6 +25,7 @@ export interface WalletState {
   deviceData?: IDeviceData
   ckbAddresses?: string[]
   masterNotes?: string
+  masterDevice?: string
   deviceList?: ICKBAddressItem[]
   isTestNet?: boolean
   loggedInSelectAddress?: boolean
@@ -38,7 +39,7 @@ export interface WalletState {
 
 export interface ICKBAddressItem {
   address: string
-  avatar?: number
+  device?: string
   notes?: string
 }
 
@@ -57,6 +58,7 @@ const localWalletState = walletStateLocalStorage
       deviceData: undefined,
       ckbAddresses: [],
       masterNotes: undefined,
+      masterDevice: undefined,
       deviceList: [],
       isTestNet: false,
       loggedInSelectAddress: true,
@@ -88,23 +90,32 @@ async function fetchAuthorizeInfo(api: string, address: string) {
 }
 
 function setAuthorizeState(
-  data: { can_authorize: number; ckb_address: ICKBAddressItem[]; master_notes?: string | undefined },
+  data: {
+    can_authorize: number
+    ckb_address: ICKBAddressItem[]
+    master_notes?: string | undefined
+    master_device?: string | undefined
+  },
   address: string = '',
 ) {
-  if (address) {
-    setWalletState({
-      address,
-      masterNotes: data.master_notes,
-      canAddDevice: data.can_authorize !== 0,
-      deviceList: data.ckb_address,
-    })
-  } else {
-    setWalletState({
-      masterNotes: data.master_notes,
-      canAddDevice: data.can_authorize !== 0,
-      deviceList: data.ckb_address,
-    })
+  const record: WalletState = {
+    masterNotes: data.master_notes,
+    masterDevice: data.master_device,
+    canAddDevice: data.can_authorize !== 0,
+    deviceList: data.ckb_address,
   }
+  if (address) {
+    record.address = address
+    const { deviceData } = snapshot(walletState)
+    if (deviceData?.ckbAddr === address) {
+      record.deviceData = {
+        ...deviceData,
+        name: data.master_notes || deviceData.name,
+        device: data.master_device || deviceData.device,
+      }
+    }
+  }
+  setWalletState(record)
 }
 
 export async function getAuthorizeInfo({ detectAssets = false } = {}) {
@@ -117,12 +128,11 @@ export async function getAuthorizeInfo({ detectAssets = false } = {}) {
   const data = await fetchAuthorizeInfo(api, address)
   // eslint-disable-next-line
   if (data.can_authorize !== 0 || !detectAssets || isSwitchAddress || !(ckbAddresses && ckbAddresses.length > 0)) {
-    setAuthorizeState(data)
+    setAuthorizeState(data, address)
     return
   }
 
   let isSetAddress = false
-
   for (const item of ckbAddresses) {
     const res = await fetchAuthorizeInfo(api, item)
     if (res.can_authorize !== 0) {
@@ -133,7 +143,7 @@ export async function getAuthorizeInfo({ detectAssets = false } = {}) {
   }
 
   if (!isSetAddress) {
-    setAuthorizeState(data)
+    setAuthorizeState(data, address)
   }
 }
 
@@ -180,24 +190,51 @@ export async function getDotbitAlias() {
   }
 }
 
-export const setWalletState = ({
-  protocol,
-  address,
-  coinType,
-  walletName,
-  hardwareWalletTipsShow,
-  deviceData,
-  masterNotes,
-  ckbAddresses,
-  deviceList,
-  isTestNet,
-  loggedInSelectAddress,
-  canAddDevice,
-  isSwitchAddress,
-  customChains,
-  customWallets,
-  alias,
-}: WalletState) => {
+export async function backupDeviceData() {
+  const { isTestNet, deviceData, address, masterNotes } = snapshot(walletState)
+  if (masterNotes || deviceData?.ckbAddr !== address) {
+    return
+  }
+  const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
+  const res = await fetch(`${api}/v1/webauthn/add-cid-info`, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      ckb_addr: deviceData?.ckbAddr,
+      cid: deviceData?.credential.rawId,
+      notes: deviceData?.name,
+      device: deviceData?.device || deviceData?.name.split('-')[0],
+    }),
+  }).then(async (res) => await res.json())
+
+  return res
+}
+
+export const setWalletState = (
+  {
+    protocol,
+    address,
+    coinType,
+    walletName,
+    hardwareWalletTipsShow,
+    deviceData,
+    masterNotes,
+    masterDevice,
+    ckbAddresses,
+    deviceList,
+    isTestNet,
+    loggedInSelectAddress,
+    canAddDevice,
+    isSwitchAddress,
+    customChains,
+    customWallets,
+    alias,
+  }: WalletState,
+  isSwitch = false,
+) => {
   if (protocol) {
     walletState.protocol = protocol
   }
@@ -219,9 +256,16 @@ export const setWalletState = ({
   if (ckbAddresses) {
     walletState.ckbAddresses = ckbAddresses
   }
-  if (masterNotes) {
+  // reset
+  if (isSwitch) {
     walletState.masterNotes = masterNotes
+    walletState.masterDevice = masterDevice
+  } else if (masterNotes) {
+    walletState.masterNotes = masterNotes
+  } else if (masterDevice) {
+    walletState.masterDevice = masterDevice
   }
+
   if (deviceList) {
     walletState.deviceList = deviceList
   }
@@ -259,6 +303,7 @@ export const resetWalletState = () => {
   walletState.deviceData = undefined
   walletState.ckbAddresses = []
   walletState.masterNotes = undefined
+  walletState.masterDevice = undefined
   walletState.deviceList = []
   walletState.canAddDevice = false
   walletState.isSwitchAddress = false

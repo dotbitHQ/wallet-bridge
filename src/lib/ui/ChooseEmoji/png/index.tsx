@@ -22,6 +22,11 @@ import swan from './swan.png'
 import unicorn from './unicorn.png'
 import voltage from './voltage.png'
 import watermelon from './watermelon.png'
+import Android from './Android.png'
+import iOS from './iOS.png'
+import Windows from './Windows.png'
+import MacOS from './MacOS.png'
+import iPad from './iPad.png'
 
 export const emojis = {
   1: computer,
@@ -75,4 +80,9 @@ export const emojisTemp = {
   fire,
   heart,
   smiling,
+  Android,
+  Windows,
+  iPad,
+  iOS,
+  MacOS,
 }
