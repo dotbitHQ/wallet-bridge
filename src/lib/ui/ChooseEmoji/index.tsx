@@ -53,10 +53,6 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
         master_ckb_address: walletSnap.address,
         slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
         operation: 'add',
-        avatar: parseInt(selected),
-        notes: webAuthnState.backupDeviceData?.name,
-        master_notes:
-          walletSnap.address === walletSnap.deviceData?.ckbAddr ? walletSnap.deviceData.name : walletSnap.masterNotes,
       })
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data

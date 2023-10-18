@@ -3,6 +3,7 @@ import { proxy, ref, useSnapshot } from 'valtio'
 export interface BackupDeviceData {
   ckbAddr: string
   name: string
+  device?: string
 }
 
 interface WebAuthnState {

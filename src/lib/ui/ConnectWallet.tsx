@@ -10,7 +10,6 @@ import { AddressList } from './LoggedIn/AddressList'
 import { SimpleRouter } from '../components/SimpleRouter'
 import { ShowQRCode } from './ShowQRCode'
 import { InputSignature } from './InputSignature'
-import { ChooseEmoji } from './ChooseEmoji'
 import { FinalConfirm } from './FinalConfirm'
 import { TransactionStatus } from './TransactionStatus'
 import { TransactionSucceeded } from './TransactionSucceeded'
@@ -65,16 +64,11 @@ const routes = {
   InputSignature: {
     el: <InputSignature key="InputSignature" />,
     prev: 'ShowQRCode',
-    next: 'ChooseEmoji',
-  },
-  ChooseEmoji: {
-    el: <ChooseEmoji key="ChooseEmoji" />,
-    prev: 'InputSignature',
     next: 'FinalConfirm',
   },
   FinalConfirm: {
     el: <FinalConfirm key="FinalConfirm" />,
-    prev: 'ChooseEmoji',
+    prev: 'InputSignature',
     next: 'TransactionStatus',
   },
   TransactionStatus: {

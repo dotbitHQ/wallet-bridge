@@ -23,7 +23,7 @@ export const AddressList = ({ transitionRef, transitionStyle }: SwapChildProps) 
 
   const onSwitchAddress = async (address: string) => {
     if (address.toLowerCase() !== String(walletSnap.address).toLowerCase()) {
-      setWalletState({ address, isSwitchAddress: true })
+      setWalletState({ address, isSwitchAddress: true, masterNotes: '', masterDevice: '' }, true)
       await getAuthorizeInfo()
       walletSDK.context.emitEvent(EventEnum.Change)
     }

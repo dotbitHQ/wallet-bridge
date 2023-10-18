@@ -1,6 +1,6 @@
 import { CopyIcon, DeviceIcon, DisconnectIcon, Header, QRCodeIcon, SwapChildProps, SwitchIcon } from '../../components'
 import { CoinType, WalletProtocol } from '../../constant'
-import { getAuthorizeInfo, getDotbitAlias, getMastersAddress, useWalletState } from '../../store'
+import { backupDeviceData, getAuthorizeInfo, getDotbitAlias, getMastersAddress, useWalletState } from '../../store'
 import { ReactNode, useContext, useEffect, useState } from 'react'
 import { collapseString, copyText } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
@@ -81,7 +81,9 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
 
   useEffect(() => {
     void getMastersAddress()
-    void getAuthorizeInfo()
+    void getAuthorizeInfo().then(() => {
+      void backupDeviceData()
+    })
     void getDotbitAlias()
   }, [])
 
