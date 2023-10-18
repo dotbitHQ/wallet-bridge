@@ -21,6 +21,9 @@ module.exports = {
       maxHeight: {
         'dialog-list-max-height': '420px',
       },
+      width: {
+        'full-4px': 'calc(100% - 4px)',
+      },
       lineHeight: {
         4.5: '18px',
       },

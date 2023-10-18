@@ -157,7 +157,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
   return (
     <>
       <Header
-        className="z-10 w-full bg-white p-6"
+        className="z-10 mt-0.5 w-full-4px bg-white p-6"
         title="Other Wallets"
         onClose={close}
         goBack={back}

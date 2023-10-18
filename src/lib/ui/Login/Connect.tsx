@@ -127,7 +127,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
   return (
     <>
       <Header
-        className="z-10 w-full bg-white p-6"
+        className="z-10 mt-0.5 w-full-4px bg-white p-6"
         title="Connect"
         onClose={close}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}

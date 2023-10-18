@@ -14,7 +14,7 @@ import { merge } from 'lodash-es'
 import Axios from 'axios'
 import errno from '../constant/errno'
 import CustomError from '../utils/CustomError'
-import { checkPasskeysSupport } from '../utils'
+import { checkICloudPasskeySupport } from '../utils'
 
 export interface WalletState {
   protocol?: WalletProtocol
@@ -291,7 +291,7 @@ export const setWalletState = (
     walletState.alias = alias
   }
 
-  walletState.iCloudPasskeySupport = checkPasskeysSupport()
+  walletState.iCloudPasskeySupport = checkICloudPasskeySupport()
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
 }
 

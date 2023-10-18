@@ -152,7 +152,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
   return (
     <>
       <Header
-        className="z-10 w-full bg-white p-6"
+        className="z-10 mt-0.5 w-full-4px bg-white p-6"
         title="Select Wallet"
         onClose={close}
         goBack={back}

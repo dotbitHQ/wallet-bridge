@@ -21,7 +21,7 @@ export function AddressQRCode({ transitionRef, transitionStyle }: SwapChildProps
         title="QR Code"
         onClose={close}
         goBack={back}
-        className="bg-blur z-10 w-full bg-white p-6"
+        className="bg-blur z-10 mt-0.5 w-full-4px bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div

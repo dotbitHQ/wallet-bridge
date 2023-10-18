@@ -287,7 +287,7 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
  *
  * @returns {boolean} Returns true if the device is on iOS version 16 or higher, otherwise false.
  */
-export function checkPasskeysSupport() {
+export function checkICloudPasskeySupport() {
   const uaParser = new UAParser(globalThis.navigator?.userAgent)
   if (
     (uaParser.getOS().name === 'iOS' && parseInt(uaParser.getOS().version?.split('.')[0] ?? '0', 10) >= 16) ||

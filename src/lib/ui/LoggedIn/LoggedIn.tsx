@@ -51,13 +51,13 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   }
 
   const bgImage: Record<CoinType, ReactNode> = {
-    [CoinType.btc]: <img className="absolute top-0" src={BscBg} alt="" />,
-    [CoinType.ckb]: <img className="absolute top-0" src={DeviceBg} alt="" />,
-    [CoinType.eth]: <img className="absolute top-0" src={EthBg} alt="" />,
-    [CoinType.bsc]: <img className="absolute top-0" src={BscBg} alt="" />,
-    [CoinType.matic]: <img className="absolute top-0" src={PolygonBg} alt="" />,
-    [CoinType.trx]: <img className="absolute top-0" src={TronBg} alt="" />,
-    [CoinType.doge]: <img className="absolute top-0" src={DogeBg} alt="" />,
+    [CoinType.btc]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={BscBg} alt="" />,
+    [CoinType.ckb]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={DeviceBg} alt="" />,
+    [CoinType.eth]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={EthBg} alt="" />,
+    [CoinType.bsc]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={BscBg} alt="" />,
+    [CoinType.matic]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={PolygonBg} alt="" />,
+    [CoinType.trx]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={TronBg} alt="" />,
+    [CoinType.doge]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={DogeBg} alt="" />,
   }
 
   const close = () => {
@@ -92,7 +92,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
       {walletSnap.coinType && bgImage[walletSnap.coinType]}
       <Header
         onClose={close}
-        className="relative z-10 w-full p-6 pb-0"
+        className="z-10 mt-0.5 w-full-4px p-6 pb-0"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div className="relative w-full px-6 pb-6 pt-[52px]" ref={transitionRef} style={transitionStyle}>
