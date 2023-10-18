@@ -32,4 +32,8 @@ coverage
 # yarn
 yarn.lock
 
+# yalc
+.yalc
+.yalc.lock
+
 !src/deps/zxing/dist

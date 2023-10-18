@@ -23,6 +23,7 @@ import unicorn from './unicorn.png'
 import voltage from './voltage.png'
 import watermelon from './watermelon.png'
 import Android from './android.png'
+import iOS from './ios.png'
 import Windows from './windows.png'
 import MacOS from './macos.png'
 import iPad from './ipad.png'
@@ -82,6 +83,6 @@ export const emojisTemp = {
   Android,
   Windows,
   iPad,
-  iOS: Android,
+  iOS,
   MacOS,
 }
