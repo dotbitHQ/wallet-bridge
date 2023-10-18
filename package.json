@@ -53,8 +53,7 @@
     "ua-parser-js": "^1.0.35",
     "utf8": "^3.0.0",
     "valtio": "^1.10.5",
-    "viem": "1.10.4",
-    "wallet-bridge": "file:.yalc/wallet-bridge"
+    "viem": "1.10.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
