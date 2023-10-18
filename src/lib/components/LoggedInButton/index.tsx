@@ -12,7 +12,7 @@ export const LoggedInButton = ({ loading = false, className, icon, ...props }: L
     <button
       {...props}
       className={clsx(
-        'box-border flex w-full cursor-pointer flex-col items-center rounded-2xl border border-[#B6C4D966] px-2 py-3 text-sm font-medium leading-[normal] text-font-tips shadow-loggedin-button outline-0 hover:shadow-none active:bg-secondary active:shadow-none',
+        'box-border flex w-full cursor-pointer flex-col items-center rounded-2xl bg-white px-2 py-3 text-sm font-medium leading-[normal] text-font-tips shadow-loggedin-button outline-0 hover:shadow-none active:bg-secondary active:shadow-none',
         className,
       )}
       disabled={props.disabled === true || loading}

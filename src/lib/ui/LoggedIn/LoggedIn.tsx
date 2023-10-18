@@ -13,7 +13,14 @@ import BscIcon from '../Login/icon/bsc-icon.svg'
 import PolygonIcon from '../Login/icon/polygon-icon.svg'
 import TronIcon from '../Login/icon/tron-icon.svg'
 import DogecoinIcon from '../Login/icon/dogecoin-icon.svg'
+import BscBg from './bg/bsc.svg'
+import DeviceBg from './bg/device.svg'
+import DogeBg from './bg/doge.svg'
+import EthBg from './bg/eth.svg'
+import PolygonBg from './bg/polygon.svg'
+import TronBg from './bg/tron.svg'
 import { LoggedInButton } from '../../components/LoggedInButton'
+import clsx from 'clsx'
 
 export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const { walletSnap } = useWalletState()
@@ -43,6 +50,16 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
     [CoinType.doge]: <img className="inline-flex h-[68px] w-[68px]" src={DogecoinIcon} alt="Dogecoin" />,
   }
 
+  const bgImage: Record<CoinType, ReactNode> = {
+    [CoinType.btc]: <img className="absolute top-0" src={BscBg} alt="" />,
+    [CoinType.ckb]: <img className="absolute top-0" src={DeviceBg} alt="" />,
+    [CoinType.eth]: <img className="absolute top-0" src={EthBg} alt="" />,
+    [CoinType.bsc]: <img className="absolute top-0" src={BscBg} alt="" />,
+    [CoinType.matic]: <img className="absolute top-0" src={PolygonBg} alt="" />,
+    [CoinType.trx]: <img className="absolute top-0" src={TronBg} alt="" />,
+    [CoinType.doge]: <img className="absolute top-0" src={DogeBg} alt="" />,
+  }
+
   const close = () => {
     onClose()
   }
@@ -69,13 +86,14 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   }, [])
 
   return (
-    <>
+    <div className={clsx('bg-[#F6F7F9]')}>
+      {walletSnap.coinType && bgImage[walletSnap.coinType]}
       <Header
         onClose={close}
-        className="bg-blur z-10 w-full bg-white p-6 pb-0"
+        className="relative z-10 w-full p-6 pb-0"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
-      <div className="w-full px-6 pb-6 pt-[52px]" ref={transitionRef} style={transitionStyle}>
+      <div className="relative w-full px-6 pb-6 pt-[52px]" ref={transitionRef} style={transitionStyle}>
         <div className="text-center">
           {walletSnap.protocol === WalletProtocol.webAuthn ? (
             <>
@@ -183,6 +201,6 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
           )
         ) : null}
       </div>
-    </>
+    </div>
   )
 }

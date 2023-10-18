@@ -111,21 +111,25 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
         <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet" className="md:hidden">
           <div
             className={clsx(
-              'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-solid border-[#5262791A] bg-white',
+              'relative box-border w-full overflow-hidden rounded-t-[32px] bg-[unset]',
               isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
             )}
           >
-            {el}
+            <div className="box-border w-full overflow-hidden rounded-t-[32px] border-2 border-b-0 border-solid border-[#5262791A] bg-white">
+              {el}
+            </div>
           </div>
         </Sheet>
         <Modal isOpen={isOpen} customRootId="ConnectWalletModal" className="max-md:hidden">
           <div
             className={clsx(
-              'box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
+              'relative box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] bg-[unset]',
               isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
             )}
           >
-            {el}
+            <div className="box-border w-full overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white">
+              {el}
+            </div>
           </div>
         </Modal>
       </QueryClientProvider>
