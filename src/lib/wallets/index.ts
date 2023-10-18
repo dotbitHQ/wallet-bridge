@@ -73,7 +73,7 @@ class WalletSDK {
   }
 
   async disconnect() {
-    const isInit = await this.initWallet({ involution: false })
+    const isInit = await this.initWallet({ involution: false, isDisconnect: true })
     if (!isInit) {
       throw new CustomError(errno.failedToInitializeWallet, 'disconnect: Please initialize wallet first')
     }
@@ -114,15 +114,20 @@ class WalletSDK {
     }
   }
 
-  async initWallet({ involution = true }: { involution?: boolean } = {}): Promise<boolean> {
+  async initWallet({
+    involution = true,
+    isDisconnect = false,
+  }: { involution?: boolean; isDisconnect?: boolean } = {}): Promise<boolean> {
     try {
       const { protocol, coinType, deviceData, walletName } = snapshot(walletState)
 
       if (walletName && protocol && coinType) {
         await this.init()
         if (protocol === WalletProtocol.webAuthn && deviceData) {
-          void getAuthorizeInfo()
-          void getMastersAddress()
+          if (!isDisconnect) {
+            void getAuthorizeInfo()
+            void getMastersAddress()
+          }
           return true
         } else {
           if (involution) {
