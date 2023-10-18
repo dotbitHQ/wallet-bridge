@@ -281,7 +281,7 @@ export class WalletContext {
       if (tronWeb.defaultAddress.base58) {
         this.provider = tronWeb
       } else {
-        throw Error('Please try again after unlocking your TronLink wallet')
+        throw Error('Please try again after unlocking your Tron wallet')
       }
     } else {
       if (isMobile) {

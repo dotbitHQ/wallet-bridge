@@ -92,12 +92,12 @@ const queryClient = new QueryClient()
 
 export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }: ConnectWalletProps) => {
   const [isOpen, setIsOpen] = useState(visible)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
 
   const onClose = () => {
     setIsOpen(false)
   }
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768) // 假设768px以下为移动设备
   const handleResize = useCallback(() => {
     setIsMobile(window.innerWidth <= 768)
   }, [])
@@ -117,13 +117,13 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
       <QueryClientProvider client={queryClient}>
         {isMobile ? (
           <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet" className="md:hidden">
-            <div
-              className={clsx(
-                'relative box-border w-full overflow-hidden rounded-t-[32px] bg-[unset]',
-                isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
-              )}
-            >
-              <div className="box-border w-full overflow-hidden rounded-t-[32px] border-2 border-b-0 border-solid border-[#5262791A] bg-white">
+            <div className={clsx('relative box-border w-full overflow-hidden rounded-t-[32px] bg-[unset]')}>
+              <div
+                className={clsx(
+                  'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-b-0 border-solid border-[#5262791A] bg-white',
+                  isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+                )}
+              >
                 {el}
               </div>
             </div>
@@ -131,12 +131,14 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
         ) : (
           <Modal isOpen={isOpen} customRootId="ConnectWalletModal" className="max-md:hidden">
             <div
-              className={clsx(
-                'relative box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] bg-[unset]',
-                isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
-              )}
+              className={clsx('relative box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] bg-[unset]')}
             >
-              <div className="box-border w-full overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white">
+              <div
+                className={clsx(
+                  'box-border w-full overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
+                  isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+                )}
+              >
                 {el}
               </div>
             </div>

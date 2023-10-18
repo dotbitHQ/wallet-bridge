@@ -113,7 +113,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                   {collapseString(walletSnap.address, 26, 4)}
                 </div>
               )}
-              <div className="mb-8 flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3">
                 <LoggedInButton
                   className="flex-loggedin-button"
                   icon={<CopyIcon className="h-5 w-5 text-[#5F6570]"></CopyIcon>}
@@ -197,9 +197,9 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
         </div>
         {walletSnap.protocol === WalletProtocol.webAuthn && walletSnap.canAddDevice ? (
           walletSnap.deviceList && walletSnap.deviceList.length > 0 ? (
-            <DeviceList onShowQRCode={onShowQRCode} onDisconnect={disconnect}></DeviceList>
+            <DeviceList className="mt-8" onShowQRCode={onShowQRCode} onDisconnect={disconnect}></DeviceList>
           ) : (
-            <BackupTips onShowQRCode={onShowQRCode}></BackupTips>
+            <BackupTips className="mt-8" onShowQRCode={onShowQRCode}></BackupTips>
           )
         ) : null}
       </div>
