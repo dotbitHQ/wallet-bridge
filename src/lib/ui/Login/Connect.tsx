@@ -157,7 +157,10 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
             </Button>
             <div className="mt-4 w-[216px] text-center text-sm font-normal text-font-tips">
               Most friendly and secure way base on{' '}
-              <span className="cursor-pointer underline" onClick={viewPasskeyDocs}>
+              <span
+                className="cursor-pointer border-b border-dashed border-black hover:opacity-70"
+                onClick={viewPasskeyDocs}
+              >
                 Passkey
               </span>
               .
