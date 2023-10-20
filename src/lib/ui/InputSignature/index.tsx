@@ -22,7 +22,6 @@ import {
   useWebAuthnState,
 } from '../../store/webAuthnState'
 import { useWalletState } from '../../store'
-import { useQuery } from '@tanstack/react-query'
 import { useWebAuthnService } from '../../services'
 
 function exceptionToMessage(err: DOMException) {
@@ -90,34 +89,6 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
   }, [])
 
   const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
-  const webAuthnState = useWebAuthnState()
-  const signDataQuery = useQuery({
-    queryKey: [
-      'FetchSignData',
-      {
-        master: walletSnap.address,
-        slave: webAuthnState.backupDeviceData?.ckbAddr,
-        notes: webAuthnState.backupDeviceData?.name,
-      },
-    ],
-    enabled: false,
-    retry: false,
-    queryFn: async () => {
-      if (
-        walletSnap.address === undefined ||
-        webAuthnState.backupDeviceData?.ckbAddr === undefined ||
-        webAuthnState.backupDeviceData?.name === undefined
-      )
-        throw new Error('unreachable')
-      const res = await webAuthnService.buildTransaction({
-        master_ckb_address: walletSnap.address,
-        slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
-        operation: 'add',
-      })
-      if (res.err_no !== 0) throw new Error(res.err_msg)
-      return res.data
-    },
-  })
 
   const onClickScan = useCallback(async () => {
     try {
@@ -137,6 +108,30 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
   }, [setPermissionError, setRequiringPermission, goTo])
 
   const isValidData = verifyData(data, walletSnap.isTestNet)
+
+  const [isLoading, setIsLoading] = useState(false)
+  const onConfirmInput = useCallback(async () => {
+    setIsLoading(true)
+    const decodeData = connectDID.decodeQRCode(data)
+    setBackupDeviceData(decodeData)
+    try {
+      if (walletSnap.address === undefined || decodeData.ckbAddr === undefined || decodeData.name === undefined) {
+        throw new Error('unreachable')
+      }
+      const res = await webAuthnService.buildTransaction({
+        master_ckb_address: walletSnap.address,
+        slave_ckb_address: decodeData.ckbAddr,
+        operation: 'add',
+      })
+      if (res.err_no !== 0) throw new Error(res.err_msg)
+      setSignData(res.data)
+      setIsLoading(false)
+      goNext?.()
+    } catch (e) {
+      console.error(e)
+      setIsLoading(false)
+    }
+  }, [connectDID, data, walletSnap.address, webAuthnService, goNext])
 
   return (
     <>
@@ -186,19 +181,8 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
           className="mt-6 w-full"
           size={ButtonSize.middle}
           shape={ButtonShape.round}
-          onClick={() => {
-            setBackupDeviceData(connectDID.decodeQRCode(data))
-            signDataQuery
-              .refetch()
-              .then((res) => {
-                if (res.isSuccess) {
-                  setSignData(res.data)
-                  goNext?.()
-                }
-              })
-              .catch(console.error)
-          }}
-          loading={signDataQuery.isInitialLoading}
+          onClick={onConfirmInput}
+          loading={isLoading}
         >
           Next
         </Button>
