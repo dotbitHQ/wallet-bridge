@@ -11,7 +11,7 @@ import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi } fro
 import { InitSignContextRes, SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, getShadowDomRoot, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
-import { getAuthorizeInfo, getMastersAddress, walletState } from '../store'
+import { backupDeviceData, getAuthorizeInfo, getMastersAddress, walletState } from '../store'
 import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
@@ -125,7 +125,9 @@ class WalletSDK {
         await this.init()
         if (protocol === WalletProtocol.webAuthn && deviceData) {
           if (!isDisconnect) {
-            void getAuthorizeInfo()
+            void getAuthorizeInfo().then(() => {
+              void backupDeviceData()
+            })
             void getMastersAddress()
           }
           return true

@@ -104,6 +104,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
     () => !walletSnap.deviceList?.find((v) => v.address === item.address),
     [item.address, walletSnap.deviceList],
   )
+
   const isCurrentDevice = useMemo(
     () => walletSnap.deviceData?.ckbAddr === item.address,
     [item.address, walletSnap.deviceData?.ckbAddr],
@@ -234,11 +235,14 @@ interface LeadingIconProps {
 function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
   const selectedEmoji = (emojisTemp as Record<string, string>)[emoji as any]
   const { walletSnap } = useWalletState()
-  const isMasterDevice = useMemo(() => walletSnap.address === address, [address, walletSnap.address])
-  if (selectedEmoji) {
-    return <img className="h-6 w-6" src={selectedEmoji} />
-  } else if (isMasterDevice) {
+  const isMasterDevice = useMemo(
+    () => !walletSnap.deviceList?.find((v) => v.address === address),
+    [address, walletSnap.deviceList],
+  )
+  if (isMasterDevice) {
     return <DeviceIcon className="h-6 w-6" />
+  } else if (selectedEmoji) {
+    return <img className="h-6 w-6" src={selectedEmoji} />
   } else if (name) {
     return <LetterAvatar data={name} className="h-[28px] w-[28px] flex-none" />
   } else {
