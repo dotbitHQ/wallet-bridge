@@ -8,7 +8,7 @@ import { WalletContext } from './WalletContext'
 import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
 import { WalletHandlerFactory } from './WalletHandlerFactory'
 import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi } from '../constant'
-import { InitSignContextRes, SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
+import { InitSignContextRes, SignInfo, SignTxListParams, SignTxListRes } from '../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, getShadowDomRoot, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
 import { getAuthorizeInfo, getMastersAddress, walletState } from '../store'
@@ -173,16 +173,7 @@ class WalletSDK {
     return signInfo
   }
 
-  // todo-open: TxsSignedOrUnSigned and TxsWithMMJsonSignedOrUnSigned is pretty much the same, while they are from different api. We need to unify them in backend.
-  async signTxList(txs: TxsSignedOrUnSigned, options?: SignDataOptions): Promise<TxsSignedOrUnSigned>
-  async signTxList(
-    txs: TxsWithMMJsonSignedOrUnSigned,
-    options?: SignDataOptions,
-  ): Promise<TxsWithMMJsonSignedOrUnSigned>
-  async signTxList(
-    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
-    options?: SignDataOptions,
-  ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
+  async signTxList(txs: SignTxListParams, options?: SignDataOptions): Promise<SignTxListRes> {
     const isInit = await this.initWallet()
     if (!isInit) {
       throw new CustomError(errno.failedToInitializeWallet, 'signTxList: Please initialize wallet first')
@@ -201,37 +192,29 @@ class WalletSDK {
       }
     }
 
-    if ('sign_list' in txs) {
-      for (const signItem of txs.sign_list) {
-        if (!(signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign)) {
-          continue
-        }
-        if (signItem.sign_type === SIGN_TYPE.eth712 && txs.mm_json != null) {
-          const mmJson = cloneDeep(txs.mm_json)
-          mmJson.message.digest = signItem.sign_msg
-          const signDataRes = await this.signData(mmJson, { isEIP712: true })
-          if (signDataRes && mmJson.domain.chainId) {
-            signItem.sign_msg = signDataRes + mmJsonHashAndChainIdHex(mmJson, mmJson.domain.chainId)
-          }
-          await sleep(1000)
-        } else {
-          await this.signTx(signItem, { provider })
-        }
+    for (const signItem of txs.sign_list) {
+      if (signItem.sign_type === SIGN_TYPE.noSign) {
+        continue
       }
-    } else if ('list' in txs) {
-      for (const list of txs.list) {
-        for (const signItem of list.sign_list) {
-          if (!(signItem.sign_msg && signItem.sign_type !== SIGN_TYPE.noSign)) {
-            continue
-          }
-          await this.signTx(signItem, { provider })
+      if (signItem.sign_type === SIGN_TYPE.eth712 && !!txs.mm_json) {
+        const mmJson = cloneDeep(txs.mm_json)
+        mmJson.message.digest = signItem.sign_msg
+        const signDataRes = await this.signData(mmJson, { isEIP712: true })
+        if (signDataRes && mmJson.domain.chainId) {
+          signItem.sign_msg = signDataRes + mmJsonHashAndChainIdHex(mmJson, mmJson.domain.chainId)
         }
+        await sleep(1000)
+      } else {
+        await this.signTx(signItem, { provider })
+        await sleep(1000)
       }
     }
 
+    delete txs.mm_json
+
     const { deviceData } = snapshot(walletState)
     if (deviceData?.ckbAddr) {
-      txs.sign_address = deviceData.ckbAddr
+      ;(txs as SignTxListRes).sign_address = deviceData.ckbAddr
     }
 
     return txs
@@ -254,10 +237,8 @@ class WalletSDK {
     }
 
     return {
-      signTxList: async (
-        txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
-      ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> => {
-        return await this.signTxList(txs as any, { provider })
+      signTxList: async (txs: SignTxListParams): Promise<SignTxListRes> => {
+        return await this.signTxList(txs, { provider })
       },
       signData: async (data: SignDataType, options?: SignDataOptions): Promise<string | undefined> => {
         return await this.signData(data, { ...options, provider })

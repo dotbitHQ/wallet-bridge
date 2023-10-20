@@ -7,29 +7,24 @@ export interface SignInfo {
   sign_msg: string
 }
 
-export interface TxsList {
-  sign_list: SignInfo[]
-}
-
-export interface TxsSignedOrUnSigned {
-  action: string
-  list: TxsList[]
-  sign_key: string
+export interface SignTxListParams {
+  action?: string
   sub_action?: string
-  sign_address?: string
-}
-
-export interface TxsWithMMJsonSignedOrUnSigned {
   sign_key: string
   sign_list: SignInfo[]
   mm_json?: TypedMessage<MessageTypes>
+}
+
+export interface SignTxListRes {
+  action?: string
+  sub_action?: string
+  sign_key: string
+  sign_list: SignInfo[]
   sign_address?: string
 }
 
 export interface InitSignContextRes {
-  signTxList: (
-    txs: TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned,
-  ) => Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned>
+  signTxList: (txs: SignTxListParams) => Promise<SignTxListRes>
   signData: (data: SignDataType, options?: SignDataOptions) => Promise<string | undefined>
   onFailed: () => Promise<IData<any>>
   onClose: () => Promise<void>

@@ -6,7 +6,7 @@ import { useWalletState } from '../../store'
 import { Emoji } from '../ChooseEmoji'
 import { WalletSDKContext } from '../ConnectWallet'
 import { setPendingTx, useWebAuthnState } from '../../store/webAuthnState'
-import { TxsWithMMJsonSignedOrUnSigned } from '../../types'
+import { SignTxListParams } from '../../types'
 import handleError from '../../utils/handleError'
 import { useWebAuthnService } from '../../services'
 
@@ -26,22 +26,20 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
 
   const sendTransactionMutation = useMutation({
     retry: false,
-    mutationFn: async (signData: TxsWithMMJsonSignedOrUnSigned) => {
-      const signList = await walletSDK?.signTxList({
-        ...signData,
-        // eslint-disable-next-line
-        sign_list: signData.sign_list?.map(({ sign_type, sign_msg }) => ({
-          sign_type,
-          sign_msg: sign_msg.replace('0x', ''),
-        })),
-      })
-      const res = await webAuthnService.sendTransaction({
-        sign_key: signData.sign_key,
-        sign_list: signList?.sign_list,
-        sign_address: walletSnap.deviceData?.ckbAddr,
-      })
-      if (res.err_no !== 0) throw new Error(res.err_msg)
-      return res.data
+    mutationFn: async (signData: SignTxListParams) => {
+      if (walletSDK) {
+        const signList = await walletSDK.signTxList({
+          ...signData,
+          // eslint-disable-next-line
+          sign_list: signData.sign_list?.map(({ sign_type, sign_msg }) => ({
+            sign_type,
+            sign_msg: sign_msg.replace('0x', ''),
+          })),
+        })
+        const res = await webAuthnService.sendTransaction(signList)
+        if (res.err_no !== 0) throw new Error(res.err_msg)
+        return res.data
+      }
     },
   })
 
