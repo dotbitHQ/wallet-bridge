@@ -117,11 +117,15 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
       <QueryClientProvider client={queryClient}>
         {isMobile ? (
           <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet">
-            <div className={clsx('relative box-border w-full overflow-hidden rounded-t-[32px] bg-[unset]')}>
+            <div
+              className={clsx(
+                'relative box-border w-full overflow-hidden rounded-t-[32px] bg-[unset]',
+                isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+              )}
+            >
               <div
                 className={clsx(
                   'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-b-0 border-solid border-[#5262791A] bg-white',
-                  isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
                 )}
               >
                 {el}
@@ -131,12 +135,14 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
         ) : (
           <Modal isOpen={isOpen} customRootId="ConnectWalletModal">
             <div
-              className={clsx('relative box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] bg-[unset]')}
+              className={clsx(
+                'relative box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] bg-[unset]',
+                isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+              )}
             >
               <div
                 className={clsx(
                   'box-border w-full overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
-                  isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
                 )}
               >
                 {el}

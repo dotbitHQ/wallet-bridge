@@ -61,7 +61,7 @@ const { Wallet } = await import('wallet-bridge')
 import { Wallet } from 'wallet-bridge'
 import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
 import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
-import { configureChains, createConfig } from '@wagmi/core'
+import { configureChains, createConfig, InjectedConnector } from '@wagmi/core'
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
 
@@ -89,37 +89,33 @@ const metaMaskConnector = new MetaMaskConnector({
   chains,
 })
 
-const walletConnectConnector = new WalletConnectConnector({
+const injectedConnector = new InjectedConnector({
   chains,
-  options: {
-    projectId: '13c75e7d20888adc7e57cad417ad9ed8',
-    metadata: {
-      name: '.bit',
-      description: 'Barrier-free DID for Every Community and Everyone',
-      url: 'https://d.id',
-      icons: ['https://d.id/favicon.png'],
-    },
-    showQrModal: true,
-  },
 })
 
-const walletConnectConnector2 = new WalletConnectConnector({
-  chains,
-  options: {
-    projectId: '13c75e7d20888adc7e57cad417ad9ed8',
-    metadata: {
-      name: '.bit',
-      description: 'Barrier-free DID for Every Community and Everyone',
-      url: 'https://d.id',
-      icons: ['https://d.id/favicon.png'],
-    },
-    showQrModal: false,
+const walletConnectConnectorOptions = {
+  projectId: '13c75e7d20888adc7e57cad417ad9ed8',
+  metadata: {
+    name: '.bit',
+    description: 'Barrier-free DID for Every Community and Everyone',
+    url: 'https://d.id',
+    icons: ['https://d.id/favicon.png'],
   },
+}
+
+const walletConnectConnectorShow = new WalletConnectConnector({
+  chains,
+  options: { ...walletConnectConnectorOptions, showQrModal: true },
+})
+
+const walletConnectConnectorHide = new WalletConnectConnector({
+  chains,
+  options: { ...walletConnectConnectorOptions, showQrModal: false },
 })
 
 const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors: [walletConnectConnector, walletConnectConnector2, metaMaskConnector],
+  connectors: [walletConnectConnectorShow, walletConnectConnectorHide, injectedConnector, metaMaskConnector],
   publicClient,
 })
 

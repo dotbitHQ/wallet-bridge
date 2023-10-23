@@ -182,7 +182,7 @@ export class WalletContext {
         this.provider = await walletConnectConnector.getProvider()
       } else {
         const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-          return item.id === 'metaMask'
+          return this.walletName === 'MetaMask' ? item.id === 'metaMask' : item.id === 'injected'
         })
         this.provider = await metaMaskConnector.getProvider()
       }
