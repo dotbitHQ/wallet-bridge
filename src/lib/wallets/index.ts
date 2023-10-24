@@ -19,6 +19,8 @@ import { DeviceAuthError } from 'connect-did-sdk'
 import Axios from 'axios'
 import { setLoginCacheState } from '../store/loginCache'
 
+Axios.defaults.withCredentials = true
+
 class WalletSDK {
   walletConnector?: WalletConnector
   walletSigner?: WalletSigner

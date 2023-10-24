@@ -16,6 +16,8 @@ import errno from '../constant/errno'
 import CustomError from '../utils/CustomError'
 import { checkICloudPasskeySupport } from '../utils'
 
+Axios.defaults.withCredentials = true
+
 export interface WalletState {
   protocol?: WalletProtocol
   address?: string
@@ -199,6 +201,7 @@ export async function backupDeviceData() {
   const res = await fetch(`${api}/v1/webauthn/add-cid-info`, {
     method: 'POST',
     mode: 'cors',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },

@@ -11,6 +11,7 @@ export function useWebAuthnService(isTestNet?: boolean) {
     const res = await fetch(`${baseURL}/v1/webauthn/authorize`, {
       method: 'POST',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -23,6 +24,7 @@ export function useWebAuthnService(isTestNet?: boolean) {
     const res = await fetch(`${baseURL}/v1/transaction/send`, {
       method: 'POST',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -35,6 +37,7 @@ export function useWebAuthnService(isTestNet?: boolean) {
     const res = await fetch(`${baseURL}/v1/transaction/status`, {
       method: 'POST',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
