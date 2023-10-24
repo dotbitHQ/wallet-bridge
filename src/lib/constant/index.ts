@@ -23,13 +23,9 @@ export const CfAccessClient = {
   'Cf-Access-Client-Secret': 'be225bb474d1f50e9c77ec10d1634b1d15270f5206b8b999e16be1ecb69c464d',
 }
 
-export const DotbitBalanceUrl = 'https://balance.did.id'
+export const WebAuthnApi = 'https://webauthn-api.d.id'
 
-export const DotbitBalanceTestUrl = 'https://testbalance.did.id'
-
-export const WebAuthnApi = 'https://webauthn-api.did.id'
-
-export const WebAuthnTestApi = 'https://test-webauthn-api.did.id'
+export const WebAuthnTestApi = 'https://test-webauthn-api.d.id'
 
 export const DotbitAliasApi = 'https://reverse-api.d.id'
 
