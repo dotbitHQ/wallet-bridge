@@ -19,8 +19,8 @@ export enum WalletProtocol {
 }
 
 export const CfAccessClient = {
-  'Cf-Access-Client-Id': '4e00f1238fe24ac0c3d7870b10294716.access',
-  'Cf-Access-Client-Secret': 'be225bb474d1f50e9c77ec10d1634b1d15270f5206b8b999e16be1ecb69c464d',
+  // 'Cf-Access-Client-Id': '4e00f1238fe24ac0c3d7870b10294716.access',
+  // 'Cf-Access-Client-Secret': 'be225bb474d1f50e9c77ec10d1634b1d15270f5206b8b999e16be1ecb69c464d',
 }
 
 export const WebAuthnApi = 'https://webauthn-api.d.id'
