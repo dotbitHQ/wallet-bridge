@@ -7,7 +7,7 @@ import { ISendTrxParams, WalletTransaction } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
 import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
 import { WalletHandlerFactory } from './WalletHandlerFactory'
-import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi } from '../constant'
+import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi, CfAccessClient } from '../constant'
 import { InitSignContextRes, SignInfo, TxsSignedOrUnSigned, TxsWithMMJsonSignedOrUnSigned } from '../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, getShadowDomRoot, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
@@ -287,12 +287,18 @@ class WalletSDK {
     }
     const { isTestNet, address, deviceData } = snapshot(walletState)
     const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
-    const res = await Axios.post(`${api}/v1/webauthn/verify`, {
-      master_addr: address,
-      backup_addr: deviceData?.ckbAddr,
-      msg: message,
-      signature,
-    })
+    const res = await Axios.post(
+      `${api}/v1/webauthn/verify`,
+      {
+        master_addr: address,
+        backup_addr: deviceData?.ckbAddr,
+        msg: message,
+        signature,
+      },
+      {
+        headers: isTestNet ? { ...CfAccessClient } : {},
+      },
+    )
 
     if (res.data?.err_no !== errno.success) {
       throw new CustomError(res.data?.err_no, res.data?.err_msg)
