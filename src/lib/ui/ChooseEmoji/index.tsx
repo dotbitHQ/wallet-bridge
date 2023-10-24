@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Button, ButtonShape, ButtonSize, Header, SwapChildProps, createTips, DeviceIcon } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import clsx from 'clsx'
-import { emojis } from './png'
+import { emojis, emojisTemp } from './png'
 import { setSelectedEmoji, setSignData, useWebAuthnState } from '../../store/webAuthnState'
 import { useQuery } from '@tanstack/react-query'
 import { useWalletState } from '../../store'
@@ -13,7 +13,7 @@ type EmojiProps = React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageEleme
 }
 
 export function Emoji({ name, ...rest }: EmojiProps) {
-  return <img {...rest} src={emojis[name as any as keyof typeof emojis] || ''} />
+  return <img {...rest} src={emojisTemp[name as any as keyof typeof emojisTemp] || ''} />
 }
 
 export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) {
@@ -53,10 +53,6 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
         master_ckb_address: walletSnap.address,
         slave_ckb_address: webAuthnState.backupDeviceData.ckbAddr,
         operation: 'add',
-        avatar: parseInt(selected),
-        notes: webAuthnState.backupDeviceData?.name,
-        master_notes:
-          walletSnap.address === walletSnap.deviceData?.ckbAddr ? walletSnap.deviceData.name : walletSnap.masterNotes,
       })
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
@@ -81,7 +77,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
         title="Add Trusted Device"
         goBack={goBack}
         onClose={onClose}
-        className="bg-blur z-10 w-full bg-white p-6"
+        className="bg-blur z-10 mt-0.5 w-full-4px bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div

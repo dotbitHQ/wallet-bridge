@@ -51,15 +51,80 @@ To create a new `Wallet` object, you can use its constructor and provide the fol
 - `loggedInSelectAddress` (optional): Whether to allow users to choose when logging in with Passkey if there are multiple addresses. Defaults to `true`.
 - `customChains` (optional): Custom chains sourced from the `CustomChain` enum. Defaults to an empty array.
 - `customWallets` (optional): Custom wallets sourced from the `CustomWallet` enum. Defaults to an empty array.
+- `wagmiConfig` (Optional): Used for configuring information related to [wagmi](https://wagmi.sh/core/getting-started), of type `WagmiConfig`. Defaults to `undefined`. If you need to use [WalletConnect](https://docs.walletconnect.com), this parameter must be provided.
+- `gtag` (optional): Used to report some wallet-bridge events to Google Analytics for the purpose of tracking and analyzing user behavior. If you use `event`, you do not need to provide this parameter.
+- `event` (optional): If you use [nextjs-google-analytics](https://www.npmjs.com/package/nextjs-google-analytics) to report data, you can use `event` in place of `gtag` to report wallet-bridge events to Google Analytics for tracking and analyzing user behavior. If you use `gtag`, you do not need to provide this parameter.
 
 **Example**:
 
 ```js
+import { Wallet } from 'wallet-bridge'
+import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
+import { configureChains, createConfig, InjectedConnector } from '@wagmi/core'
+import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
+import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
+
+const chainIdToRpc: { [chainId: number]: string | undefined } = {
+  [ethereum.id]: 'https://eth.public-rpc.com',
+  [goerli.id]: 'https://rpc.ankr.com/eth_goerli',
+  [bsc.id]: 'https://bscrpc.com',
+  [bscTestnet.id]: 'https://rpc.ankr.com/bsc_testnet_chapel',
+  [polygon.id]: 'https://polygon-rpc.com',
+  [polygonMumbai.id]: 'https://rpc.ankr.com/polygon_mumbai',
+}
+
+const { publicClient, chains } = configureChains(
+  [ethereum, goerli, bsc, bscTestnet, polygon, polygonMumbai],
+  [
+    jsonRpcProvider({
+      rpc(chain) {
+        return { http: chainIdToRpc[chain.id] || '' }
+      },
+    }),
+  ],
+)
+
+const metaMaskConnector = new MetaMaskConnector({
+  chains,
+})
+
+const injectedConnector = new InjectedConnector({
+  chains,
+})
+
+const walletConnectConnectorOptions = {
+  projectId: '13c75e7d20888adc7e57cad417ad9ed8',
+  metadata: {
+    name: '.bit',
+    description: 'Barrier-free DID for Every Community and Everyone',
+    url: 'https://d.id',
+    icons: ['https://d.id/favicon.png'],
+  },
+}
+
+const walletConnectConnectorShow = new WalletConnectConnector({
+  chains,
+  options: { ...walletConnectConnectorOptions, showQrModal: true },
+})
+
+const walletConnectConnectorHide = new WalletConnectConnector({
+  chains,
+  options: { ...walletConnectConnectorOptions, showQrModal: false },
+})
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: [walletConnectConnectorShow, walletConnectConnectorHide, injectedConnector, metaMaskConnector],
+  publicClient,
+})
+
 const wallet = new Wallet({
   isTestNet: false,
   loggedInSelectAddress: true,
   customChains: [CustomChain.eth],
   customWallets: [CustomWallet.metaMask],
+  wagmiConfig: wagmiConfig,
 })
 ```
 
@@ -101,7 +166,33 @@ Display the wallet connection popup.
 wallet.connectWallet({ onlyEth: true })
 ```
 
-#### 4.3 `loggedInfo()`
+#### 4.3 `connectWalletAndSignData(params: { signData: SignDataParams })`
+
+Displays a wallet connection popup. Allows signing while logging in.
+
+**Example**：
+
+```js
+const res = await wallet.connectWalletAndSignData({
+  signData: {
+    data: 'hello world',
+  },
+})
+console.log(res)
+
+// or EVM EIP-712
+const jsonStr =
+  '{"types":{"EIP712Domain":[{"name":"chainId","type":"uint256"},{"name":"name","type":"string"},{"name":"verifyingContract","type":"address"},{"name":"version","type":"string"}],"Action":[{"name":"action","type":"string"},{"name":"params","type":"string"}],"Cell":[{"name":"capacity","type":"string"},{"name":"lock","type":"string"},{"name":"type","type":"string"},{"name":"data","type":"string"},{"name":"extraData","type":"string"}],"Transaction":[{"name":"DAS_MESSAGE","type":"string"},{"name":"inputsCapacity","type":"string"},{"name":"outputsCapacity","type":"string"},{"name":"fee","type":"string"},{"name":"action","type":"Action"},{"name":"inputs","type":"Cell[]"},{"name":"outputs","type":"Cell[]"},{"name":"digest","type":"bytes32"}]},"primaryType":"Transaction","domain":{"chainId":5,"name":"da.systems","verifyingContract":"0x0000000000000000000000000000000020210722","version":"1"},"message":{"DAS_MESSAGE":"TRANSFER FROM 0x54366bcd1e73baf55449377bd23123274803236e(906.74221046 CKB) TO ckt1qyqvsej8jggu4hmr45g4h8d9pfkpd0fayfksz44t9q(764.13228446 CKB), 0x54366bcd1e73baf55449377bd23123274803236e(142.609826 CKB)","inputsCapacity":"906.74221046 CKB","outputsCapacity":"906.74211046 CKB","fee":"0.0001 CKB","digest":"0x29cd28dbeb470adb17548563ceb4988953fec7b499e716c16381e5ae4b04021f","action":{"action":"transfer","params":"0x00"},"inputs":[],"outputs":[]}}'
+const res = await wallet.connectWalletAndSignData({
+  signData: {
+    data: JSON.parse(jsonStr),
+    isEIP712: true,
+  },
+})
+console.log(res)
+```
+
+#### 4.4 `loggedInfo()`
 
 Display the logged-in popup. If the user is already logged in, the popup will show the login information.
 
@@ -111,7 +202,7 @@ Display the logged-in popup. If the user is already logged in, the popup will sh
 wallet.loggedInfo()
 ```
 
-#### 4.4 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
+#### 4.5 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
 
 Used for sending transactions.
 
@@ -139,7 +230,7 @@ wallet.sendTransaction(transactionData).then((txHash) => {
 })
 ```
 
-#### 4.5 `initSignContext(): Promise<InitSignContextRes>`
+#### 4.6 `initSignContext(): Promise<InitSignContextRes>`
 
 Initialize the signing context and return the signing method. To prevent the browser from blocking the signing popup, ensure that you call `initSignContext` before any asynchronous operations in the click event.
 
@@ -148,19 +239,21 @@ Initialize the signing context and return the signing method. To prevent the bro
 - `Promise<InitSignContextRes>`: Returns an object containing the following methods:
   - `signTxList`: Function, specific to .bit business, used for signing transaction lists.
   - `signData`: Function, the return value is the signed data.
-  - `onFailed`: Function, its return value is a `DeviceAuthError`. In case of any errors, call `onFailed` to notify the popup to display the error.
+  - `onFailed`: A function, which returns a `Promise<IData<any>>`. In case of any errors, call `onFailed` to notify and display the error in a popup.
+  - `onClose`: A function, which returns a `Promise<void>`. In some cases, if you want to handle the error yourself and not display it in a popup, use `onClose` to close the popup.
 
 Example:
 
 ```js
-const { signTxList, signData, onFailed } = await wallet.initSignContext()
+const { signTxList, signData, onFailed, onClose } = await wallet.initSignContext()
 const res = await signTxList({})
 const res = await signData('0x123')
 const res = await signData({}, { isEIP712: true })
 await onFailed()
+await onClose()
 ```
 
-#### 4.6 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.7 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 `useWalletState` is a React hook for retrieving and listening to the wallet's state.
 
@@ -171,6 +264,7 @@ await onFailed()
   - `protocol`: The protocol type of the wallet, of type `WalletProtocol`.
   - `address`: The currently logged-in wallet address, of type `string`.
   - `coinType`: The type of token, of type `CoinType`.
+  - `walletName`: The wallet name, of type `string`.
   - `hardwareWalletTipsShow`: Whether the hardware wallet tips are shown or not, of type `boolean`.
   - `deviceData`: Device data during Passkey login, of type `IDeviceData`.
   - `ckbAddresses`: List of CKB addresses that the device can manage during Passkey login, of type `string[]`.
@@ -191,7 +285,7 @@ function Component() {
 }
 ```
 
-#### 4.7 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.8 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 Used to immediately get the current snapshot of the wallet's state.
 
@@ -206,7 +300,7 @@ const { walletSnap } = wallet.getWalletState()
 console.log(walletSnap.address)
 ```
 
-#### 4.8 `_verifyPasskeySignature(params: { message: string, signature: string }): Promise<boolean> `
+#### 4.9 `_verifyPasskeySignature(params: { message: string, signature: string }): Promise<boolean> `
 
 Verify if the passkey signature is correct.
 

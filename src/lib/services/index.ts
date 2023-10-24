@@ -1,21 +1,21 @@
-import { WebAuthnApi, WebAuthnTestApi } from '../constant'
+import { CfAccessClient, WebAuthnApi, WebAuthnTestApi } from '../constant'
 
 export function useWebAuthnService(isTestNet?: boolean) {
   const baseURL = isTestNet ? WebAuthnTestApi : WebAuthnApi
 
   async function buildTransaction(data: {
     operation: 'add' | 'delete'
-    notes?: string
-    avatar?: number
-    master_notes?: string
     master_ckb_address: string
     slave_ckb_address: string
   }) {
+    const cfAccessClient = isTestNet ? CfAccessClient : {}
     const res = await fetch(`${baseURL}/v1/webauthn/authorize`, {
       method: 'POST',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
+        ...cfAccessClient,
       },
       body: JSON.stringify(data),
     }).then(async (res) => await res.json())
@@ -23,11 +23,14 @@ export function useWebAuthnService(isTestNet?: boolean) {
   }
 
   async function sendTransaction(data: object) {
+    const cfAccessClient = isTestNet ? CfAccessClient : {}
     const res = await fetch(`${baseURL}/v1/transaction/send`, {
       method: 'POST',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
+        ...cfAccessClient,
       },
       body: JSON.stringify(data),
     }).then(async (res) => await res.json())
@@ -35,11 +38,14 @@ export function useWebAuthnService(isTestNet?: boolean) {
   }
 
   async function getTransactionStatus(txHash: string) {
+    const cfAccessClient = isTestNet ? CfAccessClient : {}
     const res = await fetch(`${baseURL}/v1/transaction/status`, {
       method: 'POST',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
+        ...cfAccessClient,
       },
       body: JSON.stringify({
         tx_hash: txHash,

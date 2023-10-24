@@ -3,6 +3,9 @@ import { chainIdHexToNumber, toChecksumAddress } from '../../utils'
 import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap } from '../../constant'
 import { resetWalletState, setWalletState } from '../../store'
 import { EventEnum } from '../WalletEventListenerHandler'
+import { snapshot } from 'valtio'
+import { loginCacheState } from '../../store/loginCache'
+import { SignDataType, TorusSigner } from '../WalletSignerHandler'
 
 export class TorusConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
@@ -20,8 +23,13 @@ export class TorusConnector extends WalletConnector {
         protocol: this.context.protocol,
         address: this.context.address,
         coinType: this.context.coinType,
+        walletName: this.context.walletName,
       })
-      if (!ignoreEvent) {
+      const { signDataParams } = snapshot(loginCacheState)
+      if (signDataParams) {
+        const signature = await this.signData(signDataParams.data as SignDataType, signDataParams.isEIP712)
+        this.context.emitEvent(EventEnum.Signature, signature)
+      } else if (!ignoreEvent) {
         this.context.emitEvent(EventEnum.Connect)
       }
     }
@@ -39,4 +47,16 @@ export class TorusConnector extends WalletConnector {
   }
 
   async switchNetwork(chainId: number): Promise<void> {}
+
+  async signData(data: SignDataType, isEIP712?: boolean): Promise<string | undefined> {
+    try {
+      const signer = new TorusSigner(this.context)
+      return await signer.signData(data, {
+        isEIP712,
+      })
+    } catch (err) {
+      console.error(err)
+      return undefined
+    }
+  }
 }

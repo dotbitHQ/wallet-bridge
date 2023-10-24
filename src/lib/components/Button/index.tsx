@@ -17,19 +17,21 @@ const variantClasses: Record<ButtonVariant, string> = {
   [ButtonVariant.danger]:
     'text-white bg-danger hover:bg-danger-hover disabled:cursor-no-drop disabled:opacity-50 disabled:bg-danger',
   [ButtonVariant.passkey]:
-    'text-white transition-all duration-400 bg-passkey shadow-passkey hover:bg-passkey-hover hover:shadow-none active:bg-passkey-active active:shadow-none disabled:shadow-none disabled:cursor-no-drop disabled:opacity-50 disabled:bg-passkey',
+    'text-white transition-all duration-400 bg-passkey shadow-passkey hover:shadow-none active:shadow-none disabled:shadow-none disabled:cursor-no-drop disabled:bg-passkey',
 }
 
 export enum ButtonSize {
   small = 'small',
   middle = 'middle',
   large = 'large',
+  super = 'super',
 }
 
 export const sizeClasses: Record<ButtonSize, string> = {
   [ButtonSize.small]: 'h-[38px] px-3 text-sm font-medium',
   [ButtonSize.middle]: 'h-[42px] px-4 text-base font-medium',
   [ButtonSize.large]: 'h-[52px] px-4 text-base font-medium',
+  [ButtonSize.super]: 'h-[58px] px-4 text-base font-medium',
 }
 
 export enum ButtonShape {
@@ -67,6 +69,9 @@ export const Button = ({
         case ButtonSize.large:
           newRadius = 'rounded-xl'
           break
+        case ButtonSize.super:
+          newRadius = 'rounded-xl'
+          break
       }
     } else if (newShape === ButtonShape.round) {
       switch (newSize) {
@@ -78,6 +83,9 @@ export const Button = ({
           break
         case ButtonSize.large:
           newRadius = 'rounded-[26px]'
+          break
+        case ButtonSize.super:
+          newRadius = 'rounded-[29px]'
           break
       }
     }
@@ -97,7 +105,7 @@ export const Button = ({
       disabled={props.disabled === true || loading}
     >
       {loading ? (
-        <span className="mr-1 inline-flex">
+        <span className="mr-1.5 inline-flex">
           <LoadingIcon className="h-5 w-5" />
         </span>
       ) : null}

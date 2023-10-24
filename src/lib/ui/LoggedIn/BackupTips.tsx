@@ -3,7 +3,7 @@ import { Button, ButtonShape, ButtonSize } from '../../components'
 import BackupTipsIcon from './icon/backup-tips-icon.svg'
 import IcloudBackupTipsIcon from './icon/icloud-backup-tips-icon.svg'
 import { useEffect, useState } from 'react'
-import { checkPasskeysSupport } from '../../utils'
+import { checkICloudPasskeySupport } from '../../utils'
 
 interface BackupTipsProps {
   onShowQRCode: () => void
@@ -14,7 +14,7 @@ export const BackupTips = ({ onShowQRCode, className }: BackupTipsProps) => {
   const [passkeysSupported, setPasskeysSupported] = useState(false)
 
   useEffect(() => {
-    setPasskeysSupported(checkPasskeysSupport())
+    setPasskeysSupported(checkICloudPasskeySupport())
   }, [])
 
   return passkeysSupported ? (

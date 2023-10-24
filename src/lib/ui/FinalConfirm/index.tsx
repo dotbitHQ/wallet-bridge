@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Button, ButtonShape, ButtonSize, Header, SwapChildProps, createTips } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
@@ -50,6 +50,10 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
     sendTransactionMutation.mutate(signData)
   }
 
+  const deviceEmoji = useMemo(() => {
+    return webAuthnState.backupDeviceData?.device || webAuthnState.backupDeviceData?.name.split('-')[0] || ''
+  }, [webAuthnState.backupDeviceData])
+
   useEffect(() => {
     if (sendTransactionMutation.data?.hash) {
       setPendingTx(sendTransactionMutation.data.hash)
@@ -89,7 +93,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
         title="Add Trusted Device"
         onClose={onClose}
         goBack={goBack}
-        className="bg-blur z-10 w-full bg-white p-6"
+        className="bg-blur z-10 mt-0.5 w-full-4px bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div
@@ -99,7 +103,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
       >
         <div className="mt-6 flex w-full items-center gap-4 rounded-2xl border border-slate-300/40 bg-gray-50 p-6">
           <div className="flex-none text-center text-neutral-700">
-            <Emoji name={webAuthnState.selectedEmoji!} className="w-8" />
+            <Emoji name={deviceEmoji} className="w-8" />
           </div>
           <div className="h-[19px] text-[16px] font-semibold leading-[19px] text-neutral-700">
             {webAuthnState.backupDeviceData?.name}

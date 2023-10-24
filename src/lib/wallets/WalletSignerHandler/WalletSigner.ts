@@ -3,6 +3,16 @@ import { MessageTypes, TypedMessage } from '@metamask/eth-sig-util'
 
 export type SignDataType = TypedMessage<MessageTypes> | string
 
+export interface SignDataOptions {
+  isEIP712?: boolean
+  provider?: any
+}
+
+export interface SignDataParams {
+  data: SignDataType
+  isEIP712?: boolean
+}
+
 export abstract class WalletSigner {
   context: WalletContext
 
@@ -10,5 +20,5 @@ export abstract class WalletSigner {
     this.context = context
   }
 
-  abstract signData(data: SignDataType, options?: Record<string, any>): Promise<string>
+  abstract signData(data: SignDataType, options?: SignDataOptions): Promise<string>
 }

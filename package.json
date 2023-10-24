@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.1.49",
+  "version": "0.1.50",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -30,14 +30,14 @@
     "@metamask/eth-sig-util": "^6.0.0",
     "@tanstack/react-query": "^4.29.19",
     "@toruslabs/torus-embed": "^2.2.6",
-    "@wagmi/core": "^1.4.1",
+    "@wagmi/core": "1.4.1",
     "abc-copy": "^0.0.11",
     "axios": "^1.4.0",
     "bn.js": "^5.2.1",
     "buffer": "^6.0.3",
     "clsx": "^1.2.1",
     "color": "^4.2.3",
-    "connect-did-sdk": "^0.1.10",
+    "connect-did-sdk": "^0.1.14",
     "decimal.js": "^10.4.3",
     "emittery": "^1.0.1",
     "grapheme-splitter": "^1.0.4",
@@ -53,7 +53,7 @@
     "ua-parser-js": "^1.0.35",
     "utf8": "^3.0.0",
     "valtio": "^1.10.5",
-    "viem": "^1.10.4"
+    "viem": "1.10.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
@@ -103,7 +103,7 @@
     "tailwindcss": "^3.2.4",
     "typescript": "*",
     "vite": "^4.0.0",
-    "vite-plugin-dts": "^1.7.1",
+    "vite-plugin-dts": "^3.6.0",
     "vitest": "^0.27.2"
   },
   "peerDependencies": {

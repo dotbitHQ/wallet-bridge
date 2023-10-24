@@ -7,7 +7,7 @@ export function TransactionSucceeded({ transitionRef, transitionStyle }: SwapChi
     <>
       <Header
         onClose={onClose}
-        className="z-10 w-full bg-white p-6"
+        className="z-10 mt-0.5 w-full-4px bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div

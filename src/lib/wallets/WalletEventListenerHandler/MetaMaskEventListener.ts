@@ -1,29 +1,45 @@
 import { EventEnum, WalletEventListener } from './WalletEventListener'
-import { chainIdHexToNumber, toChecksumAddress } from '../../utils'
-import { ChainIdToCoinTypeMap, CoinType, ChainIdToCoinTypeTestNetMap } from '../../constant'
+import { watchAccount, watchNetwork } from '@wagmi/core'
 import { setWalletState } from '../../store'
+import { chainIdHexToNumber, toChecksumAddress } from '../../utils'
+import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap, CoinType } from '../../constant'
 import { createTips } from '../../components'
 
 export class MetaMaskEventListener extends WalletEventListener {
+  unwatchAccount: (() => void) | undefined
+  unwatchNetwork: (() => void) | undefined
+
   listenEvents(): void {
-    const { provider } = this.context
+    console.log('listenEvents')
+    this.unwatchAccount = watchAccount(async (account) => {
+      console.log('watchAccount: ', account)
+      const { address: oldAddress } = this.context
+      const { address, isConnected } = account
 
-    provider.on('accountsChanged', async (accounts: string[]) => {
-      const { address } = this.context
-      const account = accounts?.[0]
+      if (isConnected) {
+        if (!oldAddress) {
+          return
+        }
 
-      if (account && address && account.toLowerCase() === address.toLowerCase()) {
-        return
+        if (address && oldAddress && oldAddress.toLowerCase() === address.toLowerCase()) {
+          return
+        }
+
+        this.context.address = toChecksumAddress(String(address))
+        setWalletState({
+          address: this.context.address,
+        })
+        this.context.emitEvent(EventEnum.Change)
       }
-
-      this.context.address = toChecksumAddress(account)
-      setWalletState({
-        address: toChecksumAddress(account),
-      })
-      this.context.emitEvent(EventEnum.Change)
     })
 
-    provider.on('chainChanged', (chainId: string) => {
+    this.unwatchNetwork = watchNetwork((network) => {
+      console.log('watchNetwork: ', network.chain)
+      const { chain } = network
+      if (!chain) {
+        return
+      }
+      const chainId = chain?.id
       const { isTestNet, coinType } = this.context
       const _chainId = chainIdHexToNumber(chainId)
       const _coinType = isTestNet ? ChainIdToCoinTypeTestNetMap[_chainId] : ChainIdToCoinTypeMap[_chainId]
@@ -71,8 +87,8 @@ export class MetaMaskEventListener extends WalletEventListener {
   }
 
   removeEvents(): void {
-    const { provider } = this.context
-    provider.removeAllListeners?.('accountsChanged')
-    provider.removeAllListeners?.('chainChanged')
+    console.log('removeEvents: ', this.unwatchAccount, this.unwatchNetwork)
+    this.unwatchAccount?.()
+    this.unwatchNetwork?.()
   }
 }

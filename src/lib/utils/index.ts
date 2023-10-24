@@ -6,7 +6,7 @@ import { Decimal } from 'decimal.js'
 import utf8 from 'utf8'
 import { MessageTypes, SignTypedDataVersion, TypedDataUtils, TypedMessage } from '@metamask/eth-sig-util'
 import { Buffer } from 'buffer'
-import { CoinType } from '../constant'
+import { CoinType, CustomWallet } from '../constant'
 import GraphemeSplitter from 'grapheme-splitter'
 import { isMobileOnly } from 'react-device-detect'
 // @ts-expect-error
@@ -242,6 +242,14 @@ export async function copyText(text: string, el?: Element): Promise<void> {
  * @returns {boolean} Returns true if the basic WebAuthn API is supported, false otherwise.
  */
 export async function checkWebAuthnSupport(): Promise<boolean> {
+  if (typeof window !== 'undefined') {
+    const urlParams = new globalThis.URLSearchParams(window.location.search)
+    const isDebug = urlParams.get('debug') === 'true'
+    if (isDebug) {
+      return true
+    }
+  }
+
   const uaParser = new UAParser(globalThis.navigator?.userAgent)
 
   if (
@@ -257,9 +265,9 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
     return false
   }
 
-  if ('credentials' in navigator && 'PublicKeyCredential' in window) {
+  if ('credentials' in globalThis.navigator && 'PublicKeyCredential' in window) {
     try {
-      const isAvailable = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+      const isAvailable = await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
       if (isAvailable) {
         return true
       } else {
@@ -279,7 +287,7 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
  *
  * @returns {boolean} Returns true if the device is on iOS version 16 or higher, otherwise false.
  */
-export function checkPasskeysSupport() {
+export function checkICloudPasskeySupport() {
   const uaParser = new UAParser(globalThis.navigator?.userAgent)
   if (
     (uaParser.getOS().name === 'iOS' && parseInt(uaParser.getOS().version?.split('.')[0] ?? '0', 10) >= 16) ||
@@ -309,4 +317,107 @@ export function getShadowDomRoot(): ShadowRoot {
     _shadowDomRoot = shadowDomRoot
   }
   return _shadowDomRoot
+}
+
+export function isMetaMask(ethereum?: (typeof window)['ethereum']): boolean {
+  // Logic borrowed from wagmi's MetaMaskConnector
+  // https://github.com/wagmi-dev/references/blob/main/packages/connectors/src/metaMask.ts
+  if (!ethereum?.isMetaMask) return false
+  // Brave tries to make itself look like MetaMask
+  // Could also try RPC `web3_clientVersion` if following is unreliable
+  if (ethereum.isBraveWallet && !ethereum._events && !ethereum._state) return false
+  if (ethereum.isApexWallet) return false
+  if (ethereum.isAvalanche) return false
+  if (ethereum.isBackpack) return false
+  if (ethereum.isBifrost) return false
+  if (ethereum.isBitKeep) return false
+  if (ethereum.isBitski) return false
+  if (ethereum.isBlockWallet) return false
+  if (ethereum.isCoinbaseWallet) return false
+  if (ethereum.isDawn) return false
+  if (ethereum.isEnkrypt) return false
+  if (ethereum.isExodus) return false
+  if (ethereum.isFrame) return false
+  if (ethereum.isFrontier) return false
+  if (ethereum.isGamestop) return false
+  if (ethereum.isHyperPay) return false
+  if (ethereum.isImToken) return false
+  if (ethereum.isKuCoinWallet) return false
+  if (ethereum.isMathWallet) return false
+  if (ethereum.isOkxWallet || ethereum.isOKExWallet) return false
+  if (ethereum.isOneInchIOSWallet || ethereum.isOneInchAndroidWallet) return false
+  if (ethereum.isOpera) return false
+  if (ethereum.isPhantom) return false
+  if (ethereum.isPortal) return false
+  if (ethereum.isRabby) return false
+  if (ethereum.isRainbow) return false
+  if (ethereum.isStatus) return false
+  if (ethereum.isTalisman) return false
+  if (ethereum.isTally) return false
+  if (ethereum.isTokenPocket) return false
+  if (ethereum.isTokenary) return false
+  if (ethereum.isTrust || ethereum.isTrustWallet) return false
+  if (ethereum.isXDEFI) return false
+  if (ethereum.isZerion) return false
+  return true
+}
+
+export function shouldUseWalletConnect(): boolean {
+  const isMetaMaskInjected =
+    typeof window !== 'undefined' &&
+    typeof window.ethereum !== 'undefined' &&
+    (window.ethereum.providers?.some(isMetaMask) || window.ethereum.isMetaMask)
+  return !isMetaMaskInjected
+}
+
+export function getWalletDeepLink(walletName: string, displayUri: string): string {
+  if (walletName === CustomWallet.metaMask) {
+    return `metamask://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+  } else if (walletName === CustomWallet.trustWallet) {
+    return `trust://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+  } else if (walletName === CustomWallet.imToken) {
+    return `imtokenv2://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+  } else if (walletName === CustomWallet.tokenPocket) {
+    return `tpoutside://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+  } else if (walletName === CustomWallet.oneKey) {
+    return `onekey-wallet://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+  }
+  return ''
+}
+
+export function openDeepLink(deepLink: string) {
+  if (deepLink.startsWith('http')) {
+    const link = document.createElement('a')
+    link.href = deepLink
+    link.target = '_blank'
+    link.rel = 'noreferrer noopener'
+    link.click()
+    // window.open(deepLink, '_blank', 'noreferrer noopener')
+  } else {
+    // window.open(deepLink, '_self', 'noreferrer noopener')
+    window.location.href = deepLink
+  }
+}
+
+/**
+ * load script
+ * @param src
+ * @param id
+ */
+export async function loadScript(src: string, id: string): Promise<any> {
+  const script = 'script'
+  const firstScript: HTMLScriptElement = document.getElementsByTagName(script)[0]
+  if (document.getElementById(id)) {
+    await Promise.resolve()
+    return
+  }
+  const scriptElement: HTMLScriptElement = document.createElement(script)
+  scriptElement.id = id
+  scriptElement.src = src
+  firstScript.parentNode?.insertBefore(scriptElement, firstScript)
+
+  return await new Promise((resolve, reject) => {
+    scriptElement.onload = resolve
+    scriptElement.onerror = reject
+  })
 }

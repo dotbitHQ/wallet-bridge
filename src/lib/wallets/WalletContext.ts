@@ -7,8 +7,10 @@ import {
   ChainId,
   CoinType,
   CoinTypeToTorusHostMap,
+  CustomChain,
+  CustomWallet,
 } from '../constant'
-import { sleep } from '../utils'
+import { shouldUseWalletConnect, sleep } from '../utils'
 import Torus from '@toruslabs/torus-embed'
 import Emittery from 'emittery'
 import { EventKey } from './WalletEventListenerHandler'
@@ -18,6 +20,8 @@ import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
 import { snapshot } from 'valtio'
 import { walletState } from '../store'
+import { EventOptions } from '../types'
+import { Connector } from '@wagmi/core'
 
 export class WalletContext {
   // sendTrx method
@@ -29,22 +33,98 @@ export class WalletContext {
   isTestNet = false
   torusWallet?: Torus
   wagmiConfig: any
+  walletName?: string
   // event emitter
   #emitter = new Emittery()
+  gtag?: any
+  event?: any
 
-  constructor({ isTestNet, wagmiConfig }: { isTestNet: boolean; wagmiConfig?: any }) {
+  constructor({
+    isTestNet,
+    wagmiConfig,
+    gtag,
+    event,
+  }: {
+    isTestNet: boolean
+    wagmiConfig?: any
+    gtag?: any
+    event?: any
+  }) {
     this.isTestNet = isTestNet
     this.wagmiConfig = wagmiConfig
+    if (gtag) {
+      this.gtag = gtag
+    }
+    if (event) {
+      this.event = event
+    }
   }
 
-  async retrieveProvider({ protocol, coinType }: { protocol: WalletProtocol; coinType: CoinType }) {
-    this.chainId = this.isTestNet ? CoinTypeToTestNetChainIdMap[coinType] : CoinTypeToChainIdMap[coinType]
-    this.protocol = protocol
-    this.coinType = coinType
+  // @ts-expect-error
+  reportEvent(action: string, { category, label, value, nonInteraction, userId, ...otherOptions }?: EventOptions) {
+    try {
+      if (this.gtag) {
+        this.gtag('event', action, {
+          event_category: category,
+          event_label: label,
+          value,
+          non_interaction: nonInteraction,
+          user_id: userId,
+          ...otherOptions,
+        })
+      } else if (this.event) {
+        this.event(action, {
+          category,
+          label,
+          value,
+          nonInteraction,
+          userId,
+          ...otherOptions,
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
+  async retrieveProvider({ coinType, walletName }: { coinType?: CoinType; walletName?: string }) {
     const walletSnap = snapshot(walletState)
     if (walletSnap?.address) {
       this.address = walletSnap?.address
+    }
+
+    if (walletName) {
+      this.walletName = walletName
+    } else {
+      this.walletName = walletSnap?.walletName
+    }
+
+    if (coinType) {
+      this.coinType = coinType
+    } else {
+      this.coinType = walletSnap?.coinType
+    }
+
+    if (this.coinType) {
+      this.chainId = this.isTestNet ? CoinTypeToTestNetChainIdMap[this.coinType] : CoinTypeToChainIdMap[this.coinType]
+    }
+
+    if (this.walletName && this.coinType) {
+      if (this.walletName === CustomChain.passkey) {
+        this.protocol = WalletProtocol.webAuthn
+      } else if (this.walletName === CustomChain.torus) {
+        this.protocol = WalletProtocol.torus
+      } else if (this.walletName === CustomWallet.walletConnect) {
+        this.protocol = WalletProtocol.walletConnect
+      } else if (this.coinType === CoinType.doge) {
+        this.protocol = WalletProtocol.tokenPocketUTXO
+      } else if (this.coinType === CoinType.trx) {
+        this.protocol = WalletProtocol.tronLink
+      } else {
+        this.protocol = WalletProtocol.metaMask
+      }
+    } else {
+      this.protocol = walletSnap?.protocol
     }
 
     switch (this.protocol) {
@@ -73,6 +153,10 @@ export class WalletContext {
     void this.#emitter.emit(event, data)
   }
 
+  async once(event: EventKey): Promise<any> {
+    return await this.#emitter.once(event)
+  }
+
   addEventListener(event: EventKey, callback: (data?: any) => void): void {
     this.#emitter.on(event, callback)
   }
@@ -90,19 +174,42 @@ export class WalletContext {
       this.torusWallet.hideTorusButton()
     }
 
-    await sleep(1000)
-    const { ethereum } = window
-    if (typeof ethereum !== 'undefined') {
-      this.provider = ethereum
-    } else {
-      if (isMobile) {
-        throw new Error('Please open this page in your crypto wallet App and try again.')
+    if (this.wagmiConfig) {
+      if (shouldUseWalletConnect()) {
+        const walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'walletConnect' && item.options.showQrModal === false
+        })
+        this.provider = await walletConnectConnector.getProvider()
       } else {
-        const name = this.coinType && CoinTypeToChainMap[this.coinType].name
-        throw new Error(
-          `Please ensure that your browser has the ${String(name)} wallet plugin installed and try again.`,
-        )
+        const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+          return this.walletName === 'MetaMask' ? item.id === 'metaMask' : item.id === 'injected'
+        })
+        this.provider = await metaMaskConnector.getProvider()
       }
+    } else {
+      throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
+    }
+  }
+
+  private async getWalletConnectProvider() {
+    if (this.torusWallet?.hideTorusButton) {
+      this.torusWallet.hideTorusButton()
+    }
+
+    if (this.wagmiConfig) {
+      let walletConnectConnector
+      if (isMobile) {
+        walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'walletConnect' && item.options.showQrModal === true
+        })
+      } else {
+        walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
+          return item.id === 'walletConnect' && item.options.showQrModal === false
+        })
+      }
+      this.provider = await walletConnectConnector.getProvider()
+    } else {
+      throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
     }
   }
 
@@ -133,9 +240,12 @@ export class WalletContext {
   }
 
   private async getTorusProvider() {
-    this.torusWallet = new Torus({
-      buttonPosition: 'bottom-right',
-    })
+    if (!this.torusWallet) {
+      this.torusWallet = new Torus({
+        buttonPosition: 'bottom-right',
+      })
+    }
+
     try {
       let host: string
       if (this.coinType) {
@@ -160,18 +270,6 @@ export class WalletContext {
     }
   }
 
-  private async getWalletConnectProvider() {
-    if (this.torusWallet?.hideTorusButton) {
-      this.torusWallet.hideTorusButton()
-    }
-
-    if (this.wagmiConfig) {
-      this.provider = this.wagmiConfig
-    } else {
-      throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
-    }
-  }
-
   private async getTronLinkProvider() {
     if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
@@ -183,7 +281,7 @@ export class WalletContext {
       if (tronWeb.defaultAddress.base58) {
         this.provider = tronWeb
       } else {
-        throw Error('Please try again after unlocking your TronLink wallet')
+        throw Error('Please try again after unlocking your Tron wallet')
       }
     } else {
       if (isMobile) {
@@ -201,6 +299,14 @@ export class WalletContext {
     if (this.torusWallet?.hideTorusButton) {
       this.torusWallet.hideTorusButton()
     }
-    this.provider = new ConnectDID(this.isTestNet)
+
+    let isDebug = false
+
+    if (typeof window !== 'undefined') {
+      const urlParams = new globalThis.URLSearchParams(window.location.search)
+      isDebug = urlParams.get('debug') === 'true'
+    }
+
+    this.provider = new ConnectDID(this.isTestNet, isDebug)
   }
 }

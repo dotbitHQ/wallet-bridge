@@ -1,6 +1,6 @@
 import { MoreIcon, NervosIcon, PlusIcon, RevokeIcon, createTips, DeviceIcon } from '../../components'
 import { Menu, Transition } from '@headlessui/react'
-import { emojis, emojisTemp } from '../ChooseEmoji/png'
+import { emojisTemp } from '../ChooseEmoji/png'
 import React, { Fragment, useContext, useEffect, useMemo, useState } from 'react'
 import { ICKBAddressItem, setWalletState, useWalletState, walletState } from '../../store'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -32,7 +32,7 @@ function More({ address, onRevoke }: MoreProps) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="fixed right-6 z-10 mt-2 w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
+        <Menu.Items className="absolute right-[-16px] z-10 mt-2 w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
           <Menu.Item>
             <div
               className="relative h-[36px] w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500"
@@ -100,8 +100,15 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
     },
   })
 
-  const isMasterDevice = !walletSnap.deviceList?.find((v) => v.address === item.address)
-  const isCurrentDevice = walletSnap.deviceData?.ckbAddr === item.address
+  const isMasterDevice = useMemo(
+    () => !walletSnap.deviceList?.find((v) => v.address === item.address),
+    [item.address, walletSnap.deviceList],
+  )
+
+  const isCurrentDevice = useMemo(
+    () => walletSnap.deviceData?.ckbAddr === item.address,
+    [item.address, walletSnap.deviceData?.ckbAddr],
+  )
 
   const onRevoke = async () => {
     if (isMasterDevice) {
@@ -181,35 +188,36 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
     walletSnap.deviceList,
   ])
   const nameAndEmoji = getNameAndEmojiFromLocalStorage(item.address)
+  const deviceEmoji = item.device ? item.device : item.notes?.split('-')[0]
+
+  const currentDeviceName = useMemo(() => {
+    const result = isCurrentDevice
+      ? walletSnap.deviceData?.name
+      : isMasterDevice
+      ? walletSnap.masterNotes || collapseString(walletSnap.address, 8, 4)
+      : item.notes
+      ? item.notes
+      : nameAndEmoji?.name
+      ? nameAndEmoji?.name
+      : collapseString(item.address, 8, 4)
+    return result
+  }, [isCurrentDevice, isMasterDevice, item.address, item.notes, nameAndEmoji?.name, walletSnap])
 
   return (
     <li className="flex h-[48px] items-center gap-4 pl-3 pr-4">
       <LeadingIcon
-        name={item.notes ? item.notes : nameAndEmoji?.name}
-        emoji={item.notes ? item.avatar! : nameAndEmoji?.emoji}
-        isOld={!item.notes}
+        name={item.notes || nameAndEmoji?.name}
+        emoji={deviceEmoji || nameAndEmoji?.emoji}
         address={item.address}
       />
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
-        <div>
-          {isCurrentDevice
-            ? walletSnap.deviceData.name
-            : isMasterDevice
-            ? walletSnap.masterNotes || collapseString(walletSnap.address, 8, 4)
-            : item.notes
-            ? item.notes
-            : nameAndEmoji?.name
-            ? nameAndEmoji?.name
-            : collapseString(item.address, 8, 4)}
-        </div>
+        <div>{currentDeviceName}</div>
         {revoking ? (
           <span className="text-[12px] font-medium text-red-500">Revoking...</span>
         ) : isRevokingError ? (
           <span className="text-[12px] font-medium text-red-500">Revoke Failed</span>
         ) : isCurrentDevice ? (
           <span className="rounded bg-green-100 px-1 py-0.5 text-xs font-medium text-emerald-600">Current Device</span>
-        ) : isMasterDevice ? (
-          <span className="rounded bg-blue-100 px-1 py-0.5 text-xs font-medium text-indigo-400">Main Device</span>
         ) : null}
       </div>
       <More address={item.address} onRevoke={onRevoke} />
@@ -224,14 +232,17 @@ interface LeadingIconProps {
   isOld?: boolean
 }
 
-function LeadingIcon({ name, emoji, address, isOld = false }: LeadingIconProps) {
-  const selectedEmoji = ((isOld ? emojisTemp : emojis) as Record<string, string>)[emoji as any]
+function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
+  const selectedEmoji = (emojisTemp as Record<string, string>)[emoji as any]
   const { walletSnap } = useWalletState()
-  const isMasterDevice = useMemo(() => walletSnap.address === address, [address, walletSnap.address])
-  if (selectedEmoji) {
-    return <img className="h-6 w-6" src={selectedEmoji} />
-  } else if (isMasterDevice) {
+  const isMasterDevice = useMemo(
+    () => !walletSnap.deviceList?.find((v) => v.address === address),
+    [address, walletSnap.deviceList],
+  )
+  if (isMasterDevice) {
     return <DeviceIcon className="h-6 w-6" />
+  } else if (selectedEmoji) {
+    return <img className="h-6 w-6" src={selectedEmoji} />
   } else if (name) {
     return <LetterAvatar data={name} className="h-[28px] w-[28px] flex-none" />
   } else {
@@ -259,19 +270,19 @@ interface DeviceListProps {
 export function DeviceList({ onShowQRCode, className, onDisconnect }: DeviceListProps) {
   const { walletSnap } = useWalletState()
 
-  const mergedList = [...walletSnap.deviceList!]
+  const mergedList = useMemo(() => [...walletSnap.deviceList!], [walletSnap.deviceList])
   if (!mergedList.find((addr) => addr.address === walletSnap.address!)) {
     mergedList.unshift({
       address: walletSnap.address!,
-      avatar: undefined,
-      notes: walletState.deviceData?.name,
+      device: undefined,
+      notes: walletState.masterNotes || walletState.deviceData?.name,
     })
   }
 
   return (
     <div className={clsx('select-none', className)}>
       <div className="mb-3 text-base font-medium leading-[normal] text-[#5F6570]">Trusted Devices of CKB Address</div>
-      <ul className="overflow-hidden rounded-2xl border border-[#B6C4D966]">
+      <ul className="rounded-2xl border border-[#B6C4D966]">
         {mergedList?.map((item) => (
           <div key={item.address}>
             <Device key={item.address} item={item} managingAddress={walletSnap.address!} onDisconnect={onDisconnect} />

@@ -11,16 +11,16 @@ interface PortalProps {
 export function Portal({ children, customRootId, className }: PortalProps) {
   let portalRoot: HTMLElement | null = null
   const rootId = customRootId ?? 'portal-root'
+  const shadowDomRoot = getShadowDomRoot()
 
-  if (document.getElementById(rootId) !== null) {
-    portalRoot = document.getElementById(rootId)
+  if (shadowDomRoot.getElementById(rootId) !== null) {
+    portalRoot = shadowDomRoot.getElementById(rootId)
     if (className && portalRoot !== null) {
       portalRoot.className = className
     }
   } else {
     const divDOM = document.createElement('div')
     divDOM.id = rootId
-    const shadowDomRoot = getShadowDomRoot()
     shadowDomRoot.appendChild(divDOM)
     portalRoot = divDOM
     if (className) {
@@ -30,9 +30,11 @@ export function Portal({ children, customRootId, className }: PortalProps) {
 
   useEffect(
     () => () => {
-      portalRoot?.parentElement?.removeChild(portalRoot)
+      if (portalRoot) {
+        shadowDomRoot?.removeChild(portalRoot)
+      }
     },
-    [portalRoot],
+    [portalRoot, shadowDomRoot],
   )
 
   return createPortal(children, portalRoot as HTMLElement)

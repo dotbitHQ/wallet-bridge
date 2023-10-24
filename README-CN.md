@@ -51,15 +51,80 @@ const { Wallet } = await import('wallet-bridge')
 - `loggedInSelectAddress` (可选): 在使用 Passkey 登录时，如果有多个地址，是否允许用户选择。默认为 `true`。
 - `customChains` (可选): 自定义链，来源于 `CustomChain` 枚举。默认为空数组。
 - `customWallets` (可选): 自定义钱包，来源于 `CustomWallet` 枚举。默认为空数组。
+- `wagmiConfig` (可选): 用于配置 [wagmi](https://wagmi.sh/core/getting-started) 的相关信息，类型为 `WagmiConfig`。默认为`undefined`。如果需要使用 [WalletConnect](https://docs.walletconnect.com)，必须提供此参数。
+- `gtag` (可选): 用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `event`，则不需要提供此参数。
+- `event` (可选): 如果你使用 [nextjs-google-analytics](https://www.npmjs.com/package/nextjs-google-analytics) 来上报数据， 则可以用 `event` 来代替 `gtag`，用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `gtag`，则不需要提供此参数。
 
 **示例**：
 
 ```js
+import { Wallet } from 'wallet-bridge'
+import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
+import { configureChains, createConfig, InjectedConnector } from '@wagmi/core'
+import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
+import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
+
+const chainIdToRpc: { [chainId: number]: string | undefined } = {
+  [ethereum.id]: 'https://eth.public-rpc.com',
+  [goerli.id]: 'https://rpc.ankr.com/eth_goerli',
+  [bsc.id]: 'https://bscrpc.com',
+  [bscTestnet.id]: 'https://rpc.ankr.com/bsc_testnet_chapel',
+  [polygon.id]: 'https://polygon-rpc.com',
+  [polygonMumbai.id]: 'https://rpc.ankr.com/polygon_mumbai',
+}
+
+const { publicClient, chains } = configureChains(
+  [ethereum, goerli, bsc, bscTestnet, polygon, polygonMumbai],
+  [
+    jsonRpcProvider({
+      rpc(chain) {
+        return { http: chainIdToRpc[chain.id] || '' }
+      },
+    }),
+  ],
+)
+
+const metaMaskConnector = new MetaMaskConnector({
+  chains,
+})
+
+const injectedConnector = new InjectedConnector({
+  chains,
+})
+
+const walletConnectConnectorOptions = {
+  projectId: '13c75e7d20888adc7e57cad417ad9ed8',
+  metadata: {
+    name: '.bit',
+    description: 'Barrier-free DID for Every Community and Everyone',
+    url: 'https://d.id',
+    icons: ['https://d.id/favicon.png'],
+  },
+}
+
+const walletConnectConnectorShow = new WalletConnectConnector({
+  chains,
+  options: { ...walletConnectConnectorOptions, showQrModal: true },
+})
+
+const walletConnectConnectorHide = new WalletConnectConnector({
+  chains,
+  options: { ...walletConnectConnectorOptions, showQrModal: false },
+})
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: [walletConnectConnectorShow, walletConnectConnectorHide, injectedConnector, metaMaskConnector],
+  publicClient,
+})
+
 const wallet = new Wallet({
   isTestNet: false,
   loggedInSelectAddress: true,
   customChains: [CustomChain.eth],
   customWallets: [CustomWallet.metaMask],
+  wagmiConfig: wagmiConfig,
 })
 ```
 
@@ -101,7 +166,33 @@ wallet.initWallet().then((success) => {
 wallet.connectWallet({ onlyEth: true })
 ```
 
-#### 4.3 `loggedInfo()`
+#### 4.3 `connectWalletAndSignData(params: { signData: SignDataParams })`
+
+显示钱包连接弹窗。登录的同时可以进行签名操作。
+
+**示例**：
+
+```js
+const res = await wallet.connectWalletAndSignData({
+  signData: {
+    data: 'hello world',
+  },
+})
+console.log(res)
+
+// or EVM EIP-712
+const jsonStr =
+  '{"types":{"EIP712Domain":[{"name":"chainId","type":"uint256"},{"name":"name","type":"string"},{"name":"verifyingContract","type":"address"},{"name":"version","type":"string"}],"Action":[{"name":"action","type":"string"},{"name":"params","type":"string"}],"Cell":[{"name":"capacity","type":"string"},{"name":"lock","type":"string"},{"name":"type","type":"string"},{"name":"data","type":"string"},{"name":"extraData","type":"string"}],"Transaction":[{"name":"DAS_MESSAGE","type":"string"},{"name":"inputsCapacity","type":"string"},{"name":"outputsCapacity","type":"string"},{"name":"fee","type":"string"},{"name":"action","type":"Action"},{"name":"inputs","type":"Cell[]"},{"name":"outputs","type":"Cell[]"},{"name":"digest","type":"bytes32"}]},"primaryType":"Transaction","domain":{"chainId":5,"name":"da.systems","verifyingContract":"0x0000000000000000000000000000000020210722","version":"1"},"message":{"DAS_MESSAGE":"TRANSFER FROM 0x54366bcd1e73baf55449377bd23123274803236e(906.74221046 CKB) TO ckt1qyqvsej8jggu4hmr45g4h8d9pfkpd0fayfksz44t9q(764.13228446 CKB), 0x54366bcd1e73baf55449377bd23123274803236e(142.609826 CKB)","inputsCapacity":"906.74221046 CKB","outputsCapacity":"906.74211046 CKB","fee":"0.0001 CKB","digest":"0x29cd28dbeb470adb17548563ceb4988953fec7b499e716c16381e5ae4b04021f","action":{"action":"transfer","params":"0x00"},"inputs":[],"outputs":[]}}'
+const res = await wallet.connectWalletAndSignData({
+  signData: {
+    data: JSON.parse(jsonStr),
+    isEIP712: true,
+  },
+})
+console.log(res)
+```
+
+#### 4.4 `loggedInfo()`
 
 显示已登录弹窗。如果用户已经登录，弹窗将会展示出登录信息。
 
@@ -111,7 +202,7 @@ wallet.connectWallet({ onlyEth: true })
 wallet.loggedInfo()
 ```
 
-#### 4.4 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
+#### 4.5 `sendTransaction(data: ISendTrxParams): Promise<string | undefined>`
 
 用于发送交易。
 
@@ -139,7 +230,7 @@ wallet.sendTransaction(transactionData).then((txHash) => {
 })
 ```
 
-#### 4.5 `initSignContext(): Promise<InitSignContextRes>`
+#### 4.6 `initSignContext(): Promise<InitSignContextRes>`
 
 初始化签名上下文并返回签名方法。为了避免签名时弹窗被浏览器拦截，`initSignContext` 务必在点击事件所有异步操作之前调用。
 
@@ -148,19 +239,21 @@ wallet.sendTransaction(transactionData).then((txHash) => {
 - `Promise<InitSignContextRes>`: 返回一个包含以下方法的对象:
   - `signTxList`: 函数，.bit 业务专用，用于签名交易列表。
   - `signData`: 函数，返回值是签名后的数据。
-  - `onFailed`: 函数，其返回值是一个`DeviceAuthError`，有任何错误都需要调用 `onFailed` 通知弹窗显示错误。
+  - `onFailed`: 函数，其返回值是一个`Promise<IData<any>>`，有任何错误都需要调用 `onFailed` 通知弹窗显示错误。
+  - `onClose`: 函数，其返回值是一个`Promise<void>`，有些情况下如果你想自己处理错误，而不是让弹窗显示错误，想关闭弹窗就用 `onClose`。
 
 示例：
 
 ```js
-const { signTxList, signData, onFailed } = await wallet.initSignContext()
+const { signTxList, signData, onFailed, onClose } = await wallet.initSignContext()
 const res = await signTxList({})
 const res = await signData('0x123')
 const res = await signData({}, { isEIP712: true })
 await onFailed()
+await onClose()
 ```
 
-#### 4.6 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.7 `useWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 `useWalletState` 是一个 React hook，用于获取和监听钱包状态。
 
@@ -171,6 +264,7 @@ await onFailed()
   - `protocol`: 钱包的协议类型，类型为`WalletProtocol`。
   - `address`: 当前登录的钱包地址，类型为`string`。
   - `coinType`: 代币类型，类型为`CoinType`。
+  - `walletName`: 钱包名称，类型为`string`。
   - `hardwareWalletTipsShow`: 硬件钱包提示是否显示，类型为`boolean`。
   - `deviceData`: Passkey 登录时设备数据，类型为`IDeviceData`。
   - `ckbAddresses`: Passkey 登录时设备能够管理的 CKB 地址列表，类型为`string[]`。
@@ -191,7 +285,7 @@ function Component() {
 }
 ```
 
-#### 4.7 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
+#### 4.8 `getWalletState(): { walletSnap: Snapshot<WalletState> }`
 
 用于立即获取当前的钱包状态的快照。
 
@@ -206,7 +300,7 @@ const { walletSnap } = wallet.getWalletState()
 console.log(walletSnap.address)
 ```
 
-#### 4.8 `_verifyPasskeySignature(params: { message: string, signature: string }): Promise<boolean> `
+#### 4.9 `_verifyPasskeySignature(params: { message: string, signature: string }): Promise<boolean> `
 
 验证 passkey 签名结果是否正确。
 

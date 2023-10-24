@@ -12,7 +12,7 @@ export interface ToastProps {
   zIndex?: string
 }
 
-export function Toast({ visible, message, duration = 1000, customRootId, zIndex = 'z-[4]' }: ToastProps) {
+export function Toast({ visible, message, duration = 1000, customRootId, zIndex = 'z-[11]' }: ToastProps) {
   const [removeDOM, setRemoveDOM] = useState(!visible)
 
   useEffect(() => {
