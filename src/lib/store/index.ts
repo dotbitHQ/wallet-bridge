@@ -4,8 +4,8 @@ import {
   CoinType,
   CustomChain,
   CustomWallet,
-  DotbitAliasApi,
-  DotbitAliasTestApi,
+  DotbitIndexerApi,
+  DotbitIndexerTestApi,
   WalletProtocol,
   WebAuthnApi,
   WebAuthnTestApi,
@@ -184,10 +184,10 @@ export async function getMastersAddress() {
 
 export async function getDotbitAlias() {
   const { coinType, isTestNet, address } = snapshot(walletState)
-  const api = isTestNet ? DotbitAliasTestApi : DotbitAliasApi
+  const api = isTestNet ? DotbitIndexerTestApi : DotbitIndexerApi
 
   const aliasInfo = await Axios.post(
-    `${api}/v1/reverse/info`,
+    `${api}/v1/reverse/record`,
     {
       type: 'blockchain',
       key_info: { coin_type: coinType, key: address },
@@ -198,9 +198,9 @@ export async function getDotbitAlias() {
   )
 
   if (aliasInfo.data?.err_no === errno.success) {
-    if (aliasInfo.data?.data?.is_valid === true) {
+    if (aliasInfo.data?.data?.account_alias) {
       setWalletState({
-        alias: aliasInfo.data.data.account,
+        alias: aliasInfo.data.data.account_alias,
       })
     } else {
       setWalletState({
