@@ -27,6 +27,6 @@ export const WebAuthnApi = 'https://webauthn-api.d.id'
 
 export const WebAuthnTestApi = 'https://test-webauthn-api.d.id'
 
-export const DotbitAliasApi = 'https://reverse-api.d.id'
+export const DotbitIndexerApi = 'https://indexer-v1.d.id'
 
-export const DotbitAliasTestApi = 'https://test-reverse-api.d.id'
+export const DotbitIndexerTestApi = 'https://test-indexer.d.id'
