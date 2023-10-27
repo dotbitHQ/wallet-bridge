@@ -60,26 +60,23 @@ export class WalletContext {
     }
   }
 
-  // @ts-expect-error
-  reportEvent(action: string, { category, label, value, nonInteraction, userId, ...otherOptions }?: EventOptions) {
+  reportEvent(action: string, options: EventOptions) {
     try {
       if (this.gtag) {
         this.gtag('event', action, {
-          event_category: category,
-          event_label: label,
-          value,
-          non_interaction: nonInteraction,
-          user_id: userId,
-          ...otherOptions,
+          event_category: options.category,
+          event_label: options.label,
+          value: options.value,
+          non_interaction: options.nonInteraction,
+          user_id: options.userId,
         })
       } else if (this.event) {
         this.event(action, {
-          category,
-          label,
-          value,
-          nonInteraction,
-          userId,
-          ...otherOptions,
+          category: options.category,
+          label: options.label,
+          value: options.value,
+          nonInteraction: options.nonInteraction,
+          userId: options.userId,
         })
       }
     } catch (error) {
@@ -182,7 +179,7 @@ export class WalletContext {
         this.provider = await walletConnectConnector.getProvider()
       } else {
         const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-          return item.id === 'metaMask'
+          return this.walletName === 'MetaMask' ? item.id === 'metaMask' : item.id === 'injected'
         })
         this.provider = await metaMaskConnector.getProvider()
       }

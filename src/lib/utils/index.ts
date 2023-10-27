@@ -398,3 +398,26 @@ export function openDeepLink(deepLink: string) {
     window.location.href = deepLink
   }
 }
+
+/**
+ * load script
+ * @param src
+ * @param id
+ */
+export async function loadScript(src: string, id: string): Promise<any> {
+  const script = 'script'
+  const firstScript: HTMLScriptElement = document.getElementsByTagName(script)[0]
+  if (document.getElementById(id)) {
+    await Promise.resolve()
+    return
+  }
+  const scriptElement: HTMLScriptElement = document.createElement(script)
+  scriptElement.id = id
+  scriptElement.src = src
+  firstScript.parentNode?.insertBefore(scriptElement, firstScript)
+
+  return await new Promise((resolve, reject) => {
+    scriptElement.onload = resolve
+    scriptElement.onerror = reject
+  })
+}

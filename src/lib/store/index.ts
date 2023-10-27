@@ -1,10 +1,11 @@
 import { proxy, snapshot, useSnapshot } from 'valtio'
 import {
+  CfAccessClient,
   CoinType,
   CustomChain,
   CustomWallet,
-  DotbitAliasApi,
-  DotbitAliasTestApi,
+  DotbitIndexerApi,
+  DotbitIndexerTestApi,
   WalletProtocol,
   WebAuthnApi,
   WebAuthnTestApi,
@@ -15,6 +16,8 @@ import Axios from 'axios'
 import errno from '../constant/errno'
 import CustomError from '../utils/CustomError'
 import { checkICloudPasskeySupport } from '../utils'
+
+Axios.defaults.withCredentials = true
 
 export interface WalletState {
   protocol?: WalletProtocol
@@ -78,9 +81,16 @@ export const walletState = proxy<WalletState>({
 })
 
 async function fetchAuthorizeInfo(api: string, address: string) {
-  const res = await Axios.post(`${api}/v1/webauthn/authorize-info`, {
-    ckb_address: address,
-  })
+  const { isTestNet } = snapshot(walletState)
+  const res = await Axios.post(
+    `${api}/v1/webauthn/authorize-info`,
+    {
+      ckb_address: address,
+    },
+    {
+      headers: isTestNet ? { ...CfAccessClient } : {},
+    },
+  )
 
   if (res.data?.err_no !== errno.success) {
     throw new CustomError(res.data?.err_no, res.data?.err_msg)
@@ -153,9 +163,15 @@ export async function getMastersAddress() {
   if (protocol === WalletProtocol.webAuthn && cid) {
     const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
 
-    const mastersAddress = await Axios.post(`${api}/v1/webauthn/get-masters-addr`, {
-      cid,
-    })
+    const mastersAddress = await Axios.post(
+      `${api}/v1/webauthn/get-masters-addr`,
+      {
+        cid,
+      },
+      {
+        headers: isTestNet ? { ...CfAccessClient } : {},
+      },
+    )
     if (mastersAddress.data?.err_no === errno.success) {
       setWalletState({
         ckbAddresses: mastersAddress.data.data.ckb_address,
@@ -168,17 +184,23 @@ export async function getMastersAddress() {
 
 export async function getDotbitAlias() {
   const { coinType, isTestNet, address } = snapshot(walletState)
-  const api = isTestNet ? DotbitAliasTestApi : DotbitAliasApi
+  const api = isTestNet ? DotbitIndexerTestApi : DotbitIndexerApi
 
-  const aliasInfo = await Axios.post(`${api}/v1/reverse/info`, {
-    type: 'blockchain',
-    key_info: { coin_type: coinType, key: address },
-  })
+  const aliasInfo = await Axios.post(
+    `${api}/v1/reverse/record`,
+    {
+      type: 'blockchain',
+      key_info: { coin_type: coinType, key: address },
+    },
+    {
+      headers: isTestNet ? { ...CfAccessClient } : {},
+    },
+  )
 
   if (aliasInfo.data?.err_no === errno.success) {
-    if (aliasInfo.data?.data?.is_valid === true) {
+    if (aliasInfo.data?.data?.account_alias) {
       setWalletState({
-        alias: aliasInfo.data.data.account,
+        alias: aliasInfo.data.data.account_alias,
       })
     } else {
       setWalletState({
@@ -196,11 +218,14 @@ export async function backupDeviceData() {
     return
   }
   const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
+  const cfAccessClient = isTestNet ? CfAccessClient : {}
   const res = await fetch(`${api}/v1/webauthn/add-cid-info`, {
     method: 'POST',
     mode: 'cors',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...cfAccessClient,
     },
     body: JSON.stringify({
       ckb_addr: deviceData?.ckbAddr,

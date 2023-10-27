@@ -1,5 +1,5 @@
 import { WalletConnector } from './WalletConnector'
-import { getAuthorizeInfo, getMastersAddress, resetWalletState, setWalletState } from '../../store'
+import { backupDeviceData, getAuthorizeInfo, getMastersAddress, resetWalletState, setWalletState } from '../../store'
 import CustomError from '../../utils/CustomError'
 import errno from '../../constant/errno'
 import { EventEnum } from '../WalletEventListenerHandler'
@@ -33,7 +33,9 @@ export class ConnectDidConnector extends WalletConnector {
         deviceData: res.data,
       })
       await getMastersAddress()
-      await getAuthorizeInfo({ detectAssets: true })
+      await getAuthorizeInfo({ detectAssets: true }).then(() => {
+        void backupDeviceData()
+      })
       if (signature) {
         this.context.emitEvent(EventEnum.Signature, signature)
       } else if (!ignoreEvent) {

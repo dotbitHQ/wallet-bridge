@@ -15,15 +15,15 @@ export interface SwapTransitionProps {
 function getTransitionStyle(state: TransitionStatus): CSSProperties {
   switch (state) {
     case ENTERING:
-      return { opacity: '100%', position: 'absolute' }
+      return { opacity: '100%' }
     case ENTERED:
       return { opacity: '100%' }
     case EXITING:
       return { opacity: '0%' }
     case EXITED:
-      return { opacity: '0%', position: 'absolute' }
+      return { opacity: '0%' }
     case UNMOUNTED:
-      return { opacity: '0%', position: 'absolute' }
+      return { opacity: '0%' }
   }
 }
 

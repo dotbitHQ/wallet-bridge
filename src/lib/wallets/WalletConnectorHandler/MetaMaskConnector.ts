@@ -21,7 +21,7 @@ export class MetaMaskConnector extends WalletConnector {
         })
       } else {
         connector = wagmiConfig.connectors.find((item: Connector) => {
-          return item.id === 'metaMask'
+          return walletName === 'MetaMask' ? item.id === 'metaMask' : item.id === 'injected'
         })
       }
 

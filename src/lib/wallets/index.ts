@@ -7,17 +7,19 @@ import { ISendTrxParams, WalletTransaction } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
 import { EventEnum, WalletEventListener } from './WalletEventListenerHandler'
 import { WalletHandlerFactory } from './WalletHandlerFactory'
-import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi } from '../constant'
+import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi, CfAccessClient } from '../constant'
 import { InitSignContextRes, SignInfo, SignTxListParams, SignTxListRes } from '../types'
 import { cloneDeep } from 'lodash-es'
 import { convertTpUTXOSignature, getShadowDomRoot, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
-import { getAuthorizeInfo, getMastersAddress, walletState } from '../store'
+import { backupDeviceData, getAuthorizeInfo, getMastersAddress, walletState } from '../store'
 import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
 import { DeviceAuthError } from 'connect-did-sdk'
 import Axios from 'axios'
 import { setLoginCacheState } from '../store/loginCache'
+
+Axios.defaults.withCredentials = true
 
 class WalletSDK {
   walletConnector?: WalletConnector
@@ -125,7 +127,9 @@ class WalletSDK {
         await this.init()
         if (protocol === WalletProtocol.webAuthn && deviceData) {
           if (!isDisconnect) {
-            void getAuthorizeInfo()
+            void getAuthorizeInfo().then(() => {
+              void backupDeviceData()
+            })
             void getMastersAddress()
           }
           return true
@@ -264,12 +268,18 @@ class WalletSDK {
     }
     const { isTestNet, address, deviceData } = snapshot(walletState)
     const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
-    const res = await Axios.post(`${api}/v1/webauthn/verify`, {
-      master_addr: address,
-      backup_addr: deviceData?.ckbAddr,
-      msg: message,
-      signature,
-    })
+    const res = await Axios.post(
+      `${api}/v1/webauthn/verify`,
+      {
+        master_addr: address,
+        backup_addr: deviceData?.ckbAddr,
+        msg: message,
+        signature,
+      },
+      {
+        headers: isTestNet ? { ...CfAccessClient } : {},
+      },
+    )
 
     if (res.data?.err_no !== errno.success) {
       throw new CustomError(res.data?.err_no, res.data?.err_msg)

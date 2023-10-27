@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Button, ButtonShape, ButtonSize, Header, SwapChildProps, createTips, DeviceIcon } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import clsx from 'clsx'
-import { emojis } from './png'
+import { emojis, emojisTemp } from './png'
 import { setSelectedEmoji, setSignData, useWebAuthnState } from '../../store/webAuthnState'
 import { useQuery } from '@tanstack/react-query'
 import { useWalletState } from '../../store'
@@ -13,7 +13,7 @@ type EmojiProps = React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageEleme
 }
 
 export function Emoji({ name, ...rest }: EmojiProps) {
-  return <img {...rest} src={emojis[name as any as keyof typeof emojis] || ''} />
+  return <img {...rest} src={emojisTemp[name as any as keyof typeof emojisTemp] || ''} />
 }
 
 export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) {
