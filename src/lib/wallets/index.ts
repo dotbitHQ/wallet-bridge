@@ -215,6 +215,8 @@ class WalletSDK {
     }
 
     delete txs.mm_json
+    // @ts-expect-error
+    delete txs.list
 
     const { deviceData } = snapshot(walletState)
     if (deviceData?.ckbAddr) {
