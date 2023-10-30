@@ -316,8 +316,12 @@ export const setWalletState = (
     walletState.alias = alias
   }
 
-  walletState.iCloudPasskeySupport = checkICloudPasskeySupport()
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
+
+  void checkICloudPasskeySupport().then((res) => {
+    walletState.iCloudPasskeySupport = res
+    globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
+  })
 }
 
 export const resetWalletState = () => {

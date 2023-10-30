@@ -14,7 +14,9 @@ export const BackupTips = ({ onShowQRCode, className }: BackupTipsProps) => {
   const [passkeysSupported, setPasskeysSupported] = useState(false)
 
   useEffect(() => {
-    setPasskeysSupported(checkICloudPasskeySupport())
+    void checkICloudPasskeySupport().then((res) => {
+      setPasskeysSupported(res)
+    })
   }, [])
 
   return passkeysSupported ? (
