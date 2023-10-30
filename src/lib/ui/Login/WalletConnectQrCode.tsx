@@ -3,6 +3,7 @@ import { QRCode } from '../../components/QRCode'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { setLoginCacheState, useLoginCacheState } from '../../store/loginCache'
 import { CustomWallet } from '../../constant'
+import { t } from '@lingui/macro'
 
 export function WalletConnectQrCode({ transitionRef, transitionStyle }: SwapChildProps) {
   const { onClose, goBack } = useSimpleRouter()!
@@ -34,9 +35,9 @@ export function WalletConnectQrCode({ transitionRef, transitionStyle }: SwapChil
       >
         <div className="text-center text-[14px] leading-tight text-neutral-700">
           {loginCacheSnap.walletName === CustomWallet.walletConnect
-            ? 'Scan with your phone'
+            ? t`Scan with your phone`
             : // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-              `Scan with ${loginCacheSnap.walletName}`}
+              t`Scan with ${loginCacheSnap.walletName}`}
         </div>
         <div className="relative my-3 mb-9 h-[260px] w-[260px] rounded-2xl border border-stone-300/20 p-2">
           <QRCode data={loginCacheSnap.walletConnectDisplayUri} />

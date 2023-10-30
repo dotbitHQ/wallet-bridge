@@ -4,6 +4,7 @@ import { resetWalletState, setWalletState } from '../../store'
 import { chainIdHexToNumber, toChecksumAddress } from '../../utils'
 import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap, CoinType } from '../../constant'
 import { createTips } from '../../components'
+import { t } from '@lingui/macro'
 
 export class WalletConnectEventListener extends WalletEventListener {
   unwatchAccount: (() => void) | undefined
@@ -67,25 +68,25 @@ export class WalletConnectEventListener extends WalletEventListener {
         switch (coinType) {
           case CoinType.eth:
             message = isTestNet
-              ? 'Please switch your wallet to the Goerli test network before connecting'
-              : 'Please switch your wallet to the Ethereum main network before connecting'
+              ? t`Please switch your wallet to the Goerli test network before connecting`
+              : t`Please switch your wallet to the Ethereum main network before connecting`
             break
           case CoinType.bsc:
             message = isTestNet
-              ? 'Please switch your wallet to the BSC Testnet before connecting'
-              : 'Please switch your wallet to the BSC main network before connecting'
+              ? t`Please switch your wallet to the BSC Testnet before connecting`
+              : t`Please switch your wallet to the BSC main network before connecting`
             break
           case CoinType.matic:
             message = isTestNet
-              ? 'Please switch your wallet to the Polygon Testnet before connecting'
-              : 'Please switch your wallet to the Polygon Mainnet before connecting'
+              ? t`Please switch your wallet to the Polygon Testnet before connecting`
+              : t`Please switch your wallet to the Polygon Mainnet before connecting`
             break
         }
 
         if (message) {
           this.context.emitEvent(EventEnum.Error, message)
           createTips({
-            title: 'Tips',
+            title: t`Tips`,
             content: message,
           })
         }

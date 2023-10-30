@@ -1,3 +1,4 @@
+import { t } from '@lingui/macro'
 import { Header, Exlaimation, ArrowLeftIcon, SwapChildProps } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWalletState } from '../../store'
@@ -21,10 +22,10 @@ export function TransactionFailed({ transitionRef, transitionStyle }: SwapChildP
         style={transitionStyle}
       >
         <Exlaimation className="h-[80px] w-[80px] text-red-500" />
-        <div className="mt-3 text-center text-[16px] font-bold text-red-500">Failed</div>
+        <div className="mt-3 text-center text-[16px] font-bold text-red-500">{t`Failed`}</div>
         <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">
-          <div>The contract verification failed.</div>
-          <div>Please try again.</div>
+          <div>{t`The contract verification failed.`}</div>
+          <div>{t`Please try again.`}</div>
         </div>
         <div className="mb-8 mt-3 text-[12px] font-normal leading-[12px] text-gray-400">
           <a

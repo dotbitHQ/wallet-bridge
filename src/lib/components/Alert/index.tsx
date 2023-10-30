@@ -6,6 +6,7 @@ export enum AlertType {
 }
 
 const typeClasses: Record<AlertType, string> = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   [AlertType.warning]: 'text-[#AC6E15] bg-[#F9CD4E28] border-[#F9CD4E5B]',
 }
 

@@ -1,3 +1,4 @@
+import { t } from '@lingui/macro'
 import { Header, SwapChildProps } from '../../components'
 import { QRCode } from '../../components/QRCode'
 import { useSimpleRouter } from '../../components/SimpleRouter'
@@ -18,7 +19,7 @@ export function AddressQRCode({ transitionRef, transitionStyle }: SwapChildProps
   return (
     <>
       <Header
-        title="QR Code"
+        title={t`QR Code`}
         onClose={close}
         goBack={back}
         className="bg-blur z-10 mt-0.5 w-full-4px bg-white p-6"

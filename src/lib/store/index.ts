@@ -46,6 +46,7 @@ export interface ICKBAddressItem {
   notes?: string
 }
 
+// eslint-disable-next-line lingui/no-unlocalized-strings
 const WalletStateKey = 'WalletStateV1'
 
 const walletStateLocalStorage = globalThis.localStorage ? globalThis.localStorage.getItem(WalletStateKey) : null

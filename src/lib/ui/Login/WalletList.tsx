@@ -14,6 +14,7 @@ import TokenPocketIcon from './icon/tokenpocket-icon.svg'
 import OneKeyIcon from './icon/onekey-icon.svg'
 import TronLinkIcon from './icon/tronlink-icon.svg'
 import WalletConnectIcon from './icon/walletconnect-icon.svg'
+import { t } from '@lingui/macro'
 
 interface IWallet {
   icon: ReactNode
@@ -31,16 +32,19 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
   const wallets = useMemo<IWallet[]>(() => {
     return [
       {
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="h-10 w-10" src={WalletConnectIcon} alt="WalletConnect" />,
         name: CustomWallet.walletConnect,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="h-10 w-10" src={MetaMaskIcon} alt="MetaMask" />,
         name: CustomWallet.metaMask,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="h-10 w-10" src={TrustWalletIcon} alt="TrustWallet" />,
         name: CustomWallet.trustWallet,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
@@ -51,11 +55,13 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx],
       },
       {
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="h-10 w-10" src={TokenPocketIcon} alt="TokenPocket" />,
         name: CustomWallet.tokenPocket,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx, CoinType.doge],
       },
       {
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="h-10 w-10" src={OneKeyIcon} alt="OneKey" />,
         name: CustomWallet.oneKey,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
@@ -66,6 +72,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
       //   supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       // },
       {
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="h-10 w-10" src={TronLinkIcon} alt="TronLink" />,
         name: CustomWallet.tronLink,
         supportList: [CoinType.trx],
@@ -123,7 +130,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
         }
       } else {
         createTips({
-          title: `Tips`,
+          title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
         })
@@ -153,7 +160,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
     <>
       <Header
         className="z-10 mt-0.5 w-full-4px bg-white p-6"
-        title="Select Wallet"
+        title={t`Select Wallet`}
         onClose={close}
         goBack={back}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}

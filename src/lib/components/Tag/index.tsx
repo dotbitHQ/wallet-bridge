@@ -7,7 +7,9 @@ export enum TagVariant {
 }
 
 const variantClasses: Record<TagVariant, string> = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   [TagVariant.default]: 'text-font-tips bg-secondary',
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   [TagVariant.primary]: 'text-[#00A270] bg-[#E3F6ED]',
 }
 

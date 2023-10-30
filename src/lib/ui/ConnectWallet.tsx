@@ -1,3 +1,4 @@
+/* eslint-disable lingui/no-unlocalized-strings */
 import { createContext, useCallback, useEffect, useState } from 'react'
 import WalletSDK from '../wallets'
 import { Modal } from '../components/Modal'
@@ -19,11 +20,15 @@ import { TransactionFailed } from './TransactionFailed'
 import { Sheet } from '../components/Sheet'
 import { Connect } from './Login/Connect'
 import { AddressQRCode } from './LoggedIn/AddressQrCode'
+import { I18nProvider } from '@lingui/react'
+import { i18n, Messages, Locale } from "@lingui/core";
 
 interface ConnectWalletProps {
   visible: boolean
   walletSDK: WalletSDK
   initComponent?: string
+  locale?: Locale
+  messages?: Messages
 }
 
 const routes = {
@@ -90,7 +95,7 @@ const routes = {
 export const WalletSDKContext = createContext<WalletSDK | null>(null)
 const queryClient = new QueryClient()
 
-export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }: ConnectWalletProps) => {
+export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect', locale = 'en', messages = [] }: ConnectWalletProps) => {
   const [isOpen, setIsOpen] = useState(visible)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
 
@@ -110,10 +115,15 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
     }
   }, [handleResize])
 
+  useEffect(() => {
+    i18n.loadAndActivate({locale, messages});
+  }, [locale, messages])
+
   const el = <SimpleRouter routes={routes} initialRouteName={initComponent} onClose={onClose} />
 
   return (
-    <WalletSDKContext.Provider value={walletSDK}>
+    <I18nProvider i18n={i18n}>
+      <WalletSDKContext.Provider value={walletSDK}>
       <QueryClientProvider client={queryClient}>
         {isMobile ? (
           <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet">
@@ -152,5 +162,6 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
         )}
       </QueryClientProvider>
     </WalletSDKContext.Provider>
+    </I18nProvider>
   )
 }

@@ -4,16 +4,23 @@ import { defineConfig } from 'vitest/config'
 import dts from 'vite-plugin-dts'
 import tailwindcss from 'tailwindcss'
 import { UserConfigExport } from 'vite'
+import { lingui } from '@lingui/vite-plugin'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { name, dependencies, peerDependencies } from './package.json'
 
 const app = async (): Promise<UserConfigExport> => {
   return defineConfig({
     plugins: [
-      react(),
+      react({
+        babel: {
+          plugins: ["macros"],
+        },
+      }),
+      lingui(),
       dts({
         insertTypesEntry: true,
       }),
+      
       // visualizer({
       //   template: "treemap", // or sunburst
       //   open: true,

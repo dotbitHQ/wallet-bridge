@@ -40,6 +40,7 @@ export class Wallet {
   }
 
   loggedInfo() {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     this.walletSDK.connectWallet({ initComponent: 'LoggedIn' })
   }
 
