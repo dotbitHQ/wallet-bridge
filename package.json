@@ -23,7 +23,9 @@
     "format:prettier": "prettier --write \"src/**/*.{ts,tsx,js,mdx}\"",
     "test": "vitest",
     "test:cov": "vitest run --coverage",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "i18n:extract": "lingui extract --clean",
+    "i18n:compile": "lingui compile"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",

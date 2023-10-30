@@ -1,5 +1,5 @@
 import { LinguiConfig } from "@lingui/conf";
-import { formatter } from "@lingui/format-json";
+// import { formatter } from "@lingui/format-json";
 
 
 const config: LinguiConfig = {
@@ -14,7 +14,7 @@ const config: LinguiConfig = {
       include: ["src/"],
     },
   ],
-  format: formatter({ style: "minimal" }),
+  // format: formatter({ style: "minimal" }),
 };
 
 export default config;

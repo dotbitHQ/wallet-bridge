@@ -15,7 +15,7 @@ export class TokenPocketUTXOTransaction extends WalletTransaction {
 
     const balance = await this.getTPUTXOCurrentBalance()
     if (toDecimal(balance.data?.balance || 0).lte(params.amount)) {
-      throw new Error(t`insufficient funds for transfe`)
+      throw new Error(t`insufficient funds for transfer`)
     }
 
     return await new Promise((resolve, reject) => {
