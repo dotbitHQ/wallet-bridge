@@ -1,4 +1,4 @@
-import { StorybookViteConfig } from "@storybook/builder-vite"
+import { StorybookViteConfig } from '@storybook/builder-vite'
 
 const react = require('@vitejs/plugin-react')
 const dts = require('vite-plugin-dts')
@@ -19,10 +19,17 @@ const config: StorybookViteConfig = {
     builder: '@storybook/builder-vite',
   },
   async viteFinal(config, options) {
-    const res =  mergeConfig(config, {
-      plugins: lingui(),
+    const res = mergeConfig(config, {
+      plugins: [
+        react({
+          babel: {
+            plugins: ['macros'],
+          },
+        }),
+        lingui(),
+      ],
     })
-    return res 
+    return res
   },
   features: {
     storyStoreV7: true,
