@@ -386,6 +386,10 @@ export function getWalletDeepLink(walletName: string, displayUri: string): strin
 }
 
 export function openDeepLink(deepLink: string) {
+  if (!deepLink) {
+    return
+  }
+
   if (deepLink.startsWith('http')) {
     const link = document.createElement('a')
     link.href = deepLink
