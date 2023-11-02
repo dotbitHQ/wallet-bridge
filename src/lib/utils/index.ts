@@ -8,7 +8,7 @@ import { MessageTypes, SignTypedDataVersion, TypedDataUtils, TypedMessage } from
 import { Buffer } from 'buffer'
 import { CoinType, CustomWallet } from '../constant'
 import GraphemeSplitter from 'grapheme-splitter'
-import { isMobileOnly } from 'react-device-detect'
+import { isMobile, isMobileOnly } from 'react-device-detect'
 // @ts-expect-error
 import abcCopy from 'abc-copy'
 import UAParser from 'ua-parser-js'
@@ -386,7 +386,7 @@ export function getWalletDeepLink(walletName: string, displayUri: string): strin
 }
 
 export function openDeepLink(deepLink: string) {
-  if (!deepLink) {
+  if (!deepLink || !isMobile) {
     return
   }
 
