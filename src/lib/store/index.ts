@@ -93,7 +93,7 @@ async function fetchAuthorizeInfo(api: string, address: string) {
   )
 
   if (res.data?.err_no !== errno.success) {
-    throw new CustomError(res.data?.err_no, res.data?.err_msg)
+    console.error(new CustomError(res.data?.err_no, res.data?.err_msg))
   }
 
   return res.data.data
@@ -177,7 +177,7 @@ export async function getMastersAddress() {
         ckbAddresses: mastersAddress.data.data.ckb_address,
       })
     } else {
-      throw new CustomError(mastersAddress.data?.err_no, mastersAddress.data?.err_msg)
+      console.error(new CustomError(mastersAddress.data?.err_no, mastersAddress.data?.err_msg))
     }
   }
 }
@@ -208,7 +208,7 @@ export async function getDotbitAlias() {
       })
     }
   } else {
-    throw new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg)
+    console.error(new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg))
   }
 }
 
