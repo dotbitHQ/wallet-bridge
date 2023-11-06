@@ -125,7 +125,11 @@ function setAuthorizeState(
       }
     }
   }
-  setWalletState(record)
+
+  const { address: oldAddress } = snapshot(walletState)
+  if (oldAddress) {
+    setWalletState(record)
+  }
 }
 
 export async function getAuthorizeInfo({ detectAssets = false } = {}) {
@@ -160,31 +164,36 @@ export async function getAuthorizeInfo({ detectAssets = false } = {}) {
 export async function getMastersAddress() {
   const { protocol, isTestNet, deviceData } = snapshot(walletState)
   const cid = deviceData?.credential.rawId
-  if (protocol === WalletProtocol.webAuthn && cid) {
-    const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
+  if (!(protocol === WalletProtocol.webAuthn && cid)) {
+    return
+  }
+  const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
 
-    const mastersAddress = await Axios.post(
-      `${api}/v1/webauthn/get-masters-addr`,
-      {
-        cid,
-      },
-      {
-        headers: isTestNet ? { ...CfAccessClient } : {},
-      },
-    )
-    if (mastersAddress.data?.err_no === errno.success) {
-      setWalletState({
-        ckbAddresses: mastersAddress.data.data.ckb_address,
-      })
-    } else {
-      throw new CustomError(mastersAddress.data?.err_no, mastersAddress.data?.err_msg)
-    }
+  const mastersAddress = await Axios.post(
+    `${api}/v1/webauthn/get-masters-addr`,
+    {
+      cid,
+    },
+    {
+      headers: isTestNet ? { ...CfAccessClient } : {},
+    },
+  )
+  if (mastersAddress.data?.err_no === errno.success) {
+    setWalletState({
+      ckbAddresses: mastersAddress.data.data.ckb_address,
+    })
+  } else {
+    throw new CustomError(mastersAddress.data?.err_no, mastersAddress.data?.err_msg)
   }
 }
 
 export async function getDotbitAlias() {
   const { coinType, isTestNet, address } = snapshot(walletState)
   const api = isTestNet ? DotbitIndexerTestApi : DotbitIndexerApi
+
+  if (!(address && coinType)) {
+    return
+  }
 
   const aliasInfo = await Axios.post(
     `${api}/v1/reverse/record`,

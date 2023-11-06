@@ -18,6 +18,7 @@ import errno from '../constant/errno'
 import { DeviceAuthError } from 'connect-did-sdk'
 import Axios from 'axios'
 import { setLoginCacheState } from '../store/loginCache'
+import { createTips } from '../components'
 
 Axios.defaults.withCredentials = true
 
@@ -50,10 +51,15 @@ class WalletSDK {
     coinType?: CoinType
     walletName?: string
   } = {}) {
-    await this.context.retrieveProvider({
-      coinType,
-      walletName,
-    })
+    try {
+      await this.context.retrieveProvider({
+        coinType,
+        walletName,
+      })
+    } catch (err) {
+      this.walletConnector = WalletHandlerFactory.createConnector(this.context)
+      throw err
+    }
     this.eventListener?.removeEvents()
     this.walletConnector = WalletHandlerFactory.createConnector(this.context)
     this.walletSigner = WalletHandlerFactory.createSigner(this.context)
@@ -75,10 +81,6 @@ class WalletSDK {
   }
 
   async disconnect() {
-    const isInit = await this.initWallet({ involution: false, isDisconnect: true })
-    if (!isInit) {
-      throw new CustomError(errno.failedToInitializeWallet, 'disconnect: Please initialize wallet first')
-    }
     this.eventListener?.removeEvents()
     await this.walletConnector?.disconnect()
   }
@@ -142,8 +144,14 @@ class WalletSDK {
       }
       this.onInvolution(involution)
       return false
-    } catch (error) {
-      console.error(error)
+    } catch (error: any) {
+      if (!involution) {
+        createTips({
+          title: `Tips`,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
+        })
+      }
       this.onInvolution(involution)
       return false
     }
