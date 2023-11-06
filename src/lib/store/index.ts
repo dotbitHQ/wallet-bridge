@@ -125,7 +125,11 @@ function setAuthorizeState(
       }
     }
   }
-  setWalletState(record)
+
+  const { address: oldAddress } = snapshot(walletState)
+  if (oldAddress) {
+    setWalletState(record)
+  }
 }
 
 export async function getAuthorizeInfo({ detectAssets = false } = {}) {
