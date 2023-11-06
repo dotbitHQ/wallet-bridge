@@ -251,17 +251,17 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
   }
 
   const uaParser = new UAParser(globalThis.navigator?.userAgent)
+  const uaResult = uaParser.getResult()
+  const os = uaResult.os
+  const browser = uaResult.browser
+  const osVersion = parseInt(os.version?.split('.')[0] ?? '0', 10)
+  const browserVersion = parseInt(browser.version?.split('.')[0] ?? '0', 10)
 
   if (
-    (uaParser.getOS().name === 'iOS' && parseInt(uaParser.getOS().version?.split('.')[0] ?? '0', 10) < 16) ||
-    (uaParser.getOS().name === 'Mac OS' &&
-      uaParser.getBrowser().name === 'Safari' &&
-      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) < 16)
+    (os.name === 'iOS' && osVersion < 16) ||
+    (os.name === 'Mac OS' && browser.name === 'Safari' && browserVersion < 16) ||
+    (os.name === 'HarmonyOS' && osVersion < 12 && browser.name === 'Huawei Browser' && browserVersion < 14)
   ) {
-    return false
-  }
-
-  if (uaParser.getDevice().vendor === 'Huawei' || uaParser.getBrowser().name === 'Huawei Browser') {
     return false
   }
 
@@ -385,6 +385,7 @@ export function shouldUseWalletConnect(): boolean {
 }
 
 export function getWalletDeepLink(walletName: string, displayUri: string): string {
+  console.log('getWalletDeepLink displayUri: ', displayUri)
   if (walletName === CustomWallet.metaMask) {
     return `metamask://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
   } else if (walletName === CustomWallet.trustWallet) {
