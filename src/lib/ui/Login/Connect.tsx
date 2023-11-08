@@ -67,6 +67,17 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
     )
   }, [walletSDK.onlyEth, walletSnap.customChains])
 
+  const showWallets = useMemo(() => {
+    const list = walletSnap.customChains?.filter((chain: CustomChain) => chain !== CustomChain.passkey)
+    if (window.location.href.includes('.prixpal')) {
+      return false
+    }
+    return (
+      walletSDK.onlyEth ||
+      (walletSnap.customChains && walletSnap.customChains.length > 0 ? list?.length && list?.length > 0 : true)
+    )
+  }, [walletSDK.onlyEth, walletSnap.customChains])
+
   useEffect(() => {
     checkWebAuthnSupport()
       .then((res) => {
@@ -174,46 +185,48 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
             </Alert>
           </div>
         ) : null}
-        <div
-          className={clsx(
-            'mt-11 box-border flex h-[52px] cursor-pointer items-center justify-between rounded-2xl border border-[#B6C4D966] px-4 py-2 hover:bg-secondary active:bg-secondary-active',
-            { 'cursor-no-drop': !!currentLogin },
-          )}
-          onClick={showChainList}
-        >
-          <span className="text-base font-bold">Continue with wallets</span>
-          <span className="inline-flex items-center">
-            <span className="relative mr-1 inline-flex w-[102px]">
-              <img className="h-6 w-6 rounded-full border-2 border-white bg-white" src={EthIcon} alt="ETH" />
-              <img
-                className="absolute left-[16px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                src={BscIcon}
-                alt="BSC"
-              />
-              <img
-                className="absolute left-[32px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                src={PolygonIcon}
-                alt="Polygon"
-              />
-              <img
-                className="absolute left-[48px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                src={TronIcon}
-                alt="Tron"
-              />
-              <img
-                className="absolute left-[64px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                src={DogecoinIcon}
-                alt="Dogecoin"
-              />
-              <img
-                className="absolute left-[80px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                src={TorusIcon}
-                alt="Torus"
-              />
+        {showWallets ? (
+          <div
+            className={clsx(
+              'mt-11 box-border flex h-[52px] cursor-pointer items-center justify-between rounded-2xl border border-[#B6C4D966] px-4 py-2 hover:bg-secondary active:bg-secondary-active',
+              { 'cursor-no-drop': !!currentLogin },
+            )}
+            onClick={showChainList}
+          >
+            <span className="text-base font-bold">Continue with wallets</span>
+            <span className="inline-flex items-center">
+              <span className="relative mr-1 inline-flex w-[102px]">
+                <img className="h-6 w-6 rounded-full border-2 border-white bg-white" src={EthIcon} alt="ETH" />
+                <img
+                  className="absolute left-[16px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                  src={BscIcon}
+                  alt="BSC"
+                />
+                <img
+                  className="absolute left-[32px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                  src={PolygonIcon}
+                  alt="Polygon"
+                />
+                <img
+                  className="absolute left-[48px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                  src={TronIcon}
+                  alt="Tron"
+                />
+                <img
+                  className="absolute left-[64px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                  src={DogecoinIcon}
+                  alt="Dogecoin"
+                />
+                <img
+                  className="absolute left-[80px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                  src={TorusIcon}
+                  alt="Torus"
+                />
+              </span>
+              <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
             </span>
-            <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
-          </span>
-        </div>
+          </div>
+        ) : null}
       </div>
     </>
   )

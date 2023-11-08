@@ -217,7 +217,7 @@ export async function getDotbitAlias() {
       })
     }
   } else {
-    throw new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg)
+    console.error(new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg))
   }
 }
 
