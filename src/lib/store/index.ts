@@ -37,7 +37,8 @@ export interface WalletState {
   iCloudPasskeySupport?: boolean
   customChains?: CustomChain[]
   customWallets?: CustomWallet[]
-  alias?: string
+  alias?: string,
+  locale?: string,
 }
 
 export interface ICKBAddressItem {
@@ -72,6 +73,7 @@ const localWalletState = walletStateLocalStorage
       customChains: [],
       customWallets: [],
       alias: '',
+      locale: 'en'
     }
 
 export const walletState = proxy<WalletState>({
@@ -267,6 +269,7 @@ export const setWalletState = (
     customChains,
     customWallets,
     alias,
+    locale
   }: WalletState,
   isSwitch = false,
 ) => {
@@ -324,6 +327,10 @@ export const setWalletState = (
   }
   if (alias !== undefined) {
     walletState.alias = alias
+  }
+
+  if (locale !== undefined) {
+    walletState.locale = locale
   }
 
   walletState.iCloudPasskeySupport = checkICloudPasskeySupport()

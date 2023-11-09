@@ -22,6 +22,10 @@ import { Connect } from './Login/Connect'
 import { AddressQRCode } from './LoggedIn/AddressQrCode'
 import { I18nProvider } from '@lingui/react'
 import { i18n, Messages, Locale } from "@lingui/core";
+import { useWalletState } from '../store'
+import { messages as  en} from '../../locales/en'
+import { messages as zhCN} from '../../locales/zh-CN'
+import { messages as zhHK} from '../../locales/zh-HK'
 
 interface ConnectWalletProps {
   visible: boolean
@@ -95,7 +99,14 @@ const routes = {
 export const WalletSDKContext = createContext<WalletSDK | null>(null)
 const queryClient = new QueryClient()
 
-export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect', locale = 'en', messages = [] }: ConnectWalletProps) => {
+
+const messages: Record<string, Messages> = {
+  'en': en,
+  'zh-CN': zhCN,
+  'zh-HK': zhHK
+}
+
+export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }: ConnectWalletProps) => {
   const [isOpen, setIsOpen] = useState(visible)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
 
@@ -115,9 +126,12 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect', l
     }
   }, [handleResize])
 
+  const { walletSnap: { locale } } = useWalletState()
+
   useEffect(() => {
-    i18n.loadAndActivate({locale, messages});
-  }, [locale, messages])
+    if (locale === undefined || messages[locale] === undefined) return;
+    i18n.loadAndActivate({locale, messages: messages[locale]});
+  }, [locale])
 
   const el = <SimpleRouter routes={routes} initialRouteName={initComponent} onClose={onClose} />
 

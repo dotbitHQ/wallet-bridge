@@ -25,10 +25,11 @@
     "test:cov": "vitest run --coverage",
     "prepare": "husky install",
     "i18n:extract": "lingui extract --clean",
-    "i18n:compile": "lingui compile"
+    "i18n:compile": "lingui compile --typescript"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
+    "@lingui/detect-locale": "^4.5.0",
     "@lingui/macro": "^4.5.0",
     "@lingui/react": "^4.5.0",
     "@metamask/eth-sig-util": "^6.0.0",
