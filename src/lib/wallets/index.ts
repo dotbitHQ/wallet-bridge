@@ -19,6 +19,7 @@ import { DeviceAuthError } from 'connect-did-sdk'
 import Axios from 'axios'
 import { setLoginCacheState } from '../store/loginCache'
 import { createTips } from '../components'
+import { t } from '@lingui/macro'
 
 Axios.defaults.withCredentials = true
 
@@ -148,7 +149,7 @@ class WalletSDK {
     } catch (error: any) {
       if (!involution) {
         createTips({
-          title: `Tips`,
+          title: t`Error`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
         })

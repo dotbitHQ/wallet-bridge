@@ -15,4 +15,4 @@ node_modules/
 
 src/deps
 
-src/locales/**/*.d.ts
+src/locales/**/*.ts
