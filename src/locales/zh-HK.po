@@ -6,6 +6,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: zh-HK\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #: src/lib/ui/LoggedIn/LoggedIn.tsx:85
 #: src/lib/ui/ShowQRCode/index.tsx:23
@@ -44,17 +50,9 @@ msgstr "可管理地址"
 msgid "Choose a emoji to label the device."
 msgstr "請為此設備選一個圖標"
 
-#: src/lib/constant/errno.ts:20
-msgid "class org.tron.core.exception.ContractValidateException : Validate TransferContract error, no OwnerAccount."
-msgstr ""
-
 #: src/lib/ui/LoggedIn/BackupTips.tsx:30
 msgid "click here"
 msgstr "請點擊此處"
-
-#: src/lib/constant/errno.ts:18
-msgid "Confirmation declined by user"
-msgstr ""
 
 #: src/lib/ui/Login/Connect.tsx:138
 msgid "Connect"
@@ -130,15 +128,10 @@ msgstr "數據錯誤"
 msgid "Info"
 msgstr "提示"
 
-#: src/lib/constant/errno.ts:28
-msgid "input capacity not enough"
-msgstr ""
-
 #: src/lib/utils/handleError.ts:81
 msgid "Insufficient balance"
 msgstr "余額不足"
 
-#: src/lib/constant/errno.ts:16
 #: src/lib/wallets/WalletTransactionHandler/TokenPocketUTXOTransaction.ts:18
 msgid "insufficient funds for transfer"
 msgstr "余額不足"
@@ -276,16 +269,8 @@ msgstr ""
 msgid "QR Code"
 msgstr "二維碼"
 
-#: src/lib/constant/errno.ts:12
-msgid "replacement transaction underpriced"
-msgstr ""
-
 #: src/lib/utils/handleError.ts:47
 msgid "Replacement transaction underpriced"
-msgstr ""
-
-#: src/lib/constant/errno.ts:26
-msgid "Request method eth_chainId is not supported"
 msgstr ""
 
 #: src/lib/ui/LoggedIn/DeviceList.tsx:50
@@ -348,10 +333,6 @@ msgstr "當前錢包環境不支持使用TRX付款，請更新錢包版本或者
 msgid "The new trusted device has full control over this address."
 msgstr "新的授信設備有此地址的完全控制權"
 
-#: src/lib/constant/errno.ts:13
-msgid "the transaction has been aborted"
-msgstr "交易被取消"
-
 #: src/lib/utils/handleError.ts:56
 msgid "The transaction has been aborted."
 msgstr "交易被取消。"
@@ -378,10 +359,6 @@ msgstr "此設備或瀏覽器不支持Passkey，請使用其他方式連接。"
 msgid "Tips"
 msgstr "提示"
 
-#: src/lib/constant/errno.ts:21
-msgid "transactionBuilder.addUpdateData"
-msgstr ""
-
 #: src/lib/ui/LoggedIn/DeviceList.tsx:293
 msgid "Trusted Devices of CKB Address"
 msgstr "授信設備"
@@ -397,23 +374,3 @@ msgstr "未知錯誤。請重試或者重新黏貼數據。"
 #: src/lib/ui/ShowQRCode/index.tsx:43
 msgid "Use the QR code or link below on your other trusted devices and follow the instructions inside."
 msgstr "請使用待授信的設備掃碼或者打開下面的鏈接，併根據提示操作。"
-
-#: src/lib/constant/errno.ts:31
-msgid "User cancelled login"
-msgstr "用戶取消登錄"
-
-#: src/lib/constant/errno.ts:32
-msgid "user closed popup"
-msgstr "用戶關閉彈窗"
-
-#: src/lib/constant/errno.ts:15
-msgid "User rejected the transaction"
-msgstr "用戶拒絕此交易"
-
-#: src/lib/constant/errno.ts:24
-msgid "user_canceled"
-msgstr "用戶取消"
-
-#: src/lib/constant/errno.ts:29
-msgid "ValidationFailure(-31)"
-msgstr ""

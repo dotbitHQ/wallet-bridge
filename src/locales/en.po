@@ -50,17 +50,9 @@ msgstr "Associated with this device"
 msgid "Choose a emoji to label the device."
 msgstr "Choose a emoji to label the device."
 
-#: src/lib/constant/errno.ts:20
-msgid "class org.tron.core.exception.ContractValidateException : Validate TransferContract error, no OwnerAccount."
-msgstr "class org.tron.core.exception.ContractValidateException : Validate TransferContract error, no OwnerAccount."
-
 #: src/lib/ui/LoggedIn/BackupTips.tsx:30
 msgid "click here"
 msgstr "click here"
-
-#: src/lib/constant/errno.ts:18
-msgid "Confirmation declined by user"
-msgstr "Confirmation declined by user"
 
 #: src/lib/ui/Login/Connect.tsx:138
 msgid "Connect"
@@ -136,15 +128,10 @@ msgstr "Incorrect data"
 msgid "Info"
 msgstr "Info"
 
-#: src/lib/constant/errno.ts:28
-msgid "input capacity not enough"
-msgstr "input capacity not enough"
-
 #: src/lib/utils/handleError.ts:81
 msgid "Insufficient balance"
 msgstr "Insufficient balance"
 
-#: src/lib/constant/errno.ts:16
 #: src/lib/wallets/WalletTransactionHandler/TokenPocketUTXOTransaction.ts:18
 msgid "insufficient funds for transfer"
 msgstr "insufficient funds for transfer"
@@ -282,17 +269,9 @@ msgstr "Please try again."
 msgid "QR Code"
 msgstr "QR Code"
 
-#: src/lib/constant/errno.ts:12
-msgid "replacement transaction underpriced"
-msgstr "replacement transaction underpriced"
-
 #: src/lib/utils/handleError.ts:47
 msgid "Replacement transaction underpriced"
 msgstr "Replacement transaction underpriced"
-
-#: src/lib/constant/errno.ts:26
-msgid "Request method eth_chainId is not supported"
-msgstr "Request method eth_chainId is not supported"
 
 #: src/lib/ui/LoggedIn/DeviceList.tsx:50
 msgid "Revoke"
@@ -354,10 +333,6 @@ msgstr "The current wallet environment does not support payments using TRX, plea
 msgid "The new trusted device has full control over this address."
 msgstr "The new trusted device has full control over this address."
 
-#: src/lib/constant/errno.ts:13
-msgid "the transaction has been aborted"
-msgstr "the transaction has been aborted"
-
 #: src/lib/utils/handleError.ts:56
 msgid "The transaction has been aborted."
 msgstr "The transaction has been aborted."
@@ -384,10 +359,6 @@ msgstr "This device or browser unsupported. Try connect by social or wallet."
 msgid "Tips"
 msgstr "Tips"
 
-#: src/lib/constant/errno.ts:21
-msgid "transactionBuilder.addUpdateData"
-msgstr "transactionBuilder.addUpdateData"
-
 #: src/lib/ui/LoggedIn/DeviceList.tsx:293
 msgid "Trusted Devices of CKB Address"
 msgstr "Trusted Devices of CKB Address"
@@ -403,23 +374,3 @@ msgstr "Unknown error happened. Please try again or paste the data directly."
 #: src/lib/ui/ShowQRCode/index.tsx:43
 msgid "Use the QR code or link below on your other trusted devices and follow the instructions inside."
 msgstr "Use the QR code or link below on your other trusted devices and follow the instructions inside."
-
-#: src/lib/constant/errno.ts:31
-msgid "User cancelled login"
-msgstr "User cancelled login"
-
-#: src/lib/constant/errno.ts:32
-msgid "user closed popup"
-msgstr "user closed popup"
-
-#: src/lib/constant/errno.ts:15
-msgid "User rejected the transaction"
-msgstr "User rejected the transaction"
-
-#: src/lib/constant/errno.ts:24
-msgid "user_canceled"
-msgstr "user_canceled"
-
-#: src/lib/constant/errno.ts:29
-msgid "ValidationFailure(-31)"
-msgstr "ValidationFailure(-31)"
