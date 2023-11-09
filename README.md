@@ -54,6 +54,7 @@ To create a new `Wallet` object, you can use its constructor and provide the fol
 - `wagmiConfig` (Optional): Used for configuring information related to [wagmi](https://wagmi.sh/core/getting-started), of type `WagmiConfig`. Defaults to `undefined`. If you need to use [WalletConnect](https://docs.walletconnect.com), this parameter must be provided.
 - `gtag` (optional): Used to report some wallet-bridge events to Google Analytics for the purpose of tracking and analyzing user behavior. If you use `event`, you do not need to provide this parameter.
 - `event` (optional): If you use [nextjs-google-analytics](https://www.npmjs.com/package/nextjs-google-analytics) to report data, you can use `event` in place of `gtag` to report wallet-bridge events to Google Analytics for tracking and analyzing user behavior. If you use `gtag`, you do not need to provide this parameter.
+- `locale` (optional): Used to set the locale. Currently en, zh-CN, zh—TW, zh-HK and zh-MO are supported. If not set, the locale is detected in the order of query parameter lang -> the session storage lang -> browser language -> en.
 
 **Example**:
 
@@ -125,6 +126,7 @@ const wallet = new Wallet({
   customChains: [CustomChain.eth],
   customWallets: [CustomWallet.metaMask],
   wagmiConfig: wagmiConfig,
+  locale: 'zh-CN'
 })
 ```
 

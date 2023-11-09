@@ -7,6 +7,7 @@ import { setSelectedEmoji, setSignData, useWebAuthnState } from '../../store/web
 import { useQuery } from '@tanstack/react-query'
 import { useWalletState } from '../../store'
 import { useWebAuthnService } from '../../services'
+import { t } from '@lingui/macro'
 
 type EmojiProps = React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> & {
   name: string
@@ -32,6 +33,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
 
   const signDataQuery = useQuery({
     queryKey: [
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       'FetchSignData',
       {
         master: walletSnap.address,
@@ -62,7 +64,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
   useEffect(() => {
     if (signDataQuery.isError) {
       createTips({
-        title: 'Error',
+        title: t`Error`,
         content: (
           <div className="mt-2 w-full break-words text-[14px] font-normal leading-normal text-red-400">
             {(signDataQuery?.error as any)?.toString()}{' '}
@@ -74,7 +76,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
   return (
     <>
       <Header
-        title="Add Trusted Device"
+        title={t`Add Trusted Device`}
         goBack={goBack}
         onClose={onClose}
         className="bg-blur z-10 mt-0.5 w-full-4px bg-white p-6"
@@ -86,7 +88,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
         style={transitionStyle}
       >
         <div className="w-full text-center text-[16px] leading-normal text-neutral-700">
-          Choose a emoji to label the device.
+          {t`Choose a emoji to label the device.`}
         </div>
         <div className="mt-6 grid w-full grid-cols-6 rounded-2xl border border-stone-300/20 bg-gray-50 p-2">
           {Object.keys(emojis)?.map((k) => (
@@ -128,7 +130,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
           }}
           loading={signDataQuery.isInitialLoading}
         >
-          Next
+          {t`Next`}
         </Button>
       </div>
     </>

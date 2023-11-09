@@ -72,6 +72,7 @@ class WalletSDK {
     await this.walletConnector?.connect({ ignoreEvent })
     this.context.reportEvent('click', {
       category: 'wallet-bridge',
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       label: 'connect wallet',
       coinType: this.context.coinType,
       walletName: this.context.walletName,
@@ -160,6 +161,7 @@ class WalletSDK {
   async signData(data: SignDataType, options?: SignDataOptions): Promise<string | undefined> {
     const isInit = await this.initWallet()
     if (!isInit && !this.walletSigner) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new CustomError(errno.failedToInitializeWallet, 'signData: Please initialize wallet first')
     }
     return await this.walletSigner?.signData(data, options)
@@ -168,6 +170,7 @@ class WalletSDK {
   async sendTransaction(data: ISendTrxParams): Promise<string | undefined> {
     const isInit = await this.initWallet()
     if (!isInit && !this.walletTransaction) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new CustomError(errno.failedToInitializeWallet, 'sendTransaction: Please initialize wallet first')
     }
     return await this.walletTransaction?.sendTrx(data)
@@ -197,6 +200,7 @@ class WalletSDK {
   ): Promise<TxsSignedOrUnSigned | TxsWithMMJsonSignedOrUnSigned> {
     const isInit = await this.initWallet()
     if (!isInit) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new CustomError(errno.failedToInitializeWallet, 'signTxList: Please initialize wallet first')
     }
 
@@ -252,6 +256,7 @@ class WalletSDK {
   async initSignContext(): Promise<InitSignContextRes> {
     const isInit = await this.initWallet()
     if (!isInit) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new CustomError(errno.failedToInitializeWallet, 'initSignContext: Please initialize wallet first')
     }
 
@@ -291,6 +296,7 @@ class WalletSDK {
   async _verifyPasskeySignature({ message, signature }: { message: string; signature: string }): Promise<boolean> {
     const isInit = await this.initWallet()
     if (!isInit) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new CustomError(errno.failedToInitializeWallet, '_verifyPasskeySignature: Please initialize wallet first')
     }
     const { isTestNet, address, deviceData } = snapshot(walletState)

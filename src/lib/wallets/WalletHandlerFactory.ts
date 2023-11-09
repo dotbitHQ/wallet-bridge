@@ -89,6 +89,7 @@ export class WalletHandlerFactory {
 
   static createConnector(context: WalletContext): WalletConnector {
     if (!context.protocol) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new Error('createConnector: Please initialize wallet first')
     }
     return new this.handlerMap[context.protocol].Connector(context)
@@ -96,6 +97,7 @@ export class WalletHandlerFactory {
 
   static createEventListener(context: WalletContext): WalletEventListener {
     if (!context.protocol) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new Error('createConnector: Please initialize wallet first')
     }
     return new this.handlerMap[context.protocol].EventListener(context)
@@ -103,6 +105,7 @@ export class WalletHandlerFactory {
 
   static createSigner(context: WalletContext): WalletSigner {
     if (!context.protocol) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new Error('createConnector: Please initialize wallet first')
     }
     return new this.handlerMap[context.protocol].Signer(context)
@@ -110,6 +113,7 @@ export class WalletHandlerFactory {
 
   static createTransaction(context: WalletContext): WalletTransaction {
     if (!context.protocol) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new Error('createConnector: Please initialize wallet first')
     }
     return new this.handlerMap[context.protocol].Transaction(context)

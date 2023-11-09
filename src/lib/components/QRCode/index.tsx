@@ -8,6 +8,7 @@ export function QRCode(props: Omit<Options, 'type'>) {
     dotsOptions = { color: '#000000', type: 'dots' },
     cornersSquareOptions = { color: '#000000', type: 'extra-rounded' },
     cornersDotOptions = { color: '#000000', type: 'dot' },
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     qrOptions = { typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'L' },
     margin = 0,
     ...rest

@@ -1,5 +1,6 @@
 import { ISendTrxParams, WalletTransaction } from './WalletTransaction'
 import { toDecimal } from '../../utils'
+import { t } from '@lingui/macro'
 
 export class TokenPocketUTXOTransaction extends WalletTransaction {
   async sendTrx(data: ISendTrxParams): Promise<string> {
@@ -8,12 +9,13 @@ export class TokenPocketUTXOTransaction extends WalletTransaction {
     const params = { from, to: data.to, amount: data.value, op_return: opReturn }
 
     if (!params.from || !params.to || !params.amount) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new Error('missing params; "from", "to", "amount" is required ')
     }
 
     const balance = await this.getTPUTXOCurrentBalance()
     if (toDecimal(balance.data?.balance || 0).lte(params.amount)) {
-      throw new Error('insufficient funds for transfer')
+      throw new Error(t`insufficient funds for transfer`)
     }
 
     return await new Promise((resolve, reject) => {

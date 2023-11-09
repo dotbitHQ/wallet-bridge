@@ -31,6 +31,7 @@ export function SimpleRouter({ routes, onClose, initialRouteName = 'index' }: Si
   const [currentRouteName, setCurrentRouteName] = useState(initialRouteName)
 
   const currentRoute = routes[currentRouteName]
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   if (currentRoute === undefined) throw new Error('Route does not exist')
   const goNext = currentRoute.next
     ? () => {
@@ -48,6 +49,7 @@ export function SimpleRouter({ routes, onClose, initialRouteName = 'index' }: Si
       : undefined
   const goTo = useCallback(
     (routeName: string) => {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       if (routes[routeName] === undefined) throw new Error('Route does not exist')
       history.push(currentRouteName)
       setCurrentRouteName(routeName)

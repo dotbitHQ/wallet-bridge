@@ -42,6 +42,7 @@ export function toBN(number: number | string): BN {
   try {
     return numberToBN(number)
   } catch (err) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error(`${String(err)} Given value: "${number}"`)
   }
 }
@@ -55,6 +56,7 @@ export function toBN(number: number | string): BN {
  */
 export function hexToNumber(value: string | number): string | number {
   if (typeof value === 'string' && !isHexStrict(value)) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error('Given value "' + value + '" is not a valid hex string.')
   }
   return toBN(value).toNumber()
@@ -80,6 +82,7 @@ export function toChecksumAddress(address: string): string {
   if (typeof address === 'undefined') return ''
 
   if (!/^(0x)?[0-9a-f]{40}$/i.test(address))
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error(`Given address "${address}" is not a valid Ethereum address.`)
 
   address = address.toLowerCase().replace(/^0x/i, '')
@@ -135,6 +138,7 @@ export function utf8ToHex(str: string): string {
  */
 export function numberToHex(value: number | string): string {
   if (!isFinite(Number(value)) && !isHexStrict(value)) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error('Given input "' + String(value) + '" is not a number.')
   }
 
@@ -171,9 +175,11 @@ export function mmJsonHashAndChainIdHex(typedData: TypedMessage<MessageTypes>, c
  */
 export function convertTpUTXOSignature(base64SignData: string): string {
   const buffer = Buffer.from(base64SignData, 'base64')
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   if (buffer.length !== 65) throw new Error('Invalid signature length')
   const flagByte = buffer.readUInt8(0) - 27
   if (flagByte > 15 || flagByte < 0) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error('Invalid signature parameter')
   }
 
@@ -395,6 +401,7 @@ export function openDeepLink(deepLink: string) {
     const link = document.createElement('a')
     link.href = deepLink
     link.target = '_blank'
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     link.rel = 'noreferrer noopener'
     link.click()
     // window.open(deepLink, '_blank', 'noreferrer noopener')
