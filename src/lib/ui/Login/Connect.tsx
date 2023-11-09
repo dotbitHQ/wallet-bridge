@@ -69,9 +69,6 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
 
   const showWallets = useMemo(() => {
     const list = walletSnap.customChains?.filter((chain: CustomChain) => chain !== CustomChain.passkey)
-    if (window.location.href.includes('.prixpal')) {
-      return false
-    }
     return (
       walletSDK.onlyEth ||
       (walletSnap.customChains && walletSnap.customChains.length > 0 ? list?.length && list?.length > 0 : true)
