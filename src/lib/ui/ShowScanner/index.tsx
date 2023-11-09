@@ -5,6 +5,7 @@ import { useCallback } from 'react'
 import { Header, SwapChildProps } from '../../components'
 import { Result } from '../../../deps/zxing/dist/esnext'
 import { useSimpleRouter } from '../../components/SimpleRouter'
+import { t } from '@lingui/macro'
 
 export function ShowScanner({ transitionRef, transitionStyle }: SwapChildProps) {
   const webAuthnState = useWebAuthnState()
@@ -22,7 +23,7 @@ export function ShowScanner({ transitionRef, transitionStyle }: SwapChildProps) 
       <Header
         goBack={goBack}
         onClose={onClose}
-        title="Scan QR Code"
+        title={t`Scan QR Code`}
         className="z-10 mt-0.5 w-full-4px bg-white p-6"
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />

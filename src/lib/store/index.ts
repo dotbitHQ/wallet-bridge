@@ -38,6 +38,7 @@ export interface WalletState {
   customChains?: CustomChain[]
   customWallets?: CustomWallet[]
   alias?: string
+  locale?: string
 }
 
 export interface ICKBAddressItem {
@@ -46,6 +47,7 @@ export interface ICKBAddressItem {
   notes?: string
 }
 
+// eslint-disable-next-line lingui/no-unlocalized-strings
 const WalletStateKey = 'WalletStateV1'
 
 const walletStateLocalStorage = globalThis.localStorage ? globalThis.localStorage.getItem(WalletStateKey) : null
@@ -71,6 +73,7 @@ const localWalletState = walletStateLocalStorage
       customChains: [],
       customWallets: [],
       alias: '',
+      locale: 'en',
     }
 
 export const walletState = proxy<WalletState>({
@@ -266,6 +269,7 @@ export const setWalletState = (
     customChains,
     customWallets,
     alias,
+    locale,
   }: WalletState,
   isSwitch = false,
 ) => {
@@ -323,6 +327,10 @@ export const setWalletState = (
   }
   if (alias !== undefined) {
     walletState.alias = alias
+  }
+
+  if (locale !== undefined) {
+    walletState.locale = locale
   }
 
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))

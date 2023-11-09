@@ -11,6 +11,7 @@ import { isMobile } from 'react-device-detect'
 
 export class WalletConnectConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     console.log('WalletConnect connect')
     const { wagmiConfig, chainId, provider } = this.context
 
@@ -25,15 +26,18 @@ export class WalletConnectConnector extends WalletConnector {
       })
     }
 
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     const walletStateLocalStorage = globalThis.localStorage.getItem('WalletState')
     if (walletStateLocalStorage && wagmiConfig.status === 'connected') {
       await disconnect()
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       globalThis.localStorage.removeItem('WalletState')
     }
 
     if (wagmiConfig && wagmiConfig.status !== 'connected' && walletConnectConnector) {
       if (!walletConnectConnector.options.showQrModal) {
         provider.once('display_uri', async (uri: string) => {
+          // eslint-disable-next-line lingui/no-unlocalized-strings
           console.log('WalletConnect display_uri', uri)
           setLoginCacheState({ walletConnectDisplayUri: uri })
         })

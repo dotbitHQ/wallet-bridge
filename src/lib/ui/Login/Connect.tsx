@@ -26,6 +26,7 @@ import PolygonIcon from './icon/polygon-icon.svg'
 import TronIcon from './icon/tron-icon.svg'
 import DogecoinIcon from './icon/dogecoin-icon.svg'
 import TorusIcon from './icon/torus-icon.svg'
+import { t } from '@lingui/macro'
 
 interface IChain {
   icon: ReactNode
@@ -51,9 +52,11 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
     if (currentLogin) {
       return
     }
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     router?.goTo('ChainList')
   }
   const showAddressList = () => {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     router?.goTo('AddressList')
   }
   const onClose = router?.onClose
@@ -117,7 +120,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
         }
       } else {
         createTips({
-          title: `Tips`,
+          title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
         })
@@ -140,7 +143,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
     <>
       <Header
         className="z-10 mt-0.5 w-full-4px bg-white p-6"
-        title="Connect"
+        title={t`Connect`}
         onClose={close}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
@@ -160,16 +163,16 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
             >
               <span className="inline-flex items-center text-xl font-bold">
                 {currentLogin === passkey.name ? null : <FaceIcon className="mr-1.5 h-6 w-6 text-white" />}
-                Continue
+                {t`Continue`}
               </span>
             </Button>
             <div className="mt-4 w-[216px] text-center text-sm font-normal text-font-tips">
-              Most friendly and secure way base on{' '}
+              {t`Most friendly and secure way base on`}{' '}
               <span
                 className="cursor-pointer border-b border-dashed border-black hover:opacity-70"
                 onClick={viewPasskeyDocs}
               >
-                Passkey
+                {t`Passkey`}
               </span>
               .
             </div>
@@ -178,7 +181,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
               type={AlertType.warning}
               icon={<NoticeIcon className="h-[18px] w-[18px] text-[#FFB02E]"></NoticeIcon>}
             >
-              This device or browser unsupported. Try connect by social or wallet.
+              {t`This device or browser unsupported. Try connect by social or wallet.`}
             </Alert>
           </div>
         ) : null}
@@ -190,7 +193,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
             )}
             onClick={showChainList}
           >
-            <span className="text-base font-bold">Continue with wallets</span>
+            <span className="text-base font-bold">{t`Continue with wallets`}</span>
             <span className="inline-flex items-center">
               <span className="relative mr-1 inline-flex w-[102px]">
                 <img className="h-6 w-6 rounded-full border-2 border-white bg-white" src={EthIcon} alt="ETH" />
@@ -202,21 +205,25 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
                 <img
                   className="absolute left-[32px] h-6 w-6 rounded-full border-2 border-white bg-white"
                   src={PolygonIcon}
+                  // eslint-disable-next-line lingui/no-unlocalized-strings
                   alt="Polygon"
                 />
                 <img
                   className="absolute left-[48px] h-6 w-6 rounded-full border-2 border-white bg-white"
                   src={TronIcon}
+                  // eslint-disable-next-line lingui/no-unlocalized-strings
                   alt="Tron"
                 />
                 <img
                   className="absolute left-[64px] h-6 w-6 rounded-full border-2 border-white bg-white"
                   src={DogecoinIcon}
+                  // eslint-disable-next-line lingui/no-unlocalized-strings
                   alt="Dogecoin"
                 />
                 <img
                   className="absolute left-[80px] h-6 w-6 rounded-full border-2 border-white bg-white"
                   src={TorusIcon}
+                  // eslint-disable-next-line lingui/no-unlocalized-strings
                   alt="Torus"
                 />
               </span>

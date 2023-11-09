@@ -21,6 +21,7 @@ import PolygonBg from './bg/polygon.svg'
 import TronBg from './bg/tron.svg'
 import { LoggedInButton } from '../../components/LoggedInButton'
 import clsx from 'clsx'
+import { t } from '@lingui/macro'
 
 export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => {
   const { walletSnap } = useWalletState()
@@ -29,14 +30,17 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   const [disconnectLoading, setDisconnectLoading] = useState(false)
 
   const onSwitchAddress = () => {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     goTo('AddressList')
   }
 
   const onShowAddressQRCode = () => {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     goTo('AddressQRCode')
   }
 
   const onShowQRCode = () => {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     goTo('ShowQRCode')
   }
 
@@ -45,8 +49,11 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
     [CoinType.ckb]: <DeviceIcon className="inline-flex h-[68px] w-[68px]"></DeviceIcon>,
     [CoinType.eth]: <img className="inline-flex h-[68px] w-[68px]" src={EthIcon} alt="ETH" />,
     [CoinType.bsc]: <img className="inline-flex h-[68px] w-[68px]" src={BscIcon} alt="BSC" />,
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     [CoinType.matic]: <img className="inline-flex h-[68px] w-[68px]" src={PolygonIcon} alt="Polygon" />,
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     [CoinType.trx]: <img className="inline-flex h-[68px] w-[68px]" src={TronIcon} alt="Tron" />,
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     [CoinType.doge]: <img className="inline-flex h-[68px] w-[68px]" src={DogecoinIcon} alt="Dogecoin" />,
   }
 
@@ -67,6 +74,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   const disconnect = async () => {
     setDisconnectLoading(true)
     await walletSDK.disconnect()
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     goTo('Connect')
     setDisconnectLoading(false)
   }
@@ -74,7 +82,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   const onCopy = (text: string) => {
     void copyText(text).then(() => {
       createToast({
-        message: '👌 Copied',
+        message: t`👌 Copied`,
       })
     })
   }
@@ -121,14 +129,14 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                     walletSnap.address && onCopy(walletSnap.address)
                   }}
                 >
-                  Copy Address
+                  {t`Copy Address`}
                 </LoggedInButton>
                 <LoggedInButton
                   className="flex-loggedin-button"
                   icon={<QRCodeIcon className="h-5 w-5 text-[#5F6570]"></QRCodeIcon>}
                   onClick={onShowAddressQRCode}
                 >
-                  QR Code
+                  {t`QR Code`}
                 </LoggedInButton>
                 {walletSnap.ckbAddresses && walletSnap.ckbAddresses?.length > 0 ? (
                   <LoggedInButton
@@ -136,7 +144,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                     icon={<SwitchIcon className="h-5 w-5 text-[#5F6570]"></SwitchIcon>}
                     onClick={onSwitchAddress}
                   >
-                    Switch
+                    {t`Switch`}
                   </LoggedInButton>
                 ) : null}
                 <LoggedInButton
@@ -145,7 +153,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                   loading={disconnectLoading}
                   onClick={disconnect}
                 >
-                  Disconnect
+                  {t`Disconnect`}
                 </LoggedInButton>
               </div>
             </>
@@ -174,14 +182,14 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                     walletSnap.address && onCopy(walletSnap.address)
                   }}
                 >
-                  Copy Address
+                  {t`Copy Address`}
                 </LoggedInButton>
                 <LoggedInButton
                   className="flex-loggedin-button"
                   icon={<QRCodeIcon className="h-5 w-5 text-[#5F6570]"></QRCodeIcon>}
                   onClick={onShowAddressQRCode}
                 >
-                  QR Code
+                  {t`QR Code`}
                 </LoggedInButton>
                 <LoggedInButton
                   className="flex-loggedin-button"
@@ -189,7 +197,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                   loading={disconnectLoading}
                   onClick={disconnect}
                 >
-                  Disconnect
+                  {t`Disconnect`}
                 </LoggedInButton>
               </div>
             </>

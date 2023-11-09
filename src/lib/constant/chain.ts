@@ -99,6 +99,7 @@ export interface IMainChain {
 }
 
 export const CKB: IMainChain = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   name: 'Nervos Network',
   symbol: 'CKB',
   coinType: CoinType.ckb,
@@ -154,6 +155,7 @@ export const Polygon: IMainChain = {
 }
 
 export const BTC: IMainChain = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   name: 'Bitcoin',
   symbol: 'BTC',
   coinType: CoinType.btc,
@@ -184,6 +186,7 @@ export const CoinTypeToChainMap: Record<string, IMainChain> = {
 
 export const ChainIdToChainInfoMap: Record<string, any> = {
   [ChainId.eth]: {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     networkName: 'Ethereum Mainnet',
     symbol: 'ETH',
     decimals: 18,
@@ -191,6 +194,7 @@ export const ChainIdToChainInfoMap: Record<string, any> = {
     blockExplorerUrl: 'https://etherscan.io',
   },
   [ChainId.ethGoerli]: {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     networkName: 'Ethereum Goerli Testnet',
     symbol: 'ETH',
     decimals: 18,
@@ -198,6 +202,7 @@ export const ChainIdToChainInfoMap: Record<string, any> = {
     blockExplorerUrl: 'https://goerli.etherscan.io',
   },
   [ChainId.bsc]: {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     networkName: 'Binance Smart Chain Mainnet',
     symbol: 'BNB',
     decimals: 18,
@@ -205,6 +210,7 @@ export const ChainIdToChainInfoMap: Record<string, any> = {
     blockExplorerUrl: 'https://bscscan.com',
   },
   [ChainId.bscTestnet]: {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     networkName: 'Binance Smart Chain Testnet',
     symbol: 'BNB',
     decimals: 18,
@@ -212,6 +218,7 @@ export const ChainIdToChainInfoMap: Record<string, any> = {
     blockExplorerUrl: 'https://testnet.bscscan.com',
   },
   [ChainId.polygon]: {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     networkName: 'Polygon Mainnet',
     symbol: 'MATIC',
     decimals: 18,
@@ -219,6 +226,7 @@ export const ChainIdToChainInfoMap: Record<string, any> = {
     blockExplorerUrl: 'https://polygonscan.com',
   },
   [ChainId.polygonMumbai]: {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     networkName: 'Polygon Testnet Mumbai',
     symbol: 'MATIC',
     decimals: 18,

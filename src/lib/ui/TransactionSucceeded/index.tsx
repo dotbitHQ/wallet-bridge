@@ -1,3 +1,4 @@
+import { t } from '@lingui/macro'
 import { Button, ButtonShape, ButtonSize, Header, SafeIcon, SwapChildProps } from '../../components'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 
@@ -16,9 +17,9 @@ export function TransactionSucceeded({ transitionRef, transitionStyle }: SwapChi
         style={transitionStyle}
       >
         <SafeIcon className="h-[80px] w-[80px] text-green-500" />
-        <div className="mt-3 text-center text-[16px] font-bold text-neutral-700">New Trusted Device Added</div>
+        <div className="mt-3 text-center text-[16px] font-bold text-neutral-700">{t`New Trusted Device Added`}</div>
         <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">
-          The new trusted device has full control over this address.
+          {t`The new trusted device has full control over this address.`}
         </div>
         <Button
           className="mb-8 mt-4 min-w-[130px] px-5"
@@ -26,7 +27,7 @@ export function TransactionSucceeded({ transitionRef, transitionStyle }: SwapChi
           shape={ButtonShape.round}
           onClick={goNext}
         >
-          Done
+          {t`Done`}
         </Button>
       </div>
     </>

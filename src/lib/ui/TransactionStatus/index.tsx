@@ -6,6 +6,7 @@ import { setWalletState, useWalletState } from '../../store'
 import { useEffect } from 'react'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { useWebAuthnService } from '../../services'
+import { t } from '@lingui/macro'
 
 export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildProps) {
   const { walletSnap } = useWalletState()
@@ -14,6 +15,7 @@ export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildP
   const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
   const query = useQuery({
     networkMode: 'always',
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     queryKey: ['TransactionStatus', webAuthnState.pendingTxHash],
     cacheTime: 0,
     refetchInterval: 10000,
@@ -38,9 +40,11 @@ export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildP
         })
         goNext?.()
       } else if (query.data?.status === -1) {
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         goTo('TransactionFailed')
       }
     } else {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       goTo('TransactionFailed')
     }
     // eslint-disable-next-line
@@ -59,8 +63,8 @@ export function TransactionStatus({ transitionRef, transitionStyle }: SwapChildP
         style={transitionStyle}
       >
         <LoadingIconGradient className="animation-rotate-360-deg h-[64px] w-[64px] text-emerald-500" />
-        <div className="mt-4 text-center text-[16px] font-bold text-neutral-700">Adding Trusted Device</div>
-        <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">Approximately 3 minutes.</div>
+        <div className="mt-4 text-center text-[16px] font-bold text-neutral-700">{t`Adding Trusted Device`}</div>
+        <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">{t`Approximately 3 minutes.`}</div>
         <div className="mb-8 mt-3 text-[12px] font-normal leading-[12px]">
           <a
             target="_blank"

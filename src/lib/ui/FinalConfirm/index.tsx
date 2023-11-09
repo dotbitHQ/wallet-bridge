@@ -9,6 +9,7 @@ import { setPendingTx, useWebAuthnState } from '../../store/webAuthnState'
 import { SignTxListParams } from '../../types'
 import handleError from '../../utils/handleError'
 import { useWebAuthnService } from '../../services'
+import { t } from '@lingui/macro'
 
 // function setNameAndEmojiToLocalStorage(address: string, name?: string, emoji?: string) {
 //   const memos = JSON.parse(globalThis.localStorage.getItem('.bit-memos') ?? '{}')
@@ -78,7 +79,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
         }
       } else {
         createTips({
-          title: `Tips`,
+          title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
         })
@@ -88,7 +89,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
   return (
     <>
       <Header
-        title="Add Trusted Device"
+        title={t`Add Trusted Device`}
         onClose={onClose}
         goBack={goBack}
         className="bg-blur z-10 mt-0.5 w-full-4px bg-white p-6"
@@ -116,7 +117,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
               setChecked(e.target.checked)
             }}
           />
-          <div className="text-[14px] text-neutral-700">I Trust This Device.</div>
+          <div className="text-[14px] text-neutral-700">{t`I Trust This Device.`}</div>
         </div>
         <Button
           disabled={!checked}
@@ -126,7 +127,7 @@ export function FinalConfirm({ transitionRef, transitionStyle }: SwapChildProps)
           loading={sendTransactionMutation.isLoading}
           onClick={onClickNext}
         >
-          Next
+          {t`Next`}
         </Button>
       </div>
     </>

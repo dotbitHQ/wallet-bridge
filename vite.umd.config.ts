@@ -4,11 +4,17 @@ import { defineConfig } from 'vitest/config'
 import { UserConfigExport } from 'vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { name } from './package.json'
+import lingui from '@lingui/vite-plugin'
 
 const app = async (): Promise<UserConfigExport> => {
   return defineConfig({
     plugins: [
-      react(),
+      react({
+        babel: {
+          plugins: ['macros'],
+        },
+      }),
+      lingui(),
       // visualizer({
       //   template: "treemap", // or sunburst
       //   open: true,

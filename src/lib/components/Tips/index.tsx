@@ -3,6 +3,7 @@ import React, { ReactNode, useState } from 'react'
 import { Button, ButtonShape } from '../Button'
 import { createRoot } from 'react-dom/client'
 import { getShadowDomRoot } from '../../utils'
+import { t } from '@lingui/macro'
 
 interface TipsProps {
   visible: boolean
@@ -33,7 +34,7 @@ export function Tips({ visible, title, content, confirmBtnText, onClose, onConfi
     <Dialog customRootId={`tips-${tipsCustomRootId}`} isOpen={isOpen} title={title} onClose={close} zIndex="z-[11]">
       <div className="mb-8 mt-2">{content}</div>
       <Button className="mb-6 w-full" shape={ButtonShape.round} onClick={confirm}>
-        {confirmBtnText ?? 'OK'}
+        {confirmBtnText ?? t`OK`}
       </Button>
     </Dialog>
   )

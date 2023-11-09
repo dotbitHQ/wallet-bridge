@@ -1,3 +1,4 @@
+/* eslint-disable lingui/no-unlocalized-strings */
 import Color from 'color'
 import clsx, { ClassValue } from 'clsx'
 import { Keccak } from 'sha3'

@@ -11,6 +11,7 @@ import { WalletSDKContext } from '../ConnectWallet'
 import clsx from 'clsx'
 import handleError from '../../utils/handleError'
 import { useWebAuthnService } from '../../services'
+import { t } from '@lingui/macro'
 
 interface MoreProps {
   address: string
@@ -25,11 +26,17 @@ function More({ address, onRevoke }: MoreProps) {
       </Menu.Button>
       <Transition
         as={Fragment}
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         enter="transition ease-out duration-100"
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         enterFrom="transform opacity-0 scale-95"
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         enterTo="transform opacity-100 scale-100"
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         leave="transition ease-in duration-75"
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         leaveFrom="transform opacity-100 scale-100"
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-[-16px] z-10 mt-2 w-[150px] origin-top-right rounded-xl border border-slate-300/40 bg-white p-3 shadow">
@@ -40,7 +47,7 @@ function More({ address, onRevoke }: MoreProps) {
             >
               <RevokeIcon className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2" />
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] font-medium leading-tight">
-                Revoke
+                {t`Revoke`}
               </div>
             </div>
           </Menu.Item>
@@ -61,6 +68,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
   const walletSDK = useContext(WalletSDKContext)
   const webAuthnService = useWebAuthnService(walletSnap.isTestNet)
   const signDataQuery = useQuery({
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     queryKey: ['FetchSignDataDelete', { master: walletSnap.address, slave: item.address }],
     retry: false,
     enabled: false,
@@ -90,6 +98,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
   const transactionStatusQuery = useQuery({
     enabled: sendTransactionMutation.isSuccess && !statusConverged,
     networkMode: 'always',
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     queryKey: ['RevokingTransactionStatus', sendTransactionMutation.data?.hash],
     cacheTime: 0,
     refetchInterval: 10000,
@@ -113,8 +122,8 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
   const onRevoke = async () => {
     if (isMasterDevice) {
       createTips({
-        title: 'Info',
-        content: 'For safety concerns, you can not revoke the master device.',
+        title: t`Info`,
+        content: t`For safety concerns, you can not revoke the master device.`,
       })
       return
     }
@@ -147,7 +156,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
         }
       } else {
         createTips({
-          title: `Tips`,
+          title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
         })
@@ -213,11 +222,11 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
       <div className="flex-1 text-[14px] font-semibold text-neutral-700">
         <div>{currentDeviceName}</div>
         {revoking ? (
-          <span className="text-[12px] font-medium text-red-500">Revoking...</span>
+          <span className="text-[12px] font-medium text-red-500">{t`Revoking...`}</span>
         ) : isRevokingError ? (
-          <span className="text-[12px] font-medium text-red-500">Revoke Failed</span>
+          <span className="text-[12px] font-medium text-red-500">{t`Revoke Failed`}</span>
         ) : isCurrentDevice ? (
-          <span className="rounded bg-green-100 px-1 py-0.5 text-xs font-medium text-emerald-600">Current Device</span>
+          <span className="rounded bg-green-100 px-1 py-0.5 text-xs font-medium text-emerald-600">{t`Current Device`}</span>
         ) : null}
       </div>
       <More address={item.address} onRevoke={onRevoke} />
@@ -281,7 +290,7 @@ export function DeviceList({ onShowQRCode, className, onDisconnect }: DeviceList
 
   return (
     <div className={clsx('select-none', className)}>
-      <div className="mb-3 text-base font-medium leading-[normal] text-[#5F6570]">Trusted Devices of CKB Address</div>
+      <div className="mb-3 text-base font-medium leading-[normal] text-[#5F6570]">{t`Trusted Devices of CKB Address`}</div>
       <ul className="rounded-2xl border border-[#B6C4D966]">
         {mergedList?.map((item) => (
           <div key={item.address}>
@@ -294,11 +303,11 @@ export function DeviceList({ onShowQRCode, className, onDisconnect }: DeviceList
           className="flex h-[48px] cursor-pointer items-center gap-4 pl-3 pr-4 hover:bg-secondary-5 active:bg-secondary"
         >
           <PlusIcon className="h-6 w-6" />
-          <div className="flex-1 text-[14px] font-semibold text-success">Add New</div>
+          <div className="flex-1 text-[14px] font-semibold text-success">{t`Add New`}</div>
         </div>
       </ul>
       <div className="mt-3 leading-[normal] text-[#5F6570]">
-        Every trusted device can access the assets on the CKB address.
+        {t`Every trusted device can access the assets on the CKB address.`}
       </div>
     </div>
   )
