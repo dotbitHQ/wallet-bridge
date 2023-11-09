@@ -54,10 +54,6 @@ msgstr "请为此设备选一个图标"
 msgid "click here"
 msgstr "请点击此处"
 
-#: src/lib/ui/Login/Connect.tsx:138
-msgid "Connect"
-msgstr "连接钱包"
-
 #: src/lib/ui/Login/Connect.tsx:158
 msgid "Continue"
 msgstr "继续"
@@ -272,6 +268,10 @@ msgstr "二维码"
 #: src/lib/utils/handleError.ts:47
 msgid "Replacement transaction underpriced"
 msgstr ""
+
+#: src/lib/ui/Login/Connect.tsx:138
+msgid "Request Permission"
+msgstr "请求授权"
 
 #: src/lib/ui/LoggedIn/DeviceList.tsx:50
 msgid "Revoke"

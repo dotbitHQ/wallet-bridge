@@ -54,10 +54,6 @@ msgstr "Choose a emoji to label the device."
 msgid "click here"
 msgstr "click here"
 
-#: src/lib/ui/Login/Connect.tsx:138
-msgid "Connect"
-msgstr "Connect"
-
 #: src/lib/ui/Login/Connect.tsx:158
 msgid "Continue"
 msgstr "Continue"
@@ -272,6 +268,10 @@ msgstr "QR Code"
 #: src/lib/utils/handleError.ts:47
 msgid "Replacement transaction underpriced"
 msgstr "Replacement transaction underpriced"
+
+#: src/lib/ui/Login/Connect.tsx:138
+msgid "Request Permission"
+msgstr "Request Permission"
 
 #: src/lib/ui/LoggedIn/DeviceList.tsx:50
 msgid "Revoke"

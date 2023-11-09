@@ -54,10 +54,6 @@ msgstr "請為此設備選一個圖標"
 msgid "click here"
 msgstr "請點擊此處"
 
-#: src/lib/ui/Login/Connect.tsx:138
-msgid "Connect"
-msgstr "連接錢包"
-
 #: src/lib/ui/Login/Connect.tsx:158
 msgid "Continue"
 msgstr "繼續"
@@ -272,6 +268,10 @@ msgstr "二維碼"
 #: src/lib/utils/handleError.ts:47
 msgid "Replacement transaction underpriced"
 msgstr ""
+
+#: src/lib/ui/Login/Connect.tsx:138
+msgid "Request Permission"
+msgstr "請求授權"
 
 #: src/lib/ui/LoggedIn/DeviceList.tsx:50
 msgid "Revoke"
