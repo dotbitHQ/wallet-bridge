@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+/* eslint-disable lingui/no-unlocalized-strings */
 import { ActionErrorCode } from 'connect-did-sdk'
 
 const errno = {
@@ -9,27 +9,27 @@ const errno = {
   metaMaskUserDeniedMessageSignature: 4001,
   metaMaskWalletRequestPermissions: -32002,
   metaMaskUserRejectedAccountAccess: -32603,
-  metaMaskReplacementTransactionUnderpriced: t`replacement transaction underpriced`,
-  metaMaskTransactionHasBeenAborted: t`the transaction has been aborted`,
+  metaMaskReplacementTransactionUnderpriced: 'replacement transaction underpriced',
+  metaMaskTransactionHasBeenAborted: 'the transaction has been aborted',
   // WalletConnect
-  walletConnectUserRejectedTheTransaction: t`User rejected the transaction`,
-  walletConnectInsufficientFundsForTransfer: t`insufficient funds for transfer`,
+  walletConnectUserRejectedTheTransaction: 'User rejected the transaction',
+  walletConnectInsufficientFundsForTransfer: 'insufficient funds for transfer',
   // TronLink
-  tronLinkConfirmationDeclinedByUser: t`Confirmation declined by user`,
+  tronLinkConfirmationDeclinedByUser: 'Confirmation declined by user',
   tronLinkInsufficientBalance:
-    t`class org.tron.core.exception.ContractValidateException : Validate TransferContract error, no OwnerAccount.`,
-  tronLinkTypeErrorAddUpdateDataNotFunction: t`transactionBuilder.addUpdateData`,
+    'class org.tron.core.exception.ContractValidateException : Validate TransferContract error, no OwnerAccount.',
+  tronLinkTypeErrorAddUpdateDataNotFunction: 'transactionBuilder.addUpdateData',
   tronLinkAuthorizationRequestsAreBeingProcessed: 4000,
   // imToken
-  imTokenUserCanceled: t`user_canceled`,
+  imTokenUserCanceled: 'user_canceled',
   // coinbase wallet
-  coinbaseWalletUsingMultipleWallet: t`Request method eth_chainId is not supported`,
+  coinbaseWalletUsingMultipleWallet: 'Request method eth_chainId is not supported',
   // Portal Wallet
-  portalWalletInsufficientBalance: t`input capacity not enough`,
-  portalWalletValidationFailure: t`ValidationFailure(-31)`,
+  portalWalletInsufficientBalance: 'input capacity not enough',
+  portalWalletValidationFailure: 'ValidationFailure(-31)',
   // torus
-  torusUserCancelledLogin: t`User cancelled login`,
-  torusUserClosedPopup: t`user closed popup`,
+  torusUserCancelledLogin: 'User cancelled login',
+  torusUserClosedPopup: 'user closed popup',
   // connect did sdk
   connectDidSdkAbort: ActionErrorCode.ABORT,
   connectDidSdkNotFound: ActionErrorCode.NOT_FOUND,

@@ -50,17 +50,9 @@ msgstr "可管理地址"
 msgid "Choose a emoji to label the device."
 msgstr "请为此设备选一个图标"
 
-#: src/lib/constant/errno.ts:20
-msgid "class org.tron.core.exception.ContractValidateException : Validate TransferContract error, no OwnerAccount."
-msgstr ""
-
 #: src/lib/ui/LoggedIn/BackupTips.tsx:30
 msgid "click here"
 msgstr "请点击此处"
-
-#: src/lib/constant/errno.ts:18
-msgid "Confirmation declined by user"
-msgstr ""
 
 #: src/lib/ui/Login/Connect.tsx:138
 msgid "Connect"
@@ -136,15 +128,10 @@ msgstr "数据错误"
 msgid "Info"
 msgstr "提示"
 
-#: src/lib/constant/errno.ts:28
-msgid "input capacity not enough"
-msgstr ""
-
 #: src/lib/utils/handleError.ts:81
 msgid "Insufficient balance"
 msgstr "余额不足"
 
-#: src/lib/constant/errno.ts:16
 #: src/lib/wallets/WalletTransactionHandler/TokenPocketUTXOTransaction.ts:18
 msgid "insufficient funds for transfer"
 msgstr "余额不足"
@@ -282,16 +269,8 @@ msgstr ""
 msgid "QR Code"
 msgstr "二维码"
 
-#: src/lib/constant/errno.ts:12
-msgid "replacement transaction underpriced"
-msgstr ""
-
 #: src/lib/utils/handleError.ts:47
 msgid "Replacement transaction underpriced"
-msgstr ""
-
-#: src/lib/constant/errno.ts:26
-msgid "Request method eth_chainId is not supported"
 msgstr ""
 
 #: src/lib/ui/LoggedIn/DeviceList.tsx:50
@@ -354,10 +333,6 @@ msgstr "当前钱包环境不支持使用TRX付款，请更新钱包版本或者
 msgid "The new trusted device has full control over this address."
 msgstr "新的授信设备有此地址的完全控制权"
 
-#: src/lib/constant/errno.ts:13
-msgid "the transaction has been aborted"
-msgstr "交易被取消"
-
 #: src/lib/utils/handleError.ts:56
 msgid "The transaction has been aborted."
 msgstr "交易被取消。"
@@ -384,10 +359,6 @@ msgstr "此设备或浏览器不支持Passkey，请使用其他方式连接。"
 msgid "Tips"
 msgstr "提示"
 
-#: src/lib/constant/errno.ts:21
-msgid "transactionBuilder.addUpdateData"
-msgstr ""
-
 #: src/lib/ui/LoggedIn/DeviceList.tsx:293
 msgid "Trusted Devices of CKB Address"
 msgstr "授信设备"
@@ -403,23 +374,3 @@ msgstr "未知错误。请重试或者重新粘贴数据。"
 #: src/lib/ui/ShowQRCode/index.tsx:43
 msgid "Use the QR code or link below on your other trusted devices and follow the instructions inside."
 msgstr "请使用待授信的设备扫码或者打开下面的链接，并根据提示操作。"
-
-#: src/lib/constant/errno.ts:31
-msgid "User cancelled login"
-msgstr "用户取消登录"
-
-#: src/lib/constant/errno.ts:32
-msgid "user closed popup"
-msgstr "用户关闭弹窗"
-
-#: src/lib/constant/errno.ts:15
-msgid "User rejected the transaction"
-msgstr "用户拒绝此交易"
-
-#: src/lib/constant/errno.ts:24
-msgid "user_canceled"
-msgstr "用户取消"
-
-#: src/lib/constant/errno.ts:29
-msgid "ValidationFailure(-31)"
-msgstr ""
