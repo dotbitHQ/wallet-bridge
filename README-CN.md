@@ -54,6 +54,7 @@ const { Wallet } = await import('wallet-bridge')
 - `wagmiConfig` (可选): 用于配置 [wagmi](https://wagmi.sh/core/getting-started) 的相关信息，类型为 `WagmiConfig`。默认为`undefined`。如果需要使用 [WalletConnect](https://docs.walletconnect.com)，必须提供此参数。
 - `gtag` (可选): 用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `event`，则不需要提供此参数。
 - `event` (可选): 如果你使用 [nextjs-google-analytics](https://www.npmjs.com/package/nextjs-google-analytics) 来上报数据， 则可以用 `event` 来代替 `gtag`，用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `gtag`，则不需要提供此参数。
+- `locale` (可选): 用于设置语言。 现在支持en, zh-CN, zh—TW, zh-HK and zh-MO. 如果没有设置，locale会从下列顺序进行检测: query parameter lang -> session storage lang -> 浏览器语言设置 -> en。
 
 **示例**：
 
@@ -125,6 +126,7 @@ const wallet = new Wallet({
   customChains: [CustomChain.eth],
   customWallets: [CustomWallet.metaMask],
   wagmiConfig: wagmiConfig,
+  locale: 'zh-CN'
 })
 ```
 
