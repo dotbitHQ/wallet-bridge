@@ -391,6 +391,7 @@ export function shouldUseWalletConnect(): boolean {
 }
 
 export function getWalletDeepLink(walletName: string, displayUri: string): string {
+  /* eslint-disable lingui/no-unlocalized-strings */
   console.log('getWalletDeepLink displayUri: ', displayUri)
   if (walletName === CustomWallet.metaMask) {
     return `metamask://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
