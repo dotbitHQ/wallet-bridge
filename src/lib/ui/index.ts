@@ -5,6 +5,7 @@ import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
 import { CustomChain, CustomWallet } from '../constant'
 import { SignDataParams } from '../wallets/WalletSignerHandler'
 import { detect, fromNavigator, fromStorage, fromUrl } from '@lingui/detect-locale'
+import { getShadowDomRoot } from '../utils'
 
 export class Wallet {
   walletSDK: WalletSDK
@@ -36,6 +37,7 @@ export class Wallet {
     }
     if (['zh-HK', 'zh-TW', 'zh-MO'].includes(detectedLocale)) detectedLocale = 'zh-HK'
     setWalletState({ isTestNet, loggedInSelectAddress, customChains, customWallets, locale: detectedLocale })
+    getShadowDomRoot()
     this.walletSDK = new WalletSDK({ isTestNet, wagmiConfig, gtag, event })
   }
 

@@ -20,12 +20,7 @@ import { TransactionFailed } from './TransactionFailed'
 import { Sheet } from '../components/Sheet'
 import { Connect } from './Login/Connect'
 import { AddressQRCode } from './LoggedIn/AddressQrCode'
-import { I18nProvider } from '@lingui/react'
-import { i18n, Messages, Locale } from '@lingui/core'
-import { useWalletState } from '../store'
-import { messages as en } from '../../locales/en'
-import { messages as zhCN } from '../../locales/zh-CN'
-import { messages as zhHK } from '../../locales/zh-HK'
+import { Messages, Locale } from '@lingui/core'
 
 interface ConnectWalletProps {
   visible: boolean
@@ -99,12 +94,6 @@ const routes = {
 export const WalletSDKContext = createContext<WalletSDK | null>(null)
 const queryClient = new QueryClient()
 
-const messages: Record<string, Messages> = {
-  en,
-  'zh-CN': zhCN,
-  'zh-HK': zhHK,
-}
-
 export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }: ConnectWalletProps) => {
   const [isOpen, setIsOpen] = useState(visible)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
@@ -125,58 +114,47 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
     }
   }, [handleResize])
 
-  const {
-    walletSnap: { locale },
-  } = useWalletState()
-
-  useEffect(() => {
-    if (locale === undefined || messages[locale] === undefined) return
-    i18n.loadAndActivate({ locale, messages: messages[locale] })
-  }, [locale])
-
   const el = <SimpleRouter routes={routes} initialRouteName={initComponent} onClose={onClose} />
 
   return (
-    <I18nProvider i18n={i18n}>
-      <WalletSDKContext.Provider value={walletSDK}>
-        <QueryClientProvider client={queryClient}>
-          {isMobile ? (
-            <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet">
+    <WalletSDKContext.Provider value={walletSDK}>
+      <QueryClientProvider client={queryClient}>
+        {isMobile ? (
+          <Sheet isOpen={isOpen} customRootId="ConnectWalletSheet">
+            <div
+              className={clsx(
+                'relative box-border w-full overflow-hidden rounded-t-[32px] bg-[unset]',
+                isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+              )}
+            >
               <div
                 className={clsx(
-                  'relative box-border w-full overflow-hidden rounded-t-[32px] bg-[unset]',
-                  isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+                  'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-b-0 border-solid border-[#5262791A] bg-white',
                 )}
               >
-                <div
-                  className={clsx(
-                    'box-border w-full overflow-hidden rounded-t-[32px] border-2 border-b-0 border-solid border-[#5262791A] bg-white',
-                  )}
-                >
-                  {el}
-                </div>
+                {el}
               </div>
-            </Sheet>
-          ) : (
-            <Modal isOpen={isOpen} customRootId="ConnectWalletModal">
+            </div>
+          </Sheet>
+        ) : (
+          <Modal isOpen={isOpen} customRootId="ConnectWalletModal">
+            <div
+              className={clsx(
+                'relative box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] bg-[unset]',
+                isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+              )}
+            >
               <div
                 className={clsx(
-                  'relative box-border w-[92%] max-w-[400px] overflow-hidden rounded-[32px] bg-[unset]',
-                  isOpen ? 'animation-fade-in-up' : 'animation-fade-out-down',
+                  'box-border w-full overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
                 )}
               >
-                <div
-                  className={clsx(
-                    'box-border w-full overflow-hidden rounded-[32px] border-2 border-solid border-[#5262791A] bg-white',
-                  )}
-                >
-                  {el}
-                </div>
+                {el}
               </div>
-            </Modal>
-          )}
-        </QueryClientProvider>
-      </WalletSDKContext.Provider>
-    </I18nProvider>
+            </div>
+          </Modal>
+        )}
+      </QueryClientProvider>
+    </WalletSDKContext.Provider>
   )
 }

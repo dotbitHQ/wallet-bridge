@@ -64,7 +64,6 @@ import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } 
 import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
 import { configureChains, createConfig, InjectedConnector } from '@wagmi/core'
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
-import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
 
 const chainIdToRpc: { [chainId: number]: string | undefined } = {
   [ethereum.id]: 'https://eth.public-rpc.com',
@@ -85,10 +84,6 @@ const { publicClient, chains } = configureChains(
     }),
   ],
 )
-
-const metaMaskConnector = new MetaMaskConnector({
-  chains,
-})
 
 const injectedConnector = new InjectedConnector({
   chains,
@@ -116,7 +111,7 @@ const walletConnectConnectorHide = new WalletConnectConnector({
 
 const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors: [walletConnectConnectorShow, walletConnectConnectorHide, injectedConnector, metaMaskConnector],
+  connectors: [walletConnectConnectorShow, walletConnectConnectorHide, injectedConnector],
   publicClient,
 })
 

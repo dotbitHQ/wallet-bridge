@@ -13,6 +13,9 @@ import { isMobile, isMobileOnly } from 'react-device-detect'
 import abcCopy from 'abc-copy'
 import UAParser from 'ua-parser-js'
 import shadowDomRootStyle from '../../lib/tailwind/theme.css?inline'
+import React from 'react'
+import { I18n } from '../components/I18n'
+import { createRoot } from 'react-dom/client'
 
 let shadowDomRoot: ShadowRoot | null = null
 
@@ -334,6 +337,8 @@ export function getShadowDomRoot(): ShadowRoot {
     const styleEl = document.createElement('style')
     styleEl.innerHTML = shadowDomRootStyle
     shadowDomRoot.appendChild(styleEl)
+    const i18n = React.createElement(I18n)
+    createRoot(shadowDomRoot).render(i18n)
     _shadowDomRoot = shadowDomRoot
   }
   return _shadowDomRoot
