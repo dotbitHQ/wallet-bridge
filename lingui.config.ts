@@ -1,5 +1,4 @@
 import { LinguiConfig } from '@lingui/conf'
-// import { formatter } from "@lingui/format-json";
 
 const config: LinguiConfig = {
   locales: ['en', 'zh-CN', 'zh-HK'],
@@ -13,7 +12,6 @@ const config: LinguiConfig = {
       include: ['src/'],
     },
   ],
-  // format: formatter({ style: "minimal" }),
 }
 
 export default config

@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.1.56-beta.5",
+  "version": "0.1.56-beta.6",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -65,7 +65,6 @@
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@lingui/cli": "^4.5.0",
-    "@lingui/format-json": "^4.5.0",
     "@lingui/swc-plugin": "^4.0.4",
     "@lingui/vite-plugin": "^4.5.0",
     "@storybook/addon-actions": "^6.5.15",
