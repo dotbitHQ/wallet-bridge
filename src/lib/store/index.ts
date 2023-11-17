@@ -37,8 +37,8 @@ export interface WalletState {
   iCloudPasskeySupport?: boolean
   customChains?: CustomChain[]
   customWallets?: CustomWallet[]
-  alias?: string,
-  locale?: string,
+  alias?: string
+  locale?: string
 }
 
 export interface ICKBAddressItem {
@@ -73,7 +73,7 @@ const localWalletState = walletStateLocalStorage
       customChains: [],
       customWallets: [],
       alias: '',
-      locale: 'en'
+      locale: 'en',
     }
 
 export const walletState = proxy<WalletState>({
@@ -220,7 +220,7 @@ export async function getDotbitAlias() {
       })
     }
   } else {
-    throw new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg)
+    console.error(new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg))
   }
 }
 
@@ -269,7 +269,7 @@ export const setWalletState = (
     customChains,
     customWallets,
     alias,
-    locale
+    locale,
   }: WalletState,
   isSwitch = false,
 ) => {
@@ -333,8 +333,12 @@ export const setWalletState = (
     walletState.locale = locale
   }
 
-  walletState.iCloudPasskeySupport = checkICloudPasskeySupport()
   globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
+
+  void checkICloudPasskeySupport().then((res) => {
+    walletState.iCloudPasskeySupport = res
+    globalThis.localStorage.setItem(WalletStateKey, JSON.stringify(walletState))
+  })
 }
 
 export const resetWalletState = () => {

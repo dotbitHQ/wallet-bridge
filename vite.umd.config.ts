@@ -11,7 +11,7 @@ const app = async (): Promise<UserConfigExport> => {
     plugins: [
       react({
         babel: {
-          plugins: ["macros"],
+          plugins: ['macros'],
         },
       }),
       lingui(),

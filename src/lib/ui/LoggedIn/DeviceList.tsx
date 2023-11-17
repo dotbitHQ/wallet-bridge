@@ -6,7 +6,7 @@ import { ICKBAddressItem, setWalletState, useWalletState, walletState } from '..
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { LetterAvatar } from '../../components/LetterAvatar'
 import { collapseString } from '../../utils'
-import { SignInfo, TxsWithMMJsonSignedOrUnSigned } from '../../types'
+import { SignInfo, SignTxListRes } from '../../types'
 import { WalletSDKContext } from '../ConnectWallet'
 import clsx from 'clsx'
 import handleError from '../../utils/handleError'
@@ -86,7 +86,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
 
   const sendTransactionMutation = useMutation({
     retry: false,
-    mutationFn: async (signData: TxsWithMMJsonSignedOrUnSigned) => {
+    mutationFn: async (signData: SignTxListRes) => {
       const res = await webAuthnService.sendTransaction(signData)
       if (res.err_no !== 0) throw new Error(res.err_msg)
       return res.data
@@ -142,7 +142,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
             sign_msg: sign_msg.replace('0x', ''),
           })),
         })
-        await sendTransactionMutation.mutateAsync(res as TxsWithMMJsonSignedOrUnSigned)
+        await sendTransactionMutation.mutateAsync(res)
       }
     } catch (error: any) {
       onFailed().catch(console.error)

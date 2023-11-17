@@ -1,14 +1,3 @@
-export enum ChainType {
-  ckb,
-  eth,
-  btc,
-  tron,
-  fiat,
-  doge = 7,
-  bsc = 56,
-  polygon = 137,
-}
-
 // EVM-based Chains https://github.com/ethereum-lists/chains
 export enum ChainId {
   eth = 1,

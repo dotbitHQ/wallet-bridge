@@ -13,14 +13,14 @@ const app = async (): Promise<UserConfigExport> => {
     plugins: [
       react({
         babel: {
-          plugins: ["macros"],
+          plugins: ['macros'],
         },
       }),
       lingui(),
       dts({
         insertTypesEntry: true,
       }),
-      
+
       // visualizer({
       //   template: "treemap", // or sunburst
       //   open: true,

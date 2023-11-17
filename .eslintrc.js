@@ -33,7 +33,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'warn',
     'react-hooks/exhaustive-deps': 'error',
-    'lingui/no-unlocalized-strings': 'warn'
+    'lingui/no-unlocalized-strings': 'warn',
   },
   ignorePatterns: ['*.stories.tsx'],
 }

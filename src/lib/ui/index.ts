@@ -19,7 +19,7 @@ export class Wallet {
     wagmiConfig,
     gtag,
     event,
-    locale
+    locale,
   }: {
     isTestNet?: boolean
     loggedInSelectAddress?: boolean
@@ -32,7 +32,7 @@ export class Wallet {
   }) {
     let detectedLocale = locale
     if (detectedLocale === undefined) {
-      detectedLocale = detect(fromUrl("lang"), fromStorage("lang"), fromNavigator(), () => 'en')!
+      detectedLocale = detect(fromUrl('lang'), fromStorage('lang'), fromNavigator(), () => 'en')!
     }
     if (['zh-HK', 'zh-TW', 'zh-MO'].includes(detectedLocale)) detectedLocale = 'zh-HK'
     setWalletState({ isTestNet, loggedInSelectAddress, customChains, customWallets, locale: detectedLocale })

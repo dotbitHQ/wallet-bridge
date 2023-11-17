@@ -289,17 +289,31 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
 }
 
 /**
- * Checks if the current device runs on iOS and has a version greater than or equal to 16.
+ * Determine if the device supports syncing Passkey with iCloud storage.
  *
- * @returns {boolean} Returns true if the device is on iOS version 16 or higher, otherwise false.
+ * @returns {boolean} Returns true if the device supports syncing Passkey with iCloud storage, false otherwise.
  */
-export function checkICloudPasskeySupport() {
+export async function checkICloudPasskeySupport() {
   const uaParser = new UAParser(globalThis.navigator?.userAgent)
+  let platformVersion: number
+  try {
+    // @ts-expect-error
+    const highEntropyValues = await globalThis.navigator?.userAgentData?.getHighEntropyValues(['platformVersion'])
+    platformVersion = parseInt(highEntropyValues.platformVersion?.split('.')[0] ?? '0', 10)
+  } catch (e) {
+    console.error(e)
+    platformVersion = 0
+  }
+
   if (
     (uaParser.getOS().name === 'iOS' && parseInt(uaParser.getOS().version?.split('.')[0] ?? '0', 10) >= 16) ||
     (uaParser.getOS().name === 'Mac OS' &&
       uaParser.getBrowser().name === 'Safari' &&
-      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) >= 16)
+      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) >= 16) ||
+    (uaParser.getOS().name === 'Mac OS' &&
+      uaParser.getBrowser().name === 'Chrome' &&
+      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) >= 118 &&
+      platformVersion >= 14)
   ) {
     return true
   }
@@ -377,6 +391,7 @@ export function shouldUseWalletConnect(): boolean {
 }
 
 export function getWalletDeepLink(walletName: string, displayUri: string): string {
+  /* eslint-disable lingui/no-unlocalized-strings */
   console.log('getWalletDeepLink displayUri: ', displayUri)
   if (walletName === CustomWallet.metaMask) {
     return `metamask://wc?uri=${globalThis.encodeURIComponent(displayUri)}`

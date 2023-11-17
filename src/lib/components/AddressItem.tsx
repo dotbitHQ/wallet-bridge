@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from './Icons'
 import clsx from 'clsx'
 import { Tag } from './Tag'
-import { t } from '@lingui/macro';
+import { t } from '@lingui/macro'
 
 export function AddressItem(props: { address: string; isCurrent?: boolean; className?: string; onClick?: () => void }) {
   const click = () => {

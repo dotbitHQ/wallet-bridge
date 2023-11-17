@@ -126,7 +126,7 @@ const wallet = new Wallet({
   customChains: [CustomChain.eth],
   customWallets: [CustomWallet.metaMask],
   wagmiConfig: wagmiConfig,
-  locale: 'zh-CN'
+  locale: 'zh-CN',
 })
 ```
 

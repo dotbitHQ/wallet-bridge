@@ -1,4 +1,5 @@
 import { CfAccessClient, WebAuthnApi, WebAuthnTestApi } from '../constant'
+import { SignTxListRes } from '../types'
 
 export function useWebAuthnService(isTestNet?: boolean) {
   const baseURL = isTestNet ? WebAuthnTestApi : WebAuthnApi
@@ -22,7 +23,7 @@ export function useWebAuthnService(isTestNet?: boolean) {
     return res
   }
 
-  async function sendTransaction(data: object) {
+  async function sendTransaction(data: SignTxListRes) {
     const cfAccessClient = isTestNet ? CfAccessClient : {}
     const res = await fetch(`${baseURL}/v1/transaction/send`, {
       method: 'POST',
