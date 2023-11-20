@@ -210,7 +210,7 @@ class WalletSDK {
     }
 
     for (const signItem of txs.sign_list) {
-      if (signItem.sign_type === SIGN_TYPE.noSign) {
+      if (signItem.sign_msg === '') {
         continue
       }
       if (signItem.sign_type === SIGN_TYPE.eth712 && !!txs.mm_json) {
