@@ -18,8 +18,8 @@ export const I18n = ({ children }: { children?: ReactNode }) => {
   } = useWalletState()
 
   useEffect(() => {
-    if (locale === undefined || messages[locale] === undefined) return
-    i18n.loadAndActivate({ locale, messages: messages[locale] })
+    if (locale === undefined) return
+    i18n.loadAndActivate({ locale, messages: messages[locale] || messages.en })
   }, [locale])
 
   return <I18nProvider i18n={i18n}>{children}</I18nProvider>
