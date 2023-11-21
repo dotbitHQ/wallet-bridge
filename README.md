@@ -319,6 +319,20 @@ wallet._verifyPasskeySignature({ message: '0x123', signature: '0x40b4a569e0cb531
 })
 ```
 
+#### 4.10 `setLocale(locale: string)`
+
+Used to set the locale. Currently en, zh-CN, zh—TW, zh-HK and zh-MO are supported. If not set, the locale is detected in the order of query parameter lang -> the session storage lang -> browser language -> en.
+
+**Example**：
+
+```js
+wallet.setLocale('en')
+wallet.setLocale('zh-CN')
+wallet.setLocale('zh—TW')
+wallet.setLocale('zh-HK')
+wallet.setLocale('zh-MO')
+```
+
 ## License
 
 [MIT](LICENSE)

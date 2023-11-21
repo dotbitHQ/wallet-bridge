@@ -35,7 +35,6 @@ export class Wallet {
     if (detectedLocale === undefined) {
       detectedLocale = detect(fromUrl('lang'), fromStorage('lang'), fromNavigator(), () => 'en')!
     }
-    if (['zh-HK', 'zh-TW', 'zh-MO'].includes(detectedLocale)) detectedLocale = 'zh-HK'
     setWalletState({ isTestNet, loggedInSelectAddress, customChains, customWallets, locale: detectedLocale })
     getShadowDomRoot()
     this.walletSDK = new WalletSDK({ isTestNet, wagmiConfig, gtag, event })
@@ -68,5 +67,9 @@ export class Wallet {
 
   async _verifyPasskeySignature(params: { message: string; signature: string }): Promise<boolean> {
     return await this.walletSDK._verifyPasskeySignature(params)
+  }
+
+  setLocale(locale: string) {
+    setWalletState({ locale })
   }
 }

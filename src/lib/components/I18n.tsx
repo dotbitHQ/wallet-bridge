@@ -19,7 +19,11 @@ export const I18n = ({ children }: { children?: ReactNode }) => {
 
   useEffect(() => {
     if (locale === undefined) return
-    i18n.loadAndActivate({ locale, messages: messages[locale] || messages.en })
+    let _locale = locale
+    if (['zh-HK', 'zh-TW', 'zh-MO'].includes(_locale)) {
+      _locale = 'zh-HK'
+    }
+    i18n.loadAndActivate({ locale: _locale, messages: messages[_locale] || messages.en })
   }, [locale])
 
   return <I18nProvider i18n={i18n}>{children}</I18nProvider>

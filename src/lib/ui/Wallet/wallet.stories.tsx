@@ -129,6 +129,10 @@ const TemplateConnectWallet = () => {
     console.log(signature)
   }
 
+  const setLocale = (locale: string) => {
+    wallet.setLocale(locale)
+  }
+
   useEffect(() => {
     loadScript('//cdn.jsdelivr.net/npm/eruda', 'eruda').then(() => {
       // @ts-ignore
@@ -157,6 +161,30 @@ const TemplateConnectWallet = () => {
       <Button onClick={onSignData}>Sign data</Button>
       <br />
       <Button onClick={onSendTransaction}>Send transaction</Button>
+      <br />
+      <Button
+        onClick={() => {
+          setLocale('zh-HK')
+        }}
+      >
+        set zh-HK
+      </Button>
+      <br />
+      <Button
+        onClick={() => {
+          setLocale('zh-CN')
+        }}
+      >
+        set zh-CN
+      </Button>
+      <br />
+      <Button
+        onClick={() => {
+          setLocale('en')
+        }}
+      >
+        set en
+      </Button>
     </>
   )
 }
