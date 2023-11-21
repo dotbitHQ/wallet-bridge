@@ -28,6 +28,7 @@ function getTransitionStyle(state: TransitionStatus): CSSProperties {
 }
 
 export function SwapTransition({ children, className, duration }: SwapTransitionProps) {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   if (children.key === null || children.key === undefined) throw new Error('Child in SwapTransition must have a key')
   const [childRect, setChildRect] = useState<DOMRect>()
   const [animating, setAnimating] = useState(false)

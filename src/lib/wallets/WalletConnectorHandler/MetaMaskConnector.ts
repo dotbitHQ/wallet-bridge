@@ -8,6 +8,7 @@ import { CoinTypeToChainMap } from '../../constant'
 import { snapshot } from 'valtio'
 import { loginCacheState, setLoginCacheState } from '../../store/loginCache'
 import { MetaMaskSigner, SignDataType } from '../WalletSignerHandler'
+import { t } from '@lingui/macro'
 
 export class MetaMaskConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
@@ -21,13 +22,15 @@ export class MetaMaskConnector extends WalletConnector {
         })
       } else {
         connector = wagmiConfig.connectors.find((item: Connector) => {
-          return walletName === 'MetaMask' ? item.id === 'metaMask' : item.id === 'injected'
+          return item.id === 'injected'
         })
       }
 
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       const walletStateLocalStorage = globalThis.localStorage.getItem('WalletState')
       if (walletStateLocalStorage && wagmiConfig.status === 'connected') {
         await disconnect()
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         globalThis.localStorage.removeItem('WalletState')
       }
 
@@ -40,6 +43,7 @@ export class MetaMaskConnector extends WalletConnector {
                 openDeepLink(deepLink)
               }
             } else {
+              // eslint-disable-next-line lingui/no-unlocalized-strings
               console.log('WalletConnect display_uri', uri)
               setLoginCacheState({ walletConnectDisplayUri: uri })
             }
@@ -85,11 +89,11 @@ export class MetaMaskConnector extends WalletConnector {
     } catch (err) {
       console.error(err)
       if (isMobile) {
-        throw new Error('Please open this page in your crypto wallet App and try again.')
+        throw new Error(t`Please open this page in your crypto wallet App and try again.`)
       } else {
         const name = this.context.coinType && CoinTypeToChainMap[this.context.coinType].name
         throw new Error(
-          `Please ensure that your browser has the ${String(name)} wallet plugin installed and try again.`,
+          t`Please ensure that your browser has the ${String(name)} wallet plugin installed and try again.`,
         )
       }
     }

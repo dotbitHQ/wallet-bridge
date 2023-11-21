@@ -5,6 +5,7 @@ import { setWalletState } from '../../store'
 import { ChainIdToCoinTypeMap, CoinType, ChainIdToCoinTypeTestNetMap } from '../../constant'
 import { debounce } from 'lodash-es'
 import { createTips } from '../../components'
+import { t } from '@lingui/macro'
 
 export class TronLinkEventListener extends WalletEventListener {
   async messageEvent(event: MessageEvent, context: WalletContext) {
@@ -53,8 +54,8 @@ export class TronLinkEventListener extends WalletEventListener {
         switch (coinType) {
           case CoinType.trx:
             message = isTestNet
-              ? 'Please switch your wallet to the TRON Nile test network before connecting'
-              : 'Please switch your wallet to the TRON main network before connecting'
+              ? t`Please switch your wallet to the TRON Nile test network before connecting`
+              : t`Please switch your wallet to the TRON main network before connecting`
             break
         }
 
@@ -62,7 +63,7 @@ export class TronLinkEventListener extends WalletEventListener {
           this.context.emitEvent(EventEnum.Error, message)
           debounce(() => {
             createTips({
-              title: 'Tips',
+              title: t`Tips`,
               content: message,
             })
           }, 1000)

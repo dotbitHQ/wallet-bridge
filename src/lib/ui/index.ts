@@ -4,6 +4,8 @@ import { InitSignContextRes } from '../types'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
 import { CustomChain, CustomWallet } from '../constant'
 import { SignDataParams } from '../wallets/WalletSignerHandler'
+import { detect, fromNavigator, fromStorage, fromUrl } from '@lingui/detect-locale'
+import { getShadowDomRoot } from '../utils'
 
 export class Wallet {
   walletSDK: WalletSDK
@@ -18,6 +20,7 @@ export class Wallet {
     wagmiConfig,
     gtag,
     event,
+    locale,
   }: {
     isTestNet?: boolean
     loggedInSelectAddress?: boolean
@@ -26,8 +29,14 @@ export class Wallet {
     wagmiConfig?: any
     gtag?: any
     event?: any
+    locale?: string
   }) {
-    setWalletState({ isTestNet, loggedInSelectAddress, customChains, customWallets })
+    let detectedLocale = locale
+    if (detectedLocale === undefined) {
+      detectedLocale = detect(fromUrl('lang'), fromStorage('lang'), fromNavigator(), () => 'en')!
+    }
+    setWalletState({ isTestNet, loggedInSelectAddress, customChains, customWallets, locale: detectedLocale })
+    getShadowDomRoot()
     this.walletSDK = new WalletSDK({ isTestNet, wagmiConfig, gtag, event })
   }
 
@@ -40,6 +49,7 @@ export class Wallet {
   }
 
   loggedInfo() {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     this.walletSDK.connectWallet({ initComponent: 'LoggedIn' })
   }
 
@@ -57,5 +67,9 @@ export class Wallet {
 
   async _verifyPasskeySignature(params: { message: string; signature: string }): Promise<boolean> {
     return await this.walletSDK._verifyPasskeySignature(params)
+  }
+
+  setLocale(locale: string) {
+    setWalletState({ locale })
   }
 }

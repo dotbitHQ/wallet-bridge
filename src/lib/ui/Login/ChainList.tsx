@@ -13,6 +13,7 @@ import PolygonIcon from './icon/polygon-icon.svg'
 import TronIcon from './icon/tron-icon.svg'
 import DogecoinIcon from './icon/dogecoin-icon.svg'
 import TorusIcon from './icon/torus-icon.svg'
+import { t } from '@lingui/macro'
 
 interface IChain {
   icon: ReactNode
@@ -34,24 +35,28 @@ const bsc: IChain = {
 }
 
 const polygon: IChain = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   icon: <img className="h-10 w-10" src={PolygonIcon} alt="Polygon" />,
   name: CustomChain.polygon,
   coinType: CoinType.matic,
 }
 
 const tron: IChain = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   icon: <img className="h-10 w-10" src={TronIcon} alt="Tron" />,
   name: CustomChain.tron,
   coinType: CoinType.trx,
 }
 
 const doge: IChain = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   icon: <img className="h-10 w-10" src={DogecoinIcon} alt="Dogecoin" />,
   name: CustomChain.doge,
   coinType: CoinType.doge,
 }
 
 const torus: IChain = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   icon: <img className="h-10 w-10" src={TorusIcon} alt="Torus" />,
   name: CustomChain.torus,
   coinType: CoinType.eth,
@@ -64,6 +69,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
   const { walletSnap } = useWalletState()
 
   const showWalletList = () => {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     goTo('WalletList')
   }
 
@@ -134,7 +140,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
         }
       } else {
         createTips({
-          title: `Tips`,
+          title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
         })
@@ -158,7 +164,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
     <>
       <Header
         className="z-10 mt-0.5 w-full-4px bg-white p-6"
-        title="Other Wallets"
+        title={t`Other Wallets`}
         onClose={close}
         goBack={back}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}

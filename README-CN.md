@@ -54,6 +54,7 @@ const { Wallet } = await import('wallet-bridge')
 - `wagmiConfig` (可选): 用于配置 [wagmi](https://wagmi.sh/core/getting-started) 的相关信息，类型为 `WagmiConfig`。默认为`undefined`。如果需要使用 [WalletConnect](https://docs.walletconnect.com)，必须提供此参数。
 - `gtag` (可选): 用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `event`，则不需要提供此参数。
 - `event` (可选): 如果你使用 [nextjs-google-analytics](https://www.npmjs.com/package/nextjs-google-analytics) 来上报数据， 则可以用 `event` 来代替 `gtag`，用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `gtag`，则不需要提供此参数。
+- `locale` (可选): 用于设置语言。 现在支持 en、zh-CN、zh—TW、zh-HK、zh-MO. 如果没有设置，locale 会从下列顺序进行检测: query parameter lang -> session storage lang -> 浏览器语言设置 -> en。
 
 **示例**：
 
@@ -63,7 +64,6 @@ import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } 
 import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
 import { configureChains, createConfig, InjectedConnector } from '@wagmi/core'
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
-import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
 
 const chainIdToRpc: { [chainId: number]: string | undefined } = {
   [ethereum.id]: 'https://eth.public-rpc.com',
@@ -84,10 +84,6 @@ const { publicClient, chains } = configureChains(
     }),
   ],
 )
-
-const metaMaskConnector = new MetaMaskConnector({
-  chains,
-})
 
 const injectedConnector = new InjectedConnector({
   chains,
@@ -115,7 +111,7 @@ const walletConnectConnectorHide = new WalletConnectConnector({
 
 const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors: [walletConnectConnectorShow, walletConnectConnectorHide, injectedConnector, metaMaskConnector],
+  connectors: [walletConnectConnectorShow, walletConnectConnectorHide, injectedConnector],
   publicClient,
 })
 
@@ -125,6 +121,7 @@ const wallet = new Wallet({
   customChains: [CustomChain.eth],
   customWallets: [CustomWallet.metaMask],
   wagmiConfig: wagmiConfig,
+  locale: 'zh-CN',
 })
 ```
 
@@ -320,6 +317,20 @@ console.log(walletSnap.address)
 wallet._verifyPasskeySignature({ message: '0x123', signature: '0x40b4a569e0cb53163f...' }).then((result) => {
   console.log('result: ', result)
 })
+```
+
+#### 4.10 `setLocale(locale: string)`
+
+用于设置语言。 现在支持 en、zh-CN、zh—TW、zh-HK、zh-MO. 如果没有设置，locale 会从下列顺序进行检测: query parameter lang -> session storage lang -> 浏览器语言设置 -> en。
+
+**示例**：
+
+```js
+wallet.setLocale('en')
+wallet.setLocale('zh-CN')
+wallet.setLocale('zh—TW')
+wallet.setLocale('zh-HK')
+wallet.setLocale('zh-MO')
 ```
 
 ## License

@@ -1,3 +1,4 @@
+/* eslint-disable lingui/no-unlocalized-strings */
 import { createContext, useCallback, useEffect, useState } from 'react'
 import WalletSDK from '../wallets'
 import { Modal } from '../components/Modal'
@@ -19,11 +20,14 @@ import { TransactionFailed } from './TransactionFailed'
 import { Sheet } from '../components/Sheet'
 import { Connect } from './Login/Connect'
 import { AddressQRCode } from './LoggedIn/AddressQrCode'
+import { Messages, Locale } from '@lingui/core'
 
 interface ConnectWalletProps {
   visible: boolean
   walletSDK: WalletSDK
   initComponent?: string
+  locale?: Locale
+  messages?: Messages
 }
 
 const routes = {

@@ -1,3 +1,4 @@
+import { t } from '@lingui/macro'
 import errno from '../constant/errno'
 import CustomError from './CustomError'
 
@@ -42,8 +43,8 @@ export default function handleError(error: CustomError): HandleErrorRes {
   ) {
     res = {
       isHandle: true,
-      title: `Tips`,
-      message: `Replacement transaction underpriced`,
+      title: t`Tips`,
+      message: t`Replacement transaction underpriced`,
     }
   } else if (
     [errno.metaMaskUserRejectedAccountAccess, errno.metaMaskUserDeniedMessageSignature].includes(error.code) &&
@@ -51,8 +52,8 @@ export default function handleError(error: CustomError): HandleErrorRes {
   ) {
     res = {
       isHandle: true,
-      title: `Tips`,
-      message: `The transaction has been aborted.`,
+      title: t`Tips`,
+      message: t`The transaction has been aborted.`,
     }
   } else if (
     error.code === errno.metaMaskWalletRequestPermissions ||
@@ -60,14 +61,14 @@ export default function handleError(error: CustomError): HandleErrorRes {
   ) {
     res = {
       isHandle: true,
-      title: `Tips`,
-      message: `Other requests for the wallet are not processed, please try again after processing`,
+      title: t`Tips`,
+      message: t`Other requests for the wallet are not processed, please try again after processing`,
     }
   } else if (error.message === errno.coinbaseWalletUsingMultipleWallet) {
     res = {
       isHandle: true,
-      title: `Tips`,
-      message: `Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again.`,
+      title: t`Tips`,
+      message: t`Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again.`,
     }
   } else if (
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
@@ -76,14 +77,14 @@ export default function handleError(error: CustomError): HandleErrorRes {
   ) {
     res = {
       isHandle: true,
-      title: `Tips`,
-      message: `Insufficient balance`,
+      title: t`Tips`,
+      message: t`Insufficient balance`,
     }
   } else if (error.message?.includes(errno.tronLinkTypeErrorAddUpdateDataNotFunction)) {
     res = {
       isHandle: true,
-      title: `Tips`,
-      message: `The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet.`,
+      title: t`Tips`,
+      message: t`The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet.`,
     }
   }
 

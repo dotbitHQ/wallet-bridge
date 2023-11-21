@@ -18,7 +18,7 @@ module.exports = {
     project: './tsconfig.json',
   },
   parser: '@typescript-eslint/parser',
-  plugins: ['react', '@typescript-eslint', 'tailwindcss'],
+  plugins: ['react', '@typescript-eslint', 'tailwindcss', 'lingui'],
   rules: {
     'react/jsx-key': 'error',
     'react/react-in-jsx-scope': 'off',
@@ -33,6 +33,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'warn',
     'react-hooks/exhaustive-deps': 'error',
+    'lingui/no-unlocalized-strings': 'warn',
   },
   ignorePatterns: ['*.stories.tsx'],
 }

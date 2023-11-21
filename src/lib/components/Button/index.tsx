@@ -11,12 +11,16 @@ export enum ButtonVariant {
 
 const variantClasses: Record<ButtonVariant, string> = {
   [ButtonVariant.primary]:
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     'text-white bg-success hover:bg-success-hover active:bg-success-active disabled:cursor-no-drop disabled:opacity-50 disabled:bg-success',
   [ButtonVariant.secondary]:
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     'text-font-primary bg-secondary hover:bg-secondary-hover active:bg-secondary-active disabled:cursor-no-drop disabled:opacity-50 disabled:bg-secondary',
   [ButtonVariant.danger]:
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     'text-white bg-danger hover:bg-danger-hover disabled:cursor-no-drop disabled:opacity-50 disabled:bg-danger',
   [ButtonVariant.passkey]:
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     'text-white transition-all duration-400 bg-passkey shadow-passkey hover:shadow-none active:shadow-none disabled:shadow-none disabled:cursor-no-drop disabled:bg-passkey',
 }
 
@@ -28,9 +32,13 @@ export enum ButtonSize {
 }
 
 export const sizeClasses: Record<ButtonSize, string> = {
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   [ButtonSize.small]: 'h-[38px] px-3 text-sm font-medium',
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   [ButtonSize.middle]: 'h-[42px] px-4 text-base font-medium',
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   [ButtonSize.large]: 'h-[52px] px-4 text-base font-medium',
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   [ButtonSize.super]: 'h-[58px] px-4 text-base font-medium',
 }
 

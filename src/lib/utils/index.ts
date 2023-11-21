@@ -13,6 +13,9 @@ import { isMobile, isMobileOnly } from 'react-device-detect'
 import abcCopy from 'abc-copy'
 import UAParser from 'ua-parser-js'
 import shadowDomRootStyle from '../../lib/tailwind/theme.css?inline'
+import React from 'react'
+import { I18n } from '../components/I18n'
+import { createRoot } from 'react-dom/client'
 
 let shadowDomRoot: ShadowRoot | null = null
 
@@ -42,6 +45,7 @@ export function toBN(number: number | string): BN {
   try {
     return numberToBN(number)
   } catch (err) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error(`${String(err)} Given value: "${number}"`)
   }
 }
@@ -55,6 +59,7 @@ export function toBN(number: number | string): BN {
  */
 export function hexToNumber(value: string | number): string | number {
   if (typeof value === 'string' && !isHexStrict(value)) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error('Given value "' + value + '" is not a valid hex string.')
   }
   return toBN(value).toNumber()
@@ -80,6 +85,7 @@ export function toChecksumAddress(address: string): string {
   if (typeof address === 'undefined') return ''
 
   if (!/^(0x)?[0-9a-f]{40}$/i.test(address))
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error(`Given address "${address}" is not a valid Ethereum address.`)
 
   address = address.toLowerCase().replace(/^0x/i, '')
@@ -135,6 +141,7 @@ export function utf8ToHex(str: string): string {
  */
 export function numberToHex(value: number | string): string {
   if (!isFinite(Number(value)) && !isHexStrict(value)) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error('Given input "' + String(value) + '" is not a number.')
   }
 
@@ -171,9 +178,11 @@ export function mmJsonHashAndChainIdHex(typedData: TypedMessage<MessageTypes>, c
  */
 export function convertTpUTXOSignature(base64SignData: string): string {
   const buffer = Buffer.from(base64SignData, 'base64')
+  // eslint-disable-next-line lingui/no-unlocalized-strings
   if (buffer.length !== 65) throw new Error('Invalid signature length')
   const flagByte = buffer.readUInt8(0) - 27
   if (flagByte > 15 || flagByte < 0) {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     throw new Error('Invalid signature parameter')
   }
 
@@ -283,17 +292,31 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
 }
 
 /**
- * Checks if the current device runs on iOS and has a version greater than or equal to 16.
+ * Determine if the device supports syncing Passkey with iCloud storage.
  *
- * @returns {boolean} Returns true if the device is on iOS version 16 or higher, otherwise false.
+ * @returns {boolean} Returns true if the device supports syncing Passkey with iCloud storage, false otherwise.
  */
-export function checkICloudPasskeySupport() {
+export async function checkICloudPasskeySupport() {
   const uaParser = new UAParser(globalThis.navigator?.userAgent)
+  let platformVersion: number
+  try {
+    // @ts-expect-error
+    const highEntropyValues = await globalThis.navigator?.userAgentData?.getHighEntropyValues(['platformVersion'])
+    platformVersion = parseInt(highEntropyValues.platformVersion?.split('.')[0] ?? '0', 10)
+  } catch (e) {
+    console.error(e)
+    platformVersion = 0
+  }
+
   if (
     (uaParser.getOS().name === 'iOS' && parseInt(uaParser.getOS().version?.split('.')[0] ?? '0', 10) >= 16) ||
     (uaParser.getOS().name === 'Mac OS' &&
       uaParser.getBrowser().name === 'Safari' &&
-      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) >= 16)
+      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) >= 16) ||
+    (uaParser.getOS().name === 'Mac OS' &&
+      uaParser.getBrowser().name === 'Chrome' &&
+      parseInt(uaParser.getBrowser().version?.split('.')[0] ?? '0', 10) >= 118 &&
+      platformVersion >= 14)
   ) {
     return true
   }
@@ -314,6 +337,8 @@ export function getShadowDomRoot(): ShadowRoot {
     const styleEl = document.createElement('style')
     styleEl.innerHTML = shadowDomRootStyle
     shadowDomRoot.appendChild(styleEl)
+    const i18n = React.createElement(I18n)
+    createRoot(shadowDomRoot).render(i18n)
     _shadowDomRoot = shadowDomRoot
   }
   return _shadowDomRoot
@@ -371,6 +396,7 @@ export function shouldUseWalletConnect(): boolean {
 }
 
 export function getWalletDeepLink(walletName: string, displayUri: string): string {
+  /* eslint-disable lingui/no-unlocalized-strings */
   console.log('getWalletDeepLink displayUri: ', displayUri)
   if (walletName === CustomWallet.metaMask) {
     return `metamask://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
@@ -395,6 +421,7 @@ export function openDeepLink(deepLink: string) {
     const link = document.createElement('a')
     link.href = deepLink
     link.target = '_blank'
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     link.rel = 'noreferrer noopener'
     link.click()
     // window.open(deepLink, '_blank', 'noreferrer noopener')

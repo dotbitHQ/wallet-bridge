@@ -1,3 +1,4 @@
+/* eslint-disable lingui/no-unlocalized-strings */
 import { ActionErrorCode } from 'connect-did-sdk'
 
 const errno = {
