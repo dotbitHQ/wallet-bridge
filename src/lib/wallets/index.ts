@@ -248,12 +248,10 @@ class WalletSDK {
 
     let provider: any
     if (this.context.protocol === WalletProtocol.webAuthn) {
-      const timestamp = Date.now()
       provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
         console.error(err)
         throw new CustomError(err.code, err.message)
       })
-      console.log('requestWaitingPage', Date.now() - timestamp)
     }
 
     return {
