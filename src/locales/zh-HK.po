@@ -54,11 +54,11 @@ msgstr "請為此設備選一個圖標。"
 msgid "click here"
 msgstr "請點擊此處"
 
-#: src/lib/ui/Login/Connect.tsx:166
+#: src/lib/ui/Login/Connect.tsx:184
 msgid "Continue"
 msgstr "繼續"
 
-#: src/lib/ui/Login/Connect.tsx:196
+#: src/lib/ui/Login/Connect.tsx:223
 msgid "Continue with wallets"
 msgstr "用其他錢包登錄"
 
@@ -133,7 +133,7 @@ msgstr "余額不足"
 msgid "insufficient funds for transfer"
 msgstr "余額不足"
 
-#: src/lib/ui/Login/Connect.tsx:170
+#: src/lib/ui/Login/Connect.tsx:188
 msgid "Most friendly and secure way base on"
 msgstr "簡單易用，基於"
 
@@ -168,6 +168,10 @@ msgstr "攝像頭未授權"
 msgid "OK"
 msgstr "確定"
 
+#: src/lib/components/TorusList.tsx:38
+msgid "or Continue with"
+msgstr "或使用"
+
 #: src/lib/utils/handleError.ts:65
 msgid "Other requests for the wallet are not processed, please try again after processing"
 msgstr "錢包的其他請求未被處理，請處理後再試"
@@ -176,7 +180,7 @@ msgstr "錢包的其他請求未被處理，請處理後再試"
 msgid "Other Wallets"
 msgstr "其他錢包"
 
-#: src/lib/ui/Login/Connect.tsx:175
+#: src/lib/ui/Login/Connect.tsx:193
 msgid "Passkey"
 msgstr "Passkey"
 
@@ -194,13 +198,13 @@ msgid "Please download TokenPocket, connect your Dogecoin wallet within the app,
 msgstr "請下載 TokenPocket，並在應用內連接您的 Dogecoin 錢包，然後重試。"
 
 #: src/lib/wallets/WalletConnectorHandler/MetaMaskConnector.ts:96
-#: src/lib/wallets/WalletContext.ts:292
+#: src/lib/wallets/WalletContext.ts:296
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "請確保您的瀏覽器已安裝 {0} 錢包插件，然後再試。"
 
 #: src/lib/wallets/WalletConnectorHandler/MetaMaskConnector.ts:92
 #: src/lib/wallets/WalletContext.ts:232
-#: src/lib/wallets/WalletContext.ts:288
+#: src/lib/wallets/WalletContext.ts:292
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "請在您的加密貨幣錢包應用中打開此頁面，然後再試。"
 
@@ -252,7 +256,7 @@ msgstr "連接前請將您的錢包切換至 TRON Nile 測試網"
 msgid "Please try again after unlocking your TokenPocket wallet"
 msgstr "解鎖您的 TokenPocket 錢包後請再試"
 
-#: src/lib/wallets/WalletContext.ts:284
+#: src/lib/wallets/WalletContext.ts:288
 msgid "Please try again after unlocking your Tron wallet"
 msgstr "解鎖您的 Tron 錢包後請再試"
 
@@ -270,7 +274,7 @@ msgstr "二維碼"
 msgid "Replacement transaction underpriced"
 msgstr ""
 
-#: src/lib/ui/Login/Connect.tsx:146
+#: src/lib/ui/Login/Connect.tsx:160
 msgid "Request Permission"
 msgstr "請求授權"
 
@@ -338,14 +342,14 @@ msgstr "新的授信設備有此地址的完全控制權。"
 msgid "The transaction has been aborted."
 msgstr "交易被取消。"
 
-#: src/lib/ui/Login/Connect.tsx:184
+#: src/lib/ui/Login/Connect.tsx:202
 msgid "This device or browser unsupported. Try connect by social or wallet."
 msgstr "此設備或瀏覽器不支持 Passkey，請使用其他方式連接。"
 
 #: src/lib/ui/FinalConfirm/index.tsx:82
 #: src/lib/ui/LoggedIn/DeviceList.tsx:159
 #: src/lib/ui/Login/ChainList.tsx:143
-#: src/lib/ui/Login/Connect.tsx:123
+#: src/lib/ui/Login/Connect.tsx:136
 #: src/lib/ui/Login/WalletList.tsx:133
 #: src/lib/utils/handleError.ts:46
 #: src/lib/utils/handleError.ts:55

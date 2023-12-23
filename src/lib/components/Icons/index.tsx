@@ -38,7 +38,9 @@ export function ArrowLeftIcon(props: { className?: string }) {
   )
 }
 
-export function LoadingIcon(props: { className?: string }) {
+export function LoadingIcon(props: React.SVGProps<SVGSVGElement>) {
+  const { className, ...rest } = props
+
   return (
     <svg
       className={clsx('icon animation-rotate-360-deg', props.className)}
@@ -47,6 +49,7 @@ export function LoadingIcon(props: { className?: string }) {
       viewBox="0 0 10 10"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...rest}
     >
       <path
         fillRule="evenodd"

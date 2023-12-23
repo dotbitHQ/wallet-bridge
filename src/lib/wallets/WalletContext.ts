@@ -255,13 +255,17 @@ export class WalletContext {
       }
 
       if (!this.torusWallet.isLoggedIn) {
-        await this.torusWallet.init({
-          showTorusButton: true,
-          network: {
-            host,
-          },
-        })
-        await this.torusWallet.login()
+        if (this.torusWallet.isInitialized) {
+          await this.torusWallet.login()
+        } else {
+          await this.torusWallet.init({
+            showTorusButton: true,
+            network: {
+              host,
+            },
+          })
+          await this.torusWallet.login()
+        }
       }
       this.provider = this.torusWallet.ethereum
     } catch (error: any) {
