@@ -114,7 +114,7 @@ function setAuthorizeState(
   const record: WalletState = {
     masterNotes: data.master_notes,
     masterDevice: data.master_device,
-    canAddDevice: data.can_authorize !== 0,
+    canAddDevice: data?.can_authorize !== 0,
     deviceList: data.ckb_address,
   }
   if (address) {
@@ -144,7 +144,12 @@ export async function getAuthorizeInfo({ detectAssets = false } = {}) {
 
   const data = await fetchAuthorizeInfo(api, address)
   // eslint-disable-next-line
-  if (data.can_authorize !== 0 || !detectAssets || isSwitchAddress || !(ckbAddresses && ckbAddresses.length > 0)) {
+  if (
+    (data && data.can_authorize !== 0) ||
+    !detectAssets ||
+    isSwitchAddress ||
+    !(ckbAddresses && ckbAddresses.length > 0)
+  ) {
     setAuthorizeState(data, address)
     return
   }
@@ -152,7 +157,7 @@ export async function getAuthorizeInfo({ detectAssets = false } = {}) {
   let isSetAddress = false
   for (const item of ckbAddresses) {
     const res = await fetchAuthorizeInfo(api, item)
-    if (res.can_authorize !== 0) {
+    if (res && res.can_authorize !== 0) {
       isSetAddress = true
       setAuthorizeState(res, item)
       break

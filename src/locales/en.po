@@ -54,11 +54,11 @@ msgstr "Choose a emoji to label the device."
 msgid "click here"
 msgstr "click here"
 
-#: src/lib/ui/Login/Connect.tsx:166
+#: src/lib/ui/Login/Connect.tsx:184
 msgid "Continue"
 msgstr "Continue"
 
-#: src/lib/ui/Login/Connect.tsx:196
+#: src/lib/ui/Login/Connect.tsx:223
 msgid "Continue with wallets"
 msgstr "Continue with wallets"
 
@@ -133,7 +133,7 @@ msgstr "Insufficient balance"
 msgid "insufficient funds for transfer"
 msgstr "insufficient funds for transfer"
 
-#: src/lib/ui/Login/Connect.tsx:170
+#: src/lib/ui/Login/Connect.tsx:188
 msgid "Most friendly and secure way base on"
 msgstr "Most friendly and secure way base on"
 
@@ -168,6 +168,10 @@ msgstr "No Camera Permission"
 msgid "OK"
 msgstr "OK"
 
+#: src/lib/components/TorusList.tsx:38
+msgid "or Continue with"
+msgstr "or Continue with"
+
 #: src/lib/utils/handleError.ts:65
 msgid "Other requests for the wallet are not processed, please try again after processing"
 msgstr "Other requests for the wallet are not processed, please try again after processing"
@@ -176,7 +180,7 @@ msgstr "Other requests for the wallet are not processed, please try again after 
 msgid "Other Wallets"
 msgstr "Other Wallets"
 
-#: src/lib/ui/Login/Connect.tsx:175
+#: src/lib/ui/Login/Connect.tsx:193
 msgid "Passkey"
 msgstr "Passkey"
 
@@ -194,13 +198,13 @@ msgid "Please download TokenPocket, connect your Dogecoin wallet within the app,
 msgstr "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 
 #: src/lib/wallets/WalletConnectorHandler/MetaMaskConnector.ts:96
-#: src/lib/wallets/WalletContext.ts:292
+#: src/lib/wallets/WalletContext.ts:296
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "Please ensure that your browser has the {0} wallet plugin installed and try again."
 
 #: src/lib/wallets/WalletConnectorHandler/MetaMaskConnector.ts:92
 #: src/lib/wallets/WalletContext.ts:232
-#: src/lib/wallets/WalletContext.ts:288
+#: src/lib/wallets/WalletContext.ts:292
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "Please open this page in your crypto wallet App and try again."
 
@@ -252,7 +256,7 @@ msgstr "Please switch your wallet to the TRON Nile test network before connectin
 msgid "Please try again after unlocking your TokenPocket wallet"
 msgstr "Please try again after unlocking your TokenPocket wallet"
 
-#: src/lib/wallets/WalletContext.ts:284
+#: src/lib/wallets/WalletContext.ts:288
 msgid "Please try again after unlocking your Tron wallet"
 msgstr "Please try again after unlocking your Tron wallet"
 
@@ -270,7 +274,7 @@ msgstr "QR Code"
 msgid "Replacement transaction underpriced"
 msgstr "Replacement transaction underpriced"
 
-#: src/lib/ui/Login/Connect.tsx:146
+#: src/lib/ui/Login/Connect.tsx:160
 msgid "Request Permission"
 msgstr "Request Permission"
 
@@ -338,14 +342,14 @@ msgstr "The new trusted device has full control over this address."
 msgid "The transaction has been aborted."
 msgstr "The transaction has been aborted."
 
-#: src/lib/ui/Login/Connect.tsx:184
+#: src/lib/ui/Login/Connect.tsx:202
 msgid "This device or browser unsupported. Try connect by social or wallet."
 msgstr "This device or browser unsupported. Try connect by social or wallet."
 
 #: src/lib/ui/FinalConfirm/index.tsx:82
 #: src/lib/ui/LoggedIn/DeviceList.tsx:159
 #: src/lib/ui/Login/ChainList.tsx:143
-#: src/lib/ui/Login/Connect.tsx:123
+#: src/lib/ui/Login/Connect.tsx:136
 #: src/lib/ui/Login/WalletList.tsx:133
 #: src/lib/utils/handleError.ts:46
 #: src/lib/utils/handleError.ts:55

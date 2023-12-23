@@ -1,16 +1,16 @@
 import {
-  createTips,
-  Header,
-  SwapChildProps,
-  Button,
-  ButtonSize,
-  ButtonShape,
   Alert,
   AlertType,
-  NoticeIcon,
-  ButtonVariant,
-  FaceIcon,
   ArrowLeftIcon,
+  Button,
+  ButtonShape,
+  ButtonSize,
+  ButtonVariant,
+  createTips,
+  FaceIcon,
+  Header,
+  NoticeIcon,
+  SwapChildProps,
 } from '../../components'
 import { CoinType, CustomChain } from '../../constant'
 import { useWalletState } from '../../store'
@@ -27,6 +27,8 @@ import TronIcon from './icon/tron-icon.svg'
 import DogecoinIcon from './icon/dogecoin-icon.svg'
 import TorusIcon from './icon/torus-icon.svg'
 import { t } from '@lingui/macro'
+import { TorusList } from '../../components/TorusList'
+import DeviceBg from '../LoggedIn/bg/device.svg'
 
 interface IChain {
   icon: ReactNode
@@ -77,6 +79,17 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
       (walletSnap.customChains && walletSnap.customChains.length > 0 ? list?.length && list?.length > 0 : true)
     )
   }, [walletSDK.onlyEth, walletSnap.customChains])
+
+  const isPadge = useMemo(() => {
+    if (walletSnap.customChains) {
+      return (
+        walletSnap.customChains.length === 2 &&
+        walletSnap.customChains.includes(CustomChain.passkey) &&
+        walletSnap.customChains.includes(CustomChain.torus)
+      )
+    }
+    return false
+  }, [walletSnap.customChains])
 
   useEffect(() => {
     checkWebAuthnSupport()
@@ -141,13 +154,18 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
 
   return (
     <>
+      {isPadge && <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={DeviceBg} alt="" />}
       <Header
-        className="z-10 mt-0.5 w-full-4px bg-white p-6"
+        className="z-10 mt-0.5 w-full-4px p-6 pb-0"
         title={t`Request Permission`}
         onClose={close}
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
-      <div className="w-full px-6 pb-6 pt-[76px]" style={transitionStyle} ref={transitionRef}>
+      <div
+        className={clsx('w-full px-6 pb-6', isPadge ? 'pt-[46px]' : 'pt-[76px]')}
+        style={transitionStyle}
+        ref={transitionRef}
+      >
         {showPasskey ? (
           <div className="flex flex-col items-center pt-[82px]">
             <Button
@@ -186,50 +204,60 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
           </div>
         ) : null}
         {showWallets ? (
-          <div
-            className={clsx(
-              'mt-11 box-border flex h-[52px] cursor-pointer items-center justify-between rounded-2xl border border-[#B6C4D966] px-4 py-2 hover:bg-secondary active:bg-secondary-active',
-              { 'cursor-no-drop': !!currentLogin },
-            )}
-            onClick={showChainList}
-          >
-            <span className="text-base font-bold">{t`Continue with wallets`}</span>
-            <span className="inline-flex items-center">
-              <span className="relative mr-1 inline-flex w-[102px]">
-                <img className="h-6 w-6 rounded-full border-2 border-white bg-white" src={EthIcon} alt="ETH" />
-                <img
-                  className="absolute left-[16px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                  src={BscIcon}
-                  alt="BSC"
-                />
-                <img
-                  className="absolute left-[32px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                  src={PolygonIcon}
-                  // eslint-disable-next-line lingui/no-unlocalized-strings
-                  alt="Polygon"
-                />
-                <img
-                  className="absolute left-[48px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                  src={TronIcon}
-                  // eslint-disable-next-line lingui/no-unlocalized-strings
-                  alt="Tron"
-                />
-                <img
-                  className="absolute left-[64px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                  src={DogecoinIcon}
-                  // eslint-disable-next-line lingui/no-unlocalized-strings
-                  alt="Dogecoin"
-                />
-                <img
-                  className="absolute left-[80px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                  src={TorusIcon}
-                  // eslint-disable-next-line lingui/no-unlocalized-strings
-                  alt="Torus"
-                />
+          isPadge ? (
+            <TorusList
+              className="mt-6"
+              currentLogin={currentLogin}
+              onClick={async () => {
+                await onLogin({ icon: undefined, name: CustomChain.torus, coinType: CoinType.eth })
+              }}
+            />
+          ) : (
+            <div
+              className={clsx(
+                'mt-11 box-border flex h-[52px] cursor-pointer items-center justify-between rounded-2xl border border-[#B6C4D966] px-4 py-2 hover:bg-secondary active:bg-secondary-active',
+                { 'cursor-no-drop': !!currentLogin },
+              )}
+              onClick={showChainList}
+            >
+              <span className="text-base font-bold">{t`Continue with wallets`}</span>
+              <span className="inline-flex items-center">
+                <span className="relative mr-1 inline-flex w-[102px]">
+                  <img className="h-6 w-6 rounded-full border-2 border-white bg-white" src={EthIcon} alt="ETH" />
+                  <img
+                    className="absolute left-[16px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                    src={BscIcon}
+                    alt="BSC"
+                  />
+                  <img
+                    className="absolute left-[32px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                    src={PolygonIcon}
+                    // eslint-disable-next-line lingui/no-unlocalized-strings
+                    alt="Polygon"
+                  />
+                  <img
+                    className="absolute left-[48px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                    src={TronIcon}
+                    // eslint-disable-next-line lingui/no-unlocalized-strings
+                    alt="Tron"
+                  />
+                  <img
+                    className="absolute left-[64px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                    src={DogecoinIcon}
+                    // eslint-disable-next-line lingui/no-unlocalized-strings
+                    alt="Dogecoin"
+                  />
+                  <img
+                    className="absolute left-[80px] h-6 w-6 rounded-full border-2 border-white bg-white"
+                    src={TorusIcon}
+                    // eslint-disable-next-line lingui/no-unlocalized-strings
+                    alt="Torus"
+                  />
+                </span>
+                <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
               </span>
-              <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
-            </span>
-          </div>
+            </div>
+          )
         ) : null}
       </div>
     </>

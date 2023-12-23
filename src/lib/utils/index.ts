@@ -302,7 +302,7 @@ export async function checkICloudPasskeySupport() {
   try {
     // @ts-expect-error
     const highEntropyValues = await globalThis.navigator?.userAgentData?.getHighEntropyValues(['platformVersion'])
-    platformVersion = parseInt(highEntropyValues.platformVersion?.split('.')[0] ?? '0', 10)
+    platformVersion = parseInt(highEntropyValues?.platformVersion?.split('.')[0] ?? '0', 10)
   } catch (e) {
     console.error(e)
     platformVersion = 0

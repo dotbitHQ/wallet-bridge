@@ -37,7 +37,7 @@
   }
 
   .animation-rotate-360-deg {
-    animation: rotate-360-deg 0.9s linear infinite;
+    animation: rotate-360-deg 1s linear infinite;
   }
 
   @keyframes fade-in {

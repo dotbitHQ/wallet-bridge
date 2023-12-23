@@ -121,7 +121,7 @@ const TemplateConnectWallet = () => {
   }
 
   const onSendTransaction = async () => {
-    const signature = await wallet.walletSDK.sendTransaction({
+    const signature = await wallet.sendTransaction({
       to: '0x7df93d9F500fD5A9537FEE086322a988D4fDCC38',
       value: '10000000000000000',
       data: '0x123abc',
