@@ -129,8 +129,8 @@ function setAuthorizeState(
     }
   }
 
-  const { address: oldAddress } = snapshot(walletState)
-  if (oldAddress) {
+  const { address: oldAddress, coinType } = snapshot(walletState)
+  if (oldAddress && coinType === CoinType.ckb) {
     setWalletState(record)
   }
 }

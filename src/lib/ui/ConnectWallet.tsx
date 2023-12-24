@@ -108,7 +108,6 @@ export const ConnectWallet = ({ visible, walletSDK, initComponent = 'Connect' }:
 
   useEffect(() => {
     window.addEventListener('resize', handleResize)
-    // 清理函数
     return () => {
       window.removeEventListener('resize', handleResize)
     }
