@@ -83,6 +83,10 @@ const TemplateConnectWallet = () => {
     wallet.connectWallet()
   }
 
+  const onDisconnect = async () => {
+    await wallet.walletSDK?.disconnect()
+  }
+
   const onConnectOnlyETH = async () => {
     wallet.connectWallet({ onlyEth: true })
   }
@@ -149,6 +153,8 @@ const TemplateConnectWallet = () => {
         <div>walletName: {walletSnap.walletName}</div>
       </div>
       <Button onClick={onConnect}>Connect Wallet</Button>
+      <br />
+      <Button onClick={onDisconnect}>Disconnect</Button>
       <br />
       <Button onClick={onConnectOnlyETH}>Connect Wallet only ETH</Button>
       <br />
