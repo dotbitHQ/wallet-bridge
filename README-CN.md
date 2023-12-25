@@ -6,8 +6,7 @@
 
 - **支持的链**: Ethereum、BNB Smart Chain、Polygon、TRON、Dogecoin。
 - **登录方式**: Passkey、Torus。
-
-[在线示例](https://storybook.d.id/iframe.html?viewMode=story&id=ui-wallets--connect-wallet)
+- **行业标准**: 我们依赖于 [viem](https://viem.sh/) 和 [@wagmi/core](https://wagmi.sh/core/getting-started) 这是 Web3 中最常用的库。
 
 [Documentation in English](README.md)
 
@@ -25,8 +24,10 @@
 
 ### 1. 安装：
 
+安装 wallet-bridge 及其对等依赖项 [@wagmi/core](https://wagmi.sh/core/getting-started) 和 [viem](https://viem.sh/).
+
 ```bash
-yarn add wallet-bridge
+yarn add wallet-bridge @wagmi/core viem
 ```
 
 ### 2. 导入 Wallet：
@@ -51,7 +52,7 @@ const { Wallet } = await import('wallet-bridge')
 - `loggedInSelectAddress` (可选): 在使用 Passkey 登录时，如果有多个地址，是否允许用户选择。默认为 `true`。
 - `customChains` (可选): 自定义链，来源于 `CustomChain` 枚举。默认为空数组。
 - `customWallets` (可选): 自定义钱包，来源于 `CustomWallet` 枚举。默认为空数组。
-- `wagmiConfig` (可选): 用于配置 [wagmi](https://wagmi.sh/core/getting-started) 的相关信息，类型为 `WagmiConfig`。默认为`undefined`。如果需要使用 [WalletConnect](https://docs.walletconnect.com)，必须提供此参数。
+- `wagmiConfig` (必须): 用于配置 [@wagmi/core](https://wagmi.sh/core/getting-started) 的相关信息，类型为 `WagmiConfig`。默认为`undefined`。现在依赖 WalletConnect 的每一个 DApp 都需要从 [WalletConnect Cloud](https://cloud.walletconnect.com) 免费获得一个 projectId。
 - `gtag` (可选): 用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `event`，则不需要提供此参数。
 - `event` (可选): 如果你使用 [nextjs-google-analytics](https://www.npmjs.com/package/nextjs-google-analytics) 来上报数据， 则可以用 `event` 来代替 `gtag`，用来上报 wallet-bridge 的一些事件到 google analytics，便于统计和分析用户的行为。如果你使用 `gtag`，则不需要提供此参数。
 - `locale` (可选): 用于设置语言。 现在支持 en、zh-CN、zh—TW、zh-HK、zh-MO. 如果没有设置，locale 会从下列顺序进行检测: query parameter lang -> session storage lang -> 浏览器语言设置 -> en。
@@ -90,7 +91,7 @@ const injectedConnector = new InjectedConnector({
 })
 
 const walletConnectConnectorOptions = {
-  projectId: '13c75e7d20888adc7e57cad417ad9ed8',
+  projectId: 'YOUR_PROJECT_ID', // Get projectId at https://cloud.walletconnect.com
   metadata: {
     name: '.bit',
     description: 'Barrier-free DID for Every Community and Everyone',
@@ -272,6 +273,9 @@ await onClose()
   - `iCloudPasskeySupport`: 当前环境是否支持将 passkey 存储在 iCloud 中，类型为`boolean`。
   - `customChains`: 自定义显示的链，类型为`CustomChain[]`。
   - `customWallets`: 自定义显示的钱包，类型为`CustomWallet[]`。
+  - `alias`: 当前登录的钱包地址设置的 .bit alias，类型为`string`。
+  - `locale`: 当前使用的语言，类型为`string`。
+  - `chainId`: 当使用 EVM 链钱包登录时表示对应的链 ID，类型为`number`。
 
 **示例**:
 

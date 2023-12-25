@@ -2,6 +2,8 @@ import { proxy, snapshot, useSnapshot } from 'valtio'
 import {
   CfAccessClient,
   CoinType,
+  CoinTypeToChainIdMap,
+  CoinTypeToTestNetChainIdMap,
   CustomChain,
   CustomWallet,
   DotbitIndexerApi,
@@ -23,6 +25,7 @@ export interface WalletState {
   protocol?: WalletProtocol
   address?: string
   coinType?: CoinType
+  chainId?: number
   walletName?: string
   hardwareWalletTipsShow?: boolean
   deviceData?: IDeviceData
@@ -58,6 +61,7 @@ const localWalletState = walletStateLocalStorage
       protocol: undefined,
       address: undefined,
       coinType: undefined,
+      chainId: undefined,
       walletName: undefined,
       hardwareWalletTipsShow: true,
       deviceData: undefined,
@@ -283,6 +287,8 @@ export const setWalletState = (
   }
   if (coinType) {
     walletState.coinType = coinType
+    const chainId = isTestNet ? CoinTypeToTestNetChainIdMap[coinType] : CoinTypeToChainIdMap[coinType]
+    walletState.chainId = chainId
   }
   if (walletName) {
     walletState.walletName = walletName
@@ -349,6 +355,7 @@ export const setWalletState = (
 export const resetWalletState = () => {
   walletState.protocol = undefined
   walletState.coinType = undefined
+  walletState.chainId = undefined
   walletState.walletName = undefined
   walletState.address = undefined
   walletState.deviceData = undefined

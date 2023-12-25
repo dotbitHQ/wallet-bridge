@@ -6,8 +6,7 @@
 
 - **Supported Chains**: Ethereum, BNB Smart Chain, Polygon, TRON, Dogecoin.
 - **Login Methods**: Passkey, Torus.
-
-[Live Demo](https://storybook.d.id/iframe.html?viewMode=story&id=ui-wallets--connect-wallet)
+- **Industry Standard**: We rely on [viem](https://viem.sh/) and [@wagmi/core](https://wagmi.sh/core/getting-started), which are the most commonly used libraries in Web3.
 
 [中文文档](README-CN.md)
 
@@ -25,8 +24,10 @@
 
 ### 1. Installation:
 
+Install wallet-bridge and its peer dependencies [@wagmi/core](https://wagmi.sh/core/getting-started) and [viem](https://viem.sh/).
+
 ```bash
-yarn add wallet-bridge
+yarn add wallet-bridge @wagmi/core viem
 ```
 
 ### 2. Import Wallet:
@@ -51,7 +52,7 @@ To create a new `Wallet` object, you can use its constructor and provide the fol
 - `loggedInSelectAddress` (optional): Whether to allow users to choose when logging in with Passkey if there are multiple addresses. Defaults to `true`.
 - `customChains` (optional): Custom chains sourced from the `CustomChain` enum. Defaults to an empty array.
 - `customWallets` (optional): Custom wallets sourced from the `CustomWallet` enum. Defaults to an empty array.
-- `wagmiConfig` (Optional): Used for configuring information related to [wagmi](https://wagmi.sh/core/getting-started), of type `WagmiConfig`. Defaults to `undefined`. If you need to use [WalletConnect](https://docs.walletconnect.com), this parameter must be provided.
+- `wagmiConfig` (required): Used to configure related information for [@wagmi/core](https://wagmi.sh/core/getting-started), with the type `WagmiConfig`. The default is `undefined`. Now, every DApp that relies on WalletConnect needs to obtain a projectId for free from [WalletConnect Cloud](https://cloud.walletconnect.com).
 - `gtag` (optional): Used to report some wallet-bridge events to Google Analytics for the purpose of tracking and analyzing user behavior. If you use `event`, you do not need to provide this parameter.
 - `event` (optional): If you use [nextjs-google-analytics](https://www.npmjs.com/package/nextjs-google-analytics) to report data, you can use `event` in place of `gtag` to report wallet-bridge events to Google Analytics for tracking and analyzing user behavior. If you use `gtag`, you do not need to provide this parameter.
 - `locale` (optional): Used to set the locale. Currently en, zh-CN, zh—TW, zh-HK and zh-MO are supported. If not set, the locale is detected in the order of query parameter lang -> the session storage lang -> browser language -> en.
@@ -90,7 +91,7 @@ const injectedConnector = new InjectedConnector({
 })
 
 const walletConnectConnectorOptions = {
-  projectId: '13c75e7d20888adc7e57cad417ad9ed8',
+  projectId: 'YOUR_PROJECT_ID', // Get projectId at https://cloud.walletconnect.com
   metadata: {
     name: '.bit',
     description: 'Barrier-free DID for Every Community and Everyone',
@@ -272,6 +273,9 @@ await onClose()
   - `iCloudPasskeySupport`: Whether the current environment supports storing the passkey in iCloud, of type `boolean`.
   - `customChains`: Custom chains to be displayed, of type `CustomChain[]`.
   - `customWallets`: Custom wallets to be displayed, of type `CustomWallet[]`.
+  - `alias`: The .bit alias set for the currently logged-in wallet address, of type `string`.
+  - `locale`: The language currently in use, of type `string`.
+  - `chainId`: When logging in with an EVM chain wallet, it represents the corresponding chain ID, of type `number`.
 
 **Example**:
 

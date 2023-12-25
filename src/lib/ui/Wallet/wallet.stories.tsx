@@ -36,7 +36,7 @@ const injectedConnector = new InjectedConnector({
 })
 
 const walletConnectConnectorOptions = {
-  projectId: '13c75e7d20888adc7e57cad417ad9ed8',
+  projectId: '13c75e7d20888adc7e57cad417ad9ed8', // Get projectId at https://cloud.walletconnect.com
   metadata: {
     name: '.bit',
     description: 'Barrier-free DID for Every Community and Everyone',
@@ -62,7 +62,7 @@ const wagmiConfig = createConfig({
 })
 
 const wallet = new Wallet({
-  isTestNet: true,
+  isTestNet: false,
   wagmiConfig,
 })
 
@@ -120,8 +120,9 @@ const TemplateConnectWallet = () => {
     const message = '0x123abc'
     const signature = await wallet.walletSDK.signData(message)
     console.log(signature)
-    // const res = await wallet.walletSDK._verifyPasskeySignature({ message, signature: signature as string })
-    // console.log(res)
+    // only Passkey-signed transactions can be verified.
+    const res = await wallet._verifyPasskeySignature({ message, signature: signature as string })
+    console.log(res)
   }
 
   const onSendTransaction = async () => {
