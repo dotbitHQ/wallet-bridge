@@ -162,7 +162,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
         style={{ ...transitionStyle, position: 'fixed', top: 0 }}
       />
       <div
-        className={clsx('w-full px-6 pb-6', isPadge ? 'pt-[46px]' : 'pt-[76px]')}
+        className={clsx('relative w-full px-6 pb-6', isPadge ? 'pt-[46px]' : 'pt-[76px]')}
         style={transitionStyle}
         ref={transitionRef}
       >
