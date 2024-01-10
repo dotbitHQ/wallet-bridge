@@ -107,8 +107,8 @@ class WalletSDK {
           if (res !== undefined) {
             setLoginCacheState({ signDataParams: null })
           }
-          resolve({ signature: res })
           this.context.emitEvent(EventEnum.Connect)
+          resolve({ signature: res })
         })
       }
     })
