@@ -68,12 +68,7 @@ export class TronLinkConnector extends WalletConnector {
   async switchNetwork(chainId: number): Promise<void> {}
 
   async signData(data: SignDataType): Promise<string | undefined> {
-    try {
-      const signer = new TronLinkSigner(this.context)
-      return await signer.signData(data)
-    } catch (err) {
-      console.error(err)
-      return undefined
-    }
+    const signer = new TronLinkSigner(this.context)
+    return await signer.signData(data)
   }
 }

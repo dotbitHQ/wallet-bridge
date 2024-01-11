@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:85
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:94
 #: src/lib/ui/ShowQRCode/index.tsx:23
 msgid "👌 Copied"
 msgstr "👌 復制成功"
@@ -66,8 +66,8 @@ msgstr "用其他錢包登錄"
 msgid "Copy"
 msgstr "復制"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:132
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:185
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:149
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:202
 msgid "Copy Address"
 msgstr "復制地址"
 
@@ -83,8 +83,8 @@ msgstr "當前設備"
 msgid "Device Loss Can Lead to Asset Loss"
 msgstr "遺失當前設備會造成資產丟失"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:156
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:200
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:173
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:226
 msgid "Disconnect"
 msgstr "斷開連接"
 
@@ -168,6 +168,10 @@ msgstr "攝像頭未授權"
 msgid "OK"
 msgstr "確定"
 
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:217
+msgid "Open Torus"
+msgstr "打開 Torus"
+
 #: src/lib/components/TorusList.tsx:38
 msgid "or Continue with"
 msgstr "或使用"
@@ -192,19 +196,17 @@ msgstr "黏貼數據或者掃描二維碼"
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "請檢查您是否使用了多個錢包插件。請禁用多個錢包插件，只保留一個錢包插件後再試。"
 
-#: src/lib/wallets/WalletContext.ts:234
-#: src/lib/wallets/WalletContext.ts:237
+#: src/lib/wallets/WalletContext.ts:222
+#: src/lib/wallets/WalletContext.ts:225
 msgid "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 msgstr "請下載 TokenPocket，並在應用內連接您的 Dogecoin 錢包，然後重試。"
 
-#: src/lib/wallets/WalletConnectorHandler/MetaMaskConnector.ts:96
-#: src/lib/wallets/WalletContext.ts:296
+#: src/lib/wallets/WalletContext.ts:273
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "請確保您的瀏覽器已安裝 {0} 錢包插件，然後再試。"
 
-#: src/lib/wallets/WalletConnectorHandler/MetaMaskConnector.ts:92
-#: src/lib/wallets/WalletContext.ts:232
-#: src/lib/wallets/WalletContext.ts:292
+#: src/lib/wallets/WalletContext.ts:220
+#: src/lib/wallets/WalletContext.ts:269
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "請在您的加密貨幣錢包應用中打開此頁面，然後再試。"
 
@@ -252,11 +254,11 @@ msgstr "連接前請將您的錢包切換至 TRON 主網"
 msgid "Please switch your wallet to the TRON Nile test network before connecting"
 msgstr "連接前請將您的錢包切換至 TRON Nile 測試網"
 
-#: src/lib/wallets/WalletContext.ts:227
+#: src/lib/wallets/WalletContext.ts:215
 msgid "Please try again after unlocking your TokenPocket wallet"
 msgstr "解鎖您的 TokenPocket 錢包後請再試"
 
-#: src/lib/wallets/WalletContext.ts:288
+#: src/lib/wallets/WalletContext.ts:265
 msgid "Please try again after unlocking your Tron wallet"
 msgstr "解鎖您的 Tron 錢包後請再試"
 
@@ -265,8 +267,8 @@ msgid "Please try again."
 msgstr "請再次嘗試。"
 
 #: src/lib/ui/LoggedIn/AddressQrCode.tsx:22
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:139
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:192
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:156
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:209
 msgid "QR Code"
 msgstr "二維碼"
 
@@ -318,7 +320,7 @@ msgstr "通過添加授信設備來保障您資產的安全。"
 msgid "Select Wallet"
 msgstr "選擇錢包"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:147
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:164
 msgid "Switch"
 msgstr "切換"
 

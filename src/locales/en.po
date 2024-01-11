@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:85
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:94
 #: src/lib/ui/ShowQRCode/index.tsx:23
 msgid "👌 Copied"
 msgstr "👌 Copied"
@@ -66,8 +66,8 @@ msgstr "Continue with wallets"
 msgid "Copy"
 msgstr "Copy"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:132
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:185
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:149
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:202
 msgid "Copy Address"
 msgstr "Copy Address"
 
@@ -83,8 +83,8 @@ msgstr "Current Device"
 msgid "Device Loss Can Lead to Asset Loss"
 msgstr "Device Loss Can Lead to Asset Loss"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:156
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:200
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:173
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:226
 msgid "Disconnect"
 msgstr "Disconnect"
 
@@ -168,6 +168,10 @@ msgstr "No Camera Permission"
 msgid "OK"
 msgstr "OK"
 
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:217
+msgid "Open Torus"
+msgstr "Open Torus"
+
 #: src/lib/components/TorusList.tsx:38
 msgid "or Continue with"
 msgstr "or Continue with"
@@ -192,19 +196,17 @@ msgstr "Paste data or scan QR code"
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 
-#: src/lib/wallets/WalletContext.ts:234
-#: src/lib/wallets/WalletContext.ts:237
+#: src/lib/wallets/WalletContext.ts:222
+#: src/lib/wallets/WalletContext.ts:225
 msgid "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 msgstr "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 
-#: src/lib/wallets/WalletConnectorHandler/MetaMaskConnector.ts:96
-#: src/lib/wallets/WalletContext.ts:296
+#: src/lib/wallets/WalletContext.ts:273
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "Please ensure that your browser has the {0} wallet plugin installed and try again."
 
-#: src/lib/wallets/WalletConnectorHandler/MetaMaskConnector.ts:92
-#: src/lib/wallets/WalletContext.ts:232
-#: src/lib/wallets/WalletContext.ts:292
+#: src/lib/wallets/WalletContext.ts:220
+#: src/lib/wallets/WalletContext.ts:269
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "Please open this page in your crypto wallet App and try again."
 
@@ -252,11 +254,11 @@ msgstr "Please switch your wallet to the TRON main network before connecting"
 msgid "Please switch your wallet to the TRON Nile test network before connecting"
 msgstr "Please switch your wallet to the TRON Nile test network before connecting"
 
-#: src/lib/wallets/WalletContext.ts:227
+#: src/lib/wallets/WalletContext.ts:215
 msgid "Please try again after unlocking your TokenPocket wallet"
 msgstr "Please try again after unlocking your TokenPocket wallet"
 
-#: src/lib/wallets/WalletContext.ts:288
+#: src/lib/wallets/WalletContext.ts:265
 msgid "Please try again after unlocking your Tron wallet"
 msgstr "Please try again after unlocking your Tron wallet"
 
@@ -265,8 +267,8 @@ msgid "Please try again."
 msgstr "Please try again."
 
 #: src/lib/ui/LoggedIn/AddressQrCode.tsx:22
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:139
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:192
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:156
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:209
 msgid "QR Code"
 msgstr "QR Code"
 
@@ -318,7 +320,7 @@ msgstr "Secure your assets by adding extra trusted devices like mobile phones, c
 msgid "Select Wallet"
 msgstr "Select Wallet"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:147
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:164
 msgid "Switch"
 msgstr "Switch"
 

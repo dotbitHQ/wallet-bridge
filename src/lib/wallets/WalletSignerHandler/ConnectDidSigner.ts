@@ -10,7 +10,6 @@ export class ConnectDidSigner extends WalletSigner {
       provider = options?.provider
     } else {
       provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
-        console.error(err)
         throw new CustomError(err.code, err.message)
       })
     }

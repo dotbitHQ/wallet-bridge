@@ -91,15 +91,10 @@ export class WalletConnectConnector extends WalletConnector {
   }
 
   async signData(data: SignDataType, isEIP712?: boolean): Promise<string | undefined> {
-    try {
-      const signer = new WalletConnectSigner(this.context)
-      await sleep(1000)
-      return await signer.signData(data, {
-        isEIP712,
-      })
-    } catch (err) {
-      console.error(err)
-      return undefined
-    }
+    const signer = new WalletConnectSigner(this.context)
+    await sleep(1000)
+    return await signer.signData(data, {
+      isEIP712,
+    })
   }
 }

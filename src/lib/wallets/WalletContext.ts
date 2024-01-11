@@ -168,10 +168,6 @@ export class WalletContext {
   }
 
   private async getMetaMaskProvider() {
-    if (this.torusWallet?.hideTorusButton) {
-      this.torusWallet.hideTorusButton()
-    }
-
     if (this.wagmiConfig) {
       if (shouldUseWalletConnect()) {
         const walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
@@ -191,10 +187,6 @@ export class WalletContext {
   }
 
   private async getWalletConnectProvider() {
-    if (this.torusWallet?.hideTorusButton) {
-      this.torusWallet.hideTorusButton()
-    }
-
     if (this.wagmiConfig) {
       let walletConnectConnector
       if (isMobile) {
@@ -214,10 +206,6 @@ export class WalletContext {
   }
 
   private async getTokenPocketUTXOProvider() {
-    if (this.torusWallet?.hideTorusButton) {
-      this.torusWallet.hideTorusButton()
-    }
-
     await sleep(1000)
     const { bitcoin } = window
     if (typeof bitcoin !== 'undefined') {
@@ -241,44 +229,33 @@ export class WalletContext {
 
   private async getTorusProvider() {
     if (!this.torusWallet) {
-      this.torusWallet = new Torus({
-        buttonPosition: 'bottom-right',
-      })
+      this.torusWallet = new Torus()
     }
 
-    try {
-      let host: string
-      if (this.coinType) {
-        host = this.isTestNet ? CoinTypeToTorusHostTestNetMap[this.coinType] : CoinTypeToTorusHostMap[this.coinType]
+    let host: string
+    if (this.coinType) {
+      host = this.isTestNet ? CoinTypeToTorusHostTestNetMap[this.coinType] : CoinTypeToTorusHostMap[this.coinType]
+    } else {
+      host = this.isTestNet ? CoinTypeToTorusHostTestNetMap[CoinType.eth] : CoinTypeToTorusHostMap[CoinType.eth]
+    }
+
+    if (!this.torusWallet.isLoggedIn) {
+      if (this.torusWallet.isInitialized) {
+        await this.torusWallet.login()
       } else {
-        host = this.isTestNet ? CoinTypeToTorusHostTestNetMap[CoinType.eth] : CoinTypeToTorusHostMap[CoinType.eth]
+        await this.torusWallet.init({
+          showTorusButton: false,
+          network: {
+            host,
+          },
+        })
+        await this.torusWallet.login()
       }
-
-      if (!this.torusWallet.isLoggedIn) {
-        if (this.torusWallet.isInitialized) {
-          await this.torusWallet.login()
-        } else {
-          await this.torusWallet.init({
-            showTorusButton: true,
-            network: {
-              host,
-            },
-          })
-          await this.torusWallet.login()
-        }
-      }
-      this.provider = this.torusWallet.ethereum
-    } catch (error: any) {
-      this.torusWallet.hideTorusButton()
-      throw error
     }
+    this.provider = this.torusWallet.ethereum
   }
 
   private async getTronLinkProvider() {
-    if (this.torusWallet?.hideTorusButton) {
-      this.torusWallet.hideTorusButton()
-    }
-
     await sleep(1000)
     const { tronWeb } = window
     if (typeof tronWeb !== 'undefined') {
@@ -300,10 +277,6 @@ export class WalletContext {
   }
 
   private getConnectDIDProvider() {
-    if (this.torusWallet?.hideTorusButton) {
-      this.torusWallet.hideTorusButton()
-    }
-
     let isDebug = false
 
     if (typeof window !== 'undefined') {

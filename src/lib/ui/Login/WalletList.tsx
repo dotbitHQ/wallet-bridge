@@ -119,7 +119,6 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
       onClose?.()
       setLoginCacheState({ walletConnectDisplayUri: '', walletName: '' })
     } catch (error: any) {
-      console.error(error)
       const handleErrorRes = handleError(error)
       if (handleErrorRes.isHandle) {
         if (handleErrorRes.title && handleErrorRes.message) {
@@ -129,6 +128,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
           })
         }
       } else {
+        console.error(error)
         createTips({
           title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

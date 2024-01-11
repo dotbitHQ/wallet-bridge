@@ -107,8 +107,8 @@ class WalletSDK {
           if (res !== undefined) {
             setLoginCacheState({ signDataParams: null })
           }
-          resolve({ signature: res })
           this.context.emitEvent(EventEnum.Connect)
+          resolve({ signature: res })
         })
       }
     })
@@ -203,7 +203,6 @@ class WalletSDK {
         provider = options?.provider
       } else {
         provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
-          console.error(err)
           throw new CustomError(err.code, err.message)
         })
       }
@@ -249,7 +248,6 @@ class WalletSDK {
     let provider: any
     if (this.context.protocol === WalletProtocol.webAuthn) {
       provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
-        console.error(err)
         throw new CustomError(err.code, err.message)
       })
     }

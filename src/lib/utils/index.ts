@@ -283,7 +283,6 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
         return false
       }
     } catch (error) {
-      console.error(error)
       return false
     }
   } else {
@@ -298,13 +297,12 @@ export async function checkWebAuthnSupport(): Promise<boolean> {
  */
 export async function checkICloudPasskeySupport() {
   const uaParser = new UAParser(globalThis.navigator?.userAgent)
-  let platformVersion: number
+  let platformVersion: number = 0
   try {
     // @ts-expect-error
     const highEntropyValues = await globalThis.navigator?.userAgentData?.getHighEntropyValues(['platformVersion'])
     platformVersion = parseInt(highEntropyValues?.platformVersion?.split('.')[0] ?? '0', 10)
   } catch (e) {
-    console.error(e)
     platformVersion = 0
   }
 

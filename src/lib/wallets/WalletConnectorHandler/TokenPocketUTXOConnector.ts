@@ -40,12 +40,7 @@ export class TokenPocketUTXOConnector extends WalletConnector {
   async switchNetwork(chainId: number): Promise<void> {}
 
   async signData(data: SignDataType): Promise<string | undefined> {
-    try {
-      const signer = new TokenPocketUTXOSigner(this.context)
-      return await signer.signData(data)
-    } catch (err) {
-      console.error(err)
-      return undefined
-    }
+    const signer = new TokenPocketUTXOSigner(this.context)
+    return await signer.signData(data)
   }
 }

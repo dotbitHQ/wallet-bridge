@@ -36,9 +36,7 @@ export class TorusConnector extends WalletConnector {
   }
 
   async disconnect(): Promise<void> {
-    if (this.context.torusWallet?.hideTorusButton) {
-      this.context.torusWallet?.hideTorusButton()
-    }
+    await this.context.torusWallet?.logout?.()
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined
@@ -49,14 +47,9 @@ export class TorusConnector extends WalletConnector {
   async switchNetwork(chainId: number): Promise<void> {}
 
   async signData(data: SignDataType, isEIP712?: boolean): Promise<string | undefined> {
-    try {
-      const signer = new TorusSigner(this.context)
-      return await signer.signData(data, {
-        isEIP712,
-      })
-    } catch (err) {
-      console.error(err)
-      return undefined
-    }
+    const signer = new TorusSigner(this.context)
+    return await signer.signData(data, {
+      isEIP712,
+    })
   }
 }

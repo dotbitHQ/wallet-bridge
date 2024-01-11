@@ -1,7 +1,16 @@
-import { CopyIcon, DeviceIcon, DisconnectIcon, Header, QRCodeIcon, SwapChildProps, SwitchIcon } from '../../components'
+import {
+  CopyIcon,
+  DeviceIcon,
+  DisconnectIcon,
+  Header,
+  QRCodeIcon,
+  SwapChildProps,
+  SwitchIcon,
+  TorusIcon,
+} from '../../components'
 import { CoinType, WalletProtocol } from '../../constant'
 import { backupDeviceData, getAuthorizeInfo, getDotbitAlias, getMastersAddress, useWalletState } from '../../store'
-import { ReactNode, useContext, useEffect, useState } from 'react'
+import { ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { collapseString, copyText } from '../../utils'
 import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
@@ -86,6 +95,14 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
       })
     })
   }
+
+  const openTorus = () => {
+    walletSDK?.context?.torusWallet?.showWallet?.('home')
+  }
+
+  const showOpenTorusButton = useMemo(() => {
+    return !!walletSDK?.context?.torusWallet?.isLoggedIn
+  }, [walletSDK?.context?.torusWallet?.isLoggedIn])
 
   useEffect(() => {
     void getMastersAddress()
@@ -191,6 +208,15 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 >
                   {t`QR Code`}
                 </LoggedInButton>
+                {showOpenTorusButton && (
+                  <LoggedInButton
+                    className="flex-loggedin-button"
+                    icon={<TorusIcon className="h-4 w-4 text-[#5F6570]"></TorusIcon>}
+                    onClick={openTorus}
+                  >
+                    {t`Open Torus`}
+                  </LoggedInButton>
+                )}
                 <LoggedInButton
                   className="flex-loggedin-button"
                   icon={<DisconnectIcon className="h-5 w-5 text-[#5F6570]"></DisconnectIcon>}

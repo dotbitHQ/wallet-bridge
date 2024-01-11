@@ -129,7 +129,6 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
       await walletSDK.connect()
       onClose()
     } catch (error: any) {
-      console.error(error)
       const handleErrorRes = handleError(error)
       if (handleErrorRes.isHandle) {
         if (handleErrorRes.title && handleErrorRes.message) {
@@ -139,6 +138,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
           })
         }
       } else {
+        console.error(error)
         createTips({
           title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
