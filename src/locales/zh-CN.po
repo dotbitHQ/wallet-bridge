@@ -134,7 +134,7 @@ msgid "insufficient funds for transfer"
 msgstr "余额不足"
 
 #: src/lib/ui/Login/Connect.tsx:188
-msgid "Most friendly and secure way base on"
+msgid "Most friendly and secure way based on"
 msgstr "简单易用，基于"
 
 #: src/lib/ui/LoggedIn/BackupTips.tsx:30

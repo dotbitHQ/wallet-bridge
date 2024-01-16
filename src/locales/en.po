@@ -134,8 +134,8 @@ msgid "insufficient funds for transfer"
 msgstr "insufficient funds for transfer"
 
 #: src/lib/ui/Login/Connect.tsx:188
-msgid "Most friendly and secure way base on"
-msgstr "Most friendly and secure way base on"
+msgid "Most friendly and secure way based on"
+msgstr "Most friendly and secure way based on"
 
 #: src/lib/ui/LoggedIn/BackupTips.tsx:30
 msgid "Need access to this address with Windows or Android devices,"
