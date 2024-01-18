@@ -26,7 +26,6 @@ interface HandleErrorRes {
 }
 
 export default function handleError(error: CustomError): HandleErrorRes {
-  console.error(error)
   let res: HandleErrorRes = {
     isHandle: false,
     title: '',
@@ -89,6 +88,8 @@ export default function handleError(error: CustomError): HandleErrorRes {
       title: t`Tips`,
       message: t`The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet.`,
     }
+  } else {
+    console.error(error)
   }
 
   return res
