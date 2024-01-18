@@ -11,7 +11,10 @@ function isUserReject(err: any) {
     )
   const tronReject = err === errno.tronLinkConfirmationDeclinedByUser
   const torusReject = [errno.torusUserCancelledLogin, errno.torusUserClosedPopup].includes(err.message)
-  const walletConnectReject = err.message === errno.walletConnectUserRejectedTheTransaction
+  const walletConnectReject = [
+    errno.walletConnectUserRejectedTheTransaction,
+    errno.walletConnectConnectionRequestReset,
+  ].includes(err.message)
   const connectDidSdkReject = err.code === errno.connectDidSdkAbort
   return metaMaskReject || tronReject || walletConnectReject || torusReject || connectDidSdkReject
 }

@@ -14,6 +14,7 @@ const errno = {
   // WalletConnect
   walletConnectUserRejectedTheTransaction: 'User rejected the transaction',
   walletConnectInsufficientFundsForTransfer: 'insufficient funds for transfer',
+  walletConnectConnectionRequestReset: 'Connection request reset. Please try again.',
   // TronLink
   tronLinkConfirmationDeclinedByUser: 'Confirmation declined by user',
   tronLinkInsufficientBalance:

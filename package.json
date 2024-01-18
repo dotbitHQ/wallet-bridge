@@ -1,7 +1,7 @@
 {
   "name": "wallet-bridge",
   "private": false,
-  "version": "0.1.61",
+  "version": "0.1.62",
   "main": "./dist/wallet-bridge.umd.js",
   "module": "./dist/wallet-bridge.es.js",
   "types": "./dist/index.d.ts",
@@ -34,7 +34,7 @@
     "@lingui/react": "^4.5.0",
     "@metamask/eth-sig-util": "^6.0.0",
     "@tanstack/react-query": "^4.29.19",
-    "@toruslabs/torus-embed": "^2.2.6",
+    "@toruslabs/torus-embed": "^4.1.2",
     "@wagmi/core": "1.4.1",
     "abc-copy": "^0.0.11",
     "axios": "^1.4.0",
