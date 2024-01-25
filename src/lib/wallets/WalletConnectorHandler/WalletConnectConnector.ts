@@ -1,6 +1,6 @@
 import { WalletConnector } from './WalletConnector'
-import { sleep, toChecksumAddress } from '../../utils'
-import { connect, Connector, disconnect, switchNetwork } from '@wagmi/core'
+import { shouldUseWalletConnect, sleep, toChecksumAddress } from '../../utils'
+import { connect, Connector, disconnect, getAccount, getNetwork, switchNetwork } from '@wagmi/core'
 import { EventEnum } from '../WalletEventListenerHandler'
 import { resetWalletState, setWalletState } from '../../store'
 import { loginCacheState, setLoginCacheState } from '../../store/loginCache'
@@ -65,12 +65,27 @@ export class WalletConnectConnector extends WalletConnector {
         }
       }
     } else if (wagmiConfig.status === 'connected') {
-      const { signDataParams } = snapshot(loginCacheState)
-      if (signDataParams) {
-        const signature = await this.signData(signDataParams.data as SignDataType, signDataParams.isEIP712)
-        this.context.emitEvent(EventEnum.Signature, signature)
-      } else if (!ignoreEvent) {
-        this.context.emitEvent(EventEnum.Connect)
+      const network = getNetwork()
+      if (chainId && chainId !== network.chain?.id && !shouldUseWalletConnect()) {
+        await this.switchNetwork(chainId)
+      }
+      const { address } = getAccount()
+
+      if (address && network.chain && network.chain.id === chainId) {
+        this.context.address = toChecksumAddress(address)
+        setWalletState({
+          protocol: this.context.protocol,
+          address: this.context.address,
+          coinType: this.context.coinType,
+          walletName: this.context.walletName,
+        })
+        const { signDataParams } = snapshot(loginCacheState)
+        if (signDataParams) {
+          const signature = await this.signData(signDataParams.data as SignDataType, signDataParams.isEIP712)
+          this.context.emitEvent(EventEnum.Signature, signature)
+        } else if (!ignoreEvent) {
+          this.context.emitEvent(EventEnum.Connect)
+        }
       }
     }
   }
