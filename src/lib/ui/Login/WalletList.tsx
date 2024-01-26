@@ -128,7 +128,6 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
           })
         }
       } else {
-        console.error(error)
         createTips({
           title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
