@@ -138,7 +138,6 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
           })
         }
       } else {
-        console.error(error)
         createTips({
           title: t`Tips`,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
