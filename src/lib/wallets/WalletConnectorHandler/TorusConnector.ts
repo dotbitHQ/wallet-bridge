@@ -9,7 +9,10 @@ import { SignDataType, TorusSigner } from '../WalletSignerHandler'
 
 export class TorusConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
-    const { provider, isTestNet } = this.context
+    const { provider, isTestNet, torusWallet } = this.context
+    if (!torusWallet?.isLoggedIn && torusWallet?.isInitialized) {
+      await torusWallet?.login()
+    }
     const netVersion = provider.networkVersion
     const ethChainId = provider.chainId
     const res = await provider.request({ method: 'eth_requestAccounts' })
@@ -36,7 +39,9 @@ export class TorusConnector extends WalletConnector {
   }
 
   async disconnect(): Promise<void> {
-    await this.context.torusWallet?.logout?.()
+    if (this.context.torusWallet?.isLoggedIn) {
+      await this.context.torusWallet?.logout?.()
+    }
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined

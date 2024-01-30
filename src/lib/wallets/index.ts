@@ -20,6 +20,7 @@ import Axios from 'axios'
 import { setLoginCacheState } from '../store/loginCache'
 import { createTips } from '../components'
 import { t } from '@lingui/macro'
+import handleError from '../utils/handleError'
 
 Axios.defaults.withCredentials = true
 
@@ -148,11 +149,21 @@ class WalletSDK {
       return false
     } catch (error: any) {
       if (!involution) {
-        createTips({
-          title: t`Error`,
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
-        })
+        const handleErrorRes = handleError(error)
+        if (handleErrorRes.isHandle) {
+          if (handleErrorRes.title && handleErrorRes.message) {
+            createTips({
+              title: handleErrorRes.title,
+              content: handleErrorRes.message,
+            })
+          }
+        } else {
+          createTips({
+            title: t`Error`,
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            content: error.code ? `${error.code}: ${error.message}` : error.message ? error.message : error.toString(),
+          })
+        }
       }
       this.onInvolution(involution)
       return false
