@@ -96,8 +96,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
       .then((res) => {
         setIsSupportWebAuthn(res)
       })
-      .catch((err) => {
-        console.error(err)
+      .catch(() => {
         setIsSupportWebAuthn(false)
       })
   }, [])

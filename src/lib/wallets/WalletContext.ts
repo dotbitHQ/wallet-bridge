@@ -239,18 +239,13 @@ export class WalletContext {
       host = this.isTestNet ? CoinTypeToTorusHostTestNetMap[CoinType.eth] : CoinTypeToTorusHostMap[CoinType.eth]
     }
 
-    if (!this.torusWallet.isLoggedIn) {
-      if (this.torusWallet.isInitialized) {
-        await this.torusWallet.login()
-      } else {
-        await this.torusWallet.init({
-          showTorusButton: false,
-          network: {
-            host,
-          },
-        })
-        await this.torusWallet.login()
-      }
+    if (!this.torusWallet.isInitialized) {
+      await this.torusWallet.init({
+        showTorusButton: false,
+        network: {
+          host,
+        },
+      })
     }
     this.provider = this.torusWallet.ethereum
   }
