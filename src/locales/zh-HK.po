@@ -54,11 +54,11 @@ msgstr "請為此設備選一個圖標。"
 msgid "click here"
 msgstr "請點擊此處"
 
-#: src/lib/ui/Login/Connect.tsx:184
+#: src/lib/ui/Login/Connect.tsx:182
 msgid "Continue"
 msgstr "繼續"
 
-#: src/lib/ui/Login/Connect.tsx:223
+#: src/lib/ui/Login/Connect.tsx:221
 msgid "Continue with wallets"
 msgstr "用其他錢包登錄"
 
@@ -93,7 +93,7 @@ msgid "Done"
 msgstr "完成"
 
 #: src/lib/ui/ChooseEmoji/index.tsx:67
-#: src/lib/wallets/index.ts:152
+#: src/lib/wallets/index.ts:162
 msgid "Error"
 msgstr "錯誤"
 
@@ -125,7 +125,7 @@ msgstr "數據錯誤"
 msgid "Info"
 msgstr "提示"
 
-#: src/lib/utils/handleError.ts:81
+#: src/lib/utils/handleError.ts:83
 msgid "Insufficient balance"
 msgstr "余額不足"
 
@@ -133,7 +133,7 @@ msgstr "余額不足"
 msgid "insufficient funds for transfer"
 msgstr "余額不足"
 
-#: src/lib/ui/Login/Connect.tsx:188
+#: src/lib/ui/Login/Connect.tsx:186
 msgid "Most friendly and secure way based on"
 msgstr "簡單易用，基於"
 
@@ -176,15 +176,15 @@ msgstr "打開 Torus"
 msgid "or Continue with"
 msgstr "或使用"
 
-#: src/lib/utils/handleError.ts:65
+#: src/lib/utils/handleError.ts:67
 msgid "Other requests for the wallet are not processed, please try again after processing"
 msgstr "錢包的其他請求未被處理，請處理後再試"
 
-#: src/lib/ui/Login/ChainList.tsx:167
+#: src/lib/ui/Login/ChainList.tsx:166
 msgid "Other Wallets"
 msgstr "其他錢包"
 
-#: src/lib/ui/Login/Connect.tsx:193
+#: src/lib/ui/Login/Connect.tsx:191
 msgid "Passkey"
 msgstr "Passkey"
 
@@ -192,21 +192,21 @@ msgstr "Passkey"
 msgid "Paste data or scan QR code"
 msgstr "黏貼數據或者掃描二維碼"
 
-#: src/lib/utils/handleError.ts:71
+#: src/lib/utils/handleError.ts:73
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "請檢查您是否使用了多個錢包插件。請禁用多個錢包插件，只保留一個錢包插件後再試。"
 
-#: src/lib/wallets/WalletContext.ts:222
-#: src/lib/wallets/WalletContext.ts:225
+#: src/lib/wallets/WalletContext.ts:227
+#: src/lib/wallets/WalletContext.ts:233
 msgid "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 msgstr "請下載 TokenPocket，並在應用內連接您的 Dogecoin 錢包，然後重試。"
 
-#: src/lib/wallets/WalletContext.ts:273
+#: src/lib/wallets/WalletContext.ts:278
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "請確保您的瀏覽器已安裝 {0} 錢包插件，然後再試。"
 
-#: src/lib/wallets/WalletContext.ts:220
-#: src/lib/wallets/WalletContext.ts:269
+#: src/lib/wallets/WalletContext.ts:222
+#: src/lib/wallets/WalletContext.ts:273
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "請在您的加密貨幣錢包應用中打開此頁面，然後再試。"
 
@@ -255,12 +255,12 @@ msgid "Please switch your wallet to the TRON Nile test network before connecting
 msgstr "連接前請將您的錢包切換至 TRON Nile 測試網"
 
 #: src/lib/wallets/WalletContext.ts:215
-msgid "Please try again after unlocking your TokenPocket wallet"
-msgstr "解鎖您的 TokenPocket 錢包後請再試"
+msgid "Please try again after unlocking your TokenPocket wallet."
+msgstr "解鎖您的 TokenPocket 錢包後請再試。"
 
-#: src/lib/wallets/WalletContext.ts:265
-msgid "Please try again after unlocking your Tron wallet"
-msgstr "解鎖您的 Tron 錢包後請再試"
+#: src/lib/wallets/WalletContext.ts:269
+msgid "Please try again after unlocking your Tron wallet."
+msgstr "解鎖您的 Tron 錢包後請再試。"
 
 #: src/lib/ui/TransactionFailed/index.tsx:28
 msgid "Please try again."
@@ -272,11 +272,11 @@ msgstr "請再次嘗試。"
 msgid "QR Code"
 msgstr "二維碼"
 
-#: src/lib/utils/handleError.ts:47
+#: src/lib/utils/handleError.ts:49
 msgid "Replacement transaction underpriced"
 msgstr ""
 
-#: src/lib/ui/Login/Connect.tsx:160
+#: src/lib/ui/Login/Connect.tsx:158
 msgid "Request Permission"
 msgstr "請求授權"
 
@@ -316,7 +316,7 @@ msgstr "掃描二維碼需要獲取攝像頭權限，請授權。"
 msgid "Secure your assets by adding extra trusted devices like mobile phones, computers or tablets immediately."
 msgstr "通過添加授信設備來保障您資產的安全。"
 
-#: src/lib/ui/Login/WalletList.tsx:163
+#: src/lib/ui/Login/WalletList.tsx:162
 msgid "Select Wallet"
 msgstr "選擇錢包"
 
@@ -332,7 +332,7 @@ msgstr "切換地址"
 msgid "The contract verification failed."
 msgstr "合約驗證失敗。"
 
-#: src/lib/utils/handleError.ts:87
+#: src/lib/utils/handleError.ts:89
 msgid "The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet."
 msgstr "當前錢包環境不支持使用 TRX 付款，請更新錢包版本或者使用其他錢包。"
 
@@ -340,25 +340,26 @@ msgstr "當前錢包環境不支持使用 TRX 付款，請更新錢包版本或�
 msgid "The new trusted device has full control over this address."
 msgstr "新的授信設備有此地址的完全控制權。"
 
-#: src/lib/utils/handleError.ts:56
+#: src/lib/utils/handleError.ts:58
 msgid "The transaction has been aborted."
 msgstr "交易被取消。"
 
-#: src/lib/ui/Login/Connect.tsx:202
+#: src/lib/ui/Login/Connect.tsx:200
 msgid "This device or browser unsupported. Try connect by social or wallet."
 msgstr "此設備或瀏覽器不支持 Passkey，請使用其他方式連接。"
 
 #: src/lib/ui/FinalConfirm/index.tsx:82
 #: src/lib/ui/LoggedIn/DeviceList.tsx:159
-#: src/lib/ui/Login/ChainList.tsx:143
-#: src/lib/ui/Login/Connect.tsx:136
-#: src/lib/ui/Login/WalletList.tsx:133
-#: src/lib/utils/handleError.ts:46
-#: src/lib/utils/handleError.ts:55
-#: src/lib/utils/handleError.ts:64
-#: src/lib/utils/handleError.ts:70
-#: src/lib/utils/handleError.ts:80
-#: src/lib/utils/handleError.ts:86
+#: src/lib/ui/Login/ChainList.tsx:142
+#: src/lib/ui/Login/Connect.tsx:134
+#: src/lib/ui/Login/WalletList.tsx:132
+#: src/lib/utils/handleError.ts:48
+#: src/lib/utils/handleError.ts:57
+#: src/lib/utils/handleError.ts:66
+#: src/lib/utils/handleError.ts:72
+#: src/lib/utils/handleError.ts:82
+#: src/lib/utils/handleError.ts:88
+#: src/lib/utils/handleError.ts:94
 #: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:82
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:66
 #: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:66

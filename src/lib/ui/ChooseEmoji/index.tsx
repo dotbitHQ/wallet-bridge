@@ -45,8 +45,8 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
     retry: false,
     queryFn: async () => {
       if (
-        walletSnap.address === undefined ||
-        webAuthnState.backupDeviceData?.ckbAddr === undefined ||
+        !walletSnap.address ||
+        !webAuthnState.backupDeviceData?.ckbAddr ||
         selected === undefined ||
         webAuthnState.backupDeviceData?.name === undefined
       )

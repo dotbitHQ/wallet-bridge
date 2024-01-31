@@ -73,7 +73,7 @@ function Device({ item, managingAddress, onDisconnect }: DeviceProps) {
     retry: false,
     enabled: false,
     queryFn: async () => {
-      if (walletSnap.address === undefined) throw new Error('unreachable')
+      if (!walletSnap.address || !item.address) throw new Error('unreachable')
       const res = await webAuthnService.buildTransaction({
         master_ckb_address: walletSnap.address,
         slave_ckb_address: item.address,

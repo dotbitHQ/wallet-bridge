@@ -212,17 +212,26 @@ export class WalletContext {
       if (bitcoin.isTokenPocket) {
         this.provider = bitcoin
       } else {
-        throw new Error(t`Please try again after unlocking your TokenPocket wallet `)
+        throw new CustomError(errno.getProviderError, t`Please try again after unlocking your TokenPocket wallet.`)
       }
     } else {
       if (isMobile) {
         if (isAndroid) {
-          throw new Error(t`Please open this page in your crypto wallet App and try again.`)
+          throw new CustomError(
+            errno.getProviderError,
+            t`Please open this page in your crypto wallet App and try again.`,
+          )
         } else {
-          throw new Error(t`Please download TokenPocket, connect your Dogecoin wallet within the app, and retry.`)
+          throw new CustomError(
+            errno.getProviderError,
+            t`Please download TokenPocket, connect your Dogecoin wallet within the app, and retry.`,
+          )
         }
       } else {
-        throw new Error(t`Please download TokenPocket, connect your Dogecoin wallet within the app, and retry.`)
+        throw new CustomError(
+          errno.getProviderError,
+          t`Please download TokenPocket, connect your Dogecoin wallet within the app, and retry.`,
+        )
       }
     }
   }
@@ -257,14 +266,15 @@ export class WalletContext {
       if (tronWeb.defaultAddress.base58) {
         this.provider = tronWeb
       } else {
-        throw Error(t`Please try again after unlocking your Tron wallet`)
+        throw new CustomError(errno.getProviderError, t`Please try again after unlocking your Tron wallet.`)
       }
     } else {
       if (isMobile) {
-        throw new Error(t`Please open this page in your crypto wallet App and try again.`)
+        throw new CustomError(errno.getProviderError, t`Please open this page in your crypto wallet App and try again.`)
       } else {
         const name = this.coinType && CoinTypeToChainMap[this.coinType].name
-        throw new Error(
+        throw new CustomError(
+          errno.getProviderError,
           t`Please ensure that your browser has the ${String(name)} wallet plugin installed and try again.`,
         )
       }
