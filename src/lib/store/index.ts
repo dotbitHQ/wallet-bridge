@@ -235,7 +235,7 @@ export async function getDotbitAlias() {
 
 export async function backupDeviceData() {
   const { isTestNet, deviceData, address, masterNotes } = snapshot(walletState)
-  if (masterNotes || deviceData?.ckbAddr !== address) {
+  if (masterNotes || deviceData?.ckbAddr !== address || !deviceData?.ckbAddr) {
     return
   }
   const api = isTestNet ? WebAuthnTestApi : WebAuthnApi

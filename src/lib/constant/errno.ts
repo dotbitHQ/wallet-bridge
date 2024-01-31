@@ -5,6 +5,7 @@ const errno = {
   success: 0,
   networkError: -1,
   failedToInitializeWallet: -2,
+  getProviderError: -3,
   // MetaMask
   metaMaskUserDeniedMessageSignature: 4001,
   metaMaskWalletRequestPermissions: -32002,

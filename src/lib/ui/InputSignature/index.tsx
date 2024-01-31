@@ -117,7 +117,7 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
     const decodeData = connectDID.decodeQRCode(data)
     setBackupDeviceData(decodeData)
     try {
-      if (walletSnap.address === undefined || decodeData.ckbAddr === undefined || decodeData.name === undefined) {
+      if (!walletSnap.address || !decodeData.ckbAddr || decodeData.name === undefined) {
         throw new Error('unreachable')
       }
       const res = await webAuthnService.buildTransaction({

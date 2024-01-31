@@ -54,11 +54,11 @@ msgstr "Choose a emoji to label the device."
 msgid "click here"
 msgstr "click here"
 
-#: src/lib/ui/Login/Connect.tsx:184
+#: src/lib/ui/Login/Connect.tsx:182
 msgid "Continue"
 msgstr "Continue"
 
-#: src/lib/ui/Login/Connect.tsx:223
+#: src/lib/ui/Login/Connect.tsx:221
 msgid "Continue with wallets"
 msgstr "Continue with wallets"
 
@@ -93,7 +93,7 @@ msgid "Done"
 msgstr "Done"
 
 #: src/lib/ui/ChooseEmoji/index.tsx:67
-#: src/lib/wallets/index.ts:152
+#: src/lib/wallets/index.ts:162
 msgid "Error"
 msgstr "Error"
 
@@ -125,7 +125,7 @@ msgstr "Incorrect data"
 msgid "Info"
 msgstr "Info"
 
-#: src/lib/utils/handleError.ts:81
+#: src/lib/utils/handleError.ts:83
 msgid "Insufficient balance"
 msgstr "Insufficient balance"
 
@@ -133,7 +133,7 @@ msgstr "Insufficient balance"
 msgid "insufficient funds for transfer"
 msgstr "insufficient funds for transfer"
 
-#: src/lib/ui/Login/Connect.tsx:188
+#: src/lib/ui/Login/Connect.tsx:186
 msgid "Most friendly and secure way based on"
 msgstr "Most friendly and secure way based on"
 
@@ -176,15 +176,15 @@ msgstr "Open Torus"
 msgid "or Continue with"
 msgstr "or Continue with"
 
-#: src/lib/utils/handleError.ts:65
+#: src/lib/utils/handleError.ts:67
 msgid "Other requests for the wallet are not processed, please try again after processing"
 msgstr "Other requests for the wallet are not processed, please try again after processing"
 
-#: src/lib/ui/Login/ChainList.tsx:167
+#: src/lib/ui/Login/ChainList.tsx:166
 msgid "Other Wallets"
 msgstr "Other Wallets"
 
-#: src/lib/ui/Login/Connect.tsx:193
+#: src/lib/ui/Login/Connect.tsx:191
 msgid "Passkey"
 msgstr "Passkey"
 
@@ -192,21 +192,21 @@ msgstr "Passkey"
 msgid "Paste data or scan QR code"
 msgstr "Paste data or scan QR code"
 
-#: src/lib/utils/handleError.ts:71
+#: src/lib/utils/handleError.ts:73
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 
-#: src/lib/wallets/WalletContext.ts:222
-#: src/lib/wallets/WalletContext.ts:225
+#: src/lib/wallets/WalletContext.ts:227
+#: src/lib/wallets/WalletContext.ts:233
 msgid "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 msgstr "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 
-#: src/lib/wallets/WalletContext.ts:273
+#: src/lib/wallets/WalletContext.ts:278
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "Please ensure that your browser has the {0} wallet plugin installed and try again."
 
-#: src/lib/wallets/WalletContext.ts:220
-#: src/lib/wallets/WalletContext.ts:269
+#: src/lib/wallets/WalletContext.ts:222
+#: src/lib/wallets/WalletContext.ts:273
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "Please open this page in your crypto wallet App and try again."
 
@@ -255,12 +255,12 @@ msgid "Please switch your wallet to the TRON Nile test network before connecting
 msgstr "Please switch your wallet to the TRON Nile test network before connecting"
 
 #: src/lib/wallets/WalletContext.ts:215
-msgid "Please try again after unlocking your TokenPocket wallet"
-msgstr "Please try again after unlocking your TokenPocket wallet"
+msgid "Please try again after unlocking your TokenPocket wallet."
+msgstr "Please try again after unlocking your TokenPocket wallet."
 
-#: src/lib/wallets/WalletContext.ts:265
-msgid "Please try again after unlocking your Tron wallet"
-msgstr "Please try again after unlocking your Tron wallet"
+#: src/lib/wallets/WalletContext.ts:269
+msgid "Please try again after unlocking your Tron wallet."
+msgstr "Please try again after unlocking your Tron wallet."
 
 #: src/lib/ui/TransactionFailed/index.tsx:28
 msgid "Please try again."
@@ -272,11 +272,11 @@ msgstr "Please try again."
 msgid "QR Code"
 msgstr "QR Code"
 
-#: src/lib/utils/handleError.ts:47
+#: src/lib/utils/handleError.ts:49
 msgid "Replacement transaction underpriced"
 msgstr "Replacement transaction underpriced"
 
-#: src/lib/ui/Login/Connect.tsx:160
+#: src/lib/ui/Login/Connect.tsx:158
 msgid "Request Permission"
 msgstr "Request Permission"
 
@@ -316,7 +316,7 @@ msgstr "Scanning QR code requires access to the camera. Please enable camera per
 msgid "Secure your assets by adding extra trusted devices like mobile phones, computers or tablets immediately."
 msgstr "Secure your assets by adding extra trusted devices like mobile phones, computers or tablets immediately."
 
-#: src/lib/ui/Login/WalletList.tsx:163
+#: src/lib/ui/Login/WalletList.tsx:162
 msgid "Select Wallet"
 msgstr "Select Wallet"
 
@@ -332,7 +332,7 @@ msgstr "Switch Address"
 msgid "The contract verification failed."
 msgstr "The contract verification failed."
 
-#: src/lib/utils/handleError.ts:87
+#: src/lib/utils/handleError.ts:89
 msgid "The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet."
 msgstr "The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet."
 
@@ -340,25 +340,26 @@ msgstr "The current wallet environment does not support payments using TRX, plea
 msgid "The new trusted device has full control over this address."
 msgstr "The new trusted device has full control over this address."
 
-#: src/lib/utils/handleError.ts:56
+#: src/lib/utils/handleError.ts:58
 msgid "The transaction has been aborted."
 msgstr "The transaction has been aborted."
 
-#: src/lib/ui/Login/Connect.tsx:202
+#: src/lib/ui/Login/Connect.tsx:200
 msgid "This device or browser unsupported. Try connect by social or wallet."
 msgstr "This device or browser unsupported. Try connect by social or wallet."
 
 #: src/lib/ui/FinalConfirm/index.tsx:82
 #: src/lib/ui/LoggedIn/DeviceList.tsx:159
-#: src/lib/ui/Login/ChainList.tsx:143
-#: src/lib/ui/Login/Connect.tsx:136
-#: src/lib/ui/Login/WalletList.tsx:133
-#: src/lib/utils/handleError.ts:46
-#: src/lib/utils/handleError.ts:55
-#: src/lib/utils/handleError.ts:64
-#: src/lib/utils/handleError.ts:70
-#: src/lib/utils/handleError.ts:80
-#: src/lib/utils/handleError.ts:86
+#: src/lib/ui/Login/ChainList.tsx:142
+#: src/lib/ui/Login/Connect.tsx:134
+#: src/lib/ui/Login/WalletList.tsx:132
+#: src/lib/utils/handleError.ts:48
+#: src/lib/utils/handleError.ts:57
+#: src/lib/utils/handleError.ts:66
+#: src/lib/utils/handleError.ts:72
+#: src/lib/utils/handleError.ts:82
+#: src/lib/utils/handleError.ts:88
+#: src/lib/utils/handleError.ts:94
 #: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:82
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:66
 #: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:66
