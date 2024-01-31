@@ -200,36 +200,40 @@ export async function getMastersAddress() {
 }
 
 export async function getDotbitAlias() {
-  const { coinType, isTestNet, address } = snapshot(walletState)
-  const api = isTestNet ? DotbitIndexerTestApi : DotbitIndexerApi
+  try {
+    const { coinType, isTestNet, address } = snapshot(walletState)
+    const api = isTestNet ? DotbitIndexerTestApi : DotbitIndexerApi
 
-  if (!(address && coinType)) {
-    return
-  }
-
-  const aliasInfo = await Axios.post(
-    `${api}/v1/reverse/record`,
-    {
-      type: 'blockchain',
-      key_info: { coin_type: coinType, key: address },
-    },
-    {
-      headers: isTestNet ? { ...CfAccessClient } : {},
-    },
-  )
-
-  if (aliasInfo.data?.err_no === errno.success) {
-    if (aliasInfo.data?.data?.account_alias) {
-      setWalletState({
-        alias: aliasInfo.data.data.account_alias,
-      })
-    } else {
-      setWalletState({
-        alias: '',
-      })
+    if (!(address && coinType)) {
+      return
     }
-  } else {
-    console.error(new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg))
+
+    const aliasInfo = await Axios.post(
+      `${api}/v1/reverse/record`,
+      {
+        type: 'blockchain',
+        key_info: { coin_type: coinType, key: address },
+      },
+      {
+        headers: isTestNet ? { ...CfAccessClient } : {},
+      },
+    )
+
+    if (aliasInfo.data?.err_no === errno.success) {
+      if (aliasInfo.data?.data?.account_alias) {
+        setWalletState({
+          alias: aliasInfo.data.data.account_alias,
+        })
+      } else {
+        setWalletState({
+          alias: '',
+        })
+      }
+    } else {
+      console.log(new CustomError(aliasInfo.data?.err_no, aliasInfo.data?.err_msg))
+    }
+  } catch (err) {
+    console.log(err)
   }
 }
 
