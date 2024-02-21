@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import FacebookIcon from '../ui/Login/icon/facebook-icon.svg'
+import AppleIcon from '../ui/Login/icon/apple-icon.svg'
 import GoogleIcon from '../ui/Login/icon/google-icon.svg'
 import TwitterIcon from '../ui/Login/icon/twitter-icon.svg'
 import { ArrowLeftIcon, LoadingIcon } from './Icons'
@@ -14,6 +15,10 @@ interface TorusListProps {
 export function TorusList({ className, onClick, currentLogin }: TorusListProps) {
   const [name, setName] = useState('')
   const list = [
+    {
+      logo: <img className="h-5 w-5" src={AppleIcon} alt="Apple ID" />,
+      name: 'Apple ID',
+    },
     {
       logo: <img className="h-5 w-5" src={GoogleIcon} alt="Google" />,
       name: 'Google',
