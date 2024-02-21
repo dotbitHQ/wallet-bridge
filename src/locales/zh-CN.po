@@ -172,7 +172,7 @@ msgstr "确定"
 msgid "Open Torus"
 msgstr "打开 Torus"
 
-#: src/lib/components/TorusList.tsx:38
+#: src/lib/components/TorusList.tsx:43
 msgid "or Continue with"
 msgstr "或使用"
 
