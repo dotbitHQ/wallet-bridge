@@ -1,7 +1,7 @@
 import { SignDataOptions, SignDataType, WalletSigner } from './WalletSigner'
 import CustomError from '../../utils/CustomError'
 import errno from '../../constant/errno'
-import { DeviceAuthError, EnumRequestMethods } from 'connect-did-sdk'
+import { ConnectDIDError, EnumRequestMethods } from 'connect-did-sdk'
 
 export class ConnectDidSigner extends WalletSigner {
   async signData(data: SignDataType, options?: SignDataOptions): Promise<string> {
@@ -9,7 +9,7 @@ export class ConnectDidSigner extends WalletSigner {
     if (options?.provider) {
       provider = options?.provider
     } else {
-      provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
+      provider = await this.context.provider.requestWaitingPage((err: ConnectDIDError) => {
         throw new CustomError(err.code, err.message)
       })
     }
