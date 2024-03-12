@@ -15,7 +15,7 @@ import { backupDeviceData, getAuthorizeInfo, getMastersAddress, walletState } fr
 import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
 import errno from '../constant/errno'
-import { DeviceAuthError } from 'connect-did-sdk'
+import { ConnectDIDError } from 'connect-did-sdk'
 import Axios from 'axios'
 import { setLoginCacheState } from '../store/loginCache'
 import { createTips } from '../components'
@@ -213,7 +213,7 @@ class WalletSDK {
       if (options?.provider) {
         provider = options?.provider
       } else {
-        provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
+        provider = await this.context.provider.requestWaitingPage((err: ConnectDIDError) => {
           throw new CustomError(err.code, err.message)
         })
       }
@@ -258,7 +258,7 @@ class WalletSDK {
 
     let provider: any
     if (this.context.protocol === WalletProtocol.webAuthn) {
-      provider = await this.context.provider.requestWaitingPage((err: DeviceAuthError) => {
+      provider = await this.context.provider.requestWaitingPage((err: ConnectDIDError) => {
         throw new CustomError(err.code, err.message)
       })
     }

@@ -117,12 +117,17 @@ const TemplateConnectWallet = () => {
   }
 
   const onSignData = async () => {
-    const message = '0x123abc'
-    const signature = await wallet.walletSDK.signData(message)
-    console.log(signature)
-    // only Passkey-signed transactions can be verified.
-    const res = await wallet._verifyPasskeySignature({ message, signature: signature as string })
-    console.log(res)
+    try {
+      const { signData, onClose } = await wallet.walletSDK?.initSignContext()
+      const message = '0x123abc'
+      const signature = await signData(message)
+      console.log(signature)
+      // only Passkey-signed transactions can be verified.
+      const res = await wallet._verifyPasskeySignature({ message, signature: signature as string })
+      console.log(res)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const onSignData712 = async () => {
