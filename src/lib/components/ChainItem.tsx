@@ -30,9 +30,9 @@ export function ChainItem(props: {
         </span>
       </span>
       {props.name === props.currentLogin ? (
-        <LoadingIcon className="h-2.5 w-2.5 text-font-secondary"></LoadingIcon>
+        <LoadingIcon className="size-2.5 text-font-secondary"></LoadingIcon>
       ) : (
-        <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
+        <ArrowLeftIcon className="size-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
       )}
     </li>
   )

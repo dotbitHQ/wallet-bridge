@@ -23,11 +23,11 @@ export function Header({ title, className, goBack, onClose, style }: HeaderProps
       {goBack != null ? (
         <div
           className={clsx(
-            'absolute left-6 inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg hover:bg-secondary active:bg-secondary-active',
+            'absolute left-6 inline-flex size-7 cursor-pointer items-center justify-center rounded-lg hover:bg-secondary active:bg-secondary-active',
           )}
           onClick={goBack}
         >
-          <ArrowLeftIcon className={'h-3 w-3 text-[#D9D9D9]'}></ArrowLeftIcon>
+          <ArrowLeftIcon className={'size-3 text-[#D9D9D9]'}></ArrowLeftIcon>
         </div>
       ) : null}
       <div
@@ -41,11 +41,11 @@ export function Header({ title, className, goBack, onClose, style }: HeaderProps
       </div>
       <div
         className={clsx(
-          'absolute right-6 inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg hover:bg-secondary active:bg-secondary-active',
+          'absolute right-6 inline-flex size-7 cursor-pointer items-center justify-center rounded-lg hover:bg-secondary active:bg-secondary-active',
         )}
         onClick={onClose}
       >
-        <CloseIcon className={'h-3 w-3 text-[#D9D9D9]'}></CloseIcon>
+        <CloseIcon className={'size-3 text-[#D9D9D9]'}></CloseIcon>
       </div>
     </div>
   )

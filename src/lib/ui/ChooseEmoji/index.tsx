@@ -96,7 +96,7 @@ export function ChooseEmoji({ transitionRef, transitionStyle }: SwapChildProps) 
               onClick={onClick(k)}
               key={k}
               className={clsx(
-                'relative box-border h-12 w-12 cursor-pointer select-none rounded-xl transition-none active:bg-slate-600/20',
+                'relative box-border size-12 cursor-pointer select-none rounded-xl transition-none active:bg-slate-600/20',
                 selected === k ? 'border-2 border-emerald-400 bg-white' : 'hover:bg-slate-600/10',
               )}
             >

@@ -114,11 +114,11 @@ export const Button = ({
     >
       {loading ? (
         <span className="mr-1.5 inline-flex">
-          <LoadingIcon className="h-5 w-5" />
+          <LoadingIcon className="size-5" />
         </span>
       ) : null}
       {props.children}
-      {outlink ? <ArrowRightTopIcon className="ml-3 h-2.5 w-2.5"></ArrowRightTopIcon> : null}
+      {outlink ? <ArrowRightTopIcon className="ml-3 size-2.5"></ArrowRightTopIcon> : null}
     </button>
   )
 }
