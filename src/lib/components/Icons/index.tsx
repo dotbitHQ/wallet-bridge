@@ -43,7 +43,7 @@ export function LoadingIcon(props: React.SVGProps<SVGSVGElement>) {
 
   return (
     <svg
-      className={clsx('icon animation-rotate-360-deg', props.className)}
+      className={clsx('animation-rotate-360-deg', props.className)}
       width="10"
       height="10"
       viewBox="0 0 10 10"

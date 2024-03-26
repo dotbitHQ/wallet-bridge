@@ -8,19 +8,21 @@ import { MessageTypes, SignTypedDataVersion, TypedDataUtils, TypedMessage } from
 import { Buffer } from 'buffer'
 import { CoinType, CustomWallet } from '../constant'
 import GraphemeSplitter from 'grapheme-splitter'
-import { isMobile, isMobileOnly } from 'react-device-detect'
+import { isAndroid, isIOS, isMobile, isMobileOnly } from 'react-device-detect'
 // @ts-expect-error
 import abcCopy from 'abc-copy'
 import UAParser from 'ua-parser-js'
 import shadowDomRootStyle from '../../lib/tailwind/theme.css?inline'
 import React from 'react'
 import { I18n } from '../components/I18n'
-import { createRoot } from 'react-dom/client'
+import { createRoot, Root } from 'react-dom/client'
+import { type Config, type Connector, getConnectors } from '@wagmi/core'
 
-let shadowDomRoot: ShadowRoot | null = null
+let shadowDomRoot: Root | null = null
+let shadowDomElement: ShadowRoot | null = null
 
 export async function sleep(ms: number): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve, ms))
+  await new Promise((resolve) => globalThis.setTimeout(resolve, ms))
 }
 
 /**
@@ -324,88 +326,95 @@ export async function checkICloudPasskeySupport() {
 /**
  * get the shadow root of the wallet-bridge element
  */
-export function getShadowDomRoot(): ShadowRoot {
+export function getShadowDomRoot(): { shadowDomRoot: Root; shadowDomElement: ShadowRoot } {
   let _shadowDomRoot
-  if (shadowDomRoot) {
+  let _shadowDomElement
+
+  if (shadowDomRoot && shadowDomElement) {
     _shadowDomRoot = shadowDomRoot
+    _shadowDomElement = shadowDomElement
   } else {
     const el = document.createElement('wallet-bridge')
     document.body.appendChild(el)
-    shadowDomRoot = el.attachShadow({ mode: 'open' })
+    _shadowDomElement = el.attachShadow({ mode: 'open' })
     const styleEl = document.createElement('style')
     styleEl.innerHTML = shadowDomRootStyle
-    shadowDomRoot.appendChild(styleEl)
+    _shadowDomElement.appendChild(styleEl)
     const i18n = React.createElement(I18n)
-    createRoot(shadowDomRoot).render(i18n)
-    _shadowDomRoot = shadowDomRoot
+    _shadowDomRoot = createRoot(_shadowDomElement)
+    _shadowDomRoot.render(i18n)
+    shadowDomRoot = _shadowDomRoot
+    shadowDomElement = _shadowDomElement
   }
-  return _shadowDomRoot
+  return { shadowDomRoot: _shadowDomRoot, shadowDomElement: _shadowDomElement }
 }
 
-export function isMetaMask(ethereum?: (typeof window)['ethereum']): boolean {
-  // Logic borrowed from wagmi's MetaMaskConnector
-  // https://github.com/wagmi-dev/references/blob/main/packages/connectors/src/metaMask.ts
-  if (!ethereum?.isMetaMask) return false
-  // Brave tries to make itself look like MetaMask
-  // Could also try RPC `web3_clientVersion` if following is unreliable
-  if (ethereum.isBraveWallet && !ethereum._events && !ethereum._state) return false
-  if (ethereum.isApexWallet) return false
-  if (ethereum.isAvalanche) return false
-  if (ethereum.isBackpack) return false
-  if (ethereum.isBifrost) return false
-  if (ethereum.isBitKeep) return false
-  if (ethereum.isBitski) return false
-  if (ethereum.isBlockWallet) return false
-  if (ethereum.isCoinbaseWallet) return false
-  if (ethereum.isDawn) return false
-  if (ethereum.isEnkrypt) return false
-  if (ethereum.isExodus) return false
-  if (ethereum.isFrame) return false
-  if (ethereum.isFrontier) return false
-  if (ethereum.isGamestop) return false
-  if (ethereum.isHyperPay) return false
-  if (ethereum.isImToken) return false
-  if (ethereum.isKuCoinWallet) return false
-  if (ethereum.isMathWallet) return false
-  if (ethereum.isOkxWallet || ethereum.isOKExWallet) return false
-  if (ethereum.isOneInchIOSWallet || ethereum.isOneInchAndroidWallet) return false
-  if (ethereum.isOpera) return false
-  if (ethereum.isPhantom) return false
-  if (ethereum.isPortal) return false
-  if (ethereum.isRabby) return false
-  if (ethereum.isRainbow) return false
-  if (ethereum.isStatus) return false
-  if (ethereum.isTalisman) return false
-  if (ethereum.isTally) return false
-  if (ethereum.isTokenPocket) return false
-  if (ethereum.isTokenary) return false
-  if (ethereum.isTrust || ethereum.isTrustWallet) return false
-  if (ethereum.isXDEFI) return false
-  if (ethereum.isZerion) return false
-  return true
+/*
+ * Returns the explicit window provider that matches the flag and the flag is true
+ */
+function getExplicitInjectedProvider(flag: string) {
+  if (typeof window === 'undefined' || typeof window.ethereum === 'undefined') return
+  const providers = window.ethereum.providers
+  return providers
+    ? // @ts-expect-error - some provider flags are not typed in `InjectedProviderFlags`
+      providers.find((provider) => provider[flag])
+    : window.ethereum[flag]
+    ? window.ethereum
+    : undefined
+}
+
+/*
+ * Gets the `window.namespace` window provider if it exists
+ */
+function getWindowProviderNamespace(namespace: string) {
+  const providerSearch = (provider: any, namespace: string): any => {
+    const [property, ...path] = namespace.split('.')
+    const _provider = provider[property]
+    if (_provider) {
+      if (path.length === 0) return _provider
+      return providerSearch(_provider, path.join('.'))
+    }
+  }
+  if (typeof window !== 'undefined') return providerSearch(window, namespace)
+}
+
+/*
+ * Checks if the explict provider or window ethereum exists
+ */
+export function hasInjectedProvider({ flag, namespace }: { flag?: string; namespace?: string }): boolean {
+  if (namespace && typeof getWindowProviderNamespace(namespace) !== 'undefined') return true
+  if (flag && typeof getExplicitInjectedProvider(flag) !== 'undefined') return true
+  return false
 }
 
 export function shouldUseWalletConnect(): boolean {
-  const isMetaMaskInjected =
-    typeof window !== 'undefined' &&
-    typeof window.ethereum !== 'undefined' &&
-    (window.ethereum.providers?.some(isMetaMask) || window.ethereum.isMetaMask)
-  return !isMetaMaskInjected
+  const isInjected =
+    hasInjectedProvider({ flag: 'isMetaMask' }) ||
+    hasInjectedProvider({ flag: 'isTrust' }) ||
+    hasInjectedProvider({ flag: 'isTrustWallet' }) ||
+    hasInjectedProvider({ flag: 'isTokenPocket' }) ||
+    hasInjectedProvider({ namespace: '$onekey.ethereum' })
+  return !isInjected
 }
 
 export function getWalletDeepLink(walletName: string, displayUri: string): string {
-  /* eslint-disable lingui/no-unlocalized-strings */
   console.log('getWalletDeepLink displayUri: ', displayUri)
+  const uri = globalThis.encodeURIComponent(displayUri)
   if (walletName === CustomWallet.metaMask) {
-    return `metamask://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+    return isAndroid
+      ? displayUri
+      : isIOS
+      ? // currently broken in MetaMask v6.5.0 https://github.com/MetaMask/metamask-mobile/issues/6457
+        `metamask://wc?uri=${uri}`
+      : `https://metamask.app.link/wc?uri=${uri}`
   } else if (walletName === CustomWallet.trustWallet) {
-    return `trust://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+    return `trust://wc?uri=${uri}`
   } else if (walletName === CustomWallet.imToken) {
-    return `imtokenv2://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+    return `imtokenv2://wc?uri=${uri}`
   } else if (walletName === CustomWallet.tokenPocket) {
-    return `tpoutside://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+    return `tpoutside://wc?uri=${uri}`
   } else if (walletName === CustomWallet.oneKey) {
-    return `onekey-wallet://wc?uri=${globalThis.encodeURIComponent(displayUri)}`
+    return `onekey-wallet://wc?uri=${uri}`
   }
   return ''
 }
@@ -419,12 +428,9 @@ export function openDeepLink(deepLink: string) {
     const link = document.createElement('a')
     link.href = deepLink
     link.target = '_blank'
-    // eslint-disable-next-line lingui/no-unlocalized-strings
     link.rel = 'noreferrer noopener'
     link.click()
-    // window.open(deepLink, '_blank', 'noreferrer noopener')
   } else {
-    // window.open(deepLink, '_self', 'noreferrer noopener')
     window.location.href = deepLink
   }
 }
@@ -450,4 +456,61 @@ export async function loadScript(src: string, id: string): Promise<any> {
     scriptElement.onload = resolve
     scriptElement.onerror = reject
   })
+}
+
+export function removeWalletConnectQrModal(provider: any, walletName: string): (() => void) | undefined {
+  if (!walletName) {
+    return
+  }
+
+  if (isMobile && walletName === CustomWallet.walletConnect) {
+    return
+  }
+
+  const modal = provider?.modal
+  if (!modal) {
+    return
+  }
+
+  const openModal = modal?.openModal
+  if (!openModal) {
+    return
+  }
+
+  modal.openModal = () => {
+    modal.openModal = openModal
+  }
+
+  return () => {
+    modal.openModal = openModal
+  }
+}
+
+export function getConnector(wagmiConfig: Config, walletName: string): Connector | undefined {
+  if (!walletName || !wagmiConfig) {
+    return
+  }
+
+  const connectors = getConnectors(wagmiConfig)
+
+  if (connectors?.length === 0) {
+    return
+  }
+
+  if (shouldUseWalletConnect() || walletName === CustomWallet.walletConnect) {
+    return connectors.find((item: Connector) => {
+      return item.id === 'walletConnect' && item.name === 'WalletConnect'
+    })
+  } else {
+    const connector = connectors.find((item: Connector) => {
+      return item.type === 'injected' && item.name !== 'Injected'
+    })
+    if (connector) {
+      return connector
+    } else {
+      return connectors.find((item: Connector) => {
+        return item.type === 'injected' && item.name === 'Injected'
+      })
+    }
+  }
 }

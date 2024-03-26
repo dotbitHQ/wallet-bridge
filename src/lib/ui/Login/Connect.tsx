@@ -20,12 +20,7 @@ import { WalletSDKContext } from '../ConnectWallet'
 import { useSimpleRouter } from '../../components/SimpleRouter'
 import { checkWebAuthnSupport } from '../../utils'
 import clsx from 'clsx'
-import EthIcon from './icon/eth-icon.svg'
-import BscIcon from './icon/bsc-icon.svg'
-import PolygonIcon from './icon/polygon-icon.svg'
-import TronIcon from './icon/tron-icon.svg'
-import DogecoinIcon from './icon/dogecoin-icon.svg'
-import TorusIcon from './icon/torus-icon.svg'
+import ChainList from './icon/chain-list.png'
 import { t } from '@lingui/macro'
 import { TorusList } from '../../components/TorusList'
 import DeviceBg from '../LoggedIn/bg/device.svg'
@@ -178,7 +173,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
               }}
             >
               <span className="inline-flex items-center text-xl font-bold">
-                {currentLogin === passkey.name ? null : <FaceIcon className="mr-1.5 h-6 w-6 text-white" />}
+                {currentLogin === passkey.name ? null : <FaceIcon className="mr-1.5 size-6 text-white" />}
                 {t`Continue`}
               </span>
             </Button>
@@ -195,7 +190,7 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
             <Alert
               className={clsx('mt-5', isSupportWebAuthn ? 'invisible' : 'visible')}
               type={AlertType.warning}
-              icon={<NoticeIcon className="h-[18px] w-[18px] text-[#FFB02E]"></NoticeIcon>}
+              icon={<NoticeIcon className="size-[18px] text-[#FFB02E]"></NoticeIcon>}
             >
               {t`This device or browser unsupported. Try connect by social or wallet.`}
             </Alert>
@@ -220,39 +215,8 @@ export const Connect = ({ transitionStyle, transitionRef }: SwapChildProps) => {
             >
               <span className="text-base font-bold">{t`Continue with wallets`}</span>
               <span className="inline-flex items-center">
-                <span className="relative mr-1 inline-flex w-[102px]">
-                  <img className="h-6 w-6 rounded-full border-2 border-white bg-white" src={EthIcon} alt="ETH" />
-                  <img
-                    className="absolute left-[16px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                    src={BscIcon}
-                    alt="BSC"
-                  />
-                  <img
-                    className="absolute left-[32px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                    src={PolygonIcon}
-                    // eslint-disable-next-line lingui/no-unlocalized-strings
-                    alt="Polygon"
-                  />
-                  <img
-                    className="absolute left-[48px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                    src={TronIcon}
-                    // eslint-disable-next-line lingui/no-unlocalized-strings
-                    alt="Tron"
-                  />
-                  <img
-                    className="absolute left-[64px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                    src={DogecoinIcon}
-                    // eslint-disable-next-line lingui/no-unlocalized-strings
-                    alt="Dogecoin"
-                  />
-                  <img
-                    className="absolute left-[80px] h-6 w-6 rounded-full border-2 border-white bg-white"
-                    src={TorusIcon}
-                    // eslint-disable-next-line lingui/no-unlocalized-strings
-                    alt="Torus"
-                  />
-                </span>
-                <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
+                <img className="mr-1 inline-flex h-5" src={ChainList} alt="chain-list" />
+                <ArrowLeftIcon className="size-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
               </span>
             </div>
           )

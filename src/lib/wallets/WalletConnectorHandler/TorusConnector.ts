@@ -13,8 +13,8 @@ export class TorusConnector extends WalletConnector {
     if (!torusWallet?.isLoggedIn && torusWallet?.isInitialized) {
       await torusWallet?.login()
     }
-    const netVersion = provider.networkVersion
-    const ethChainId = provider.chainId
+    const netVersion = await provider.request({ method: 'net_version' })
+    const ethChainId = await provider.request({ method: 'eth_chainId' })
     const res = await provider.request({ method: 'eth_requestAccounts' })
     if (res?.[0]) {
       this.context.address = toChecksumAddress(res[0])

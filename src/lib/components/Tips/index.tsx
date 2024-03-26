@@ -46,7 +46,7 @@ export const createTips = (props: Omit<TipsProps, 'visible'>) => {
     visible: true,
   }
 
-  const shadowDomRoot = getShadowDomRoot()
+  const { shadowDomElement } = getShadowDomRoot()
   const instance = React.createElement(Tips, tipsProps)
-  createRoot(shadowDomRoot).render(instance)
+  createRoot(shadowDomElement).render(instance)
 }

@@ -1,20 +1,29 @@
 import { SignDataOptions, SignDataType, WalletSigner } from './WalletSigner'
-import { getWalletDeepLink, isHexStrict, openDeepLink, shouldUseWalletConnect } from '../../utils'
+import { getWalletDeepLink, isHexStrict, openDeepLink } from '../../utils'
 import { signMessage, signTypedData } from '@wagmi/core'
+import { CustomWallet } from '../../constant'
+import { isMobile } from 'react-device-detect'
 
 export class WalletConnectSigner extends WalletSigner {
   async signData(data: SignDataType, options?: SignDataOptions): Promise<string> {
-    if (shouldUseWalletConnect()) {
-      const { walletName, provider } = this.context
-      const sessionTopic: string = provider.session.pairingTopic
-      if (walletName && sessionTopic) {
-        const deepLink = getWalletDeepLink(walletName, `wc:${sessionTopic}@2`)
+    const { walletName, provider, wagmiConfig } = this.context
+
+    if (provider?.isWalletConnect && isMobile && walletName !== CustomWallet.walletConnect) {
+      const session = provider.session
+      if (walletName && session) {
+        // const deepLink = getWalletDeepLink(walletName, `wc:${sessionTopic}@2`)
+        const deepLink = getWalletDeepLink(
+          walletName,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          `wc:${session?.pairingTopic}@2?expiryTimestamp=${session?.expiry}&relay-protocol=${session?.relay?.protocol}`,
+        )
         openDeepLink(deepLink)
       }
     }
+
     let res
     if (options?.isEIP712) {
-      res = await signTypedData(data as any)
+      res = await signTypedData(wagmiConfig, data as any)
     } else {
       let _data = data
       // eslint-disable-next-line @typescript-eslint/no-base-to-string,@typescript-eslint/restrict-plus-operands
@@ -23,8 +32,7 @@ export class WalletConnectSigner extends WalletSigner {
         _data = '0x' + data
       }
 
-      console.log('signMessage', String(_data))
-      res = await signMessage({
+      res = await signMessage(wagmiConfig, {
         message: String(_data),
       })
     }

@@ -17,7 +17,6 @@ export class TorusSigner extends WalletSigner {
         _data = '0x' + data
       }
 
-      console.log('personal_sign', _data)
       res = await this.context.provider.request({
         method: 'personal_sign',
         params: [_data, this.context.address],
