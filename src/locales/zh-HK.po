@@ -54,11 +54,11 @@ msgstr "請為此設備選一個圖標。"
 msgid "click here"
 msgstr "請點擊此處"
 
-#: src/lib/ui/Login/Connect.tsx:182
+#: src/lib/ui/Login/Connect.tsx:177
 msgid "Continue"
 msgstr "繼續"
 
-#: src/lib/ui/Login/Connect.tsx:221
+#: src/lib/ui/Login/Connect.tsx:216
 msgid "Continue with wallets"
 msgstr "用其他錢包登錄"
 
@@ -93,7 +93,7 @@ msgid "Done"
 msgstr "完成"
 
 #: src/lib/ui/ChooseEmoji/index.tsx:67
-#: src/lib/wallets/index.ts:162
+#: src/lib/wallets/index.ts:166
 msgid "Error"
 msgstr "錯誤"
 
@@ -133,7 +133,7 @@ msgstr "余額不足"
 msgid "insufficient funds for transfer"
 msgstr "余額不足"
 
-#: src/lib/ui/Login/Connect.tsx:186
+#: src/lib/ui/Login/Connect.tsx:181
 msgid "Most friendly and secure way based on"
 msgstr "簡單易用，基於"
 
@@ -184,7 +184,7 @@ msgstr "錢包的其他請求未被處理，請處理後再試"
 msgid "Other Wallets"
 msgstr "其他錢包"
 
-#: src/lib/ui/Login/Connect.tsx:191
+#: src/lib/ui/Login/Connect.tsx:186
 msgid "Passkey"
 msgstr "Passkey"
 
@@ -196,53 +196,47 @@ msgstr "黏貼數據或者掃描二維碼"
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "請檢查您是否使用了多個錢包插件。請禁用多個錢包插件，只保留一個錢包插件後再試。"
 
-#: src/lib/wallets/WalletContext.ts:227
-#: src/lib/wallets/WalletContext.ts:233
+#: src/lib/wallets/WalletContext.ts:206
+#: src/lib/wallets/WalletContext.ts:212
 msgid "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 msgstr "請下載 TokenPocket，並在應用內連接您的 Dogecoin 錢包，然後重試。"
 
-#: src/lib/wallets/WalletContext.ts:278
+#: src/lib/wallets/WalletContext.ts:267
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "請確保您的瀏覽器已安裝 {0} 錢包插件，然後再試。"
 
-#: src/lib/wallets/WalletContext.ts:222
-#: src/lib/wallets/WalletContext.ts:273
+#: src/lib/wallets/WalletContext.ts:201
+#: src/lib/wallets/WalletContext.ts:262
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "請在您的加密貨幣錢包應用中打開此頁面，然後再試。"
 
-#: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:70
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:54
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:77
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:56
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:79
 msgid "Please switch your wallet to the BSC main network before connecting"
 msgstr "連接前請將您的錢包切換到 BSC 主網絡"
 
-#: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:69
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:53
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:76
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:55
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:78
 msgid "Please switch your wallet to the BSC Testnet before connecting"
 msgstr "連接前請將您的錢包切換到 BSC 測試網"
 
-#: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:65
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:49
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:72
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:51
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:74
 msgid "Please switch your wallet to the Ethereum main network before connecting"
 msgstr "連接前請將您的錢包切換至 Ethereum 主網"
 
-#: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:64
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:48
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:71
-msgid "Please switch your wallet to the Goerli test network before connecting"
-msgstr "連接前請將您的錢包切換至 Goerli 測試網"
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:50
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:73
+msgid "Please switch your wallet to the Holesky test network before connecting"
+msgstr "連接前請將您的錢包切換至 Holesky 測試網"
 
-#: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:75
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:59
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:82
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:61
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:84
 msgid "Please switch your wallet to the Polygon Mainnet before connecting"
 msgstr "連接前請將您的錢包切換至 Polygon 主網"
 
-#: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:74
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:58
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:81
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:60
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:83
 msgid "Please switch your wallet to the Polygon Testnet before connecting"
 msgstr "連接前請將您的錢包切換至 Polygon 測試網"
 
@@ -254,11 +248,11 @@ msgstr "連接前請將您的錢包切換至 TRON 主網"
 msgid "Please switch your wallet to the TRON Nile test network before connecting"
 msgstr "連接前請將您的錢包切換至 TRON Nile 測試網"
 
-#: src/lib/wallets/WalletContext.ts:215
+#: src/lib/wallets/WalletContext.ts:194
 msgid "Please try again after unlocking your TokenPocket wallet."
 msgstr "解鎖您的 TokenPocket 錢包後請再試。"
 
-#: src/lib/wallets/WalletContext.ts:269
+#: src/lib/wallets/WalletContext.ts:258
 msgid "Please try again after unlocking your Tron wallet."
 msgstr "解鎖您的 Tron 錢包後請再試。"
 
@@ -276,7 +270,7 @@ msgstr "二維碼"
 msgid "Replacement transaction underpriced"
 msgstr ""
 
-#: src/lib/ui/Login/Connect.tsx:158
+#: src/lib/ui/Login/Connect.tsx:153
 msgid "Request Permission"
 msgstr "請求授權"
 
@@ -316,7 +310,7 @@ msgstr "掃描二維碼需要獲取攝像頭權限，請授權。"
 msgid "Secure your assets by adding extra trusted devices like mobile phones, computers or tablets immediately."
 msgstr "通過添加授信設備來保障您資產的安全。"
 
-#: src/lib/ui/Login/WalletList.tsx:162
+#: src/lib/ui/Login/WalletList.tsx:170
 msgid "Select Wallet"
 msgstr "選擇錢包"
 
@@ -344,15 +338,15 @@ msgstr "新的授信設備有此地址的完全控制權。"
 msgid "The transaction has been aborted."
 msgstr "交易被取消。"
 
-#: src/lib/ui/Login/Connect.tsx:200
+#: src/lib/ui/Login/Connect.tsx:195
 msgid "This device or browser unsupported. Try connect by social or wallet."
 msgstr "此設備或瀏覽器不支持 Passkey，請使用其他方式連接。"
 
 #: src/lib/ui/FinalConfirm/index.tsx:82
 #: src/lib/ui/LoggedIn/DeviceList.tsx:159
 #: src/lib/ui/Login/ChainList.tsx:142
-#: src/lib/ui/Login/Connect.tsx:134
-#: src/lib/ui/Login/WalletList.tsx:132
+#: src/lib/ui/Login/Connect.tsx:129
+#: src/lib/ui/Login/WalletList.tsx:137
 #: src/lib/utils/handleError.ts:48
 #: src/lib/utils/handleError.ts:57
 #: src/lib/utils/handleError.ts:66
@@ -360,10 +354,9 @@ msgstr "此設備或瀏覽器不支持 Passkey，請使用其他方式連接。"
 #: src/lib/utils/handleError.ts:82
 #: src/lib/utils/handleError.ts:88
 #: src/lib/utils/handleError.ts:94
-#: src/lib/wallets/WalletEventListenerHandler/MetaMaskEventListener.ts:82
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:66
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:69
 #: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:66
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:89
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:92
 msgid "Tips"
 msgstr "提示"
 

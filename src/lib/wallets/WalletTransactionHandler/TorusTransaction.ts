@@ -5,7 +5,7 @@ export class TorusTransaction extends WalletTransaction {
   async sendTrx(data: ISendTrxParams): Promise<string> {
     const _from = this.context.address
     let _data: string = ''
-    if (data.data != null) {
+    if (data.data) {
       _data = utf8ToHex(data.data)
     }
     const _value = numberToHex(data.value)

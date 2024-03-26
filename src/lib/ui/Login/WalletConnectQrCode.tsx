@@ -39,7 +39,7 @@ export function WalletConnectQrCode({ transitionRef, transitionStyle }: SwapChil
             : // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               t`Scan with ${loginCacheSnap.walletName}`}
         </div>
-        <div className="relative my-3 mb-9 h-[260px] w-[260px] rounded-2xl border border-stone-300/20 p-2">
+        <div className="relative my-3 mb-9 size-[260px] rounded-2xl border border-stone-300/20 p-2">
           <QRCode data={loginCacheSnap.walletConnectDisplayUri} />
         </div>
       </div>

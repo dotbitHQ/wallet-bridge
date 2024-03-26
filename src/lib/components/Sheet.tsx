@@ -19,7 +19,7 @@ export function Sheet({ isOpen, children, customRootId, zIndex = 'z-[10]', class
       document.body.style.overflow = 'hidden'
       setRemoveDOM(false)
     } else {
-      setTimeout(() => {
+      globalThis.setTimeout(() => {
         setRemoveDOM(true)
         document.body.style.overflow = 'auto'
       }, 150)
@@ -33,7 +33,7 @@ export function Sheet({ isOpen, children, customRootId, zIndex = 'z-[10]', class
   return removeDOM ? null : (
     <Portal customRootId={customRootId} className={className}>
       <Mask zIndex={zIndex} isOpen={isOpen} />
-      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-end justify-center', zIndex)}>{children}</div>
+      <div className={clsx('fixed left-0 top-0 flex size-full items-end justify-center', zIndex)}>{children}</div>
     </Portal>
   )
 }

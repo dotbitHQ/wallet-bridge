@@ -19,7 +19,7 @@ export function Modal({ isOpen, children, customRootId, className, zIndex = 'z-[
       document.body.style.overflow = 'hidden'
       setRemoveDOM(false)
     } else {
-      setTimeout(() => {
+      globalThis.setTimeout(() => {
         setRemoveDOM(true)
         document.body.style.overflow = 'auto'
       }, 150)
@@ -33,9 +33,7 @@ export function Modal({ isOpen, children, customRootId, className, zIndex = 'z-[
   return removeDOM ? null : (
     <Portal customRootId={customRootId} className={className}>
       <Mask zIndex={zIndex} isOpen={isOpen} />
-      <div className={clsx('fixed left-0 top-0 flex h-full w-full items-center justify-center', zIndex)}>
-        {children}
-      </div>
+      <div className={clsx('fixed left-0 top-0 flex size-full items-center justify-center', zIndex)}>{children}</div>
     </Portal>
   )
 }

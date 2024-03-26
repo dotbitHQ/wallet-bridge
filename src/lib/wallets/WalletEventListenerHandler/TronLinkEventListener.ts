@@ -77,6 +77,7 @@ export class TronLinkEventListener extends WalletEventListener {
   }
 
   listenEvents(): void {
+    this.removeEvents()
     window.addEventListener('message', this.handleMessageEvent)
   }
 

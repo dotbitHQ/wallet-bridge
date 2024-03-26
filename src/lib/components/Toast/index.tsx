@@ -22,7 +22,7 @@ export function Toast({ visible, message, duration = 1000, customRootId, zIndex 
   }, [visible])
 
   useEffect(() => {
-    window.setTimeout(() => {
+    globalThis.setTimeout(() => {
       setRemoveDOM(true)
     }, duration)
   }, [duration])
@@ -31,7 +31,7 @@ export function Toast({ visible, message, duration = 1000, customRootId, zIndex 
     <Portal customRootId={customRootId ?? 'toast-root'}>
       <span
         className={clsx(
-          'fixed inset-0 m-auto h-max w-max min-w-[120px] rounded-lg bg-[#11142D] p-4 text-center text-base font-semibold leading-[22px] text-white shadow-toast',
+          'fixed inset-0 m-auto size-max min-w-[120px] rounded-lg bg-[#11142D] p-4 text-center text-base font-semibold leading-[22px] text-white shadow-toast',
           zIndex,
         )}
       >
@@ -47,7 +47,7 @@ export const createToast = (props: Omit<ToastProps, 'visible'>) => {
     visible: true,
   }
 
-  const shadowDomRoot = getShadowDomRoot()
+  const { shadowDomElement } = getShadowDomRoot()
   const instance = React.createElement(Toast, toastProps)
-  createRoot(shadowDomRoot).render(instance)
+  createRoot(shadowDomElement).render(instance)
 }

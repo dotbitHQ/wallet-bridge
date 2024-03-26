@@ -22,7 +22,7 @@ function More({ address, onRevoke }: MoreProps) {
   return (
     <Menu as="div" className="relative inline-block flex-none">
       <Menu.Button className="flex">
-        <MoreIcon className="h-[16px] w-[16px] flex-none cursor-pointer text-zinc-300 active:opacity-60" />
+        <MoreIcon className="size-[16px] flex-none cursor-pointer text-zinc-300 active:opacity-60" />
       </Menu.Button>
       <Transition
         as={Fragment}
@@ -45,7 +45,7 @@ function More({ address, onRevoke }: MoreProps) {
               className="relative h-[36px] w-full cursor-pointer rounded-lg px-3 py-2 text-center text-gray-700 hover:bg-red-100 hover:text-red-500 active:text-red-500"
               onClick={onRevoke}
             >
-              <RevokeIcon className="absolute left-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2" />
+              <RevokeIcon className="absolute left-3 top-1/2 size-[16px] -translate-y-1/2" />
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] font-medium leading-tight">
                 {t`Revoke`}
               </div>
@@ -249,13 +249,13 @@ function LeadingIcon({ name, emoji, address }: LeadingIconProps) {
     [address, walletSnap.deviceList],
   )
   if (isMasterDevice) {
-    return <DeviceIcon className="h-6 w-6" />
+    return <DeviceIcon className="size-6" />
   } else if (selectedEmoji) {
-    return <img className="h-6 w-6" src={selectedEmoji} />
+    return <img className="size-6" src={selectedEmoji} />
   } else if (name) {
-    return <LetterAvatar data={name} className="h-[28px] w-[28px] flex-none" />
+    return <LetterAvatar data={name} className="size-[28px] flex-none" />
   } else {
-    return <NervosIcon className="h-6 w-6 flex-none rounded-full border border-stone-300/20" />
+    return <NervosIcon className="size-6 flex-none rounded-full border border-stone-300/20" />
   }
 }
 
@@ -302,7 +302,7 @@ export function DeviceList({ onShowQRCode, className, onDisconnect }: DeviceList
           onClick={onShowQRCode}
           className="flex h-[48px] cursor-pointer items-center gap-4 pl-3 pr-4 hover:bg-secondary-5 active:bg-secondary"
         >
-          <PlusIcon className="h-6 w-6" />
+          <PlusIcon className="size-6" />
           <div className="flex-1 text-[14px] font-semibold text-success">{t`Add New`}</div>
         </div>
       </ul>

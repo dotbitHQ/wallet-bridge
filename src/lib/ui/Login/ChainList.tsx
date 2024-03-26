@@ -23,41 +23,41 @@ interface IChain {
 }
 
 const eth: IChain = {
-  icon: <img className="h-10 w-10" src={EthIcon} alt="ETH" />,
+  icon: <img className="size-10" src={EthIcon} alt="ETH" />,
   name: CustomChain.eth,
   coinType: CoinType.eth,
 }
 
 const bsc: IChain = {
-  icon: <img className="h-10 w-10" src={BscIcon} alt="BSC" />,
+  icon: <img className="size-10" src={BscIcon} alt="BSC" />,
   name: CustomChain.bsc,
   coinType: CoinType.bsc,
 }
 
 const polygon: IChain = {
   // eslint-disable-next-line lingui/no-unlocalized-strings
-  icon: <img className="h-10 w-10" src={PolygonIcon} alt="Polygon" />,
+  icon: <img className="size-10" src={PolygonIcon} alt="Polygon" />,
   name: CustomChain.polygon,
   coinType: CoinType.matic,
 }
 
 const tron: IChain = {
   // eslint-disable-next-line lingui/no-unlocalized-strings
-  icon: <img className="h-10 w-10" src={TronIcon} alt="Tron" />,
+  icon: <img className="size-10" src={TronIcon} alt="Tron" />,
   name: CustomChain.tron,
   coinType: CoinType.trx,
 }
 
 const doge: IChain = {
   // eslint-disable-next-line lingui/no-unlocalized-strings
-  icon: <img className="h-10 w-10" src={DogecoinIcon} alt="Dogecoin" />,
+  icon: <img className="size-10" src={DogecoinIcon} alt="Dogecoin" />,
   name: CustomChain.doge,
   coinType: CoinType.doge,
 }
 
 const torus: IChain = {
   // eslint-disable-next-line lingui/no-unlocalized-strings
-  icon: <img className="h-10 w-10" src={TorusIcon} alt="Torus" />,
+  icon: <img className="size-10" src={TorusIcon} alt="Torus" />,
   name: CustomChain.torus,
   coinType: CoinType.eth,
 }

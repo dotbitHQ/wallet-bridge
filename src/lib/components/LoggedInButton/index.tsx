@@ -19,7 +19,7 @@ export const LoggedInButton = ({ loading = false, className, icon, ...props }: L
     >
       {loading ? (
         <span className="mr-1.5 inline-flex">
-          <LoadingIcon className="h-5 w-5 text-[#5F6570]" />
+          <LoadingIcon className="size-5 text-[#5F6570]" />
         </span>
       ) : (
         icon

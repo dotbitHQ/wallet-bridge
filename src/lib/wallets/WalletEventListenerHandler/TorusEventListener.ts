@@ -4,9 +4,11 @@ import { ChainIdToCoinTypeMap, CoinType, ChainIdToCoinTypeTestNetMap } from '../
 import { setWalletState } from '../../store'
 import { createTips } from '../../components'
 import { t } from '@lingui/macro'
+import { debounce } from 'lodash-es'
 
 export class TorusEventListener extends WalletEventListener {
   listenEvents(): void {
+    this.removeEvents()
     const { provider } = this.context
 
     provider.on('accountsChanged', async (accounts: string[]) => {
@@ -45,7 +47,7 @@ export class TorusEventListener extends WalletEventListener {
         switch (coinType) {
           case CoinType.eth:
             message = isTestNet
-              ? t`Please switch your wallet to the Goerli test network before connecting`
+              ? t`Please switch your wallet to the Holesky test network before connecting`
               : t`Please switch your wallet to the Ethereum main network before connecting`
             break
           case CoinType.bsc:
@@ -62,10 +64,12 @@ export class TorusEventListener extends WalletEventListener {
 
         if (message) {
           this.context.emitEvent(EventEnum.Error, message)
-          createTips({
-            title: t`Tips`,
-            content: message,
-          })
+          debounce(() => {
+            createTips({
+              title: t`Tips`,
+              content: message,
+            })
+          }, 1000)
         }
       }
     })
@@ -73,7 +77,7 @@ export class TorusEventListener extends WalletEventListener {
 
   removeEvents(): void {
     const { provider } = this.context
-    provider.removeAllListeners?.('accountsChanged')
-    provider.removeAllListeners?.('chainChanged')
+    provider?.removeAllListeners?.('accountsChanged')
+    provider?.removeAllListeners?.('chainChanged')
   }
 }

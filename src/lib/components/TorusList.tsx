@@ -14,11 +14,11 @@ export function TorusList({ className, onClick, currentLogin }: TorusListProps) 
   const [name, setName] = useState('')
   const list = [
     {
-      logo: <img className="h-5 w-5" src={AppleIcon} alt="Apple ID" />,
+      logo: <img className="size-5" src={AppleIcon} alt="Apple ID" />,
       name: 'Apple ID',
     },
     {
-      logo: <img className="h-5 w-5" src={GoogleIcon} alt="Google" />,
+      logo: <img className="size-5" src={GoogleIcon} alt="Google" />,
       name: 'Google',
     },
   ]
@@ -45,9 +45,9 @@ export function TorusList({ className, onClick, currentLogin }: TorusListProps) 
               <span className="ml-2 text-base text-neutral-700">{item.name}</span>
             </span>
             {item.name === name && currentLogin ? (
-              <LoadingIcon className="h-2.5 w-2.5 rotate-180 text-neutral-400"></LoadingIcon>
+              <LoadingIcon className="size-2.5 rotate-180 text-neutral-400"></LoadingIcon>
             ) : (
-              <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-neutral-400"></ArrowLeftIcon>
+              <ArrowLeftIcon className="size-2.5 rotate-180 text-neutral-400"></ArrowLeftIcon>
             )}
           </div>
         ))}

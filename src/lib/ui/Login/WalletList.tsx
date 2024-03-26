@@ -26,6 +26,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
   const walletSDK = useContext(WalletSDKContext)!
   const { goBack, onClose, goNext } = useSimpleRouter()!
   const [currentLogin, setCurrentLogin] = useState('')
+  const [timeoutId, setTimeoutId] = useState(0)
   const { loginCacheSnap } = useLoginCacheState()
   const { walletSnap } = useWalletState()
 
@@ -33,36 +34,36 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
     return [
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="h-10 w-10" src={WalletConnectIcon} alt="WalletConnect" />,
+        icon: <img className="size-10" src={WalletConnectIcon} alt="WalletConnect" />,
         name: CustomWallet.walletConnect,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="h-10 w-10" src={MetaMaskIcon} alt="MetaMask" />,
+        icon: <img className="size-10" src={MetaMaskIcon} alt="MetaMask" />,
         name: CustomWallet.metaMask,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="h-10 w-10" src={TrustWalletIcon} alt="TrustWallet" />,
+        icon: <img className="size-10" src={TrustWalletIcon} alt="TrustWallet" />,
         name: CustomWallet.trustWallet,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
       {
-        icon: <img className="h-10 w-10" src={ImTokenIcon} alt="imToken" />,
+        icon: <img className="size-10" src={ImTokenIcon} alt="imToken" />,
         name: CustomWallet.imToken,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx],
       },
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="h-10 w-10" src={TokenPocketIcon} alt="TokenPocket" />,
+        icon: <img className="size-10" src={TokenPocketIcon} alt="TokenPocket" />,
         name: CustomWallet.tokenPocket,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx, CoinType.doge],
       },
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="h-10 w-10" src={OneKeyIcon} alt="OneKey" />,
+        icon: <img className="size-10" src={OneKeyIcon} alt="OneKey" />,
         name: CustomWallet.oneKey,
         supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
       },
@@ -73,7 +74,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
       // },
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="h-10 w-10" src={TronLinkIcon} alt="TronLink" />,
+        icon: <img className="size-10" src={TronLinkIcon} alt="TronLink" />,
         name: CustomWallet.tronLink,
         supportList: [CoinType.trx],
       },
@@ -107,6 +108,10 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
 
     try {
       setCurrentLogin(name)
+      const id = globalThis.setTimeout(() => {
+        setCurrentLogin('')
+      }, 12000)
+      setTimeoutId(id as unknown as number)
       const { coinType } = loginCacheSnap
       if (coinType) {
         setLoginCacheState({ walletName: name })
@@ -136,16 +141,19 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
       }
     } finally {
       setCurrentLogin('')
+      globalThis.clearTimeout(timeoutId)
     }
   }
 
   const close = () => {
     onClose?.()
+    globalThis.clearTimeout(timeoutId)
     setCurrentLogin('')
   }
 
   const back = () => {
     goBack?.()
+    globalThis.clearTimeout(timeoutId)
     setCurrentLogin('')
   }
 

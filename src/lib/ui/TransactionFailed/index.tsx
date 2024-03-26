@@ -21,7 +21,7 @@ export function TransactionFailed({ transitionRef, transitionStyle }: SwapChildP
         ref={transitionRef}
         style={transitionStyle}
       >
-        <Exlaimation className="h-[80px] w-[80px] text-red-500" />
+        <Exlaimation className="size-[80px] text-red-500" />
         <div className="mt-3 text-center text-[16px] font-bold text-red-500">{t`Failed`}</div>
         <div className="mt-3 text-center text-[16px] leading-normal text-neutral-700">
           <div>{t`The contract verification failed.`}</div>

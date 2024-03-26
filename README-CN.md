@@ -6,7 +6,7 @@
 
 - **支持的链**: Ethereum、BNB Smart Chain、Polygon、TRON、Dogecoin。
 - **登录方式**: Passkey、Torus。
-- **行业标准**: 我们依赖于 [viem](https://viem.sh/) 和 [@wagmi/core](https://wagmi.sh/core/getting-started) 这是 Web3 中最常用的库。
+- **行业标准**: 我们依赖于 [viem](https://viem.sh/)、[@wagmi/core](https://wagmi.sh/core/getting-started) 和 [@wagmi/connectors](https://wagmi.sh/core/api/connectors) 这是 Web3 中最常用的库。
 
 [Documentation in English](README.md)
 
@@ -24,10 +24,10 @@
 
 ### 1. 安装：
 
-安装 wallet-bridge 及其对等依赖项 [@wagmi/core](https://wagmi.sh/core/getting-started) 和 [viem](https://viem.sh/).
+安装 wallet-bridge 及其对等依赖.
 
 ```bash
-yarn add wallet-bridge @wagmi/core viem
+yarn add wallet-bridge@^1 @wagmi/core@^2 @wagmi/connectors@^4 viem@^2
 ```
 
 ### 2. 导入 Wallet：
@@ -61,36 +61,11 @@ const { Wallet } = await import('wallet-bridge')
 
 ```js
 import { Wallet } from 'wallet-bridge'
-import { bsc, bscTestnet, goerli, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
-import { jsonRpcProvider } from '@wagmi/core/providers/jsonRpc'
-import { configureChains, createConfig, InjectedConnector } from '@wagmi/core'
-import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
+import { createConfig, http } from '@wagmi/core'
+import { bsc, bscTestnet, holesky, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { injected, walletConnect } from '@wagmi/connectors'
 
-const chainIdToRpc: { [chainId: number]: string | undefined } = {
-  [ethereum.id]: 'https://eth.public-rpc.com',
-  [goerli.id]: 'https://rpc.ankr.com/eth_goerli',
-  [bsc.id]: 'https://bscrpc.com',
-  [bscTestnet.id]: 'https://rpc.ankr.com/bsc_testnet_chapel',
-  [polygon.id]: 'https://polygon-rpc.com',
-  [polygonMumbai.id]: 'https://rpc.ankr.com/polygon_mumbai',
-}
-
-const { publicClient, chains } = configureChains(
-  [ethereum, goerli, bsc, bscTestnet, polygon, polygonMumbai],
-  [
-    jsonRpcProvider({
-      rpc(chain) {
-        return { http: chainIdToRpc[chain.id] || '' }
-      },
-    }),
-  ],
-)
-
-const injectedConnector = new InjectedConnector({
-  chains,
-})
-
-const walletConnectConnectorOptions = {
+const walletConnectOptions = {
   projectId: 'YOUR_PROJECT_ID', // Get projectId at https://cloud.walletconnect.com
   metadata: {
     name: '.bit',
@@ -100,20 +75,17 @@ const walletConnectConnectorOptions = {
   },
 }
 
-const walletConnectConnectorShow = new WalletConnectConnector({
-  chains,
-  options: { ...walletConnectConnectorOptions, showQrModal: true },
-})
-
-const walletConnectConnectorHide = new WalletConnectConnector({
-  chains,
-  options: { ...walletConnectConnectorOptions, showQrModal: false },
-})
-
 const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors: [walletConnectConnectorShow, walletConnectConnectorHide, injectedConnector],
-  publicClient,
+  chains: [ethereum, holesky, bsc, bscTestnet, polygon, polygonMumbai],
+  transports: {
+    [ethereum.id]: http(),
+    [holesky.id]: http(),
+    [bsc.id]: http(),
+    [bscTestnet.id]: http(),
+    [polygon.id]: http(),
+    [polygonMumbai.id]: http(),
+  },
+  connectors: [injected(), walletConnect(walletConnectOptions)],
 })
 
 const wallet = new Wallet({

@@ -53,7 +53,7 @@ function DomException({ err, className }: { err: DOMException; className?: strin
         className,
       )}
     >
-      <WarningOutlineIcon className="h-5 w-5 flex-none text-yellow-500" />
+      <WarningOutlineIcon className="size-5 flex-none text-yellow-500" />
 
       <div className="flex-1">
         <div className="text-[16px] leading-[20px] text-yellow-700">{title}</div>
@@ -160,15 +160,15 @@ export function InputSignature({ transitionRef, transitionStyle }: SwapChildProp
             onChange={onChange}
           />
           <div className="absolute bottom-0 right-0 p-3 align-middle">
-            <div className="inline-flex h-[30px] w-[30px] items-center justify-center  rounded-lg border border-slate-600/10 bg-white">
+            <div className="inline-flex size-[30px] items-center justify-center rounded-lg  border border-slate-600/10 bg-white">
               <PasteIcon onClick={onPaste} className="w-[16px] cursor-pointer" />
             </div>
             {requiringPermission ? (
-              <div className="ml-4 inline-flex h-[30px] w-[30px] items-center justify-center  rounded-lg border border-slate-600/10 bg-white">
+              <div className="ml-4 inline-flex size-[30px] items-center justify-center rounded-lg  border border-slate-600/10 bg-white">
                 <LoadingIcon className="animation-rotate-360-deg w-[18px] cursor-pointer" />
               </div>
             ) : (
-              <div className="ml-4 inline-flex h-[30px] w-[30px] items-center justify-center  rounded-lg border border-slate-600/10 bg-white">
+              <div className="ml-4 inline-flex size-[30px] items-center justify-center rounded-lg  border border-slate-600/10 bg-white">
                 <ScanIcon onClick={onClickScan} className="w-[18px] cursor-pointer" />
               </div>
             )}
