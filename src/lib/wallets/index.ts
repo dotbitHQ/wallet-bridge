@@ -175,11 +175,11 @@ class WalletSDK {
   }
 
   async signData(data: SignDataType, options?: SignDataOptions): Promise<string | undefined> {
-    // const isInit = await this.initWallet()
-    // if (!isInit && !this.walletSigner) {
-    //   // eslint-disable-next-line lingui/no-unlocalized-strings
-    //   throw new CustomError(errno.failedToInitializeWallet, 'signData: Please initialize wallet first')
-    // }
+    const isInit = await this.initWallet()
+    if (!isInit && !this.walletSigner) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
+      throw new CustomError(errno.failedToInitializeWallet, 'signData: Please initialize wallet first')
+    }
     return await this.walletSigner?.signData(data, options)
   }
 
@@ -205,11 +205,11 @@ class WalletSDK {
   }
 
   async signTxList(txs: SignTxListParams, options?: SignDataOptions): Promise<SignTxListRes> {
-    // const isInit = await this.initWallet()
-    // if (!isInit) {
-    //   // eslint-disable-next-line lingui/no-unlocalized-strings
-    //   throw new CustomError(errno.failedToInitializeWallet, 'signTxList: Please initialize wallet first')
-    // }
+    const isInit = await this.initWallet()
+    if (!isInit) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
+      throw new CustomError(errno.failedToInitializeWallet, 'signTxList: Please initialize wallet first')
+    }
 
     let provider
 
@@ -289,11 +289,11 @@ class WalletSDK {
   }
 
   async _verifyPasskeySignature({ message, signature }: { message: string; signature: string }): Promise<boolean> {
-    // const isInit = await this.initWallet()
-    // if (!isInit) {
-    //   // eslint-disable-next-line lingui/no-unlocalized-strings
-    //   throw new CustomError(errno.failedToInitializeWallet, '_verifyPasskeySignature: Please initialize wallet first')
-    // }
+    const isInit = await this.initWallet()
+    if (!isInit) {
+      // eslint-disable-next-line lingui/no-unlocalized-strings
+      throw new CustomError(errno.failedToInitializeWallet, '_verifyPasskeySignature: Please initialize wallet first')
+    }
     const { isTestNet, address, deviceData } = snapshot(walletState)
     const api = isTestNet ? WebAuthnTestApi : WebAuthnApi
     const res = await Axios.post(

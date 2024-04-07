@@ -17,7 +17,6 @@ export class WalletConnectTransaction extends WalletTransaction {
     if (provider?.isWalletConnect && isMobile && walletName !== CustomWallet.walletConnect) {
       const session = provider.session
       if (walletName && session) {
-        // const deepLink = getWalletDeepLink(walletName, `wc:${sessionTopic}@2`)
         const deepLink = getWalletDeepLink(
           walletName,
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
