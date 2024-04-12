@@ -62,7 +62,7 @@ class WalletSDK {
       this.walletConnector = WalletHandlerFactory.createConnector(this.context)
       throw err
     }
-    this.eventListener?.removeEvents()
+    // this.eventListener?.removeEvents()
     this.walletConnector = WalletHandlerFactory.createConnector(this.context)
     this.walletSigner = WalletHandlerFactory.createSigner(this.context)
     this.walletTransaction = WalletHandlerFactory.createTransaction(this.context)
@@ -89,14 +89,18 @@ class WalletSDK {
   }
 
   connectWallet(params: { initComponent?: string; onlyEth?: boolean } = {}): void {
-    const shadowDomRoot = getShadowDomRoot()
-    this.onlyEth = params.onlyEth ?? false
-    const connectWalletInstance = React.createElement(ConnectWallet, {
-      visible: true,
-      walletSDK: this,
-      ...params,
-    })
-    createRoot(shadowDomRoot).render(connectWalletInstance)
+    const { shadowDomElement } = getShadowDomRoot()
+    const connectWalletModalNodeList = shadowDomElement?.querySelectorAll('#ConnectWalletModal')
+    const connectWalletSheetNodeList = shadowDomElement?.querySelectorAll('#ConnectWalletSheet')
+    if (connectWalletModalNodeList?.length === 0 && connectWalletSheetNodeList?.length === 0) {
+      this.onlyEth = params.onlyEth ?? false
+      const connectWalletInstance = React.createElement(ConnectWallet, {
+        visible: true,
+        walletSDK: this,
+        ...params,
+      })
+      createRoot(shadowDomElement).render(connectWalletInstance)
+    }
   }
 
   async connectWalletAndSignData(params: { signData: SignDataParams }): Promise<{ signature: string } | undefined> {

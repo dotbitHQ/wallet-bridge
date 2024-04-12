@@ -54,16 +54,16 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   }
 
   const icons: Record<CoinType, ReactNode> = {
-    [CoinType.btc]: <DeviceIcon className="inline-flex h-[68px] w-[68px]"></DeviceIcon>,
-    [CoinType.ckb]: <DeviceIcon className="inline-flex h-[68px] w-[68px]"></DeviceIcon>,
-    [CoinType.eth]: <img className="inline-flex h-[68px] w-[68px]" src={EthIcon} alt="ETH" />,
-    [CoinType.bsc]: <img className="inline-flex h-[68px] w-[68px]" src={BscIcon} alt="BSC" />,
+    [CoinType.btc]: <DeviceIcon className="inline-flex size-[68px]"></DeviceIcon>,
+    [CoinType.ckb]: <DeviceIcon className="inline-flex size-[68px]"></DeviceIcon>,
+    [CoinType.eth]: <img className="inline-flex size-[68px]" src={EthIcon} alt="ETH" />,
+    [CoinType.bsc]: <img className="inline-flex size-[68px]" src={BscIcon} alt="BSC" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    [CoinType.matic]: <img className="inline-flex h-[68px] w-[68px]" src={PolygonIcon} alt="Polygon" />,
+    [CoinType.matic]: <img className="inline-flex size-[68px]" src={PolygonIcon} alt="Polygon" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    [CoinType.trx]: <img className="inline-flex h-[68px] w-[68px]" src={TronIcon} alt="Tron" />,
+    [CoinType.trx]: <img className="inline-flex size-[68px]" src={TronIcon} alt="Tron" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    [CoinType.doge]: <img className="inline-flex h-[68px] w-[68px]" src={DogecoinIcon} alt="Dogecoin" />,
+    [CoinType.doge]: <img className="inline-flex size-[68px]" src={DogecoinIcon} alt="Dogecoin" />,
   }
 
   const bgImage: Record<CoinType, ReactNode> = {
@@ -141,7 +141,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
               <div className="flex flex-wrap gap-3">
                 <LoggedInButton
                   className="flex-loggedin-button"
-                  icon={<CopyIcon className="h-5 w-5 text-[#5F6570]"></CopyIcon>}
+                  icon={<CopyIcon className="size-5 text-[#5F6570]"></CopyIcon>}
                   onClick={() => {
                     walletSnap.address && onCopy(walletSnap.address)
                   }}
@@ -150,7 +150,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 </LoggedInButton>
                 <LoggedInButton
                   className="flex-loggedin-button"
-                  icon={<QRCodeIcon className="h-5 w-5 text-[#5F6570]"></QRCodeIcon>}
+                  icon={<QRCodeIcon className="size-5 text-[#5F6570]"></QRCodeIcon>}
                   onClick={onShowAddressQRCode}
                 >
                   {t`QR Code`}
@@ -158,7 +158,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 {walletSnap.ckbAddresses && walletSnap.ckbAddresses?.length > 0 ? (
                   <LoggedInButton
                     className="flex-loggedin-button"
-                    icon={<SwitchIcon className="h-5 w-5 text-[#5F6570]"></SwitchIcon>}
+                    icon={<SwitchIcon className="size-5 text-[#5F6570]"></SwitchIcon>}
                     onClick={onSwitchAddress}
                   >
                     {t`Switch`}
@@ -166,7 +166,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 ) : null}
                 <LoggedInButton
                   className="flex-loggedin-button"
-                  icon={<DisconnectIcon className="h-5 w-5 text-[#5F6570]"></DisconnectIcon>}
+                  icon={<DisconnectIcon className="size-5 text-[#5F6570]"></DisconnectIcon>}
                   loading={disconnectLoading}
                   onClick={disconnect}
                 >
@@ -194,7 +194,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
               <div className="flex flex-wrap gap-3">
                 <LoggedInButton
                   className="flex-loggedin-button"
-                  icon={<CopyIcon className="h-5 w-5 text-[#5F6570]"></CopyIcon>}
+                  icon={<CopyIcon className="size-5 text-[#5F6570]"></CopyIcon>}
                   onClick={() => {
                     walletSnap.address && onCopy(walletSnap.address)
                   }}
@@ -203,7 +203,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 </LoggedInButton>
                 <LoggedInButton
                   className="flex-loggedin-button"
-                  icon={<QRCodeIcon className="h-5 w-5 text-[#5F6570]"></QRCodeIcon>}
+                  icon={<QRCodeIcon className="size-5 text-[#5F6570]"></QRCodeIcon>}
                   onClick={onShowAddressQRCode}
                 >
                   {t`QR Code`}
@@ -211,7 +211,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 {showOpenTorusButton && (
                   <LoggedInButton
                     className="flex-loggedin-button"
-                    icon={<TorusIcon className="h-4 w-4 text-[#5F6570]"></TorusIcon>}
+                    icon={<TorusIcon className="size-4 text-[#5F6570]"></TorusIcon>}
                     onClick={openTorus}
                   >
                     {t`Open Torus`}
@@ -219,7 +219,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
                 )}
                 <LoggedInButton
                   className="flex-loggedin-button"
-                  icon={<DisconnectIcon className="h-5 w-5 text-[#5F6570]"></DisconnectIcon>}
+                  icon={<DisconnectIcon className="size-5 text-[#5F6570]"></DisconnectIcon>}
                   loading={disconnectLoading}
                   onClick={disconnect}
                 >

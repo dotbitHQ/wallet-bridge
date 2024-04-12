@@ -20,7 +20,7 @@ export function AddressItem(props: { address: string; isCurrent?: boolean; class
         <span className="text-base font-bold leading-5">{props.address}</span>
         <span className="inline-flex">{props.isCurrent ? <Tag className="text-sm">{t`Current`}</Tag> : null}</span>
       </span>
-      <ArrowLeftIcon className="h-2.5 w-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
+      <ArrowLeftIcon className="size-2.5 rotate-180 text-font-secondary"></ArrowLeftIcon>
     </li>
   )
 }

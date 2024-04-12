@@ -1,7 +1,7 @@
 // EVM-based Chains https://github.com/ethereum-lists/chains
 export enum ChainId {
   eth = 1,
-  ethGoerli = 5,
+  ethHolesky = 17000,
   bsc = 56,
   bscTestnet = 97,
   polygon = 137,
@@ -29,7 +29,7 @@ export const CoinTypeToChainIdMap: Record<string, number> = {
 }
 
 export const CoinTypeToTestNetChainIdMap: Record<string, number> = {
-  [CoinType.eth]: ChainId.ethGoerli,
+  [CoinType.eth]: ChainId.ethHolesky,
   [CoinType.bsc]: ChainId.bscTestnet,
   [CoinType.matic]: ChainId.polygonMumbai,
   [CoinType.trx]: ChainId.tronNile,
@@ -42,7 +42,7 @@ export const CoinTypeToTorusHostMap: Record<string, string> = {
 }
 
 export const CoinTypeToTorusHostTestNetMap: Record<string, string> = {
-  [CoinType.eth]: 'goerli',
+  [CoinType.eth]: 'holesky',
   [CoinType.bsc]: 'bsc_testnet',
   [CoinType.matic]: 'mumbai',
 }
@@ -52,17 +52,17 @@ export const CoinTypeToGenesisHash: Record<string, string> = {
 }
 
 export const ChainIdToCoinTypeMap: Record<string, CoinType> = {
-  1: CoinType.eth,
-  56: CoinType.bsc,
-  137: CoinType.matic,
-  728126428: CoinType.trx,
+  [ChainId.eth]: CoinType.eth,
+  [ChainId.bsc]: CoinType.bsc,
+  [ChainId.polygon]: CoinType.matic,
+  [ChainId.tron]: CoinType.trx,
 }
 
 export const ChainIdToCoinTypeTestNetMap: Record<string, CoinType> = {
-  5: CoinType.eth,
-  97: CoinType.bsc,
-  80001: CoinType.matic,
-  3448148188: CoinType.trx,
+  [ChainId.ethHolesky]: CoinType.eth,
+  [ChainId.bscTestnet]: CoinType.bsc,
+  [ChainId.polygonMumbai]: CoinType.matic,
+  [ChainId.tronNile]: CoinType.trx,
 }
 
 export enum SIGN_TYPE {
@@ -118,7 +118,7 @@ export const ETH: IMainChain = {
   icon: 'ethereum',
   tokenId: 'eth_eth',
   explorerTrx: 'https://etherscan.io/tx/',
-  testExplorerTrx: 'https://goerli.etherscan.io/tx/',
+  testExplorerTrx: 'https://holesky.etherscan.io/tx/',
 }
 
 export const TRON: IMainChain = {
@@ -193,13 +193,13 @@ export const ChainIdToChainInfoMap: Record<string, any> = {
     rpcUrl: 'https://mainnet.infura.io/v3/',
     blockExplorerUrl: 'https://etherscan.io',
   },
-  [ChainId.ethGoerli]: {
+  [ChainId.ethHolesky]: {
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    networkName: 'Ethereum Goerli Testnet',
+    networkName: 'Ethereum Holesky Testnet',
     symbol: 'ETH',
     decimals: 18,
-    rpcUrl: 'https://goerli.infura.io/v3/',
-    blockExplorerUrl: 'https://goerli.etherscan.io',
+    rpcUrl: 'https://rpc.ankr.com/eth_holesky/',
+    blockExplorerUrl: 'https://holesky.etherscan.io',
   },
   [ChainId.bsc]: {
     // eslint-disable-next-line lingui/no-unlocalized-strings

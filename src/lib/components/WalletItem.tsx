@@ -25,9 +25,7 @@ export function WalletItem(props: {
         {props.icon}
         <span className="ml-4 text-base font-semibold leading-5">{props.name}</span>
       </span>
-      {props.name === props.currentLogin ? (
-        <LoadingIcon className="h-2.5 w-2.5 text-font-secondary"></LoadingIcon>
-      ) : null}
+      {props.name === props.currentLogin ? <LoadingIcon className="size-2.5 text-font-secondary"></LoadingIcon> : null}
     </li>
   )
 }

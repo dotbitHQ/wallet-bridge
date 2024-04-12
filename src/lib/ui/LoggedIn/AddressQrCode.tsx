@@ -30,7 +30,7 @@ export function AddressQRCode({ transitionRef, transitionStyle }: SwapChildProps
         ref={transitionRef}
         style={transitionStyle}
       >
-        <div className="relative my-3 mb-9 h-[270px] w-[270px]">
+        <div className="relative my-3 mb-9 size-[270px]">
           <QRCode data={walletSnap.address} />
         </div>
       </div>

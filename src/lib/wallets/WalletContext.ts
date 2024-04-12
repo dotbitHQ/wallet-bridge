@@ -10,7 +10,7 @@ import {
   CustomChain,
   CustomWallet,
 } from '../constant'
-import { shouldUseWalletConnect, sleep } from '../utils'
+import { getConnector, sleep } from '../utils'
 import Torus from '@toruslabs/torus-embed'
 import Emittery from 'emittery'
 import { EventKey } from './WalletEventListenerHandler'
@@ -21,7 +21,7 @@ import errno from '../constant/errno'
 import { snapshot } from 'valtio'
 import { walletState } from '../store'
 import { EventOptions } from '../types'
-import { Connector } from '@wagmi/core'
+import { reconnect } from '@wagmi/core'
 import { t } from '@lingui/macro'
 
 export class WalletContext {
@@ -168,41 +168,20 @@ export class WalletContext {
   }
 
   private async getMetaMaskProvider() {
-    if (this.wagmiConfig) {
-      if (shouldUseWalletConnect()) {
-        const walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-          return item.id === 'walletConnect' && item.options.showQrModal === false
-        })
-        this.provider = await walletConnectConnector.getProvider()
-      } else {
-        const metaMaskConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-          return item.id === 'injected'
-        })
-        this.provider = await metaMaskConnector.getProvider()
+    if (this.wagmiConfig && this.walletName) {
+      const connector = getConnector(this.wagmiConfig, this.walletName)
+      if (connector) {
+        await reconnect(this.wagmiConfig, { connectors: [connector] })
       }
+      this.provider = await connector?.getProvider()
     } else {
       // eslint-disable-next-line lingui/no-unlocalized-strings
-      throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
+      throw new CustomError(errno.failedToInitializeWallet, 'getMetaMaskProvider: wagmiConfig is undefined')
     }
   }
 
   private async getWalletConnectProvider() {
-    if (this.wagmiConfig) {
-      let walletConnectConnector
-      if (isMobile) {
-        walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-          return item.id === 'walletConnect' && item.options.showQrModal === true
-        })
-      } else {
-        walletConnectConnector = this.wagmiConfig.connectors.find((item: Connector) => {
-          return item.id === 'walletConnect' && item.options.showQrModal === false
-        })
-      }
-      this.provider = await walletConnectConnector.getProvider()
-    } else {
-      // eslint-disable-next-line lingui/no-unlocalized-strings
-      throw new CustomError(errno.failedToInitializeWallet, 'getWalletConnectProvider: wagmiConfig is undefined')
-    }
+    await this.getMetaMaskProvider()
   }
 
   private async getTokenPocketUTXOProvider() {
@@ -251,9 +230,19 @@ export class WalletContext {
     if (!this.torusWallet.isInitialized) {
       await this.torusWallet.init({
         showTorusButton: false,
-        network: {
-          host,
-        },
+        network:
+          host === 'holesky'
+            ? {
+                host: 'https://rpc.ankr.com/eth_holesky',
+                chainId: this.chainId,
+                networkName: 'Holesky Test Network',
+                blockExplorer: 'https://holesky.etherscan.io',
+                ticker: 'ETH',
+                tickerName: 'Ethereum',
+              }
+            : {
+                host,
+              },
       })
     }
     this.provider = this.torusWallet.ethereum

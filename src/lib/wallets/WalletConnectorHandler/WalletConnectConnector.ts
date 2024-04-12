@@ -1,6 +1,13 @@
 import { WalletConnector } from './WalletConnector'
-import { shouldUseWalletConnect, sleep, toChecksumAddress } from '../../utils'
-import { connect, Connector, disconnect, getAccount, getNetwork, switchNetwork } from '@wagmi/core'
+import {
+  getConnector,
+  getWalletDeepLink,
+  openDeepLink,
+  removeWalletConnectQrModal,
+  sleep,
+  toChecksumAddress,
+} from '../../utils'
+import { connect, disconnect, getChainId, switchChain, getAccount } from '@wagmi/core'
 import { EventEnum } from '../WalletEventListenerHandler'
 import { resetWalletState, setWalletState } from '../../store'
 import { loginCacheState, setLoginCacheState } from '../../store/loginCache'
@@ -8,47 +15,51 @@ import { snapshot } from 'valtio'
 import { WalletConnectSigner } from '../WalletSignerHandler/WalletConnectSigner'
 import { SignDataType } from '../WalletSignerHandler'
 import { isMobile } from 'react-device-detect'
+import { CustomWallet } from '../../constant'
 
 export class WalletConnectConnector extends WalletConnector {
   async connect({ ignoreEvent }: { ignoreEvent: boolean } = { ignoreEvent: false }) {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    console.log('WalletConnect connect')
-    const { wagmiConfig, chainId, provider } = this.context
+    const { wagmiConfig, chainId: contextChainId, provider, walletName } = this.context
+    const connector = getConnector(wagmiConfig, walletName!)
 
-    let walletConnectConnector
-    if (isMobile) {
-      walletConnectConnector = wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'walletConnect' && item.options.showQrModal === true
-      })
-    } else {
-      walletConnectConnector = wagmiConfig.connectors.find((item: Connector) => {
-        return item.id === 'walletConnect' && item.options.showQrModal === false
-      })
-    }
-
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    const walletStateLocalStorage = globalThis.localStorage.getItem('WalletState')
-    if (walletStateLocalStorage && wagmiConfig.status === 'connected') {
-      await disconnect()
-      // eslint-disable-next-line lingui/no-unlocalized-strings
-      globalThis.localStorage.removeItem('WalletState')
-    }
-
-    if (wagmiConfig && wagmiConfig.status !== 'connected' && walletConnectConnector) {
-      if (!walletConnectConnector.options.showQrModal) {
-        provider.once('display_uri', async (uri: string) => {
-          // eslint-disable-next-line lingui/no-unlocalized-strings
-          console.log('WalletConnect display_uri', uri)
-          setLoginCacheState({ walletConnectDisplayUri: uri })
-        })
+    const handleUri = async (uri: string) => {
+      if (isMobile) {
+        if (walletName === CustomWallet.walletConnect) return
+        openDeepLink(getWalletDeepLink(walletName!, uri))
+      } else {
+        setLoginCacheState({ walletConnectDisplayUri: uri })
       }
-      const { chain, account } = await connect({
-        connector: walletConnectConnector,
-        chainId,
-      })
+    }
 
-      if (account && chain && chain.id === chainId) {
-        this.context.address = toChecksumAddress(account)
+    let recoveryWalletConnectQrModal
+    if (wagmiConfig?.state?.status !== 'connected' && connector) {
+      if (connector.id === 'walletConnect') {
+        provider.once('display_uri', handleUri)
+        recoveryWalletConnectQrModal = removeWalletConnectQrModal(provider, walletName!)
+      }
+
+      let address: string
+      try {
+        const { accounts, chainId } = await connect(wagmiConfig, {
+          connector,
+          chainId: contextChainId,
+        })
+        address = accounts[0]
+        if (contextChainId && contextChainId !== chainId) {
+          void this.switchNetwork(contextChainId)
+        }
+      } catch (err) {
+        console.log(err)
+        throw err
+      } finally {
+        recoveryWalletConnectQrModal?.()
+        if (connector.id === 'walletConnect') {
+          provider.off('display_uri', handleUri)
+        }
+      }
+
+      if (address) {
+        this.context.address = toChecksumAddress(address)
         setWalletState({
           protocol: this.context.protocol,
           address: this.context.address,
@@ -64,14 +75,15 @@ export class WalletConnectConnector extends WalletConnector {
           this.context.emitEvent(EventEnum.Connect)
         }
       }
-    } else if (wagmiConfig.status === 'connected') {
-      const network = getNetwork()
-      if (chainId && chainId !== network.chain?.id && !shouldUseWalletConnect()) {
-        await this.switchNetwork(chainId)
+    } else if (wagmiConfig.state.status === 'connected') {
+      const chainId = getChainId(wagmiConfig)
+      if (contextChainId && contextChainId !== chainId) {
+        void this.switchNetwork(contextChainId)
       }
-      const { address } = getAccount()
 
-      if (address && network.chain && network.chain.id === chainId) {
+      const { address } = getAccount(wagmiConfig)
+
+      if (address) {
         this.context.address = toChecksumAddress(address)
         setWalletState({
           protocol: this.context.protocol,
@@ -91,7 +103,7 @@ export class WalletConnectConnector extends WalletConnector {
   }
 
   async disconnect(): Promise<void> {
-    await disconnect()
+    await disconnect(this.context.wagmiConfig)
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined
@@ -100,9 +112,13 @@ export class WalletConnectConnector extends WalletConnector {
   }
 
   async switchNetwork(chainId: number): Promise<void> {
-    await switchNetwork({
-      chainId,
-    })
+    try {
+      await switchChain(this.context.wagmiConfig, {
+        chainId,
+      })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   async signData(data: SignDataType, isEIP712?: boolean): Promise<string | undefined> {
