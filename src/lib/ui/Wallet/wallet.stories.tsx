@@ -118,10 +118,19 @@ const TemplateConnectWallet = () => {
     }
   }
 
-  const onSendTransaction = async () => {
+  const onSendETH = async () => {
     const signature = await wallet.sendTransaction({
       to: '0x7df93d9F500fD5A9537FEE086322a988D4fDCC38',
       value: '10000000000000000',
+      data: '0x123abc',
+    })
+    console.log(signature)
+  }
+
+  const onSendBTC = async () => {
+    const signature = await wallet.sendTransaction({
+      to: 'tb1qgej835qcnd59ln79ayfrcxv6awv7mge3ljfpqd',
+      value: '10000',
       data: '0x123abc',
     })
     console.log(signature)
@@ -131,18 +140,18 @@ const TemplateConnectWallet = () => {
     wallet.setLocale(locale)
   }
 
-  useEffect(() => {
-    loadScript('//cdn.jsdelivr.net/npm/eruda', 'eruda').then(() => {
-      // @ts-ignore
-      window.eruda.init()
-    })
-  })
+  // useEffect(() => {
+  //   loadScript('//cdn.jsdelivr.net/npm/eruda', 'eruda').then(() => {
+  //     // @ts-ignore
+  //     window.eruda.init()
+  //   })
+  // })
 
-  useEffect(() => {
-    if (wallet && !walletSnap?.address) {
-      wallet.connectWallet()
-    }
-  }, [wallet, walletSnap?.address])
+  // useEffect(() => {
+  //   if (wallet && !walletSnap?.address) {
+  //     wallet.connectWallet()
+  //   }
+  // }, [wallet, walletSnap?.address])
 
   return (
     <>
@@ -168,7 +177,9 @@ const TemplateConnectWallet = () => {
       <br />
       <Button onClick={onSignData712}>Sign data 712</Button>
       <br />
-      <Button onClick={onSendTransaction}>Send transaction</Button>
+      <Button onClick={onSendETH}>Send ETH</Button>
+      <br />
+      <Button onClick={onSendBTC}>Send BTC</Button>
       <br />
       <Button
         onClick={() => {

@@ -6,7 +6,6 @@ import { ChainIdToCoinTypeMap, ChainIdToCoinTypeTestNetMap, CoinType } from '../
 import { createTips } from '../../components'
 import { t } from '@lingui/macro'
 import { GetChainIdReturnType } from 'viem'
-import { debounce } from 'lodash-es'
 
 export class WalletConnectEventListener extends WalletEventListener {
   unwatchAccount: (() => void) | undefined
@@ -28,11 +27,13 @@ export class WalletConnectEventListener extends WalletEventListener {
         return
       }
 
-      this.context.address = toChecksumAddress(String(address))
-      setWalletState({
-        address: this.context.address,
-      })
-      this.context.emitEvent(EventEnum.Change)
+      if (address && contextAddress) {
+        this.context.address = toChecksumAddress(String(address))
+        setWalletState({
+          address: this.context.address,
+        })
+        this.context.emitEvent(EventEnum.Change)
+      }
     } else if (isDisconnected && prevAccount.isConnected) {
       this.removeEvents()
       this.context.address = undefined
@@ -87,19 +88,16 @@ export class WalletConnectEventListener extends WalletEventListener {
 
       if (message) {
         this.context.emitEvent(EventEnum.Error, message)
-        debounce(() => {
-          createTips({
-            title: t`Tips`,
-            content: message,
-          })
-        }, 1000)
+        createTips({
+          title: t`Tips`,
+          content: message,
+        })
       }
     }
   }
 
   listenEvents(): void {
     console.log('WalletConnectEventListener')
-    this.removeEvents()
     const { wagmiConfig } = this.context
 
     this.unwatchAccount = watchAccount(wagmiConfig, {

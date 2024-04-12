@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:94
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:96
 #: src/lib/ui/ShowQRCode/index.tsx:23
 msgid "👌 Copied"
 msgstr "👌 復制成功"
@@ -66,8 +66,8 @@ msgstr "用其他錢包登錄"
 msgid "Copy"
 msgstr "復制"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:149
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:202
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:151
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:204
 msgid "Copy Address"
 msgstr "復制地址"
 
@@ -83,8 +83,8 @@ msgstr "當前設備"
 msgid "Device Loss Can Lead to Asset Loss"
 msgstr "遺失當前設備會造成資產丟失"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:173
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:226
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:175
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:228
 msgid "Disconnect"
 msgstr "斷開連接"
 
@@ -168,7 +168,7 @@ msgstr "攝像頭未授權"
 msgid "OK"
 msgstr "確定"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:217
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:219
 msgid "Open Torus"
 msgstr "打開 Torus"
 
@@ -180,7 +180,7 @@ msgstr "或使用"
 msgid "Other requests for the wallet are not processed, please try again after processing"
 msgstr "錢包的其他請求未被處理，請處理後再試"
 
-#: src/lib/ui/Login/ChainList.tsx:166
+#: src/lib/ui/Login/ChainList.tsx:173
 msgid "Other Wallets"
 msgstr "其他錢包"
 
@@ -196,63 +196,75 @@ msgstr "黏貼數據或者掃描二維碼"
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "請檢查您是否使用了多個錢包插件。請禁用多個錢包插件，只保留一個錢包插件後再試。"
 
-#: src/lib/wallets/WalletContext.ts:206
-#: src/lib/wallets/WalletContext.ts:212
+#: src/lib/wallets/WalletContext.ts:210
+#: src/lib/wallets/WalletContext.ts:216
 msgid "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 msgstr "請下載 TokenPocket，並在應用內連接您的 Dogecoin 錢包，然後重試。"
 
-#: src/lib/wallets/WalletContext.ts:267
+#: src/lib/wallets/WalletContext.ts:234
+#: src/lib/wallets/WalletContext.ts:289
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "請確保您的瀏覽器已安裝 {0} 錢包插件，然後再試。"
 
-#: src/lib/wallets/WalletContext.ts:201
-#: src/lib/wallets/WalletContext.ts:262
+#: src/lib/wallets/WalletContext.ts:205
+#: src/lib/wallets/WalletContext.ts:229
+#: src/lib/wallets/WalletContext.ts:284
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "請在您的加密貨幣錢包應用中打開此頁面，然後再試。"
 
+#: src/lib/wallets/WalletEventListenerHandler/UnisatEventListener.ts:69
+msgid "Please switch your wallet to the Bitcoin livenet before connecting"
+msgstr "連接前請將您的錢包切換到 Bitcoin livenet 網絡"
+
+#: src/lib/wallets/WalletEventListenerHandler/UnisatEventListener.ts:68
+msgid "Please switch your wallet to the Bitcoin testnet before connecting"
+msgstr "連接前請將您的錢包切換到 Bitcoin testnet 網絡"
+
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:56
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:79
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:80
 msgid "Please switch your wallet to the BSC main network before connecting"
 msgstr "連接前請將您的錢包切換到 BSC 主網絡"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:55
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:78
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:79
 msgid "Please switch your wallet to the BSC Testnet before connecting"
 msgstr "連接前請將您的錢包切換到 BSC 測試網"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:51
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:74
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:75
 msgid "Please switch your wallet to the Ethereum main network before connecting"
 msgstr "連接前請將您的錢包切換至 Ethereum 主網"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:50
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:73
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:74
 msgid "Please switch your wallet to the Holesky test network before connecting"
 msgstr "連接前請將您的錢包切換至 Holesky 測試網"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:61
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:84
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:85
 msgid "Please switch your wallet to the Polygon Mainnet before connecting"
 msgstr "連接前請將您的錢包切換至 Polygon 主網"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:60
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:83
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:84
 msgid "Please switch your wallet to the Polygon Testnet before connecting"
 msgstr "連接前請將您的錢包切換至 Polygon 測試網"
 
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:58
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:64
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:117
 msgid "Please switch your wallet to the TRON main network before connecting"
 msgstr "連接前請將您的錢包切換至 TRON 主網"
 
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:57
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:63
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:116
 msgid "Please switch your wallet to the TRON Nile test network before connecting"
 msgstr "連接前請將您的錢包切換至 TRON Nile 測試網"
 
-#: src/lib/wallets/WalletContext.ts:194
+#: src/lib/wallets/WalletContext.ts:198
 msgid "Please try again after unlocking your TokenPocket wallet."
 msgstr "解鎖您的 TokenPocket 錢包後請再試。"
 
-#: src/lib/wallets/WalletContext.ts:258
+#: src/lib/wallets/WalletContext.ts:280
 msgid "Please try again after unlocking your Tron wallet."
 msgstr "解鎖您的 Tron 錢包後請再試。"
 
@@ -261,8 +273,8 @@ msgid "Please try again."
 msgstr "請再次嘗試。"
 
 #: src/lib/ui/LoggedIn/AddressQrCode.tsx:22
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:156
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:209
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:158
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:211
 msgid "QR Code"
 msgstr "二維碼"
 
@@ -310,11 +322,11 @@ msgstr "掃描二維碼需要獲取攝像頭權限，請授權。"
 msgid "Secure your assets by adding extra trusted devices like mobile phones, computers or tablets immediately."
 msgstr "通過添加授信設備來保障您資產的安全。"
 
-#: src/lib/ui/Login/WalletList.tsx:170
+#: src/lib/ui/Login/WalletList.tsx:176
 msgid "Select Wallet"
 msgstr "選擇錢包"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:164
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:166
 msgid "Switch"
 msgstr "切換"
 
@@ -344,9 +356,9 @@ msgstr "此設備或瀏覽器不支持 Passkey，請使用其他方式連接。"
 
 #: src/lib/ui/FinalConfirm/index.tsx:82
 #: src/lib/ui/LoggedIn/DeviceList.tsx:159
-#: src/lib/ui/Login/ChainList.tsx:142
+#: src/lib/ui/Login/ChainList.tsx:149
 #: src/lib/ui/Login/Connect.tsx:129
-#: src/lib/ui/Login/WalletList.tsx:137
+#: src/lib/ui/Login/WalletList.tsx:143
 #: src/lib/utils/handleError.ts:48
 #: src/lib/utils/handleError.ts:57
 #: src/lib/utils/handleError.ts:66
@@ -354,8 +366,10 @@ msgstr "此設備或瀏覽器不支持 Passkey，請使用其他方式連接。"
 #: src/lib/utils/handleError.ts:82
 #: src/lib/utils/handleError.ts:88
 #: src/lib/utils/handleError.ts:94
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:69
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:66
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:68
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:71
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:124
+#: src/lib/wallets/WalletEventListenerHandler/UnisatEventListener.ts:76
 #: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:92
 msgid "Tips"
 msgstr "提示"

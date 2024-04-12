@@ -6,8 +6,10 @@ export enum ChainId {
   bscTestnet = 97,
   polygon = 137,
   polygonMumbai = 80001,
-  tron = 728126428,
-  tronNile = 3448148188,
+  tron = '0x2b6653dc',
+  tronNile = '0xcd8690dc',
+  btc = 'livenet',
+  btcTestnet = 'testnet',
 }
 
 // SLIP-0044 : Registered coin types for BIP-0044 https://github.com/satoshilabs/slips/blob/master/slip-0044.md
@@ -21,18 +23,20 @@ export enum CoinType {
   matic = '966',
 }
 
-export const CoinTypeToChainIdMap: Record<string, number> = {
+export const CoinTypeToChainIdMap: Record<string, number | string> = {
   [CoinType.eth]: ChainId.eth,
   [CoinType.bsc]: ChainId.bsc,
   [CoinType.matic]: ChainId.polygon,
   [CoinType.trx]: ChainId.tron,
+  [CoinType.btc]: ChainId.btc,
 }
 
-export const CoinTypeToTestNetChainIdMap: Record<string, number> = {
+export const CoinTypeToTestNetChainIdMap: Record<string, number | string> = {
   [CoinType.eth]: ChainId.ethHolesky,
   [CoinType.bsc]: ChainId.bscTestnet,
   [CoinType.matic]: ChainId.polygonMumbai,
   [CoinType.trx]: ChainId.tronNile,
+  [CoinType.btc]: ChainId.btcTestnet,
 }
 
 export const CoinTypeToTorusHostMap: Record<string, string> = {
@@ -47,15 +51,12 @@ export const CoinTypeToTorusHostTestNetMap: Record<string, string> = {
   [CoinType.matic]: 'mumbai',
 }
 
-export const CoinTypeToGenesisHash: Record<string, string> = {
-  [CoinType.doge]: '1a91e3dace36e2be3bf030a65679fe821aa1d6ef92e7c9902eb318182c355691',
-}
-
 export const ChainIdToCoinTypeMap: Record<string, CoinType> = {
   [ChainId.eth]: CoinType.eth,
   [ChainId.bsc]: CoinType.bsc,
   [ChainId.polygon]: CoinType.matic,
   [ChainId.tron]: CoinType.trx,
+  [ChainId.btc]: CoinType.btc,
 }
 
 export const ChainIdToCoinTypeTestNetMap: Record<string, CoinType> = {
@@ -63,6 +64,7 @@ export const ChainIdToCoinTypeTestNetMap: Record<string, CoinType> = {
   [ChainId.bscTestnet]: CoinType.bsc,
   [ChainId.polygonMumbai]: CoinType.matic,
   [ChainId.tronNile]: CoinType.trx,
+  [ChainId.btcTestnet]: CoinType.btc,
 }
 
 export enum SIGN_TYPE {
@@ -75,6 +77,7 @@ export enum SIGN_TYPE {
   ed25519,
   doge,
   webauthn,
+  btc,
 }
 
 export enum CustomChain {
@@ -83,6 +86,7 @@ export enum CustomChain {
   bsc = 'BNB Smart Chain',
   tron = 'TRON',
   doge = 'Dogecoin',
+  btc = 'Bitcoin',
   polygon = 'Polygon',
   torus = 'Torus',
 }
@@ -154,17 +158,6 @@ export const Polygon: IMainChain = {
   testExplorerTrx: 'https://mumbai.polygonscan.com/tx/',
 }
 
-export const BTC: IMainChain = {
-  // eslint-disable-next-line lingui/no-unlocalized-strings
-  name: 'Bitcoin',
-  symbol: 'BTC',
-  coinType: CoinType.btc,
-  decimals: 8,
-  icon: 'bitcoin',
-  tokenId: 'btc_btc',
-  explorerTrx: 'https://explorer.btc.com/btc/address/',
-  testExplorerTrx: '',
-}
 export const DOGE: IMainChain = {
   name: CustomChain.doge,
   symbol: 'DOGE',
@@ -176,63 +169,24 @@ export const DOGE: IMainChain = {
   testExplorerTrx: 'https://dogechain.info/tx/',
 }
 
+export const BTC: IMainChain = {
+  name: CustomChain.btc,
+  symbol: 'BTC',
+  coinType: CoinType.btc,
+  decimals: 8,
+  icon: 'bitcoin',
+  tokenId: 'btc_btc',
+  explorerTrx: 'https://blockchair.com/bitcoin/transaction/',
+  testExplorerTrx: 'https://blockchair.com/bitcoin/testnet/transaction/',
+}
+
 export const CoinTypeToChainMap: Record<string, IMainChain> = {
   [CoinType.eth]: ETH,
   [CoinType.bsc]: BSC,
   [CoinType.matic]: Polygon,
   [CoinType.trx]: TRON,
   [CoinType.doge]: DOGE,
-}
-
-export const ChainIdToChainInfoMap: Record<string, any> = {
-  [ChainId.eth]: {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    networkName: 'Ethereum Mainnet',
-    symbol: 'ETH',
-    decimals: 18,
-    rpcUrl: 'https://mainnet.infura.io/v3/',
-    blockExplorerUrl: 'https://etherscan.io',
-  },
-  [ChainId.ethHolesky]: {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    networkName: 'Ethereum Holesky Testnet',
-    symbol: 'ETH',
-    decimals: 18,
-    rpcUrl: 'https://rpc.ankr.com/eth_holesky/',
-    blockExplorerUrl: 'https://holesky.etherscan.io',
-  },
-  [ChainId.bsc]: {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    networkName: 'Binance Smart Chain Mainnet',
-    symbol: 'BNB',
-    decimals: 18,
-    rpcUrl: 'https://bsc-dataseed1.binance.org',
-    blockExplorerUrl: 'https://bscscan.com',
-  },
-  [ChainId.bscTestnet]: {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    networkName: 'Binance Smart Chain Testnet',
-    symbol: 'BNB',
-    decimals: 18,
-    rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545',
-    blockExplorerUrl: 'https://testnet.bscscan.com',
-  },
-  [ChainId.polygon]: {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    networkName: 'Polygon Mainnet',
-    symbol: 'MATIC',
-    decimals: 18,
-    rpcUrl: 'https://polygon-rpc.com/',
-    blockExplorerUrl: 'https://polygonscan.com',
-  },
-  [ChainId.polygonMumbai]: {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    networkName: 'Polygon Testnet Mumbai',
-    symbol: 'MATIC',
-    decimals: 18,
-    rpcUrl: 'https://matic-mumbai.chainstacklabs.com',
-    blockExplorerUrl: 'https://mumbai.polygonscan.com',
-  },
+  [CoinType.btc]: BTC,
 }
 
 export enum CustomWallet {
@@ -240,6 +194,7 @@ export enum CustomWallet {
   trustWallet = 'TrustWallet',
   imToken = 'imToken',
   tokenPocket = 'TokenPocket',
+  unisat = 'Unisat',
   oneKey = 'OneKey',
   iToken = 'iToken',
   tronLink = 'TronLink',

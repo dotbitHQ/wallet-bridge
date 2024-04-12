@@ -25,7 +25,7 @@ export interface WalletState {
   protocol?: WalletProtocol
   address?: string
   coinType?: CoinType
-  chainId?: number
+  chainId?: number | string
   walletName?: string
   hardwareWalletTipsShow?: boolean
   deviceData?: IDeviceData

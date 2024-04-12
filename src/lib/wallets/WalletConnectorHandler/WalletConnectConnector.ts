@@ -46,7 +46,7 @@ export class WalletConnectConnector extends WalletConnector {
         })
         address = accounts[0]
         if (contextChainId && contextChainId !== chainId) {
-          void this.switchNetwork(contextChainId)
+          void this.switchNetwork(contextChainId as number)
         }
       } catch (err) {
         console.log(err)
@@ -78,7 +78,7 @@ export class WalletConnectConnector extends WalletConnector {
     } else if (wagmiConfig.state.status === 'connected') {
       const chainId = getChainId(wagmiConfig)
       if (contextChainId && contextChainId !== chainId) {
-        void this.switchNetwork(contextChainId)
+        void this.switchNetwork(contextChainId as number)
       }
 
       const { address } = getAccount(wagmiConfig)
@@ -103,11 +103,11 @@ export class WalletConnectConnector extends WalletConnector {
   }
 
   async disconnect(): Promise<void> {
-    await disconnect(this.context.wagmiConfig)
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined
     resetWalletState()
+    await disconnect(this.context.wagmiConfig)
     this.context.emitEvent(EventEnum.Disconnect)
   }
 

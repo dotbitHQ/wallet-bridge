@@ -5,6 +5,8 @@ import {
   TokenPocketUTXOConnector,
   TorusConnector,
   TronLinkConnector,
+  UnisatConnector,
+  WalletConnectConnector,
   WalletConnector,
 } from './WalletConnectorHandler'
 import {
@@ -13,6 +15,8 @@ import {
   TokenPocketUTXOEventListener,
   TorusEventListener,
   TronLinkEventListener,
+  UnisatEventListener,
+  WalletConnectEventListener,
   WalletEventListener,
 } from './WalletEventListenerHandler'
 import {
@@ -21,6 +25,8 @@ import {
   TokenPocketUTXOSigner,
   TorusSigner,
   TronLinkSigner,
+  UnisatSigner,
+  WalletConnectSigner,
   WalletSigner,
 } from './WalletSignerHandler'
 import {
@@ -29,13 +35,11 @@ import {
   TokenPocketUTXOTransaction,
   TorusTransaction,
   TronLinkTransaction,
+  UnisatTransaction,
+  WalletConnectTransaction,
   WalletTransaction,
 } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
-import { WalletConnectConnector } from './WalletConnectorHandler/WalletConnectConnector'
-import { WalletConnectEventListener } from './WalletEventListenerHandler/WalletConnectEventListener'
-import { WalletConnectSigner } from './WalletSignerHandler/WalletConnectSigner'
-import { WalletConnectTransaction } from './WalletTransactionHandler/WalletConnectTransaction'
 
 type WalletHandlerMap = {
   [P in WalletProtocol]: {
@@ -72,6 +76,12 @@ export class WalletHandlerFactory {
       EventListener: TokenPocketUTXOEventListener,
       Signer: TokenPocketUTXOSigner,
       Transaction: TokenPocketUTXOTransaction,
+    },
+    [WalletProtocol.unisat]: {
+      Connector: UnisatConnector,
+      EventListener: UnisatEventListener,
+      Signer: UnisatSigner,
+      Transaction: UnisatTransaction,
     },
     [WalletProtocol.webAuthn]: {
       Connector: ConnectDidConnector,

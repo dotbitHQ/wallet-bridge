@@ -10,7 +10,7 @@ import { WalletHandlerFactory } from './WalletHandlerFactory'
 import { CoinType, WalletProtocol, SIGN_TYPE, WebAuthnTestApi, WebAuthnApi, CfAccessClient } from '../constant'
 import { InitSignContextRes, SignInfo, SignTxListParams, SignTxListRes } from '../types'
 import { cloneDeep } from 'lodash-es'
-import { convertTpUTXOSignature, getShadowDomRoot, isDogecoinChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
+import { convertUTXOSignature, getShadowDomRoot, isUTXOChain, mmJsonHashAndChainIdHex, sleep } from '../utils'
 import { backupDeviceData, getAuthorizeInfo, getMastersAddress, walletState } from '../store'
 import { ConnectWallet } from '../ui/ConnectWallet'
 import CustomError from '../utils/CustomError'
@@ -53,6 +53,7 @@ class WalletSDK {
     coinType?: CoinType
     walletName?: string
   } = {}) {
+    this.eventListener?.removeEvents()
     try {
       await this.context.retrieveProvider({
         coinType,
@@ -62,7 +63,6 @@ class WalletSDK {
       this.walletConnector = WalletHandlerFactory.createConnector(this.context)
       throw err
     }
-    // this.eventListener?.removeEvents()
     this.walletConnector = WalletHandlerFactory.createConnector(this.context)
     this.walletSigner = WalletHandlerFactory.createSigner(this.context)
     this.walletTransaction = WalletHandlerFactory.createTransaction(this.context)
@@ -175,17 +175,12 @@ class WalletSDK {
   }
 
   async signData(data: SignDataType, options?: SignDataOptions): Promise<string | undefined> {
-    const isInit = await this.initWallet()
-    if (!isInit && !this.walletSigner) {
-      // eslint-disable-next-line lingui/no-unlocalized-strings
-      throw new CustomError(errno.failedToInitializeWallet, 'signData: Please initialize wallet first')
-    }
     return await this.walletSigner?.signData(data, options)
   }
 
   async sendTransaction(data: ISendTrxParams): Promise<string | undefined> {
     const isInit = await this.initWallet()
-    if (!isInit && !this.walletTransaction) {
+    if (!isInit) {
       // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new CustomError(errno.failedToInitializeWallet, 'sendTransaction: Please initialize wallet first')
     }
@@ -194,8 +189,8 @@ class WalletSDK {
 
   private async signTx(signInfo: SignInfo, options?: SignDataOptions): Promise<SignInfo> {
     let signDataRes = await this.signData(signInfo.sign_msg, options)
-    if (signDataRes && this.context.coinType && isDogecoinChain(this.context.coinType)) {
-      signDataRes = convertTpUTXOSignature(signDataRes)
+    if (signDataRes && this.context.coinType && isUTXOChain(this.context.coinType)) {
+      signDataRes = convertUTXOSignature(signDataRes)
     }
     if (signDataRes) {
       signInfo.sign_msg = signDataRes
@@ -205,12 +200,6 @@ class WalletSDK {
   }
 
   async signTxList(txs: SignTxListParams, options?: SignDataOptions): Promise<SignTxListRes> {
-    const isInit = await this.initWallet()
-    if (!isInit) {
-      // eslint-disable-next-line lingui/no-unlocalized-strings
-      throw new CustomError(errno.failedToInitializeWallet, 'signTxList: Please initialize wallet first')
-    }
-
     let provider
 
     if (this.context.protocol === WalletProtocol.webAuthn) {

@@ -12,6 +12,7 @@ import BscIcon from './icon/bsc-icon.svg'
 import PolygonIcon from './icon/polygon-icon.svg'
 import TronIcon from './icon/tron-icon.svg'
 import DogecoinIcon from './icon/dogecoin-icon.svg'
+import BtcIcon from './icon/btc-icon.svg'
 import TorusIcon from './icon/torus-icon.svg'
 import { t } from '@lingui/macro'
 
@@ -55,6 +56,12 @@ const doge: IChain = {
   coinType: CoinType.doge,
 }
 
+const btc: IChain = {
+  icon: <img className="size-10" src={BtcIcon} alt="Bitcoin" />,
+  name: CustomChain.btc,
+  coinType: CoinType.btc,
+}
+
 const torus: IChain = {
   // eslint-disable-next-line lingui/no-unlocalized-strings
   icon: <img className="size-10" src={TorusIcon} alt="Torus" />,
@@ -75,7 +82,7 @@ export const ChainList = ({ transitionStyle, transitionRef }: SwapChildProps) =>
 
   const chains: IChain[] = useMemo(() => {
     const customChains = walletSnap.customChains
-    let walletList: IChain[] = [eth, bsc, polygon, tron, doge]
+    let walletList: IChain[] = [btc, eth, bsc, polygon, tron, doge]
     let socialList: IChain[] = [torus]
 
     const list = []
