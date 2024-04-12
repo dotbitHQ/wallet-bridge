@@ -180,7 +180,7 @@ class WalletSDK {
 
   async sendTransaction(data: ISendTrxParams): Promise<string | undefined> {
     const isInit = await this.initWallet()
-    if (!isInit) {
+    if (!isInit && !this.walletTransaction) {
       // eslint-disable-next-line lingui/no-unlocalized-strings
       throw new CustomError(errno.failedToInitializeWallet, 'sendTransaction: Please initialize wallet first')
     }

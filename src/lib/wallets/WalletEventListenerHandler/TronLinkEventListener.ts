@@ -26,6 +26,7 @@ export class TronLinkEventListener extends WalletEventListener {
       const isAuth = event.data?.message?.data?.data?.isAuth
 
       if (!_chainId || !isAuth || eventTabReplyDebounce) {
+        // shim disconnect
         if (_chainId && isAuth === false) {
           this.removeEvents()
           this.context.address = undefined
@@ -37,6 +38,7 @@ export class TronLinkEventListener extends WalletEventListener {
         return
       }
 
+      // switch network check
       eventTabReplyDebounce = true
       globalThis.setTimeout(() => {
         eventTabReplyDebounce = false
@@ -129,6 +131,7 @@ export class TronLinkEventListener extends WalletEventListener {
     }
 
     if (event.data?.message?.action === 'disconnect') {
+      // shim disconnect
       this.removeEvents()
       this.context.address = undefined
       this.context.chainId = undefined

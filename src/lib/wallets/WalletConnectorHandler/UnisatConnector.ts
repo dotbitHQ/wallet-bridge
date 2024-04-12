@@ -42,12 +42,8 @@ export class UnisatConnector extends WalletConnector {
   }
 
   async switchNetwork(chainId: string): Promise<void> {
-    try {
-      const { provider } = this.context
-      await provider.switchNetwork(chainId)
-    } catch (err) {
-      console.error(err)
-    }
+    const { provider } = this.context
+    await provider.switchNetwork(chainId)
   }
 
   async signData(data: SignDataType): Promise<string | undefined> {
