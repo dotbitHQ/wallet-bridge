@@ -250,13 +250,13 @@ msgstr "请在连接前将您的钱包切换到 Polygon 主网"
 msgid "Please switch your wallet to the Polygon Testnet before connecting"
 msgstr "请在连接前将您的钱包切换到 Polygon 测试网"
 
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:64
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:117
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:66
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:119
 msgid "Please switch your wallet to the TRON main network before connecting"
 msgstr "请在连接前将您的钱包切换到 TRON 主网络"
 
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:63
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:116
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:65
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:118
 msgid "Please switch your wallet to the TRON Nile test network before connecting"
 msgstr "请在连接前将您的钱包切换到 TRON Nile 测试网"
 
@@ -367,8 +367,8 @@ msgstr "此设备或浏览器不支持 Passkey，请使用其他方式连接。"
 #: src/lib/utils/handleError.ts:88
 #: src/lib/utils/handleError.ts:94
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:68
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:71
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:124
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:73
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:126
 #: src/lib/wallets/WalletEventListenerHandler/UnisatEventListener.ts:76
 #: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:92
 msgid "Tips"

@@ -250,13 +250,13 @@ msgstr "Please switch your wallet to the Polygon Mainnet before connecting"
 msgid "Please switch your wallet to the Polygon Testnet before connecting"
 msgstr "Please switch your wallet to the Polygon Testnet before connecting"
 
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:64
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:117
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:66
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:119
 msgid "Please switch your wallet to the TRON main network before connecting"
 msgstr "Please switch your wallet to the TRON main network before connecting"
 
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:63
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:116
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:65
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:118
 msgid "Please switch your wallet to the TRON Nile test network before connecting"
 msgstr "Please switch your wallet to the TRON Nile test network before connecting"
 
@@ -367,8 +367,8 @@ msgstr "This device or browser unsupported. Try connect by social or wallet."
 #: src/lib/utils/handleError.ts:88
 #: src/lib/utils/handleError.ts:94
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:68
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:71
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:124
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:73
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:126
 #: src/lib/wallets/WalletEventListenerHandler/UnisatEventListener.ts:76
 #: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:92
 msgid "Tips"
