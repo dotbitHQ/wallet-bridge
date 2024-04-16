@@ -5,6 +5,7 @@ import { loadScript } from '../../utils'
 import { createConfig, http } from '@wagmi/core'
 import { bsc, bscTestnet, holesky, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
 import { injected, walletConnect } from '@wagmi/connectors'
+import handleError from '../../utils/handleError'
 
 export default {
   title: 'UI/Wallets',
@@ -97,7 +98,8 @@ const TemplateConnectWallet = () => {
       // only Passkey-signed transactions can be verified.
       const res = await wallet._verifyPasskeySignature({ message, signature: signature as string })
       console.log(res)
-    } catch (err) {
+    } catch (err: any) {
+      handleError(err)
       onClose?.()
       console.error(err)
     }
@@ -119,12 +121,17 @@ const TemplateConnectWallet = () => {
   }
 
   const onSendETH = async () => {
-    const signature = await wallet.sendTransaction({
-      to: '0x7df93d9F500fD5A9537FEE086322a988D4fDCC38',
-      value: '10000000000000000',
-      data: '0x123abc',
-    })
-    console.log(signature)
+    try {
+      const signature = await wallet.sendTransaction({
+        to: '0x7df93d9F500fD5A9537FEE086322a988D4fDCC38',
+        value: '10000000000000000',
+        data: '0x123abc',
+      })
+      console.log(signature)
+    } catch (err: any) {
+      handleError(err)
+      console.log(err)
+    }
   }
 
   const onSendBTC = async () => {
