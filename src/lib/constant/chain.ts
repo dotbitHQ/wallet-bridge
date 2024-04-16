@@ -187,6 +187,7 @@ export const CoinTypeToChainMap: Record<string, IMainChain> = {
   [CoinType.trx]: TRON,
   [CoinType.doge]: DOGE,
   [CoinType.btc]: BTC,
+  [CoinType.ckb]: CKB,
 }
 
 export enum CustomWallet {

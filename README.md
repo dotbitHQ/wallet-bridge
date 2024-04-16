@@ -4,8 +4,8 @@
 
 ## Features
 
-- **Supported Chains**: Bitcoin, Ethereum, BNB Smart Chain, Polygon, TRON, Dogecoin.
-- **Login Methods**: Unisat, WalletConnect, Passkey, Torus.
+- **Supported Chains**: Ethereum, BNB Smart Chain, Polygon, TRON, Dogecoin.
+- **Login Methods**: WalletConnect, Passkey, Torus.
 - **Industry Standards**: We rely on [viem](https://viem.sh/), [@wagmi/core](https://wagmi.sh/core/getting-started), and [@wagmi/connectors](https://wagmi.sh/core/api/connectors), which are among the most commonly used libraries in Web3.
 
 [中文文档](README-CN.md)
@@ -247,7 +247,7 @@ await onClose()
   - `customWallets`: Custom wallets to be displayed, of type `CustomWallet[]`.
   - `alias`: The .bit alias set for the currently logged-in wallet address, of type `string`.
   - `locale`: The language currently in use, of type `string`.
-  - `chainId`: When logging in with an EVM chain wallet, it represents the corresponding chain ID, of type `number`. When logging in with an Bitcoin, TRON wallet, it represents the corresponding chain ID, of type `string`.
+  - `chainId`: When logging in with an EVM chain wallet, it represents the corresponding chain ID, of type `number`. When logging in with an TRON wallet, it represents the corresponding chain ID, of type `string`.
 
 **Example**:
 

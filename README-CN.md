@@ -4,8 +4,8 @@
 
 ## 主要特性
 
-- **支持的链**: Bitcoin、Ethereum、BNB Smart Chain、Polygon、TRON、Dogecoin。
-- **登录方式**: Unisat、WalletConnect、Passkey、Torus。
+- **支持的链**: Ethereum、BNB Smart Chain、Polygon、TRON、Dogecoin。
+- **登录方式**: WalletConnect、Passkey、Torus。
 - **行业标准**: 我们依赖于 [viem](https://viem.sh/)、[@wagmi/core](https://wagmi.sh/core/getting-started) 和 [@wagmi/connectors](https://wagmi.sh/core/api/connectors) 这是 Web3 中最常用的库。
 
 [Documentation in English](README.md)
@@ -247,7 +247,7 @@ await onClose()
   - `customWallets`: 自定义显示的钱包，类型为`CustomWallet[]`。
   - `alias`: 当前登录的钱包地址设置的 .bit alias，类型为`string`。
   - `locale`: 当前使用的语言，类型为`string`。
-  - `chainId`: 当使用 EVM 链钱包登录时表示对应的链 ID，类型为`number`。当使用 Bitcoin、TRON 钱包登录时表示对应的链 ID，类型为`string`
+  - `chainId`: 当使用 EVM 链钱包登录时表示对应的链 ID，类型为`number`。当使用 TRON 钱包登录时表示对应的链 ID，类型为`string`。
 
 **示例**:
 
