@@ -125,7 +125,7 @@ msgstr "数据错误"
 msgid "Info"
 msgstr "提示"
 
-#: src/lib/utils/handleError.ts:83
+#: src/lib/utils/handleError.ts:84
 msgid "Insufficient balance"
 msgstr "余额不足"
 
@@ -176,7 +176,7 @@ msgstr "打开 Torus"
 msgid "or Continue with"
 msgstr "或使用"
 
-#: src/lib/utils/handleError.ts:67
+#: src/lib/utils/handleError.ts:68
 msgid "Other requests for the wallet are not processed, please try again after processing"
 msgstr "钱包的其他请求未处理，请处理后再试"
 
@@ -192,7 +192,7 @@ msgstr "Passkey"
 msgid "Paste data or scan QR code"
 msgstr "粘贴数据或者扫描二维码"
 
-#: src/lib/utils/handleError.ts:73
+#: src/lib/utils/handleError.ts:74
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "请检查是否使用多个钱包插件。请禁用多个钱包插件，仅保留一个钱包插件后重试。"
 
@@ -278,7 +278,7 @@ msgstr "请再次尝试。"
 msgid "QR Code"
 msgstr "二维码"
 
-#: src/lib/utils/handleError.ts:49
+#: src/lib/utils/handleError.ts:50
 msgid "Replacement transaction underpriced"
 msgstr ""
 
@@ -338,7 +338,7 @@ msgstr "切换地址"
 msgid "The contract verification failed."
 msgstr "合约验证失败。"
 
-#: src/lib/utils/handleError.ts:89
+#: src/lib/utils/handleError.ts:90
 msgid "The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet."
 msgstr "当前钱包环境不支持使用 TRX 付款，请更新钱包版本或者使用其他钱包。"
 
@@ -346,7 +346,7 @@ msgstr "当前钱包环境不支持使用 TRX 付款，请更新钱包版本或�
 msgid "The new trusted device has full control over this address."
 msgstr "新的授信设备有此地址的完全控制权。"
 
-#: src/lib/utils/handleError.ts:58
+#: src/lib/utils/handleError.ts:59
 msgid "The transaction has been aborted."
 msgstr "交易被取消。"
 
@@ -359,13 +359,13 @@ msgstr "此设备或浏览器不支持 Passkey，请使用其他方式连接。"
 #: src/lib/ui/Login/ChainList.tsx:149
 #: src/lib/ui/Login/Connect.tsx:129
 #: src/lib/ui/Login/WalletList.tsx:143
-#: src/lib/utils/handleError.ts:48
-#: src/lib/utils/handleError.ts:57
-#: src/lib/utils/handleError.ts:66
-#: src/lib/utils/handleError.ts:72
-#: src/lib/utils/handleError.ts:82
-#: src/lib/utils/handleError.ts:88
-#: src/lib/utils/handleError.ts:94
+#: src/lib/utils/handleError.ts:49
+#: src/lib/utils/handleError.ts:58
+#: src/lib/utils/handleError.ts:67
+#: src/lib/utils/handleError.ts:73
+#: src/lib/utils/handleError.ts:83
+#: src/lib/utils/handleError.ts:89
+#: src/lib/utils/handleError.ts:95
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:68
 #: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:73
 #: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:126

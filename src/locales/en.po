@@ -125,7 +125,7 @@ msgstr "Incorrect data"
 msgid "Info"
 msgstr "Info"
 
-#: src/lib/utils/handleError.ts:83
+#: src/lib/utils/handleError.ts:84
 msgid "Insufficient balance"
 msgstr "Insufficient balance"
 
@@ -176,7 +176,7 @@ msgstr "Open Torus"
 msgid "or Continue with"
 msgstr "or Continue with"
 
-#: src/lib/utils/handleError.ts:67
+#: src/lib/utils/handleError.ts:68
 msgid "Other requests for the wallet are not processed, please try again after processing"
 msgstr "Other requests for the wallet are not processed, please try again after processing"
 
@@ -192,7 +192,7 @@ msgstr "Passkey"
 msgid "Paste data or scan QR code"
 msgstr "Paste data or scan QR code"
 
-#: src/lib/utils/handleError.ts:73
+#: src/lib/utils/handleError.ts:74
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 
@@ -278,7 +278,7 @@ msgstr "Please try again."
 msgid "QR Code"
 msgstr "QR Code"
 
-#: src/lib/utils/handleError.ts:49
+#: src/lib/utils/handleError.ts:50
 msgid "Replacement transaction underpriced"
 msgstr "Replacement transaction underpriced"
 
@@ -338,7 +338,7 @@ msgstr "Switch Address"
 msgid "The contract verification failed."
 msgstr "The contract verification failed."
 
-#: src/lib/utils/handleError.ts:89
+#: src/lib/utils/handleError.ts:90
 msgid "The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet."
 msgstr "The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet."
 
@@ -346,7 +346,7 @@ msgstr "The current wallet environment does not support payments using TRX, plea
 msgid "The new trusted device has full control over this address."
 msgstr "The new trusted device has full control over this address."
 
-#: src/lib/utils/handleError.ts:58
+#: src/lib/utils/handleError.ts:59
 msgid "The transaction has been aborted."
 msgstr "The transaction has been aborted."
 
@@ -359,13 +359,13 @@ msgstr "This device or browser unsupported. Try connect by social or wallet."
 #: src/lib/ui/Login/ChainList.tsx:149
 #: src/lib/ui/Login/Connect.tsx:129
 #: src/lib/ui/Login/WalletList.tsx:143
-#: src/lib/utils/handleError.ts:48
-#: src/lib/utils/handleError.ts:57
-#: src/lib/utils/handleError.ts:66
-#: src/lib/utils/handleError.ts:72
-#: src/lib/utils/handleError.ts:82
-#: src/lib/utils/handleError.ts:88
-#: src/lib/utils/handleError.ts:94
+#: src/lib/utils/handleError.ts:49
+#: src/lib/utils/handleError.ts:58
+#: src/lib/utils/handleError.ts:67
+#: src/lib/utils/handleError.ts:73
+#: src/lib/utils/handleError.ts:83
+#: src/lib/utils/handleError.ts:89
+#: src/lib/utils/handleError.ts:95
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:68
 #: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:73
 #: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:126

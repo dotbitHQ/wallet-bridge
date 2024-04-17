@@ -220,9 +220,9 @@ export async function getDotbitAlias() {
     )
 
     if (aliasInfo.data?.err_no === errno.success) {
-      if (aliasInfo.data?.data?.account_alias) {
+      if (aliasInfo.data?.data?.account) {
         setWalletState({
-          alias: aliasInfo.data.data.account_alias,
+          alias: aliasInfo.data.data.account,
         })
       } else {
         setWalletState({
