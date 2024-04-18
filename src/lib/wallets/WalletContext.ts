@@ -119,7 +119,7 @@ export class WalletContext {
         this.protocol = WalletProtocol.unisat
       } else if (this.coinType === CoinType.trx) {
         this.protocol = WalletProtocol.tronLink
-      } else if (this.coinType === CoinType.eth) {
+      } else {
         this.protocol = WalletProtocol.metaMask
       }
     } else {
