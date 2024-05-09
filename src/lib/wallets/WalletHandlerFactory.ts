@@ -5,6 +5,8 @@ import {
   TokenPocketUTXOConnector,
   TorusConnector,
   TronLinkConnector,
+  UnisatConnector,
+  WalletConnectConnector,
   WalletConnector,
 } from './WalletConnectorHandler'
 import {
@@ -13,6 +15,8 @@ import {
   TokenPocketUTXOEventListener,
   TorusEventListener,
   TronLinkEventListener,
+  UnisatEventListener,
+  WalletConnectEventListener,
   WalletEventListener,
 } from './WalletEventListenerHandler'
 import {
@@ -21,6 +25,8 @@ import {
   TokenPocketUTXOSigner,
   TorusSigner,
   TronLinkSigner,
+  UnisatSigner,
+  WalletConnectSigner,
   WalletSigner,
 } from './WalletSignerHandler'
 import {
@@ -29,13 +35,11 @@ import {
   TokenPocketUTXOTransaction,
   TorusTransaction,
   TronLinkTransaction,
+  UnisatTransaction,
+  WalletConnectTransaction,
   WalletTransaction,
 } from './WalletTransactionHandler'
 import { WalletContext } from './WalletContext'
-import { WalletConnectConnector } from './WalletConnectorHandler/WalletConnectConnector'
-import { WalletConnectEventListener } from './WalletEventListenerHandler/WalletConnectEventListener'
-import { WalletConnectSigner } from './WalletSignerHandler/WalletConnectSigner'
-import { WalletConnectTransaction } from './WalletTransactionHandler/WalletConnectTransaction'
 
 type WalletHandlerMap = {
   [P in WalletProtocol]: {
@@ -73,6 +77,12 @@ export class WalletHandlerFactory {
       Signer: TokenPocketUTXOSigner,
       Transaction: TokenPocketUTXOTransaction,
     },
+    [WalletProtocol.unisat]: {
+      Connector: UnisatConnector,
+      EventListener: UnisatEventListener,
+      Signer: UnisatSigner,
+      Transaction: UnisatTransaction,
+    },
     [WalletProtocol.webAuthn]: {
       Connector: ConnectDidConnector,
       EventListener: ConnectDidEventListener,
@@ -98,7 +108,7 @@ export class WalletHandlerFactory {
   static createEventListener(context: WalletContext): WalletEventListener {
     if (!context.protocol) {
       // eslint-disable-next-line lingui/no-unlocalized-strings
-      throw new Error('createConnector: Please initialize wallet first')
+      throw new Error('createEventListener: Please initialize wallet first')
     }
     return new this.handlerMap[context.protocol].EventListener(context)
   }
@@ -106,7 +116,7 @@ export class WalletHandlerFactory {
   static createSigner(context: WalletContext): WalletSigner {
     if (!context.protocol) {
       // eslint-disable-next-line lingui/no-unlocalized-strings
-      throw new Error('createConnector: Please initialize wallet first')
+      throw new Error('createSigner: Please initialize wallet first')
     }
     return new this.handlerMap[context.protocol].Signer(context)
   }
@@ -114,7 +124,7 @@ export class WalletHandlerFactory {
   static createTransaction(context: WalletContext): WalletTransaction {
     if (!context.protocol) {
       // eslint-disable-next-line lingui/no-unlocalized-strings
-      throw new Error('createConnector: Please initialize wallet first')
+      throw new Error('createTransaction: Please initialize wallet first')
     }
     return new this.handlerMap[context.protocol].Transaction(context)
   }

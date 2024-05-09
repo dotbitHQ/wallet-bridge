@@ -1,4 +1,3 @@
-/* eslint-disable lingui/no-unlocalized-strings */
 import { ActionErrorCode } from 'connect-did-sdk'
 
 const errno = {
@@ -12,6 +11,7 @@ const errno = {
   metaMaskUserRejectedAccountAccess: -32603,
   metaMaskReplacementTransactionUnderpriced: 'replacement transaction underpriced',
   metaMaskTransactionHasBeenAborted: 'the transaction has been aborted',
+  metaMaskUserRejectedTheRequest: 'User rejected the request',
   // WalletConnect
   walletConnectUserRejectedTheTransaction: 'User rejected the transaction',
   walletConnectInsufficientFundsForTransfer: 'insufficient funds for transfer',

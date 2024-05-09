@@ -1,41 +1,49 @@
 import { EventEnum, WalletEventListener } from './WalletEventListener'
-import { WalletContext } from '../WalletContext'
-import { chainIdHexToNumber } from '../../utils'
-import { setWalletState } from '../../store'
+import { resetWalletState, setWalletState } from '../../store'
 import { ChainIdToCoinTypeMap, CoinType, ChainIdToCoinTypeTestNetMap } from '../../constant'
-import { debounce } from 'lodash-es'
 import { createTips } from '../../components'
 import { t } from '@lingui/macro'
+import { WalletContext } from '../WalletContext'
+
+let eventTabReplyDebounce = false
 
 export class TronLinkEventListener extends WalletEventListener {
-  async messageEvent(event: MessageEvent, context: WalletContext) {
+  messageEvent: (event: MessageEvent) => Promise<void>
+
+  constructor(context: WalletContext) {
+    super(context)
+    this.messageEvent = this.messageEventFun.bind(this)
+  }
+
+  async messageEventFun(event: MessageEvent) {
     if (!event?.data?.isTronLink) {
       return
     }
 
-    if (event.data?.message?.action === 'setAccount') {
-      const { address } = context
-      const account = event.data?.message?.data?.address
+    if (event.data?.message?.action === 'tabReply') {
+      const { isTestNet, coinType } = this.context
+      const _chainId = event.data?.message?.data?.data?.chainId
+      const isAuth = event.data?.message?.data?.data?.isAuth
 
-      if (account && address && account.toLowerCase() === address.toLowerCase()) {
+      if (!_chainId || !isAuth || eventTabReplyDebounce) {
+        // shim disconnect
+        if (_chainId && isAuth === false) {
+          this.removeEvents()
+          this.context.address = undefined
+          this.context.chainId = undefined
+          this.context.coinType = undefined
+          resetWalletState()
+          this.context.emitEvent(EventEnum.Disconnect)
+        }
         return
       }
 
-      if (account) {
-        context.address = account
-        setWalletState({
-          address: account,
-        })
-        context.emitEvent(EventEnum.Change)
-      }
-    }
+      // switch network check
+      eventTabReplyDebounce = true
+      globalThis.setTimeout(() => {
+        eventTabReplyDebounce = false
+      }, 1000)
 
-    if (event.data?.message?.action === 'setNode') {
-      const { isTestNet, coinType } = context
-      let _chainId = event.data?.message?.data?.node?.chainId
-      if (_chainId) {
-        _chainId = chainIdHexToNumber(_chainId)
-      }
       const _coinType = isTestNet ? ChainIdToCoinTypeTestNetMap[_chainId] : ChainIdToCoinTypeMap[_chainId]
 
       if (coinType === _coinType && this.context.chainId === _chainId) {
@@ -43,12 +51,12 @@ export class TronLinkEventListener extends WalletEventListener {
       }
 
       if (_coinType) {
-        context.chainId = _chainId
-        context.coinType = _coinType
+        this.context.chainId = _chainId
+        this.context.coinType = _coinType
         setWalletState({
           coinType: _coinType,
         })
-        context.emitEvent(EventEnum.Change)
+        this.context.emitEvent(EventEnum.Change)
       } else {
         let message: string = ''
         switch (coinType) {
@@ -61,27 +69,83 @@ export class TronLinkEventListener extends WalletEventListener {
 
         if (message) {
           this.context.emitEvent(EventEnum.Error, message)
-          debounce(() => {
-            createTips({
-              title: t`Tips`,
-              content: message,
-            })
-          }, 1000)
+          createTips({
+            title: t`Tips`,
+            content: message,
+          })
         }
       }
     }
-  }
 
-  handleMessageEvent = async (event: MessageEvent) => {
-    await this.messageEvent(event, this.context)
+    if (event.data?.message?.action === 'setAccount') {
+      const { address } = this.context
+      const account = event.data?.message?.data?.address
+
+      if (account && address && account.toLowerCase() === address.toLowerCase()) {
+        return
+      }
+
+      if (account && address) {
+        this.context.address = account
+        setWalletState({
+          address: account,
+        })
+        this.context.emitEvent(EventEnum.Change)
+      }
+    }
+
+    if (event.data?.message?.action === 'setNode') {
+      const { isTestNet, coinType } = this.context
+      const _chainId = event.data?.message?.data?.node?.chainId
+      const _coinType = isTestNet ? ChainIdToCoinTypeTestNetMap[_chainId] : ChainIdToCoinTypeMap[_chainId]
+
+      if (coinType === _coinType && this.context.chainId === _chainId) {
+        return
+      }
+
+      if (_coinType) {
+        this.context.chainId = _chainId
+        this.context.coinType = _coinType
+        setWalletState({
+          coinType: _coinType,
+        })
+        this.context.emitEvent(EventEnum.Change)
+      } else {
+        let message: string = ''
+        switch (coinType) {
+          case CoinType.trx:
+            message = isTestNet
+              ? t`Please switch your wallet to the TRON Nile test network before connecting`
+              : t`Please switch your wallet to the TRON main network before connecting`
+            break
+        }
+
+        if (message) {
+          this.context.emitEvent(EventEnum.Error, message)
+          createTips({
+            title: t`Tips`,
+            content: message,
+          })
+        }
+      }
+    }
+
+    if (event.data?.message?.action === 'disconnect') {
+      // shim disconnect
+      this.removeEvents()
+      this.context.address = undefined
+      this.context.chainId = undefined
+      this.context.coinType = undefined
+      resetWalletState()
+      this.context.emitEvent(EventEnum.Disconnect)
+    }
   }
 
   listenEvents(): void {
-    this.removeEvents()
-    window.addEventListener('message', this.handleMessageEvent)
+    window.addEventListener('message', this.messageEvent)
   }
 
   removeEvents(): void {
-    window.removeEventListener('message', this.handleMessageEvent)
+    window.removeEventListener('message', this.messageEvent)
   }
 }

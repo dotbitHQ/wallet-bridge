@@ -14,6 +14,7 @@ export enum WalletProtocol {
   tronLink = 'tronLink',
   torus = 'torus',
   tokenPocketUTXO = 'tokenPocketUTXO',
+  unisat = 'unisat',
   walletConnect = 'walletConnect',
   webAuthn = 'webAuthn',
 }

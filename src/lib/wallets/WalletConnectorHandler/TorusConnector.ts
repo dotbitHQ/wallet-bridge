@@ -39,13 +39,13 @@ export class TorusConnector extends WalletConnector {
   }
 
   async disconnect(): Promise<void> {
-    if (this.context.torusWallet?.isLoggedIn) {
-      await this.context.torusWallet?.logout?.()
-    }
     this.context.address = undefined
     this.context.chainId = undefined
     this.context.coinType = undefined
     resetWalletState()
+    if (this.context.torusWallet?.isLoggedIn) {
+      await this.context.torusWallet?.logout?.()
+    }
     this.context.emitEvent(EventEnum.Disconnect)
   }
 
