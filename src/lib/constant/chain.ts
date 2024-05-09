@@ -165,8 +165,8 @@ export const DOGE: IMainChain = {
   decimals: 8,
   icon: 'dogecoin',
   tokenId: 'doge_doge',
-  explorerTrx: 'https://dogechain.info/tx/',
-  testExplorerTrx: 'https://dogechain.info/tx/',
+  explorerTrx: 'https://blockchair.com/dogecoin/transaction/',
+  testExplorerTrx: 'https://blockexplorer.one/dogecoin/testnet/tx/',
 }
 
 export const BTC: IMainChain = {
