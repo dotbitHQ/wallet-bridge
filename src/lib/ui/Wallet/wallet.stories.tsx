@@ -3,7 +3,7 @@ import { Button } from '../../components'
 import { Wallet } from '../index'
 import { loadScript } from '../../utils'
 import { createConfig, http } from '@wagmi/core'
-import { bsc, bscTestnet, holesky, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { bsc, bscTestnet, holesky, mainnet as ethereum, polygon, polygonAmoy } from '@wagmi/core/chains'
 import { injected, walletConnect } from '@wagmi/connectors'
 import handleError from '../../utils/handleError'
 
@@ -22,14 +22,14 @@ const walletConnectOptions = {
 }
 
 const wagmiConfig = createConfig({
-  chains: [ethereum, holesky, bsc, bscTestnet, polygon, polygonMumbai],
+  chains: [ethereum, holesky, bsc, bscTestnet, polygon, polygonAmoy],
   transports: {
     [ethereum.id]: http(),
     [holesky.id]: http(),
     [bsc.id]: http(),
     [bscTestnet.id]: http(),
     [polygon.id]: http(),
-    [polygonMumbai.id]: http(),
+    [polygonAmoy.id]: http(),
   },
   connectors: [injected(), walletConnect(walletConnectOptions)],
 })
@@ -94,10 +94,14 @@ const TemplateConnectWallet = () => {
     try {
       const message = '0x123abc'
       const signature = await signData(message)
-      console.log(signature)
+      // const { signData: signData2, onClose: onClose2 } = await wallet.walletSDK?.initSignContext()
+      // const signature2 = await signData2('0x123abcd')
+
+      console.log('signature: ', signature)
+      // console.log('signature2: ', signature2)
       // only Passkey-signed transactions can be verified.
-      const res = await wallet._verifyPasskeySignature({ message, signature: signature as string })
-      console.log(res)
+      // const res = await wallet._verifyPasskeySignature({ message, signature: signature as string })
+      // console.log(res)
     } catch (err: any) {
       handleError(err)
       onClose?.()

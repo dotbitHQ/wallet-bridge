@@ -5,7 +5,7 @@ export enum ChainId {
   bsc = 56,
   bscTestnet = 97,
   polygon = 137,
-  polygonMumbai = 80001,
+  polygonAmoy = 80002,
   tron = '0x2b6653dc',
   tronNile = '0xcd8690dc',
   btc = 'livenet',
@@ -34,7 +34,7 @@ export const CoinTypeToChainIdMap: Record<string, number | string> = {
 export const CoinTypeToTestNetChainIdMap: Record<string, number | string> = {
   [CoinType.eth]: ChainId.ethHolesky,
   [CoinType.bsc]: ChainId.bscTestnet,
-  [CoinType.matic]: ChainId.polygonMumbai,
+  [CoinType.matic]: ChainId.polygonAmoy,
   [CoinType.trx]: ChainId.tronNile,
   [CoinType.btc]: ChainId.btcTestnet,
 }
@@ -48,7 +48,7 @@ export const CoinTypeToTorusHostMap: Record<string, string> = {
 export const CoinTypeToTorusHostTestNetMap: Record<string, string> = {
   [CoinType.eth]: 'holesky',
   [CoinType.bsc]: 'bsc_testnet',
-  [CoinType.matic]: 'mumbai',
+  [CoinType.matic]: 'amoy',
 }
 
 export const ChainIdToCoinTypeMap: Record<string, CoinType> = {
@@ -62,7 +62,7 @@ export const ChainIdToCoinTypeMap: Record<string, CoinType> = {
 export const ChainIdToCoinTypeTestNetMap: Record<string, CoinType> = {
   [ChainId.ethHolesky]: CoinType.eth,
   [ChainId.bscTestnet]: CoinType.bsc,
-  [ChainId.polygonMumbai]: CoinType.matic,
+  [ChainId.polygonAmoy]: CoinType.matic,
   [ChainId.tronNile]: CoinType.trx,
   [ChainId.btcTestnet]: CoinType.btc,
 }
@@ -155,7 +155,7 @@ export const Polygon: IMainChain = {
   icon: 'polygon',
   tokenId: 'polygon_matic',
   explorerTrx: 'https://polygonscan.com/tx/',
-  testExplorerTrx: 'https://mumbai.polygonscan.com/tx/',
+  testExplorerTrx: 'https://amoy.polygonscan.com/tx/',
 }
 
 export const DOGE: IMainChain = {
@@ -190,14 +190,14 @@ export const CoinTypeToChainMap: Record<string, IMainChain> = {
   [CoinType.ckb]: CKB,
 }
 
-export enum CustomWallet {
-  metaMask = 'MetaMask',
-  trustWallet = 'TrustWallet',
-  imToken = 'imToken',
-  tokenPocket = 'TokenPocket',
-  unisat = 'Unisat',
-  oneKey = 'OneKey',
-  iToken = 'iToken',
-  tronLink = 'TronLink',
-  walletConnect = 'WalletConnect',
+export const CustomWallet: Record<string, string> = {
+  metaMask: 'MetaMask',
+  trustWallet: 'TrustWallet',
+  imToken: 'imToken',
+  tokenPocket: 'TokenPocket',
+  unisat: 'Unisat',
+  oneKey: 'OneKey',
+  iToken: 'iToken',
+  tronLink: 'TronLink',
+  walletConnect: 'WalletConnect',
 }

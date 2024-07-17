@@ -503,7 +503,7 @@ export function getConnector(wagmiConfig: Config, walletName: string): Connector
     })
   } else {
     const connector = connectors.find((item: Connector) => {
-      return item.type === 'injected' && item.name !== 'Injected'
+      return item.type === 'injected' && item.name === walletName
     })
     if (connector) {
       return connector

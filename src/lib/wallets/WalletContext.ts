@@ -262,6 +262,15 @@ export class WalletContext {
                 ticker: 'ETH',
                 tickerName: 'Ethereum',
               }
+            : host === 'amoy'
+            ? {
+                host: 'https://rpc.ankr.com/polygon_amoy',
+                chainId: this.chainId as number,
+                networkName: 'Amoy Test Network',
+                blockExplorer: 'https://amoy.polygonscan.com',
+                ticker: 'Matic',
+                tickerName: 'Polygon',
+              }
             : {
                 host,
               },

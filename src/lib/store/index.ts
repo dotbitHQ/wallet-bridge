@@ -5,7 +5,6 @@ import {
   CoinTypeToChainIdMap,
   CoinTypeToTestNetChainIdMap,
   CustomChain,
-  CustomWallet,
   DotbitIndexerApi,
   DotbitIndexerTestApi,
   WalletProtocol,
@@ -39,7 +38,7 @@ export interface WalletState {
   isSwitchAddress?: boolean
   iCloudPasskeySupport?: boolean
   customChains?: CustomChain[]
-  customWallets?: CustomWallet[]
+  customWallets?: string[]
   alias?: string
   locale?: string
 }

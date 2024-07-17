@@ -62,7 +62,7 @@ To create a new `Wallet` object, you can use its constructor and provide the fol
 ```js
 import { Wallet } from 'wallet-bridge'
 import { createConfig, http } from '@wagmi/core'
-import { bsc, bscTestnet, holesky, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { bsc, bscTestnet, holesky, mainnet as ethereum, polygon, polygonAmoy } from '@wagmi/core/chains'
 import { injected, walletConnect } from '@wagmi/connectors'
 
 const walletConnectOptions = {
@@ -76,14 +76,14 @@ const walletConnectOptions = {
 }
 
 const wagmiConfig = createConfig({
-  chains: [ethereum, holesky, bsc, bscTestnet, polygon, polygonMumbai],
+  chains: [ethereum, holesky, bsc, bscTestnet, polygon, polygonAmoy],
   transports: {
     [ethereum.id]: http(),
     [holesky.id]: http(),
     [bsc.id]: http(),
     [bscTestnet.id]: http(),
     [polygon.id]: http(),
-    [polygonMumbai.id]: http(),
+    [polygonAmoy.id]: http(),
   },
   connectors: [injected(), walletConnect(walletConnectOptions)],
 })
@@ -244,7 +244,7 @@ await onClose()
   - `canAddDevice`: Whether a backup device can be added or not, of type `boolean`.
   - `iCloudPasskeySupport`: Whether the current environment supports storing the passkey in iCloud, of type `boolean`.
   - `customChains`: Custom chains to be displayed, of type `CustomChain[]`.
-  - `customWallets`: Custom wallets to be displayed, of type `CustomWallet[]`.
+  - `customWallets`: Custom wallets to be displayed, of type `string[]`.
   - `alias`: The .bit alias set for the currently logged-in wallet address, of type `string`.
   - `locale`: The language currently in use, of type `string`.
   - `chainId`: When logging in with an EVM chain wallet, it represents the corresponding chain ID, of type `number`. When logging in with an TRON wallet, it represents the corresponding chain ID, of type `string`.

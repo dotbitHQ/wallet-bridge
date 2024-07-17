@@ -202,13 +202,13 @@ msgid "Please download TokenPocket, connect your Dogecoin wallet within the app,
 msgstr "请下载 TokenPocket，连接您的 Dogecoin 钱包，并重试。"
 
 #: src/lib/wallets/WalletContext.ts:234
-#: src/lib/wallets/WalletContext.ts:289
+#: src/lib/wallets/WalletContext.ts:298
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "请确保您的浏览器已安装 {0} 钱包插件，并再次尝试。"
 
 #: src/lib/wallets/WalletContext.ts:205
 #: src/lib/wallets/WalletContext.ts:229
-#: src/lib/wallets/WalletContext.ts:284
+#: src/lib/wallets/WalletContext.ts:293
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "请在您的加密货币钱包应用中打开此页面，并再次尝试。"
 
@@ -264,7 +264,7 @@ msgstr "请在连接前将您的钱包切换到 TRON Nile 测试网"
 msgid "Please try again after unlocking your TokenPocket wallet."
 msgstr "请在解锁您的 TokenPocket 钱包后再试。"
 
-#: src/lib/wallets/WalletContext.ts:280
+#: src/lib/wallets/WalletContext.ts:289
 msgid "Please try again after unlocking your Tron wallet."
 msgstr "请在解锁您的 Tron 钱包后再试。"
 
@@ -322,7 +322,7 @@ msgstr "扫描二维码需要获取摄像头权限，请授权。"
 msgid "Secure your assets by adding extra trusted devices like mobile phones, computers or tablets immediately."
 msgstr "通过添加授信设备来保障您资产的安全。"
 
-#: src/lib/ui/Login/WalletList.tsx:176
+#: src/lib/ui/Login/WalletList.tsx:224
 msgid "Select Wallet"
 msgstr "选择钱包"
 
@@ -358,7 +358,7 @@ msgstr "此设备或浏览器不支持 Passkey，请使用其他方式连接。"
 #: src/lib/ui/LoggedIn/DeviceList.tsx:159
 #: src/lib/ui/Login/ChainList.tsx:149
 #: src/lib/ui/Login/Connect.tsx:129
-#: src/lib/ui/Login/WalletList.tsx:143
+#: src/lib/ui/Login/WalletList.tsx:191
 #: src/lib/utils/handleError.ts:49
 #: src/lib/utils/handleError.ts:58
 #: src/lib/utils/handleError.ts:67
