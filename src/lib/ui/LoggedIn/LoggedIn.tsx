@@ -60,7 +60,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
     [CoinType.eth]: <img className="inline-flex size-[68px]" src={EthIcon} alt="ETH" />,
     [CoinType.bsc]: <img className="inline-flex size-[68px]" src={BscIcon} alt="BSC" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    [CoinType.matic]: <img className="inline-flex size-[68px]" src={PolygonIcon} alt="Polygon" />,
+    [CoinType.pol]: <img className="inline-flex size-[68px]" src={PolygonIcon} alt="Polygon" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
     [CoinType.trx]: <img className="inline-flex size-[68px]" src={TronIcon} alt="Tron" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
@@ -72,7 +72,7 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
     [CoinType.ckb]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={DeviceBg} alt="" />,
     [CoinType.eth]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={EthBg} alt="" />,
     [CoinType.bsc]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={BscBg} alt="" />,
-    [CoinType.matic]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={PolygonBg} alt="" />,
+    [CoinType.pol]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={PolygonBg} alt="" />,
     [CoinType.trx]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={TronBg} alt="" />,
     [CoinType.doge]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={DogeBg} alt="" />,
     [CoinType.btc]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={BtcBg} alt="" />,

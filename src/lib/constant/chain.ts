@@ -20,13 +20,13 @@ export enum CoinType {
   trx = '195',
   ckb = '309',
   bsc = '9006',
-  matic = '966',
+  pol = '966',
 }
 
 export const CoinTypeToChainIdMap: Record<string, number | string> = {
   [CoinType.eth]: ChainId.eth,
   [CoinType.bsc]: ChainId.bsc,
-  [CoinType.matic]: ChainId.polygon,
+  [CoinType.pol]: ChainId.polygon,
   [CoinType.trx]: ChainId.tron,
   [CoinType.btc]: ChainId.btc,
 }
@@ -34,7 +34,7 @@ export const CoinTypeToChainIdMap: Record<string, number | string> = {
 export const CoinTypeToTestNetChainIdMap: Record<string, number | string> = {
   [CoinType.eth]: ChainId.ethHolesky,
   [CoinType.bsc]: ChainId.bscTestnet,
-  [CoinType.matic]: ChainId.polygonAmoy,
+  [CoinType.pol]: ChainId.polygonAmoy,
   [CoinType.trx]: ChainId.tronNile,
   [CoinType.btc]: ChainId.btcTestnet,
 }
@@ -42,19 +42,19 @@ export const CoinTypeToTestNetChainIdMap: Record<string, number | string> = {
 export const CoinTypeToTorusHostMap: Record<string, string> = {
   [CoinType.eth]: 'mainnet',
   [CoinType.bsc]: 'bsc_mainnet',
-  [CoinType.matic]: 'matic',
+  [CoinType.pol]: 'pol',
 }
 
 export const CoinTypeToTorusHostTestNetMap: Record<string, string> = {
   [CoinType.eth]: 'holesky',
   [CoinType.bsc]: 'bsc_testnet',
-  [CoinType.matic]: 'amoy',
+  [CoinType.pol]: 'amoy',
 }
 
 export const ChainIdToCoinTypeMap: Record<string, CoinType> = {
   [ChainId.eth]: CoinType.eth,
   [ChainId.bsc]: CoinType.bsc,
-  [ChainId.polygon]: CoinType.matic,
+  [ChainId.polygon]: CoinType.pol,
   [ChainId.tron]: CoinType.trx,
   [ChainId.btc]: CoinType.btc,
 }
@@ -62,7 +62,7 @@ export const ChainIdToCoinTypeMap: Record<string, CoinType> = {
 export const ChainIdToCoinTypeTestNetMap: Record<string, CoinType> = {
   [ChainId.ethHolesky]: CoinType.eth,
   [ChainId.bscTestnet]: CoinType.bsc,
-  [ChainId.polygonAmoy]: CoinType.matic,
+  [ChainId.polygonAmoy]: CoinType.pol,
   [ChainId.tronNile]: CoinType.trx,
   [ChainId.btcTestnet]: CoinType.btc,
 }
@@ -149,11 +149,11 @@ export const BSC: IMainChain = {
 
 export const Polygon: IMainChain = {
   name: CustomChain.polygon,
-  symbol: 'MATIC',
-  coinType: CoinType.matic,
+  symbol: 'POL',
+  coinType: CoinType.pol,
   decimals: 18,
   icon: 'polygon',
-  tokenId: 'polygon_matic',
+  tokenId: 'polygon_pol',
   explorerTrx: 'https://polygonscan.com/tx/',
   testExplorerTrx: 'https://amoy.polygonscan.com/tx/',
 }
@@ -183,7 +183,7 @@ export const BTC: IMainChain = {
 export const CoinTypeToChainMap: Record<string, IMainChain> = {
   [CoinType.eth]: ETH,
   [CoinType.bsc]: BSC,
-  [CoinType.matic]: Polygon,
+  [CoinType.pol]: Polygon,
   [CoinType.trx]: TRON,
   [CoinType.doge]: DOGE,
   [CoinType.btc]: BTC,

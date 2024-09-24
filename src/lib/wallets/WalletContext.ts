@@ -268,7 +268,7 @@ export class WalletContext {
                 chainId: this.chainId as number,
                 networkName: 'Amoy Test Network',
                 blockExplorer: 'https://amoy.polygonscan.com',
-                ticker: 'Matic',
+                ticker: 'POL',
                 tickerName: 'Polygon',
               }
             : {

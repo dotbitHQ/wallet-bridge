@@ -39,7 +39,7 @@ const polygon: IChain = {
   // eslint-disable-next-line lingui/no-unlocalized-strings
   icon: <img className="size-10" src={PolygonIcon} alt="Polygon" />,
   name: CustomChain.polygon,
-  coinType: CoinType.matic,
+  coinType: CoinType.pol,
 }
 
 const tron: IChain = {

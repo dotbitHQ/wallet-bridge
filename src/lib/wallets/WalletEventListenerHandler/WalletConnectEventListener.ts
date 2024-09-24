@@ -79,7 +79,7 @@ export class WalletConnectEventListener extends WalletEventListener {
             ? t`Please switch your wallet to the BSC Testnet before connecting`
             : t`Please switch your wallet to the BSC main network before connecting`
           break
-        case CoinType.matic:
+        case CoinType.pol:
           message = isTestNet
             ? t`Please switch your wallet to the Polygon Testnet before connecting`
             : t`Please switch your wallet to the Polygon Mainnet before connecting`

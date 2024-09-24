@@ -40,7 +40,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
         // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="size-10" src={WalletConnectIcon} alt="WalletConnect" />,
         name: CustomWallet.walletConnect,
-        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
       },
       {
         icon: <img className="size-10" src={ImTokenIcon} alt="imToken" />,
@@ -72,7 +72,7 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
           list.unshift({
             icon: <img className="size-10" src={connector.icon} alt={connector.name} />,
             name: connector.name,
-            supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+            supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
           })
         }
       })
@@ -82,24 +82,24 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
           // eslint-disable-next-line lingui/no-unlocalized-strings
           icon: <img className="size-10" src={WalletConnectIcon} alt="WalletConnect" />,
           name: CustomWallet.walletConnect,
-          supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
         },
         {
           // eslint-disable-next-line lingui/no-unlocalized-strings
           icon: <img className="size-10" src={MetaMaskIcon} alt="MetaMask" />,
           name: CustomWallet.metaMask,
-          supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
         },
         {
           // eslint-disable-next-line lingui/no-unlocalized-strings
           icon: <img className="size-10" src={TrustWalletIcon} alt="TrustWallet" />,
           name: CustomWallet.trustWallet,
-          supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
         },
         {
           icon: <img className="size-10" src={ImTokenIcon} alt="imToken" />,
           name: CustomWallet.imToken,
-          supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx],
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol, CoinType.trx],
         },
         // {
         //   icon: <img className="size-10" src={UnisatIcon} alt="Unisat" />,
@@ -110,18 +110,18 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
           // eslint-disable-next-line lingui/no-unlocalized-strings
           icon: <img className="size-10" src={TokenPocketIcon} alt="TokenPocket" />,
           name: CustomWallet.tokenPocket,
-          supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx, CoinType.doge],
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol, CoinType.trx, CoinType.doge],
         },
         {
           // eslint-disable-next-line lingui/no-unlocalized-strings
           icon: <img className="size-10" src={OneKeyIcon} alt="OneKey" />,
           name: CustomWallet.oneKey,
-          supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
         },
         // {
         //   icon: <img className="h-10 w-10" src={ITokenIcon} alt="iToken" />,
         //   name: CustomWallet.iToken,
-        //   supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+        //   supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
         // },
         {
           // eslint-disable-next-line lingui/no-unlocalized-strings
