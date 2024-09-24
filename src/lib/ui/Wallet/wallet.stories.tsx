@@ -3,8 +3,9 @@ import { Button } from '../../components'
 import { Wallet } from '../index'
 import { loadScript } from '../../utils'
 import { createConfig, http } from '@wagmi/core'
-import { bsc, bscTestnet, holesky, mainnet as ethereum, polygon, polygonMumbai } from '@wagmi/core/chains'
+import { bsc, bscTestnet, holesky, mainnet as ethereum, polygon, polygonAmoy } from '@wagmi/core/chains'
 import { injected, walletConnect } from '@wagmi/connectors'
+import handleError from '../../utils/handleError'
 
 export default {
   title: 'UI/Wallets',
@@ -21,14 +22,14 @@ const walletConnectOptions = {
 }
 
 const wagmiConfig = createConfig({
-  chains: [ethereum, holesky, bsc, bscTestnet, polygon, polygonMumbai],
+  chains: [ethereum, holesky, bsc, bscTestnet, polygon, polygonAmoy],
   transports: {
     [ethereum.id]: http(),
     [holesky.id]: http(),
     [bsc.id]: http(),
     [bscTestnet.id]: http(),
     [polygon.id]: http(),
-    [polygonMumbai.id]: http(),
+    [polygonAmoy.id]: http(),
   },
   connectors: [injected(), walletConnect(walletConnectOptions)],
 })
@@ -93,11 +94,16 @@ const TemplateConnectWallet = () => {
     try {
       const message = '0x123abc'
       const signature = await signData(message)
-      console.log(signature)
+      // const { signData: signData2, onClose: onClose2 } = await wallet.walletSDK?.initSignContext()
+      // const signature2 = await signData2('0x123abcd')
+
+      console.log('signature: ', signature)
+      // console.log('signature2: ', signature2)
       // only Passkey-signed transactions can be verified.
-      const res = await wallet._verifyPasskeySignature({ message, signature: signature as string })
-      console.log(res)
-    } catch (err) {
+      // const res = await wallet._verifyPasskeySignature({ message, signature: signature as string })
+      // console.log(res)
+    } catch (err: any) {
+      handleError(err)
       onClose?.()
       console.error(err)
     }
@@ -118,10 +124,24 @@ const TemplateConnectWallet = () => {
     }
   }
 
-  const onSendTransaction = async () => {
+  const onSendETH = async () => {
+    try {
+      const signature = await wallet.sendTransaction({
+        to: '0x7df93d9F500fD5A9537FEE086322a988D4fDCC38',
+        value: '10000000000000000',
+        data: '0x123abc',
+      })
+      console.log(signature)
+    } catch (err: any) {
+      handleError(err)
+      console.log(err)
+    }
+  }
+
+  const onSendBTC = async () => {
     const signature = await wallet.sendTransaction({
-      to: '0x7df93d9F500fD5A9537FEE086322a988D4fDCC38',
-      value: '10000000000000000',
+      to: 'tb1qgej835qcnd59ln79ayfrcxv6awv7mge3ljfpqd',
+      value: '10000',
       data: '0x123abc',
     })
     console.log(signature)
@@ -131,18 +151,18 @@ const TemplateConnectWallet = () => {
     wallet.setLocale(locale)
   }
 
-  useEffect(() => {
-    loadScript('//cdn.jsdelivr.net/npm/eruda', 'eruda').then(() => {
-      // @ts-ignore
-      window.eruda.init()
-    })
-  })
+  // useEffect(() => {
+  //   loadScript('//cdn.jsdelivr.net/npm/eruda', 'eruda').then(() => {
+  //     // @ts-ignore
+  //     window.eruda.init()
+  //   })
+  // })
 
-  useEffect(() => {
-    if (wallet && !walletSnap?.address) {
-      wallet.connectWallet()
-    }
-  }, [wallet, walletSnap?.address])
+  // useEffect(() => {
+  //   if (wallet && !walletSnap?.address) {
+  //     wallet.connectWallet()
+  //   }
+  // }, [wallet, walletSnap?.address])
 
   return (
     <>
@@ -168,7 +188,9 @@ const TemplateConnectWallet = () => {
       <br />
       <Button onClick={onSignData712}>Sign data 712</Button>
       <br />
-      <Button onClick={onSendTransaction}>Send transaction</Button>
+      <Button onClick={onSendETH}>Send ETH</Button>
+      <br />
+      <Button onClick={onSendBTC}>Send BTC</Button>
       <br />
       <Button
         onClick={() => {

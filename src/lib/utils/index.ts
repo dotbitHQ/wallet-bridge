@@ -178,7 +178,7 @@ export function mmJsonHashAndChainIdHex(typedData: TypedMessage<MessageTypes>, c
  *  @param {string} base64SignData base64 encoded signature data
  *  @return {string} hex encoded signature data
  */
-export function convertTpUTXOSignature(base64SignData: string): string {
+export function convertUTXOSignature(base64SignData: string): string {
   const buffer = Buffer.from(base64SignData, 'base64')
   // eslint-disable-next-line lingui/no-unlocalized-strings
   if (buffer.length !== 65) throw new Error('Invalid signature length')
@@ -202,8 +202,8 @@ export function convertTpUTXOSignature(base64SignData: string): string {
   return '0x' + signData.toString('hex')
 }
 
-export function isDogecoinChain(coinType: CoinType) {
-  return coinType === CoinType.doge
+export function isUTXOChain(coinType: CoinType) {
+  return [CoinType.doge, CoinType.btc].includes(coinType)
 }
 
 /**
@@ -503,7 +503,7 @@ export function getConnector(wagmiConfig: Config, walletName: string): Connector
     })
   } else {
     const connector = connectors.find((item: Connector) => {
-      return item.type === 'injected' && item.name !== 'Injected'
+      return item.type === 'injected' && item.name === walletName
     })
     if (connector) {
       return connector

@@ -5,7 +5,6 @@ import {
   CoinTypeToChainIdMap,
   CoinTypeToTestNetChainIdMap,
   CustomChain,
-  CustomWallet,
   DotbitIndexerApi,
   DotbitIndexerTestApi,
   WalletProtocol,
@@ -25,7 +24,7 @@ export interface WalletState {
   protocol?: WalletProtocol
   address?: string
   coinType?: CoinType
-  chainId?: number
+  chainId?: number | string
   walletName?: string
   hardwareWalletTipsShow?: boolean
   deviceData?: IDeviceData
@@ -39,7 +38,7 @@ export interface WalletState {
   isSwitchAddress?: boolean
   iCloudPasskeySupport?: boolean
   customChains?: CustomChain[]
-  customWallets?: CustomWallet[]
+  customWallets?: string[]
   alias?: string
   locale?: string
 }
@@ -220,9 +219,9 @@ export async function getDotbitAlias() {
     )
 
     if (aliasInfo.data?.err_no === errno.success) {
-      if (aliasInfo.data?.data?.account_alias) {
+      if (aliasInfo.data?.data?.account) {
         setWalletState({
-          alias: aliasInfo.data.data.account_alias,
+          alias: aliasInfo.data.data.account,
         })
       } else {
         setWalletState({

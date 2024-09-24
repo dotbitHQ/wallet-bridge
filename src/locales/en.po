@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:94
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:96
 #: src/lib/ui/ShowQRCode/index.tsx:23
 msgid "👌 Copied"
 msgstr "👌 Copied"
@@ -66,8 +66,8 @@ msgstr "Continue with wallets"
 msgid "Copy"
 msgstr "Copy"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:149
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:202
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:151
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:204
 msgid "Copy Address"
 msgstr "Copy Address"
 
@@ -83,8 +83,8 @@ msgstr "Current Device"
 msgid "Device Loss Can Lead to Asset Loss"
 msgstr "Device Loss Can Lead to Asset Loss"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:173
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:226
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:175
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:228
 msgid "Disconnect"
 msgstr "Disconnect"
 
@@ -125,7 +125,7 @@ msgstr "Incorrect data"
 msgid "Info"
 msgstr "Info"
 
-#: src/lib/utils/handleError.ts:83
+#: src/lib/utils/handleError.ts:84
 msgid "Insufficient balance"
 msgstr "Insufficient balance"
 
@@ -168,7 +168,7 @@ msgstr "No Camera Permission"
 msgid "OK"
 msgstr "OK"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:217
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:219
 msgid "Open Torus"
 msgstr "Open Torus"
 
@@ -176,11 +176,11 @@ msgstr "Open Torus"
 msgid "or Continue with"
 msgstr "or Continue with"
 
-#: src/lib/utils/handleError.ts:67
+#: src/lib/utils/handleError.ts:68
 msgid "Other requests for the wallet are not processed, please try again after processing"
 msgstr "Other requests for the wallet are not processed, please try again after processing"
 
-#: src/lib/ui/Login/ChainList.tsx:166
+#: src/lib/ui/Login/ChainList.tsx:173
 msgid "Other Wallets"
 msgstr "Other Wallets"
 
@@ -192,67 +192,79 @@ msgstr "Passkey"
 msgid "Paste data or scan QR code"
 msgstr "Paste data or scan QR code"
 
-#: src/lib/utils/handleError.ts:73
+#: src/lib/utils/handleError.ts:74
 msgid "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 msgstr "Please check if you are using multiple wallet plugins. Please disable multiple wallet plugins, keep only one wallet plugin and try again."
 
-#: src/lib/wallets/WalletContext.ts:206
-#: src/lib/wallets/WalletContext.ts:212
+#: src/lib/wallets/WalletContext.ts:210
+#: src/lib/wallets/WalletContext.ts:216
 msgid "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 msgstr "Please download TokenPocket, connect your Dogecoin wallet within the app, and retry."
 
-#: src/lib/wallets/WalletContext.ts:267
+#: src/lib/wallets/WalletContext.ts:234
+#: src/lib/wallets/WalletContext.ts:298
 msgid "Please ensure that your browser has the {0} wallet plugin installed and try again."
 msgstr "Please ensure that your browser has the {0} wallet plugin installed and try again."
 
-#: src/lib/wallets/WalletContext.ts:201
-#: src/lib/wallets/WalletContext.ts:262
+#: src/lib/wallets/WalletContext.ts:205
+#: src/lib/wallets/WalletContext.ts:229
+#: src/lib/wallets/WalletContext.ts:293
 msgid "Please open this page in your crypto wallet App and try again."
 msgstr "Please open this page in your crypto wallet App and try again."
 
+#: src/lib/wallets/WalletEventListenerHandler/UnisatEventListener.ts:69
+msgid "Please switch your wallet to the Bitcoin livenet before connecting"
+msgstr "Please switch your wallet to the Bitcoin livenet before connecting"
+
+#: src/lib/wallets/WalletEventListenerHandler/UnisatEventListener.ts:68
+msgid "Please switch your wallet to the Bitcoin testnet before connecting"
+msgstr "Please switch your wallet to the Bitcoin testnet before connecting"
+
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:56
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:79
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:80
 msgid "Please switch your wallet to the BSC main network before connecting"
 msgstr "Please switch your wallet to the BSC main network before connecting"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:55
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:78
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:79
 msgid "Please switch your wallet to the BSC Testnet before connecting"
 msgstr "Please switch your wallet to the BSC Testnet before connecting"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:51
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:74
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:75
 msgid "Please switch your wallet to the Ethereum main network before connecting"
 msgstr "Please switch your wallet to the Ethereum main network before connecting"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:50
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:73
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:74
 msgid "Please switch your wallet to the Holesky test network before connecting"
 msgstr "Please switch your wallet to the Holesky test network before connecting"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:61
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:84
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:85
 msgid "Please switch your wallet to the Polygon Mainnet before connecting"
 msgstr "Please switch your wallet to the Polygon Mainnet before connecting"
 
 #: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:60
-#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:83
+#: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:84
 msgid "Please switch your wallet to the Polygon Testnet before connecting"
 msgstr "Please switch your wallet to the Polygon Testnet before connecting"
 
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:58
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:66
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:119
 msgid "Please switch your wallet to the TRON main network before connecting"
 msgstr "Please switch your wallet to the TRON main network before connecting"
 
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:57
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:65
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:118
 msgid "Please switch your wallet to the TRON Nile test network before connecting"
 msgstr "Please switch your wallet to the TRON Nile test network before connecting"
 
-#: src/lib/wallets/WalletContext.ts:194
+#: src/lib/wallets/WalletContext.ts:198
 msgid "Please try again after unlocking your TokenPocket wallet."
 msgstr "Please try again after unlocking your TokenPocket wallet."
 
-#: src/lib/wallets/WalletContext.ts:258
+#: src/lib/wallets/WalletContext.ts:289
 msgid "Please try again after unlocking your Tron wallet."
 msgstr "Please try again after unlocking your Tron wallet."
 
@@ -261,12 +273,12 @@ msgid "Please try again."
 msgstr "Please try again."
 
 #: src/lib/ui/LoggedIn/AddressQrCode.tsx:22
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:156
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:209
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:158
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:211
 msgid "QR Code"
 msgstr "QR Code"
 
-#: src/lib/utils/handleError.ts:49
+#: src/lib/utils/handleError.ts:50
 msgid "Replacement transaction underpriced"
 msgstr "Replacement transaction underpriced"
 
@@ -310,11 +322,11 @@ msgstr "Scanning QR code requires access to the camera. Please enable camera per
 msgid "Secure your assets by adding extra trusted devices like mobile phones, computers or tablets immediately."
 msgstr "Secure your assets by adding extra trusted devices like mobile phones, computers or tablets immediately."
 
-#: src/lib/ui/Login/WalletList.tsx:170
+#: src/lib/ui/Login/WalletList.tsx:224
 msgid "Select Wallet"
 msgstr "Select Wallet"
 
-#: src/lib/ui/LoggedIn/LoggedIn.tsx:164
+#: src/lib/ui/LoggedIn/LoggedIn.tsx:166
 msgid "Switch"
 msgstr "Switch"
 
@@ -326,7 +338,7 @@ msgstr "Switch Address"
 msgid "The contract verification failed."
 msgstr "The contract verification failed."
 
-#: src/lib/utils/handleError.ts:89
+#: src/lib/utils/handleError.ts:90
 msgid "The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet."
 msgstr "The current wallet environment does not support payments using TRX, please upgrade your wallet version or register with another wallet."
 
@@ -334,7 +346,7 @@ msgstr "The current wallet environment does not support payments using TRX, plea
 msgid "The new trusted device has full control over this address."
 msgstr "The new trusted device has full control over this address."
 
-#: src/lib/utils/handleError.ts:58
+#: src/lib/utils/handleError.ts:59
 msgid "The transaction has been aborted."
 msgstr "The transaction has been aborted."
 
@@ -344,18 +356,20 @@ msgstr "This device or browser unsupported. Try connect by social or wallet."
 
 #: src/lib/ui/FinalConfirm/index.tsx:82
 #: src/lib/ui/LoggedIn/DeviceList.tsx:159
-#: src/lib/ui/Login/ChainList.tsx:142
+#: src/lib/ui/Login/ChainList.tsx:149
 #: src/lib/ui/Login/Connect.tsx:129
-#: src/lib/ui/Login/WalletList.tsx:137
-#: src/lib/utils/handleError.ts:48
-#: src/lib/utils/handleError.ts:57
-#: src/lib/utils/handleError.ts:66
-#: src/lib/utils/handleError.ts:72
-#: src/lib/utils/handleError.ts:82
-#: src/lib/utils/handleError.ts:88
-#: src/lib/utils/handleError.ts:94
-#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:69
-#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:66
+#: src/lib/ui/Login/WalletList.tsx:191
+#: src/lib/utils/handleError.ts:49
+#: src/lib/utils/handleError.ts:58
+#: src/lib/utils/handleError.ts:67
+#: src/lib/utils/handleError.ts:73
+#: src/lib/utils/handleError.ts:83
+#: src/lib/utils/handleError.ts:89
+#: src/lib/utils/handleError.ts:95
+#: src/lib/wallets/WalletEventListenerHandler/TorusEventListener.ts:68
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:73
+#: src/lib/wallets/WalletEventListenerHandler/TronLinkEventListener.ts:126
+#: src/lib/wallets/WalletEventListenerHandler/UnisatEventListener.ts:76
 #: src/lib/wallets/WalletEventListenerHandler/WalletConnectEventListener.ts:92
 msgid "Tips"
 msgstr "Tips"

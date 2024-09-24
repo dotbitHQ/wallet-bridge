@@ -22,9 +22,11 @@ import BscIcon from '../Login/icon/bsc-icon.svg'
 import PolygonIcon from '../Login/icon/polygon-icon.svg'
 import TronIcon from '../Login/icon/tron-icon.svg'
 import DogecoinIcon from '../Login/icon/dogecoin-icon.svg'
+import BtcIcon from '../Login/icon/btc-icon.svg'
 import BscBg from './bg/bsc.svg'
 import DeviceBg from './bg/device.svg'
 import DogeBg from './bg/doge.svg'
+import BtcBg from './bg/btc.svg'
 import EthBg from './bg/eth.svg'
 import PolygonBg from './bg/polygon.svg'
 import TronBg from './bg/tron.svg'
@@ -54,26 +56,26 @@ export const LoggedIn = ({ transitionRef, transitionStyle }: SwapChildProps) => 
   }
 
   const icons: Record<CoinType, ReactNode> = {
-    [CoinType.btc]: <DeviceIcon className="inline-flex size-[68px]"></DeviceIcon>,
     [CoinType.ckb]: <DeviceIcon className="inline-flex size-[68px]"></DeviceIcon>,
     [CoinType.eth]: <img className="inline-flex size-[68px]" src={EthIcon} alt="ETH" />,
     [CoinType.bsc]: <img className="inline-flex size-[68px]" src={BscIcon} alt="BSC" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
-    [CoinType.matic]: <img className="inline-flex size-[68px]" src={PolygonIcon} alt="Polygon" />,
+    [CoinType.pol]: <img className="inline-flex size-[68px]" src={PolygonIcon} alt="Polygon" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
     [CoinType.trx]: <img className="inline-flex size-[68px]" src={TronIcon} alt="Tron" />,
     // eslint-disable-next-line lingui/no-unlocalized-strings
     [CoinType.doge]: <img className="inline-flex size-[68px]" src={DogecoinIcon} alt="Dogecoin" />,
+    [CoinType.btc]: <img className="inline-flex size-[68px]" src={BtcIcon} alt="BTC" />,
   }
 
   const bgImage: Record<CoinType, ReactNode> = {
-    [CoinType.btc]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={BscBg} alt="" />,
     [CoinType.ckb]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={DeviceBg} alt="" />,
     [CoinType.eth]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={EthBg} alt="" />,
     [CoinType.bsc]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={BscBg} alt="" />,
-    [CoinType.matic]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={PolygonBg} alt="" />,
+    [CoinType.pol]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={PolygonBg} alt="" />,
     [CoinType.trx]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={TronBg} alt="" />,
     [CoinType.doge]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={DogeBg} alt="" />,
+    [CoinType.btc]: <img className="absolute top-0 w-full-4px rounded-t-[32px]" src={BtcBg} alt="" />,
   }
 
   const close = () => {

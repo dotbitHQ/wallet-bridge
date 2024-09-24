@@ -2,7 +2,7 @@ import WalletSDK from '../wallets'
 import { useWalletState, getWalletState, setWalletState } from '../store'
 import { InitSignContextRes } from '../types'
 import { ISendTrxParams } from '../wallets/WalletTransactionHandler'
-import { CustomChain, CustomWallet } from '../constant'
+import { CustomChain } from '../constant'
 import { SignDataParams } from '../wallets/WalletSignerHandler'
 import { detect, fromNavigator, fromStorage, fromUrl } from '@lingui/detect-locale'
 import { getShadowDomRoot } from '../utils'
@@ -25,7 +25,7 @@ export class Wallet {
     isTestNet?: boolean
     loggedInSelectAddress?: boolean
     customChains?: CustomChain[]
-    customWallets?: CustomWallet[]
+    customWallets?: string[]
     wagmiConfig?: any
     gtag?: any
     event?: any

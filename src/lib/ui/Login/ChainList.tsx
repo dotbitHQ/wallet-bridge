@@ -12,6 +12,7 @@ import BscIcon from './icon/bsc-icon.svg'
 import PolygonIcon from './icon/polygon-icon.svg'
 import TronIcon from './icon/tron-icon.svg'
 import DogecoinIcon from './icon/dogecoin-icon.svg'
+// import BtcIcon from './icon/btc-icon.svg'
 import TorusIcon from './icon/torus-icon.svg'
 import { t } from '@lingui/macro'
 
@@ -38,7 +39,7 @@ const polygon: IChain = {
   // eslint-disable-next-line lingui/no-unlocalized-strings
   icon: <img className="size-10" src={PolygonIcon} alt="Polygon" />,
   name: CustomChain.polygon,
-  coinType: CoinType.matic,
+  coinType: CoinType.pol,
 }
 
 const tron: IChain = {
@@ -54,6 +55,12 @@ const doge: IChain = {
   name: CustomChain.doge,
   coinType: CoinType.doge,
 }
+
+// const btc: IChain = {
+//   icon: <img className="size-10" src={BtcIcon} alt="Bitcoin" />,
+//   name: CustomChain.btc,
+//   coinType: CoinType.btc,
+// }
 
 const torus: IChain = {
   // eslint-disable-next-line lingui/no-unlocalized-strings

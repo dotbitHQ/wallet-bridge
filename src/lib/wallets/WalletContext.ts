@@ -4,7 +4,6 @@ import {
   CoinTypeToTestNetChainIdMap,
   CoinTypeToTorusHostTestNetMap,
   WalletProtocol,
-  ChainId,
   CoinType,
   CoinTypeToTorusHostMap,
   CustomChain,
@@ -29,7 +28,7 @@ export class WalletContext {
   provider: any
   protocol?: WalletProtocol
   address?: string
-  chainId?: ChainId
+  chainId?: number | string
   coinType?: CoinType
   isTestNet = false
   torusWallet?: Torus
@@ -116,6 +115,8 @@ export class WalletContext {
         this.protocol = WalletProtocol.walletConnect
       } else if (this.coinType === CoinType.doge) {
         this.protocol = WalletProtocol.tokenPocketUTXO
+      } else if (this.coinType === CoinType.btc) {
+        this.protocol = WalletProtocol.unisat
       } else if (this.coinType === CoinType.trx) {
         this.protocol = WalletProtocol.tronLink
       } else {
@@ -137,6 +138,9 @@ export class WalletContext {
         break
       case WalletProtocol.tokenPocketUTXO:
         await this.getTokenPocketUTXOProvider()
+        break
+      case WalletProtocol.unisat:
+        await this.getUnisatProvider()
         break
       case WalletProtocol.webAuthn:
         this.getConnectDIDProvider()
@@ -215,6 +219,24 @@ export class WalletContext {
     }
   }
 
+  private async getUnisatProvider() {
+    await sleep(1000)
+    const { unisat } = window
+    if (typeof unisat !== 'undefined') {
+      this.provider = unisat
+    } else {
+      if (isMobile) {
+        throw new CustomError(errno.getProviderError, t`Please open this page in your crypto wallet App and try again.`)
+      } else {
+        const name = this.coinType && CoinTypeToChainMap[this.coinType].name
+        throw new CustomError(
+          errno.getProviderError,
+          t`Please ensure that your browser has the ${String(name)} wallet plugin installed and try again.`,
+        )
+      }
+    }
+  }
+
   private async getTorusProvider() {
     if (!this.torusWallet) {
       this.torusWallet = new Torus()
@@ -234,11 +256,20 @@ export class WalletContext {
           host === 'holesky'
             ? {
                 host: 'https://rpc.ankr.com/eth_holesky',
-                chainId: this.chainId,
+                chainId: this.chainId as number,
                 networkName: 'Holesky Test Network',
                 blockExplorer: 'https://holesky.etherscan.io',
                 ticker: 'ETH',
                 tickerName: 'Ethereum',
+              }
+            : host === 'amoy'
+            ? {
+                host: 'https://rpc.ankr.com/polygon_amoy',
+                chainId: this.chainId as number,
+                networkName: 'Amoy Test Network',
+                blockExplorer: 'https://amoy.polygonscan.com',
+                ticker: 'POL',
+                tickerName: 'Polygon',
               }
             : {
                 host,

@@ -4,11 +4,12 @@ import CustomError from './CustomError'
 
 function isUserReject(err: any) {
   const metaMaskReject =
-    [errno.metaMaskUserRejectedAccountAccess, errno.metaMaskUserDeniedMessageSignature].includes(err.code) &&
-    !(
-      err.message.includes(errno.metaMaskReplacementTransactionUnderpriced) ||
-      err.message.includes(errno.metaMaskTransactionHasBeenAborted)
-    )
+    ([errno.metaMaskUserRejectedAccountAccess, errno.metaMaskUserDeniedMessageSignature].includes(err.code) &&
+      !(
+        err.message.includes(errno.metaMaskReplacementTransactionUnderpriced) ||
+        err.message.includes(errno.metaMaskTransactionHasBeenAborted)
+      )) ||
+    err.message.includes(errno.metaMaskUserRejectedTheRequest)
   const tronReject = err === errno.tronLinkConfirmationDeclinedByUser
   const torusReject = [errno.torusUserCancelledLogin, errno.torusUserClosedPopup].includes(err.message)
   const walletConnectReject = [

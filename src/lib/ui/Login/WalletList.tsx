@@ -11,14 +11,16 @@ import MetaMaskIcon from './icon/metamask-icon.svg'
 import TrustWalletIcon from './icon/trustwallet-icon.svg'
 import ImTokenIcon from './icon/imtoken-icon.svg'
 import TokenPocketIcon from './icon/tokenpocket-icon.svg'
+// import UnisatIcon from './icon/unisat-icon.svg'
 import OneKeyIcon from './icon/onekey-icon.svg'
 import TronLinkIcon from './icon/tronlink-icon.svg'
 import WalletConnectIcon from './icon/walletconnect-icon.svg'
 import { t } from '@lingui/macro'
+import { getConnectors } from '@wagmi/core'
 
 interface IWallet {
   icon: ReactNode
-  name: CustomWallet
+  name: string
   supportList: CoinType[]
 }
 
@@ -31,47 +33,31 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
   const { walletSnap } = useWalletState()
 
   const wallets = useMemo<IWallet[]>(() => {
-    return [
+    const connectors = getConnectors(walletSDK.context.wagmiConfig)
+
+    let list = [
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="size-10" src={WalletConnectIcon} alt="WalletConnect" />,
         name: CustomWallet.walletConnect,
-        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
-      },
-      {
-        // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="size-10" src={MetaMaskIcon} alt="MetaMask" />,
-        name: CustomWallet.metaMask,
-        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
-      },
-      {
-        // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="size-10" src={TrustWalletIcon} alt="TrustWallet" />,
-        name: CustomWallet.trustWallet,
-        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
+        supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
       },
       {
         icon: <img className="size-10" src={ImTokenIcon} alt="imToken" />,
         name: CustomWallet.imToken,
-        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx],
+        supportList: [CoinType.trx],
       },
+      // {
+      //   icon: <img className="size-10" src={UnisatIcon} alt="Unisat" />,
+      //   name: CustomWallet.unisat,
+      //   supportList: [CoinType.btc],
+      // },
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="size-10" src={TokenPocketIcon} alt="TokenPocket" />,
         name: CustomWallet.tokenPocket,
-        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic, CoinType.trx, CoinType.doge],
+        supportList: [CoinType.trx, CoinType.doge],
       },
-      {
-        // eslint-disable-next-line lingui/no-unlocalized-strings
-        icon: <img className="size-10" src={OneKeyIcon} alt="OneKey" />,
-        name: CustomWallet.oneKey,
-        supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
-      },
-      // {
-      //   icon: <img className="h-10 w-10" src={ITokenIcon} alt="iToken" />,
-      //   name: CustomWallet.iToken,
-      //   supportList: [CoinType.eth, CoinType.bsc, CoinType.matic],
-      // },
       {
         // eslint-disable-next-line lingui/no-unlocalized-strings
         icon: <img className="size-10" src={TronLinkIcon} alt="TronLink" />,
@@ -79,7 +65,75 @@ export const WalletList = ({ transitionRef, transitionStyle }: SwapChildProps) =
         supportList: [CoinType.trx],
       },
     ]
-  }, [])
+
+    if (connectors.length > 2) {
+      connectors.forEach((connector) => {
+        if (connector.name !== 'WalletConnect' && connector.name !== 'Injected') {
+          list.unshift({
+            icon: <img className="size-10" src={connector.icon} alt={connector.name} />,
+            name: connector.name,
+            supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
+          })
+        }
+      })
+    } else {
+      list = [
+        {
+          // eslint-disable-next-line lingui/no-unlocalized-strings
+          icon: <img className="size-10" src={WalletConnectIcon} alt="WalletConnect" />,
+          name: CustomWallet.walletConnect,
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
+        },
+        {
+          // eslint-disable-next-line lingui/no-unlocalized-strings
+          icon: <img className="size-10" src={MetaMaskIcon} alt="MetaMask" />,
+          name: CustomWallet.metaMask,
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
+        },
+        {
+          // eslint-disable-next-line lingui/no-unlocalized-strings
+          icon: <img className="size-10" src={TrustWalletIcon} alt="TrustWallet" />,
+          name: CustomWallet.trustWallet,
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
+        },
+        {
+          icon: <img className="size-10" src={ImTokenIcon} alt="imToken" />,
+          name: CustomWallet.imToken,
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol, CoinType.trx],
+        },
+        // {
+        //   icon: <img className="size-10" src={UnisatIcon} alt="Unisat" />,
+        //   name: CustomWallet.unisat,
+        //   supportList: [CoinType.btc],
+        // },
+        {
+          // eslint-disable-next-line lingui/no-unlocalized-strings
+          icon: <img className="size-10" src={TokenPocketIcon} alt="TokenPocket" />,
+          name: CustomWallet.tokenPocket,
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol, CoinType.trx, CoinType.doge],
+        },
+        {
+          // eslint-disable-next-line lingui/no-unlocalized-strings
+          icon: <img className="size-10" src={OneKeyIcon} alt="OneKey" />,
+          name: CustomWallet.oneKey,
+          supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
+        },
+        // {
+        //   icon: <img className="h-10 w-10" src={ITokenIcon} alt="iToken" />,
+        //   name: CustomWallet.iToken,
+        //   supportList: [CoinType.eth, CoinType.bsc, CoinType.pol],
+        // },
+        {
+          // eslint-disable-next-line lingui/no-unlocalized-strings
+          icon: <img className="size-10" src={TronLinkIcon} alt="TronLink" />,
+          name: CustomWallet.tronLink,
+          supportList: [CoinType.trx],
+        },
+      ]
+    }
+
+    return list
+  }, [walletSDK.context.wagmiConfig])
 
   const showWallets = useMemo(() => {
     const { coinType } = loginCacheSnap

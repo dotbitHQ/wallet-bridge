@@ -4,11 +4,9 @@ import { ChainIdToCoinTypeMap, CoinType, ChainIdToCoinTypeTestNetMap } from '../
 import { setWalletState } from '../../store'
 import { createTips } from '../../components'
 import { t } from '@lingui/macro'
-import { debounce } from 'lodash-es'
 
 export class TorusEventListener extends WalletEventListener {
   listenEvents(): void {
-    this.removeEvents()
     const { provider } = this.context
 
     provider.on('accountsChanged', async (accounts: string[]) => {
@@ -19,11 +17,13 @@ export class TorusEventListener extends WalletEventListener {
         return
       }
 
-      this.context.address = toChecksumAddress(account)
-      setWalletState({
-        address: toChecksumAddress(account),
-      })
-      this.context.emitEvent(EventEnum.Change)
+      if (account && address) {
+        this.context.address = toChecksumAddress(account)
+        setWalletState({
+          address: toChecksumAddress(account),
+        })
+        this.context.emitEvent(EventEnum.Change)
+      }
     })
 
     provider.on('chainChanged', (chainId: string) => {
@@ -55,7 +55,7 @@ export class TorusEventListener extends WalletEventListener {
               ? t`Please switch your wallet to the BSC Testnet before connecting`
               : t`Please switch your wallet to the BSC main network before connecting`
             break
-          case CoinType.matic:
+          case CoinType.pol:
             message = isTestNet
               ? t`Please switch your wallet to the Polygon Testnet before connecting`
               : t`Please switch your wallet to the Polygon Mainnet before connecting`
@@ -64,12 +64,10 @@ export class TorusEventListener extends WalletEventListener {
 
         if (message) {
           this.context.emitEvent(EventEnum.Error, message)
-          debounce(() => {
-            createTips({
-              title: t`Tips`,
-              content: message,
-            })
-          }, 1000)
+          createTips({
+            title: t`Tips`,
+            content: message,
+          })
         }
       }
     })
